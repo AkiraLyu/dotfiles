@@ -6,16 +6,14 @@
     "passthrough": false,
     "gtk-layer-shell": true,
     "height": 40,
-
     "modules-left": [
         "clock",
-        "hyprland/workspaces"
+        "hyprland/workspaces",
+        "custom/media"
     ],
-    
     "modules-center": [
         "hyprland/window"
     ],
-    
     "modules-right": [
         "temperature",
         "battery",
@@ -31,25 +29,35 @@
         "disable-scroll": true,
         "all-otputs": true,
         "on-click": "activate",
-        "persistent_workspaces":
-        {
+        "persistent_workspaces": {
             "1": [],
             "2": [],
             "3": [],
             "4": []
         }
     },
-    
+
+    "custom/media": {
+        "mode": "dock",
+        "exec": "playerctl metadata -p yesplaymusic -f '{{lc(status)}}-{{title}}-{{artist}}' -F",
+        "on-click": "playerctl -p yesplaymusic play-pause",
+        "on-click-middle": "playerctl -p yesplaymusic stop",
+        "on-scroll-up": "playerctl -p yesplaymusic previous",
+        "on-scroll-down": "playerctl -p yesplaymusic next",
+        "max-length": 100,
+        "min-length": 25,
+        // indicate this can be truncated
+        "escape": true,
+        "tooltip": true
+    },
     "clock": {
         "format": "<b>󰥔 {:%I:%M %p 󰃭 %a, %b %e}</b>",
         "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
     },
-
     //center
     "hyprland/window": {
         "format": "{}"
     },
-    
     //right
     "battery": {
         "states": {
