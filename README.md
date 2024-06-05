@@ -1,0 +1,1 @@
+dotfile for sway wm
