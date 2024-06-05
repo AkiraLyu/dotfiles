@@ -3,7 +3,7 @@
     border-radius: 0;
     font-family: "JetBrainsMono Nerd Font";
     font-weight: bold;
-    font-size: 14px;
+    font-size: 16px;
     min-height: 0;
 }
 
@@ -13,6 +13,7 @@ window#waybar {
 }
 
 tooltip {
+    color:#fff5f5;
     background: #1e1e2e;
     border-radius: 10px;
     border-width: 2px;
@@ -32,7 +33,7 @@ tooltip {
 
 #workspaces button.focused {
     color: #a6adc8;
-    background: #eba0ac;
+    background: #11111b;
     border-radius: 10px;
 }
 

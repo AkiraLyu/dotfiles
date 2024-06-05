@@ -8,11 +8,11 @@
     "height": 40,
     "modules-left": [
         "clock",
-        "hyprland/workspaces",
+        "sway/workspaces",
         "custom/media"
     ],
     "modules-center": [
-        "hyprland/window"
+        "sway/window"
     ],
     "modules-right": [
         "temperature",
@@ -25,7 +25,7 @@
     ],
 
     //left
-    "hyprland/workspaces": {
+    "sway/workspaces": {
         "disable-scroll": true,
         "all-otputs": true,
         "on-click": "activate",
@@ -55,7 +55,7 @@
         "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
     },
     //center
-    "hyprland/window": {
+    "sway/window": {
         "format": "{}"
     },
     //right
