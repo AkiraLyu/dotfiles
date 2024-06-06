@@ -52,7 +52,9 @@
     },
     "clock": {
         "format": "<b>󰥔 {:%I:%M %p 󰃭 %a, %b %e}</b>",
-        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+        "on-click": "nohup ~/.config/waybar/random.sh > /dev/null 2>&1 &"
+
     },
     //center
     "sway/window": {
