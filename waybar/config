@@ -5,8 +5,9 @@
     "exclusive": true,
     "passthrough": false,
     "gtk-layer-shell": true,
-    "height": 40,
+    "height": 30,
     "modules-left": [
+        "custom/os",
         "clock",
         "sway/workspaces",
         "custom/media"
@@ -21,10 +22,19 @@
         "bluetooth",
         "pulseaudio",
         "pulseaudio#microphone",
+        "custom/idle",
         "tray"
     ],
 
-    //left
+    "custom/os": {
+        "format": " 󰣇 ",
+        "tooltip-format": "Arch Linux",
+        "on-click": "nohup ~/.config/waybar/random.sh > /dev/null 2>&1 &"
+    },
+    "clock": {
+        "format": " <b>󰥔 {:%I:%M %p}</b> ",
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
+    },
     "sway/workspaces": {
         "disable-scroll": true,
         "all-otputs": true,
@@ -36,7 +46,6 @@
             "4": []
         }
     },
-
     "custom/media": {
         "mode": "dock",
         "exec": "playerctl metadata -p yesplaymusic -f '{{lc(status)}}-{{title}}-{{artist}}' -F",
@@ -44,33 +53,34 @@
         "on-click-middle": "playerctl -p yesplaymusic stop",
         "on-scroll-up": "playerctl -p yesplaymusic previous",
         "on-scroll-down": "playerctl -p yesplaymusic next",
-        "max-length": 100,
+        "max-length": 25,
         "min-length": 25,
-        // indicate this can be truncated
         "escape": true,
         "tooltip": true
     },
-    "clock": {
-        "format": "<b>󰥔 {:%I:%M %p 󰃭 %a, %b %e}</b>",
-        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-        "on-click": "nohup ~/.config/waybar/random.sh > /dev/null 2>&1 &"
 
-    },
-    //center
     "sway/window": {
-        "format": "{}"
+        "format": " {title} "
     },
-    //right
+
+    "temperature": {
+        "hwmon-path": "/sys/class/hwmon/hwmon3/temp1_input",
+        "thermal-zone": 1,
+        "format": " {temperatureC}°C  ",
+        "critical-threshold": 80,
+        "format-critical": "{temperatureC}°C "
+    },
+
     "battery": {
         "states": {
             "good": 95,
             "warning": 30,
             "critical": 20
         },
-        "format": "{icon} {capacity}%",
-        "format-charging": " {capacity}%",
-        "format-plugged": " {capacity}%",
-        "format-alt": "{time} {icon}",
+        "format": " {icon} {capacity}% ",
+        "format-charging": "  {capacity}% ",
+        "format-plugged": "  {capacity}% ",
+        "format-alt": " {time} {icon} ",
         "format-icons": [
             "󰂎",
             "󰁺",
@@ -85,10 +95,31 @@
             "󰁹"
         ]
     },
+    "backlight": {
+        "device": "intel_backlight",
+        "format": "{icon} {percent}%",
+        "format-icons": [
+            "󰃞",
+            "󰃟",
+            "󰃠"
+        ],
+        "on-scroll-up": "brightnessctl set 1%+",
+        "on-scroll-down": "brightnessctl set 1%-",
+        "min-length": 6
+    },
+    "bluetooth": {
+        "format": "  {status} ",
+        "format-disabled": "","format-connected": "  {num_connections} ",
+        "on-click": "bluetoothctl connect F0:BE:25:14:D3:3C",
+        "on-click-middle": "bluetoothctl disconnect F0:BE:25:14:D3:3C",
+        "tooltip-format": "{device_alias}",
+        "tooltip-format-connected": "  {device_enumerate} ",
+        "tooltip-format-enumerate-connected": "{device_alias}"
+    },
     "pulseaudio": {
-        "format": "{icon} {volume}%",
+        "format": " {icon} {volume}% ",
         "tooltip": false,
-        "format-muted": " Muted",
+        "format-muted": "  Muted ",
         "on-click": "pamixer -t",
         "on-scroll-up": "pamixer -i 1",
         "on-scroll-down": "pamixer -d 1",
@@ -109,44 +140,21 @@
     },
     "pulseaudio#microphone": {
         "format": "{format_source}",
-        "format-source": " {volume}%",
-        "format-source-muted": " Muted",
+        "format-source": "  {volume}% ",
+        "format-source-muted": "  Muted ",
         "on-click": "pamixer --default-source -t",
         "on-scroll-up": "pamixer --default-source -i 1",
         "on-scroll-down": "pamixer --default-source -d 1",
         "scroll-step": 1
     },
-    "temperature": {
-        "hwmon-path": "/sys/class/hwmon/hwmon3/temp1_input",
-        "thermal-zone": 1,
-        "format": "{temperatureC}°C ",
-        "critical-threshold": 80,
-        "format-critical": "{temperatureC}°C "
+
+    "custom/idle": {
+        "format": "  ",
+        "on-click": "wlogout"
     },
-    "backlight": {
-        "device": "intel_backlight",
-        "format": "{icon} {percent}%",
-        "format-icons": [
-            "󰃞",
-            "󰃟",
-            "󰃠"
-        ],
-        "on-scroll-up": "brightnessctl set 1%+",
-        "on-scroll-down": "brightnessctl set 1%-",
-        "min-length": 6
-    },
-    "bluetooth": {
-        "format": " {status}",
-        "format-disabled": "", // an empty format will hide the module
-        "format-connected": " {num_connections}",
-        "on-click": "bluetoothctl connect F0:BE:25:14:D3:3C",
-        "on-click-middle": "bluetoothctl disconnect F0:BE:25:14:D3:3C",
-        "tooltip-format": "{device_alias}",
-        "tooltip-format-connected": " {device_enumerate}",
-        "tooltip-format-enumerate-connected": "{device_alias}"
-    },
+
     "tray": {
         "icon-size": 18,
-        "spacing": 10
+        "spacing": 5
     }
 }
