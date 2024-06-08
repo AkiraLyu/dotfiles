@@ -8,11 +8,14 @@
     "height": 30,
     "modules-left": [
         "custom/os",
+        "custom/MyNoti",
         "clock",
+        "hyprland/workspaces",
         "sway/workspaces",
         "custom/media"
     ],
     "modules-center": [
+        "hyprland/window",
         "sway/window"
     ],
     "modules-right": [
@@ -29,12 +32,32 @@
     "custom/os": {
         "format": " 󰣇 ",
         "tooltip-format": "Arch Linux",
-        "on-click": "nohup ~/.config/waybar/random.sh > /dev/null 2>&1 &"
+        "on-click": "nohup ~/.config/waybar/scripts/random.sh > /dev/null 2>&1 &"
     },
+
+    "custom/MyNoti": {
+        "format": "   ",
+        "tooltip": false,
+        "on-click": "/home/akira/.config/waybar/scripts/NotificationViewer"
+    },
+
     "clock": {
         "format": " <b>󰥔 {:%I:%M %p}</b> ",
         "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
     },
+
+    "hyprland/workspaces": {
+        "disable-scroll": true,
+        "all-otputs": true,
+        "on-click": "activate",
+        "persistent_workspaces": {
+            "1": [],
+            "2": [],
+            "3": [],
+            "4": []
+        }
+    },
+
     "sway/workspaces": {
         "disable-scroll": true,
         "all-otputs": true,
@@ -46,6 +69,7 @@
             "4": []
         }
     },
+
     "custom/media": {
         "mode": "dock",
         "exec": "playerctl metadata -p yesplaymusic -f '{{lc(status)}}-{{title}}-{{artist}}' -F",
@@ -60,6 +84,10 @@
     },
 
     "sway/window": {
+        "format": " {title} "
+    },
+
+    "hyprland/window": {
         "format": " {title} "
     },
 

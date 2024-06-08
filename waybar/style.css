@@ -12,6 +12,17 @@ window#waybar {
     color: #cdd6f4;
 }
 
+#custom-MyNoti {
+    background: #000300;
+    color: #2aa167;
+
+    border-radius: 5px;
+    
+    margin-top: 5px;
+    margin-left: 5px;
+    margin-right: 0px; 
+}
+
 #custom-os {
     background: #000300;
     color: #33aadd;
@@ -129,17 +140,6 @@ window#waybar {
     margin-right: 5px;
 }
 
-#custom-idle {
-    background: #000300;
-    color: #ff0303;
-
-    border-radius: 5 0 0 5;
-    
-    margin-top: 5px;
-    margin-left: 0px;
-    margin-right: 0px;
-}
-
 #tray {
     background: #000300;
     color: #34c6eb;
@@ -149,6 +149,17 @@ window#waybar {
     margin-top: 5px;
     margin-left: 0px;
     margin-right: 5px;
+}
+
+#custom-idle {
+    background: #000300;
+    color: #ff0303;
+
+    border-radius: 5 0 0 5;
+    
+    margin-top: 5px;
+    margin-left: 0px;
+    margin-right: 0px;
 }
 
 #workspaces {
