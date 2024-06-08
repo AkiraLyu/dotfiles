@@ -33,7 +33,10 @@
           "foreground": "#ffffff",
           "leading_diamond": "\ue0b2",
           "style": "diamond",
-          "template": " {{ .Path }} ",
+          "mapped_locations": {
+            "~": " "
+          },
+          "template": " {{ .PWD }} ",
           "trailing_diamond": "<transparent,#516BEB>\ue0b2</>",
           "type": "path"
         },
