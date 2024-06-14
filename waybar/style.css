@@ -12,6 +12,13 @@ window#waybar {
     color: #cdd6f4;
 }
 
+tooltip {
+  background: rgb(48, 45, 65);
+}
+tooltip label {
+  color: rgb(217, 224, 238);
+}
+
 #custom-MyNoti {
     background: #000300;
     color: #2aa167;
