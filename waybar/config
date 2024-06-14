@@ -92,7 +92,7 @@
     },
 
     "temperature": {
-        "hwmon-path": "/sys/class/hwmon/hwmon3/temp1_input",
+        "hwmon-path": "/sys/class/hwmon/hwmon1/temp1_input",
         "thermal-zone": 1,
         "format": " {temperatureC}°C  ",
         "critical-threshold": 80,
