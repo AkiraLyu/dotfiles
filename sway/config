@@ -29,6 +29,8 @@ output * bg /home/akira/Pictures/swaybg/NA.jpg fill
 #Window
 #swaymsg -t get_tree | grep app_id
 for_window [app_id="NotificationViewer"] floating enable
+for_window [app_id="volume.py"] floating enable
+for_window [app_id="pot"] floating enable
 for_window [app_id="NotificationViewer"]                  resize set height 540
 for_window [app_id="NotificationViewer"]                  resize set width 960
 
