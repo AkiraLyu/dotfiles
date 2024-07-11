@@ -10,13 +10,13 @@
         "custom/os",
         "custom/MyNoti",
         "clock",
+        //"hyprland/workspaces",
         "hyprland/workspaces",
-        "sway/workspaces",
         "custom/media"
     ],
     "modules-center": [
-        "hyprland/window",
-        "sway/window"
+        //"hyprland/window",
+        "hyprland/window"
     ],
     "modules-right": [
         "temperature",
@@ -58,18 +58,6 @@
         }
     },
 
-    "sway/workspaces": {
-        "disable-scroll": true,
-        "all-otputs": true,
-        "on-click": "activate",
-        "persistent_workspaces": {
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": []
-        }
-    },
-
     "custom/media": {
         "mode": "dock",
         "exec": "playerctl metadata -p yesplaymusic -f '{{lc(status)}}-{{title}}-{{artist}}' -F",
@@ -81,10 +69,6 @@
         "min-length": 25,
         "escape": true,
         "tooltip": true
-    },
-
-    "sway/window": {
-        "format": " {title} "
     },
 
     "hyprland/window": {

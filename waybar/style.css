@@ -20,7 +20,7 @@ tooltip label {
 }
 
 #custom-MyNoti {
-    background: #000300;
+    background: #222436;
     color: #2aa167;
 
     border-radius: 5px;
@@ -31,7 +31,7 @@ tooltip label {
 }
 
 #custom-os {
-    background: #000300;
+    background: #222436;
     color: #33aadd;
 
     border-radius: 5px 5px 5px 5px;
@@ -46,7 +46,7 @@ tooltip label {
 
 #clock {
 
-    background: #000300;
+    background: #222436;
     color: #fab387;
 
     border-radius: 5px 5px 5px 5px;
@@ -57,7 +57,7 @@ tooltip label {
 }
 
 #custom-media {
-    background: #000300;
+    background: #222436;
     color: #9e9999;
     
     border-radius: 5px;
@@ -68,7 +68,7 @@ tooltip label {
 }
 
 #window {
-    background: #000300;
+    background: #222436;
 
     border-radius: 5px;
 
@@ -78,7 +78,7 @@ tooltip label {
 }
 
 #temperature {
-    background: #000300;
+    background: #222436;
     color: #a6e3a1;
 
     border-radius: 5px;
@@ -93,7 +93,7 @@ tooltip label {
 }
 
 #battery {
-    background: #000300;
+    background: #222436;
     color: #a6e3a1;
 
     border-radius: 5px;
@@ -104,7 +104,7 @@ tooltip label {
 }
 
 #backlight {
-    background: #000300;
+    background: #222436;
     color: #a6e3a1;
 
     border-radius: 5px;
@@ -115,7 +115,7 @@ tooltip label {
 }
 
 #bluetooth {
-    background: #000300;
+    background: #222436;
     color: #34c6eb;
 
     border-radius: 5px;
@@ -126,7 +126,7 @@ tooltip label {
 }
 
 #pulseaudio {
-    background: #000300;
+    background: #222436;
     color: #34c6eb;
 
     border-radius: 5px;
@@ -137,7 +137,7 @@ tooltip label {
 }
 
 #pulseaudio.microphone {
-    background: #000300;
+    background: #222436;
     color: #34c6eb;
 
     border-radius: 5px;
@@ -148,7 +148,7 @@ tooltip label {
 }
 
 #tray {
-    background: #000300;
+    background: #222436;
     color: #34c6eb;
 
     border-radius: 0 5 5 0;
@@ -159,7 +159,7 @@ tooltip label {
 }
 
 #custom-idle {
-    background: #000300;
+    background: #222436;
     color: #ff0303;
 
     border-radius: 5 0 0 5;
@@ -170,7 +170,7 @@ tooltip label {
 }
 
 #workspaces {
-    background: #000300;
+    background: #222436;
 
     border-radius: 5px;
 

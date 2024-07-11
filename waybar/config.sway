@@ -1,0 +1,171 @@
+{
+    "layer": "top",
+    "position": "top",
+    "mod": "dock",
+    "exclusive": true,
+    "passthrough": false,
+    "gtk-layer-shell": true,
+    "height": 30,
+    "modules-left": [
+        "custom/os",
+        "custom/MyNoti",
+        "clock",
+        "sway/workspaces",
+        "custom/media"
+    ],
+    "modules-center": [
+        "sway/window"
+    ],
+    "modules-right": [
+        "temperature",
+        "battery",
+        "backlight",
+        "bluetooth",
+        "pulseaudio",
+        "pulseaudio#microphone",
+        "custom/idle",
+        "tray"
+    ],
+
+    "custom/os": {
+        "format": " 󰣇 ",
+        "tooltip-format": "Arch Linux",
+        "on-click": "nohup ~/.config/waybar/scripts/random.sh > /dev/null 2>&1 &"
+    },
+
+    "custom/MyNoti": {
+        "format": "   ",
+        "tooltip": false,
+        "on-click": "/home/akira/.config/waybar/scripts/NotificationViewer"
+    },
+
+    "clock": {
+        "format": " <b>󰥔 {:%I:%M %p}</b> ",
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
+    },
+
+    "sway/workspaces": {
+        "disable-scroll": true,
+        "all-otputs": true,
+        "on-click": "activate",
+        "persistent_workspaces": {
+            "1": [],
+            "2": [],
+            "3": [],
+            "4": []
+        }
+    },
+
+    "custom/media": {
+        "mode": "dock",
+        "exec": "playerctl metadata -p yesplaymusic -f '{{lc(status)}}-{{title}}-{{artist}}' -F",
+        "on-click": "playerctl -p yesplaymusic play-pause",
+        "on-click-middle": "playerctl -p yesplaymusic stop",
+        "on-scroll-up": "playerctl -p yesplaymusic previous",
+        "on-scroll-down": "playerctl -p yesplaymusic next",
+        "max-length": 25,
+        "min-length": 25,
+        "escape": true,
+        "tooltip": true
+    },
+
+    "sway/window": {
+        "format": " {title} "
+    },
+
+    "temperature": {
+        "hwmon-path": "/sys/class/hwmon/hwmon1/temp1_input",
+        "thermal-zone": 1,
+        "format": " {temperatureC}°C  ",
+        "critical-threshold": 80,
+        "format-critical": "{temperatureC}°C "
+    },
+
+    "battery": {
+        "states": {
+            "good": 95,
+            "warning": 30,
+            "critical": 20
+        },
+        "format": " {icon} {capacity}% ",
+        "format-charging": "  {capacity}% ",
+        "format-plugged": "  {capacity}% ",
+        "format-alt": " {time} {icon} ",
+        "format-icons": [
+            "󰂎",
+            "󰁺",
+            "󰁻",
+            "󰁼",
+            "󰁽",
+            "󰁾",
+            "󰁿",
+            "󰂀",
+            "󰂁",
+            "󰂂",
+            "󰁹"
+        ]
+    },
+    "backlight": {
+        "device": "intel_backlight",
+        "format": "{icon} {percent}%",
+        "format-icons": [
+            "󰃞",
+            "󰃟",
+            "󰃠"
+        ],
+        "on-scroll-up": "brightnessctl set 1%+",
+        "on-scroll-down": "brightnessctl set 1%-",
+        "min-length": 6
+    },
+    "bluetooth": {
+        "format": "  {status} ",
+        "format-disabled": "","format-connected": "  {num_connections} ",
+        "on-click": "bluetoothctl connect F0:BE:25:14:D3:3C",
+        "on-click-middle": "bluetoothctl disconnect F0:BE:25:14:D3:3C",
+        "tooltip-format": "{device_alias}",
+        "tooltip-format-connected": "  {device_enumerate} ",
+        "tooltip-format-enumerate-connected": "{device_alias}"
+    },
+    "pulseaudio": {
+        "format": " {icon} {volume}% ",
+        "tooltip": false,
+        "format-muted": "  Muted ",
+        "on-click": "python /home/akira/.config/waybar/scripts/volume.py",
+        "on-click-middle": "pamixer -t",
+        "on-scroll-up": "pamixer -i 1",
+        "on-scroll-down": "pamixer -d 1",
+        "scroll-step": 5,
+        "format-icons": {
+            "headphone": "",
+            "hands-free": "",
+            "headset": "",
+            "phone": "",
+            "portable": "",
+            "car": "",
+            "default": [
+                "",
+                "",
+                ""
+            ]
+        }
+    },
+    "pulseaudio#microphone": {
+        "format": "{format_source}",
+        "format-source": "  {volume}% ",
+        "format-source-muted": "  Muted ",
+        "on-click": "pamixer --default-source -t",
+        "on-scroll-up": "pamixer --default-source -i 1",
+        "on-scroll-down": "pamixer --default-source -d 1",
+        "scroll-step": 1
+    },
+
+    "custom/idle": {
+        "format": "  ",
+        "on-click": "wlogout"
+    },
+
+    "tray": {
+        "icon-size": 18,
+        "spacing": 5
+    }
+}
