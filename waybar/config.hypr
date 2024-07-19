@@ -32,7 +32,8 @@
     "custom/os": {
         "format": " 󰣇 ",
         "tooltip-format": "Arch Linux",
-        "on-click": "nohup ~/.config/waybar/scripts/random.sh > /dev/null 2>&1 &"
+        "on-click": "nohup ~/.config/waybar/scripts/random.sh > /dev/null 2>&1 &",
+        "on-click-middle": "wallpaper"
     },
 
     "custom/MyNoti": {
