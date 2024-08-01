@@ -24,7 +24,7 @@ input 10182:480:GXTP7863:00_27C6:01E0_Touchpad {
 }
 
 #壁纸
-output * bg /home/akira/Pictures/swaybg/NA.jpg fill
+output * bg /home/akira/Pictures/swaybg/pixel/IMG_20231031_172218_293.png fill
 
 #Window
 #swaymsg -t get_tree | grep app_id

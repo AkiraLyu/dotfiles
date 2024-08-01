@@ -8,7 +8,7 @@ set __fish_git_prompt_showdirtystate 'yes'
 set __fish_git_prompt_showstashstate 'yes'
 set __fish_git_prompt_showuntrackedfiles 'yes'
 set __fish_git_prompt_showupstream 'informative'
-set __fish_git_prompt_color_branch black
+set __fish_git_prompt_color_branch white
 set __fish_git_prompt_color_upstream_ahead green
 set __fish_git_prompt_color_upstream_behind red
 set __fish_git_prompt_color_suffix white
@@ -87,38 +87,15 @@ function fish_prompt
 
     #git信息
     if test -d .git
-        echo -n ' • '
-        set_color white
-        echo -n ''
-        set_color black
-        set_color -b white
-        # echo -n (__fish_git_prompt)
-
-        echo -n (git_ahead)
-        echo -n (git_branch_name)
-        echo -n (git_is_dirty)
-        echo -n (git_is_touched)
-
-        #untracked
-        if test (git ls-files --others --exclude-standard | wc -l) = 1
-            echo -n "?"
-            echo -n (git ls-files --others --exclude-standard)
-        end
-
-        echo -n (git_is_stashed)
-
-        # if test git_is_staged
-        #     echo -n "+"
-        #     echo -n (git_is_staged)
-        # end
-
-        set_color -b normal
-        set_color white
-        echo -n ''
-        set_color normal
+        echo -n ' •'
+        # set_color white
+        # echo -n ''
+        # set_color black
+        # set_color -b white
+        echo -n (__fish_git_prompt)
+        # set_color -b normal  
     end
 
-    
     echo
 
     # 彩色圆条配置
