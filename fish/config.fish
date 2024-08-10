@@ -10,5 +10,6 @@ export QT_SCREEN_SCALE_FACTORS=1
 export QT_FONT_DPI=120
 
 export LFS=/mnt/lfs
+export EDITOR=nvim
 
 alias n=neofetch
