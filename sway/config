@@ -26,13 +26,5 @@ input 10182:480:GXTP7863:00_27C6:01E0_Touchpad {
 #壁纸
 output * bg /home/akira/Pictures/swaybg/云兮/平凡的一天-小云兮买菜.png fill
 
-#Window
-#swaymsg -t get_tree | grep app_id
-for_window [app_id="NotificationViewer"] floating enable
-for_window [app_id="volume.py"] floating enable
-for_window [app_id="pot"] floating enable
-for_window [app_id="NotificationViewer"]                  resize set height 540
-for_window [app_id="NotificationViewer"]                  resize set width 960
-
 include /etc/sway/config.d/*
 include /home/akira/.config/sway/*

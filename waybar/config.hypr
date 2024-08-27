@@ -116,6 +116,7 @@
             "󰃟",
             "󰃠"
         ],
+        "on-click": "/home/akira/.config/waybar/scripts/light",
         "on-scroll-up": "brightnessctl set 1%+",
         "on-scroll-down": "brightnessctl set 1%-",
         "min-length": 6
