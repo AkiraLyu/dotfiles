@@ -94,3 +94,14 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
     vim.fn.mkdir(vim.fn.fnamemodify(file, ":p:h"), "p")
   end,
 })
+
+-- 自动编译latex
+vim.api.nvim_create_augroup("TexCompile", { clear = true })
+
+vim.api.nvim_create_autocmd("BufWritePost", {
+  group = "TexCompile",
+  pattern = "*.tex",
+  callback = function()
+    vim.cmd("silent !xelatex " .. vim.fn.expand("%"))
+  end,
+})
