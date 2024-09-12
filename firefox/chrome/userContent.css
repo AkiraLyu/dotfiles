@@ -1,0 +1,44 @@
+@-moz-document url(about:home), url(about:newtab), url(about:privatebrowsing){
+
+/*用于将字体设置为白色*/
+.top-site-button .title,
+.context-menu-button {
+    color: #fff !important;
+    text-shadow: 2px 2px 2px #222 !important;
+}
+
+/*用于移除Logo*/
+.logo-and-wordmark {
+    display: none !important;
+}
+
+/*修改了当鼠标移动到网页图标上时显示的方框的颜色*/
+body {
+    --newtab-topsites-outer-card-hover: rgba(255, 255, 255, 0.4) !important;
+    --newtab-element-hover-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+/*修改背景图片，radial-gradient(rgba(255, 255, 255, 0), rgba(0, 0, 0, 0.75))在图片上叠加了一个中心渐变*/
+body::before {
+    content: "";
+    z-index: -1;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    /* 添加或确保 no-repeat */
+    background: radial-gradient(rgba(255, 255, 255, 0), rgba(0, 0, 0, 0.75)) no-repeat center center;
+    
+    /* 确保 background-repeat 被设置为 no-repeat */
+    background-repeat: no-repeat;
+
+    /* 调整背景图片的位置和大小 */
+    background-position: center center;
+    background-size: 788px 833px;
+
+    /* 背景图片的 URL */
+    background-image: url(firefox.png);
+}
+}
