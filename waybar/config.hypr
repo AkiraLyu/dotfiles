@@ -44,7 +44,8 @@
 
     "clock": {
         "format": " <b>󰥔 {:%I:%M %p}</b> ",
-        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+        "on-click": "nohup gnome-calendar > /dev/null 2>&1 &"
     },
 
     "hyprland/workspaces": {
@@ -61,11 +62,10 @@
 
     "custom/media": {
         "mode": "dock",
-        "exec": "playerctl metadata -p yesplaymusic -f '{{lc(status)}}-{{title}}-{{artist}}' -F",
-        "on-click": "playerctl -p yesplaymusic play-pause",
-        "on-click-middle": "playerctl -p yesplaymusic stop",
-        "on-scroll-up": "playerctl -p yesplaymusic previous",
-        "on-scroll-down": "playerctl -p yesplaymusic next",
+        "exec": "playerctl metadata -p yesplaymusic,rhythmbox -f '{{lc(status)}}-{{title}}-{{artist}}' -F",
+        "on-click": "playerctl -p yesplaymusic,rhythmbox play-pause",
+        "on-scroll-up": "playerctl -p yesplaymusic,rhythmbox previous",
+        "on-scroll-down": "playerctl -p yesplaymusic,rhythmbox next",
         "max-length": 25,
         "min-length": 25,
         "escape": true,
