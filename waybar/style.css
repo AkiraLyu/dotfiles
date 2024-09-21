@@ -151,7 +151,7 @@ tooltip label {
     background: #222436;
     color: #34c6eb;
 
-    border-radius: 0 5 5 0;
+    border-radius: 0px 5px 5px 0px;
     
     margin-top: 5px;
     margin-left: 0px;
@@ -162,7 +162,7 @@ tooltip label {
     background: #222436;
     color: #ff0303;
 
-    border-radius: 5 0 0 5;
+    border-radius: 5px 0px 0px 5px;
     
     margin-top: 5px;
     margin-left: 0px;
