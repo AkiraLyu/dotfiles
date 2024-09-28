@@ -9,3 +9,4 @@ export LFS=/mnt/lfs
 export EDITOR=nvim
 
 alias n=neofetch
+alias l="ls -l"

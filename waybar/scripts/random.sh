@@ -8,4 +8,5 @@ else
 	# 进程不存在，不做任何事
 	echo "进程不存在，无需杀死"
 fi
-nohup swaybg -i $(find /home/akira/Pictures/swaybg/ -type f | shuf -n 1) -m fill >/dev/null 2>&1 &
+# nohup swaybg -i $(find /home/akira/Pictures/swaybg/ -type f | shuf -n 1) -m fill >/dev/null 2>&1 &
+nohup wallpaper $(find /home/akira/Pictures/ -type f | shuf -n 1) >/dev/null 2>&1 &
