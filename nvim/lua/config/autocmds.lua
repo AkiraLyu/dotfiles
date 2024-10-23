@@ -105,3 +105,10 @@ vim.api.nvim_create_autocmd("BufWritePost", {
     vim.cmd("silent !xelatex " .. vim.fn.expand("%"))
   end,
 })
+
+vim.api.nvim_create_autocmd({ "FileType" }, {
+  pattern = { "c" },
+  callback = function()
+    vim.b.autoformat = false
+  end,
+})
