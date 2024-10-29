@@ -3,12 +3,23 @@ vim.api.nvim_create_autocmd("BufNewFile", {
   callback = function()
     vim.api.nvim_buf_set_lines(0, 0, -1, false, {
       "\\documentclass{article}",
+      "",
+      "\\usepackage{ctex}",
+      "\\usepackage{geometry}",
+      "\\usepackage{titlesec}",
+      "\\usepackage{setspace}",
+      "",
+      "\\geometry{a4paper, margin=1in}",
+      "\\titleformat{\\section}{\\Large\\bfseries}{\\thesection}{1em}{}",
+      "\\setstretch{1.2}",
+      "\\setlength{\\parindent}{2em}",
+      "",
       "\\begin{document}",
       "",
       "\\end{document}",
     })
 
-    vim.api.nvim_win_set_cursor(0, { 3, 0 })
+    vim.api.nvim_win_set_cursor(0, { 14, 0 })
 
     vim.cmd("startinsert")
   end,
