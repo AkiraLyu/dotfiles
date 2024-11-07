@@ -52,6 +52,14 @@
         "disable-scroll": true,
         "all-otputs": true,
         "on-click": "activate",
+        "format": "{icon}",
+        "format-icons": {
+            "1": " ",
+            "2": " ",
+            "3": " ",
+            "4": " ",
+            "5": " ",
+        },
         "persistent-workspaces": {
             "1": [],
             "2": [],
