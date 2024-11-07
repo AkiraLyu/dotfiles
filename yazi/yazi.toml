@@ -1,0 +1,25 @@
+[opener]
+play = [
+	{ run = 'mpv "$@"', orphan = true, for = "unix" },
+]
+edit = [
+	{ run = '$EDITOR "$@"', block = true, for = "unix" },
+]
+pic = [
+	{ run = 'eog "$@"', block = true, for = "unix" },
+]
+open = [
+	{ run = 'xdg-open "$@"', desc = "Open" },
+]
+
+[open]
+prepend_rules = [
+	{ name = "*.json", use = "edit" },
+
+	# Multiple openers for a single rule
+	{ name = "*.html", use = [ "open", "edit" ] },
+
+	{ name = "*.png", use = [ "pic" ] },
+	{ name = "*.jpg", use = [ "pic" ] },
+	{ name = "*.jpeg", use = [ "pic" ] },
+]
