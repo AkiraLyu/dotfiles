@@ -189,13 +189,14 @@ tooltip label {
 #workspaces button.active {
     /*color: #a6adc8;*/
     color: #343742;
-    background: #e6e7d0;
+    background: #a6e3a1;
+    border-radius: 5px;
 }
 
 #workspaces button.focused {
     color: #a6adc8;
     /*background: #11111b;*/
-    border-radius: 10px;
+    border-radius: 5px;
 }
 
 #workspaces button.urgent {
@@ -207,6 +208,6 @@ tooltip label {
 #workspaces button:hover {
     background: #11111b;
     color: #cdd6f4;
-    border-radius: 10px;
+    border-radius: 5px;
 }
 
