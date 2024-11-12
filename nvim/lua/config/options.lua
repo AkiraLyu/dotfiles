@@ -60,6 +60,7 @@ opt.virtualedit = "block" -- Allow cursor to move where there is no text in visu
 opt.wildmode = "longest:full,full" -- Command-line completion mode
 opt.winminwidth = 5 -- Minimum window width
 opt.wrap = true -- Disable line wrap
+opt.statuscolumn = [[%!v:lua.require'snacks.statuscolumn'.get()]]
 opt.fillchars = {
   foldopen = "",
   foldclose = "",
@@ -77,10 +78,6 @@ end
 -- Folding
 vim.opt.foldlevel = 99
 vim.opt.foldtext = "v:lua.require'lazyvim.util'.ui.foldtext()"
-
-if vim.fn.has("nvim-0.9.0") == 1 then
-  vim.opt.statuscolumn = [[%!v:lua.require'lazyvim.util'.ui.statuscolumn()]]
-end
 
 -- HACK: causes freezes on <= 0.9, so only enable on >= 0.10 for now
 if vim.fn.has("nvim-0.10") == 1 then
