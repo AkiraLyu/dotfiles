@@ -106,6 +106,7 @@ vim.api.nvim_create_autocmd("BufWritePost", {
   end,
 })
 
+-- 禁止自动格式化
 vim.api.nvim_create_autocmd({ "FileType" }, {
   pattern = { "c", "cpp" },
   callback = function()

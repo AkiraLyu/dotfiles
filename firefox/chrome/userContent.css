@@ -38,6 +38,7 @@ body::before {
     background-position: center center;
     background-size: 788px 833px;
 
+
     /* 背景图片的 URL */
     background-image: url(firefox.png);
 }
