@@ -60,8 +60,8 @@ cmp.setup({
     -- customize the appearance of the completion menu
     format = function(entry, vim_item)
       vim_item.menu = ({
-        nvim_lsp = "[Lsp]",
         luasnip = "[Luasnip]",
+        nvim_lsp = "[Lsp]",
         buffer = "[File]",
         path = "[Path]",
       })[entry.source.name]
