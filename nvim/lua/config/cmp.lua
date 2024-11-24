@@ -40,8 +40,8 @@ cmp.setup({
     ["<S-Tab>"] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_prev_item()
-      elseif luasnip.jumpable(-1) then
-        luasnip.jump(-1)
+      elseif luasnip.jumpable(1) then
+        luasnip.jump(1)
       else
         fallback()
       end
@@ -61,7 +61,7 @@ cmp.setup({
     format = function(entry, vim_item)
       vim_item.menu = ({
         luasnip = "[Luasnip]",
-        nvim_lsp = "[Lsp]",
+        -- nvim_lsp = "[Lsp]",
         buffer = "[File]",
         path = "[Path]",
       })[entry.source.name]
@@ -71,8 +71,8 @@ cmp.setup({
 
   -- Set source precedence
   sources = cmp.config.sources({
-    { name = "nvim_lsp" }, -- For nvim-lsp
     { name = "luasnip" }, -- For luasnip user
+    { name = "nvim_lsp" }, -- For nvim-lsp
     { name = "buffer" }, -- For buffer word completion
     { name = "path" }, -- For path completion
     { name = "latex_title" },
