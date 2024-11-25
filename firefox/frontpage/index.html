@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homepage</title>
+    <style>
+        @font-face {
+            font-family: "JetBrainsMono Nerd Font";
+            src: local("JetBrainsMono Nerd Font"), local("JetBrainsMonoNF");
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            color: #fff;
+            background: url("wallpaper.png") no-repeat center center fixed;
+            background-size: 788px 833px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .links {
+            position: absolute;
+            bottom: 40%;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .links a {
+            text-decoration: none;
+            color: #fff;
+            font-size: 1.2em;
+            padding: 10px 20px;
+            background-color: rgba(192, 192, 192, 0.7);
+            border-radius: 10px;
+            transition: background-color 0.3s, transform 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            backdrop-filter: blur(10px);
+            font-family: "JetBrainsMono Nerd Font Mono";
+        }
+
+        .links a:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+            transform: translateY(-5px);
+        }
+
+        .links i {
+            font-size: 1.5em;
+        }
+
+        /* 图标代码对应的字体代码点 */
+        .icon-google::before {
+            content: "\f1a0"; /* Google图标 */
+        }
+
+        .icon-youtube::before {
+            content: "\f16a"; /* YouTube图标 */
+        }
+
+        .icon-github::before {
+            content: "\f09b"; /* GitHub图标 */
+        }
+
+        .icon-wikipedia::before {
+            content: "\f266"; /* Wikipedia图标 */
+        }
+    </style>
+</head>
+<body>
+    <div class="links">
+        <a href="https://www.google.com" target="_blank" rel="noopener noreferrer">
+            <i class="icon-google"></i>
+            Google
+        </a>
+        <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer">
+            <i class="icon-youtube"></i>
+            YouTube
+        </a>
+        <a href="https://github.com" target="_blank" rel="noopener noreferrer">
+            <i class="icon-github"></i>
+            GitHub
+        </a>
+        <a href="https://www.wikipedia.org" target="_blank" rel="noopener noreferrer">
+            <i class="icon-wikipedia"></i>
+            Wikipedia
+        </a>
+    </div>
+</body>
+</html>
+
