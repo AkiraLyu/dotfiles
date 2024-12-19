@@ -14,6 +14,18 @@ cmp.setup({
       require("luasnip").lsp_expand(args.body) -- For `luasnip` users.
     end,
   },
+
+  window = {
+    completion = {
+      border = "rounded", -- Use 'rounded' for rounded corners, you can also use 'single', 'double', 'solid', etc.
+      winhighlight = "Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None", -- Highlighting for window elements
+    },
+    documentation = {
+      border = "rounded", -- Same for documentation window
+      winhighlight = "Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None", -- Highlighting for window elements
+    },
+  },
+
   mapping = cmp.mapping.preset.insert({
     -- Use <C-b/f> to scroll the docs
     ["<C-b>"] = cmp.mapping.scroll_docs(-4),
@@ -27,7 +39,7 @@ cmp.setup({
 
     -- A super tab
     -- sourc: https://github.com/hrsh7th/nvim-cmp/wiki/Example-mappings#luasnip
-    ["<Tab>"] = cmp.mapping(function(fallback)
+    ["<C-Tab>"] = cmp.mapping(function(fallback)
       -- Hint: if the completion menu is visible select next one
       if cmp.visible() then
         cmp.select_next_item()
@@ -37,10 +49,10 @@ cmp.setup({
         fallback()
       end
     end, { "i", "s" }), -- i - insert mode; s - select mode
-    ["<S-Tab>"] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_prev_item()
-      elseif luasnip.jumpable(1) then
+    ["<Tab>"] = cmp.mapping(function(fallback)
+      -- if cmp.visible() then
+      -- cmp.select_prev_item()
+      if luasnip.jumpable(1) then
         luasnip.jump(1)
       else
         fallback()
@@ -48,24 +60,25 @@ cmp.setup({
     end, { "i", "s" }),
   }),
 
-  -- Let's configure the item's appearance
-  -- source: https://github.com/hrsh7th/nvim-cmp/wiki/Menu-Appearance
   formatting = {
-    -- Set order from left to right
-    -- kind: single letter indicating the type of completion
-    -- abbr: abbreviation of "word"; when not empty it is used in the menu instead of "word"
-    -- menu: extra text for the popup menu, displayed after "word" or "abbr"
-    fields = { "abbr", "menu" },
+    format = function(entry, item)
+      local icons = LazyVim.config.icons.kinds
+      if icons[item.kind] then
+        item.kind = icons[item.kind] .. item.kind
+      end
 
-    -- customize the appearance of the completion menu
-    format = function(entry, vim_item)
-      vim_item.menu = ({
-        luasnip = "[Luasnip]",
-        -- nvim_lsp = "[Lsp]",
-        buffer = "[File]",
-        path = "[Path]",
-      })[entry.source.name]
-      return vim_item
+      local widths = {
+        abbr = vim.g.cmp_widths and vim.g.cmp_widths.abbr or 40,
+        menu = vim.g.cmp_widths and vim.g.cmp_widths.menu or 30,
+      }
+
+      for key, width in pairs(widths) do
+        if item[key] and vim.fn.strdisplaywidth(item[key]) > width then
+          item[key] = vim.fn.strcharpart(item[key], 0, width - 1) .. "…"
+        end
+      end
+
+      return item
     end,
   },
 
