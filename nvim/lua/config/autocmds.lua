@@ -124,3 +124,14 @@ end
 vim.api.nvim_create_autocmd("InsertLeave", {
   callback = switch_to_english, -- 在离开插入模式时调用
 })
+
+-- 映射一个快捷键手动触发
+vim.api.nvim_set_keymap("n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>", { noremap = true, silent = true })
+
+-- 自动触发光标悬浮显示
+vim.api.nvim_create_autocmd("CursorHold", {
+  pattern = "*",
+  callback = function()
+    vim.lsp.buf.hover()
+  end,
+})
