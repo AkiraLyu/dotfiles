@@ -129,9 +129,11 @@ vim.api.nvim_create_autocmd("InsertLeave", {
 vim.api.nvim_set_keymap("n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>", { noremap = true, silent = true })
 
 -- 自动触发光标悬浮显示
-vim.api.nvim_create_autocmd("CursorHold", {
-  pattern = "*",
-  callback = function()
-    vim.lsp.buf.hover()
-  end,
-})
+-- vim.api.nvim_create_autocmd("CursorHold", {
+--   pattern = "*",
+--   callback = function()
+--     vim.lsp.buf.hover()
+--   end,
+-- })
+--
+--
