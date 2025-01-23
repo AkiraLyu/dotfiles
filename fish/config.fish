@@ -11,3 +11,4 @@ export EDITOR=nvim
 alias n=neofetch
 alias l="ls -l"
 alias vim=nvim
+alias chat="python ~/.local/scripts/deepseek.py"

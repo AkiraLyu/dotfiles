@@ -186,7 +186,7 @@ tooltip label {
     margin-right: 5px;
 }
 
-#workspaces button.active {
+#workspaces button.visible {
     /*color: #a6adc8;*/
     color: #343742;
     background: #a6e3a1;
