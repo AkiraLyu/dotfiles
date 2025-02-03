@@ -8,8 +8,8 @@
 }
 
 window#waybar {
-    background: rgba(207, 255, 253, 1);
-    /* color: #cdd6f4; */
+    background: rgba(21, 18, 27, 0);
+    color: #cdd6f4;
 }
 
 tooltip {
@@ -20,19 +20,23 @@ tooltip label {
 }
 
 #custom-MyNoti {
+    background: #222436;
     color: #2aa167;
 
     border-radius: 5px;
     
+    margin-top: 5px;
     margin-left: 5px;
     margin-right: 0px; 
 }
 
 #custom-os {
+    background: #222436;
     color: #33aadd;
 
     border-radius: 5px 5px 5px 5px;
 
+    margin-top: 5px;
     margin-left: 5px;
     margin-right: 0px;
 
@@ -41,35 +45,45 @@ tooltip label {
 }
 
 #clock {
+
+    background: #222436;
     color: #fab387;
 
     border-radius: 5px 5px 5px 5px;
 
+    margin-top: 5px;
     margin-left: 5px;
     margin-right: 0px;
 }
 
 #custom-media {
+    background: #222436;
     color: #9e9999;
     
     border-radius: 5px;
 
+    margin-top: 5px;
     margin-left: 5px;
     margin-right: 0px;
 }
 
 #window {
+    background: #222436;
+
     border-radius: 5px;
 
+    margin-top: 5px;
     margin-left: 5px;
     margin-right: 5px;
 }
 
 #temperature {
+    background: #222436;
     color: #a6e3a1;
 
     border-radius: 5px;
 
+    margin-top: 5px;
     margin-left: 0px;
     margin-right: 5px;
 }
@@ -79,71 +93,88 @@ tooltip label {
 }
 
 #battery {
+    background: #222436;
     color: #a6e3a1;
 
     border-radius: 5px;
     
+    margin-top: 5px;
     margin-left: 0px;
     margin-right: 5px;
 }
 
 #backlight {
+    background: #222436;
     color: #a6e3a1;
 
     border-radius: 5px;
     
+    margin-top: 5px;
     margin-left: 0px;
     margin-right: 5px;
 }
 
 #bluetooth {
+    background: #222436;
     color: #34c6eb;
 
     border-radius: 5px;
     
+    margin-top: 5px;
     margin-left: 0px;
     margin-right: 5px;
 }
 
 #pulseaudio {
+    background: #222436;
     color: #34c6eb;
 
     border-radius: 5px;
     
+    margin-top: 5px;
     margin-left: 0px;
     margin-right: 5px;
 }
 
 #pulseaudio.microphone {
+    background: #222436;
     color: #34c6eb;
 
     border-radius: 5px;
     
+    margin-top: 5px;
     margin-left: 0px;
     margin-right: 5px;
 }
 
 #tray {
+    background: #222436;
     color: #34c6eb;
 
     border-radius: 0px 5px 5px 0px;
     
+    margin-top: 5px;
     margin-left: 0px;
     margin-right: 5px;
 }
 
 #custom-idle {
+    background: #222436;
     color: #ff0303;
 
     border-radius: 5px 0px 0px 5px;
     
+    margin-top: 5px;
     margin-left: 0px;
     margin-right: 0px;
 }
 
 #workspaces {
+    background: #222436;
+
     border-radius: 5px;
 
+    margin-top: 5px;
     margin-left: 5px;
     margin-right: 0px;
 }
