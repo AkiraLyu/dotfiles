@@ -24,7 +24,7 @@ input 10182:480:GXTP7863:00_27C6:01E0_Touchpad {
 }
 
 #壁纸
-output * bg /home/akira/Pictures/swaybg/shiro.png fill
+output * bg /home/akira/Pictures/swaybg/gura.png fill
 
 include /etc/sway/config.d/*
 include /home/akira/.config/sway/*

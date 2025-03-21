@@ -41,7 +41,8 @@ tooltip label {
 }
 
 #clock {
-    color: #fab387;
+    /* color: #fab387; */
+    color: #fca56f;
 
     border-radius: 5px 5px 5px 5px;
 
@@ -66,7 +67,8 @@ tooltip label {
 }
 
 #temperature {
-    color: #a6e3a1;
+    /* color: #a6e3a1; */
+    color: #5bd450;
 
     border-radius: 5px;
 
@@ -79,7 +81,8 @@ tooltip label {
 }
 
 #battery {
-    color: #a6e3a1;
+    /* color: #a6e3a1; */
+    color: #5bd450;
 
     border-radius: 5px;
     
@@ -88,7 +91,8 @@ tooltip label {
 }
 
 #backlight {
-    color: #a6e3a1;
+    /* color: #a6e3a1; */
+    color: #5bd450;
 
     border-radius: 5px;
     
@@ -97,7 +101,8 @@ tooltip label {
 }
 
 #bluetooth {
-    color: #34c6eb;
+    /* color: #34c6eb; */
+    color: #3584e4;
 
     border-radius: 5px;
     
@@ -106,7 +111,8 @@ tooltip label {
 }
 
 #pulseaudio {
-    color: #34c6eb;
+    /* color: #34c6eb; */
+    color: #3584e4;
 
     border-radius: 5px;
     
@@ -115,7 +121,8 @@ tooltip label {
 }
 
 #pulseaudio.microphone {
-    color: #34c6eb;
+    /* color: #34c6eb; */
+    color: #3584e4;
 
     border-radius: 5px;
     
