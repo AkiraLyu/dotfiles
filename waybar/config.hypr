@@ -8,14 +8,13 @@
     "height": 30,
     "modules-left": [
         "custom/os",
+        "custom/pacman",
         "custom/MyNoti",
         "clock",
-        //"hyprland/workspaces",
         "hyprland/workspaces",
         "custom/media"
     ],
     "modules-center": [
-        //"hyprland/window",
         "hyprland/window"
     ],
     "modules-right": [
@@ -30,7 +29,7 @@
     ],
 
     "custom/os": {
-        "format": " 󰣇 ",
+        "format": "  ",
         "tooltip-format": "Arch Linux",
         "on-click": "nohup ~/.config/waybar/scripts/random.sh > /dev/null 2>&1 &",
         "on-click-middle": "wallpaper"
@@ -39,7 +38,17 @@
     "custom/MyNoti": {
         "format": "   ",
         "tooltip": false,
-        "on-click": "/home/akira/.config/waybar/scripts/NotificationViewer"
+        "on-click": "python /home/akira/.config/waybar/scripts/Notification.py"
+    },
+
+    "custom/pacman": {
+        "format": " 󰮯 ",
+        "tooltip-format": " {} ",
+        "interval": 3600,
+        "exec": "checkupdates | wc -l",
+        "exec-if": "exit 0",
+        "on-click": "termite -e 'sudo pacman -Syu'; pkill -SIGRTMIN+8 waybar",
+        "signal": 8
     },
 
     "clock": {
@@ -91,9 +100,9 @@
     "temperature": {
         "hwmon-path": "/sys/class/hwmon/hwmon1/temp1_input",
         "thermal-zone": 1,
-        "format": " {temperatureC}°C  ",
+        "format": "  {temperatureC}°C",
         "critical-threshold": 80,
-        "format-critical": "{temperatureC}°C "
+        "format-critical": " {temperatureC}°C"
     },
 
     "battery": {
@@ -128,7 +137,7 @@
             "󰃟",
             "󰃠"
         ],
-        "on-click": "/home/akira/.config/waybar/scripts/light",
+        "on-click": "python /home/akira/.config/waybar/scripts/light.py",
         "on-scroll-up": "brightnessctl set 1%+",
         "on-scroll-down": "brightnessctl set 1%-",
         "min-length": 6
@@ -169,7 +178,8 @@
         "format": "{format_source}",
         "format-source": "  {volume}% ",
         "format-source-muted": "  Muted ",
-        "on-click": "pamixer --default-source -t",
+        "on-click": "python /home/akira/.config/waybar/scripts/volume.py",
+        "on-click-middle": "pamixer --default-source -t",
         "on-scroll-up": "pamixer --default-source -i 1",
         "on-scroll-down": "pamixer --default-source -d 1",
         "scroll-step": 1

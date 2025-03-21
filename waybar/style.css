@@ -3,36 +3,30 @@
     border-radius: 0;
     font-family: "JetBrainsMono Nerd Font";
     font-weight: bold;
-    font-size: 16px;
+    font-size: 15px;
     min-height: 0;
 }
 
 window#waybar {
-    background: rgba(207, 255, 253, 1);
-    /* color: #cdd6f4; */
+    background: rgba(239, 240, 241, 0);
+    color: #000000;
 }
 
 tooltip {
-  background: rgb(48, 45, 65);
+    background: rgb(239, 240, 241);
+    border-radius: 5px;
 }
 tooltip label {
-  color: rgb(217, 224, 238);
-}
-
-#custom-MyNoti {
-    color: #2aa167;
-
-    border-radius: 5px;
-    
-    margin-left: 5px;
-    margin-right: 0px; 
+  color: rgb(27, 91, 168);
 }
 
 #custom-os {
+    background: #eff0f1;
     color: #33aadd;
 
-    border-radius: 5px 5px 5px 5px;
+    border-radius: 5 0 0 5;
 
+    margin-top: 5px;
     margin-left: 5px;
     margin-right: 0px;
 
@@ -40,40 +34,68 @@ tooltip label {
     border-right: 0px;
 }
 
+#custom-pacman{
+    background: #eff0f1;
+    color: #2aa167;
+
+    border-radius: 0 0 0 0;
+
+    margin-top: 5px;
+    margin-right: 0px; 
+}
+
+#custom-MyNoti {
+    background: #eff0f1;
+    color: #2aa167;
+
+    border-radius: 0 5 5 0;
+
+    margin-top: 5px;
+    margin-right: 0px; 
+}
+
+
 #clock {
-    /* color: #fab387; */
-    color: #fca56f;
+
+    background: #eff0f1;
+    color: #f28744;
 
     border-radius: 5px 5px 5px 5px;
 
+    margin-top: 5px;
     margin-left: 5px;
     margin-right: 0px;
 }
 
 #custom-media {
+    background: #eff0f1;
     color: #9e9999;
-    
+
     border-radius: 5px;
 
+    margin-top: 5px;
     margin-left: 5px;
     margin-right: 0px;
 }
 
 #window {
+    background: #eff0f1;
+
     border-radius: 5px;
 
+    margin-top: 5px;
     margin-left: 5px;
     margin-right: 5px;
 }
 
 #temperature {
-    /* color: #a6e3a1; */
-    color: #5bd450;
+    background: #eff0f1;
+    color: #0c9625;
 
-    border-radius: 5px;
+    border-radius: 5px 0px 0px 5px;
 
+    margin-top: 5px;
     margin-left: 0px;
-    margin-right: 5px;
 }
 
 #temperature.critical {
@@ -81,89 +103,96 @@ tooltip label {
 }
 
 #battery {
-    /* color: #a6e3a1; */
-    color: #5bd450;
+    background: #eff0f1;
+    color: #0c9625;
 
-    border-radius: 5px;
-    
+    border-radius: 0px;
+
+    margin-top: 5px;
     margin-left: 0px;
-    margin-right: 5px;
 }
 
 #backlight {
-    /* color: #a6e3a1; */
-    color: #5bd450;
+    background: #eff0f1;
+    color: #0c9625;
 
-    border-radius: 5px;
-    
+    border-radius: 0px 5px 5px 0px;
+
+    margin-top: 5px;
     margin-left: 0px;
     margin-right: 5px;
 }
 
 #bluetooth {
-    /* color: #34c6eb; */
-    color: #3584e4;
+    background: #eff0f1;
+    color: #5a25cc;
 
-    border-radius: 5px;
-    
+    border-radius: 5px 0px 0px 5px;
+
+    margin-top: 5px;
     margin-left: 0px;
-    margin-right: 5px;
 }
 
 #pulseaudio {
-    /* color: #34c6eb; */
-    color: #3584e4;
+    background: #eff0f1;
+    color: #5a25cc;
 
-    border-radius: 5px;
-    
+    border-radius: 0px;
+
+    margin-top: 5px;
     margin-left: 0px;
-    margin-right: 5px;
 }
 
 #pulseaudio.microphone {
-    /* color: #34c6eb; */
-    color: #3584e4;
+    background: #eff0f1;
+    color: #5a25cc;
 
-    border-radius: 5px;
-    
+    border-radius: 0px 5px 5px 0px;
+
+    margin-top: 5px;
     margin-left: 0px;
     margin-right: 5px;
 }
 
 #tray {
-    color: #34c6eb;
+    background: #eff0f1;
+    color: #5a25cc;
 
     border-radius: 0px 5px 5px 0px;
-    
+
+    margin-top: 5px;
     margin-left: 0px;
     margin-right: 5px;
 }
 
 #custom-idle {
+    background: #eff0f1;
     color: #ff0303;
 
     border-radius: 5px 0px 0px 5px;
-    
+
+    margin-top: 5px;
     margin-left: 0px;
     margin-right: 0px;
 }
 
 #workspaces {
+    background: #eff0f1;
+
     border-radius: 5px;
 
+    margin-top: 5px;
     margin-left: 5px;
     margin-right: 0px;
 }
 
 #workspaces button {
     padding: 5px;
-    /*color: #313244;*/
-    color: #a6adc8;
+    color: #636675;
     margin-right: 5px;
 }
 
 #workspaces button.visible {
-    /*color: #a6adc8;*/
     color: #343742;
     background: #a6e3a1;
     border-radius: 5px;
@@ -171,7 +200,6 @@ tooltip label {
 
 #workspaces button.focused {
     color: #a6adc8;
-    /*background: #11111b;*/
     border-radius: 5px;
 }
 
@@ -182,8 +210,6 @@ tooltip label {
 }
 
 #workspaces button:hover {
-    /*background: #11111b;*/
-    /*color: #cdd6f4;*/
     background: #a6e3a1;
     color: #343742;
     border-radius: 5px;

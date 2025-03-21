@@ -1,4 +1,4 @@
-set Start_Env kde
+set Start_Env hypr
 
 set TTY1 (tty)
 if [ "$TTY1" = /dev/tty1 ]
