@@ -111,17 +111,17 @@ return {
       -- cmdline = {}, -- Disable sources for command-line mode
       providers = {
         lsp = {
-          min_keyword_length = 2, -- Number of characters to trigger porvider
+          min_keyword_length = 1, -- Number of characters to trigger porvider
           score_offset = 0, -- Boost/penalize the score of the items
         },
         path = {
           min_keyword_length = 0,
         },
         snippets = {
-          min_keyword_length = 2,
+          min_keyword_length = 1,
         },
         buffer = {
-          min_keyword_length = 5,
+          min_keyword_length = 1,
           max_items = 5,
         },
       },

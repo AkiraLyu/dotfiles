@@ -145,7 +145,8 @@
     "bluetooth": {
         "format": "  {status} ",
         "format-disabled": "","format-connected": "  {num_connections} ",
-        "on-click": "bluetoothctl connect 08:F0:B6:D9:43:92",
+        "on-click": "blueberry",
+        "on-click-left": "bluetoothctl connect 08:F0:B6:D9:43:92",
         "on-click-middle": "bluetoothctl disconnect 08:F0:B6:D9:43:92",
         "tooltip-format": "{device_alias}",
         "tooltip-format-connected": "  {device_enumerate} ",
