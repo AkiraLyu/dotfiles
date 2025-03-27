@@ -1,0 +1,23 @@
+{
+    "name": "my-snippets",
+    "contributes": {
+        "snippets": [
+            {
+                "language": "tex",
+                "path": "./latex.json"
+            },
+            {
+                "language": "lua",
+                "path": "./lua.json"
+            },
+            {
+                "language": "c",
+                "path": "./c.json"
+            },
+            {
+                "language": "all",
+                "path": "./allFiletypes.json"
+            }
+        ]
+    }
+}
