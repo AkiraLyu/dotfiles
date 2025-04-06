@@ -1,4 +1,22 @@
 {
+    "Centering Math": {
+        "prefix": "cm",
+        "body": [
+            "\\$$ $0 \\$$"
+        ]
+    },
+    "Inline Math": {
+        "prefix": "im",
+        "body": [
+            "\\$ $0 \\$"
+        ]
+    },
+    "D Frac": {
+        "prefix": "df",
+        "body": [
+            "\\dfrac{$1}{$2} $0"
+        ]
+    },
     "Align*": {
         "prefix": "al",
         "body": [

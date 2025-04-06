@@ -1,6 +1,9 @@
 {
     "main": {
-        "prefix": "main",
+        "prefix": [
+            "mymain",
+            "main"
+        ],
         "body": [
             "#include <stdio.h>",
             "",

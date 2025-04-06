@@ -1,0 +1,21 @@
+{
+    "build": {
+        "prefix": "cbuild",
+        "body": [
+            "CC = clang",
+            "CFLAGS = -g -Wall",
+            "OBJ = shell.o cmd.o builtin.o execute.o file.o",
+            "shell: $(OBJ)",
+            "\t$(CC) $(OBJ) -o shell",
+            "%.o: %.c",
+            "\t$(CC) $(CFLAGS) -c $< -o $@",
+            "run: shell",
+            "\t./shell",
+            "debug:shell",
+            "\t@gdb ./shell",
+            "clean:",
+            "\trm -f $(OBJ) shell"
+        ],
+        "description": "Build the project"
+    }
+}

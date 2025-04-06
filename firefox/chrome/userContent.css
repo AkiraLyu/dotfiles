@@ -1,5 +1,13 @@
 @-moz-document url(about:home), url(about:newtab), url(about:privatebrowsing){
 
+  .search-wrapper .search-inner-wrapper {
+  position: absolute !important;
+  left: 50% !important;
+  top: 45% !important;
+  transform: translate(-50%, -50%) !important;
+  margin: 0 !important;
+  }
+
 /*用于将字体设置为白色*/
 .top-site-button .title,
 .context-menu-button {
@@ -38,8 +46,8 @@ body::before {
     background-position: center center;
     background-size: 788px 833px;
 
-
     /* 背景图片的 URL */
     background-image: url(firefox.png);
 }
 }
+

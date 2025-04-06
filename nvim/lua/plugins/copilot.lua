@@ -20,6 +20,7 @@ return {
       help = true,
       c = true,
       python = true,
+      tex = false,
     },
   },
 }

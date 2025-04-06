@@ -17,6 +17,10 @@
             {
                 "language": "all",
                 "path": "./allFiletypes.json"
+            },
+            {
+                "language": "make",
+                "path": "./makefile.json"
             }
         ]
     }

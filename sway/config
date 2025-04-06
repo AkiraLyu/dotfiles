@@ -1,5 +1,8 @@
 output * scale 1
-#output HDMI-A-1 resolution 1920x1080 position 1920,0
+output HEADLESS-1 {
+        pos 0,1920
+        mode 1920x1080@60Hz
+}
 
 #边界
 default_floating_border pixel 3

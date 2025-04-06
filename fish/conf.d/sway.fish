@@ -3,4 +3,4 @@
 #export QT_QPA_PLATFORM=wayland
 #export XDG_CURRENT_DESKTOP=hyprland
 #export XDG_SESSION_DESKTOP=hyprland
-export AQ_NO_MODIFIERS=1
+#export AQ_NO_MODIFIERS=1
