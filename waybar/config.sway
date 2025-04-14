@@ -8,6 +8,7 @@
     "height": 30,
     "modules-left": [
         "custom/os",
+        "custom/pacman",
         "custom/MyNoti",
         "clock",
         "sway/workspaces",
@@ -37,7 +38,17 @@
     "custom/MyNoti": {
         "format": "   ",
         "tooltip": false,
-        "on-click": "/home/akira/.config/waybar/scripts/NotificationViewer"
+        "on-click": "python /home/akira/.config/waybar/scripts/Notification.py"
+    },
+
+    "custom/pacman": {
+        "format": " 󰮯 ",
+        "tooltip-format": " {} ",
+        "interval": 3600,
+        "exec": "checkupdates | wc -l",
+        "exec-if": "exit 0",
+        "on-click": "termite -e 'sudo pacman -Syu'; pkill -SIGRTMIN+8 waybar",
+        "signal": 8
     },
 
     "clock": {
@@ -72,7 +83,7 @@
 
     "custom/media": {
         "mode": "dock",
-        "exec": "playerctl metadata -p yesplaymusic,rhythmbox -f '{{lc(status)}}-{{title}}-{{artist}}' -F",
+        "exec": "/home/akira/.config/waybar/scripts/media.sh",
         "on-click": "playerctl -p yesplaymusic,rhythmbox play-pause",
         "on-scroll-up": "playerctl -p yesplaymusic,rhythmbox previous",
         "on-scroll-down": "playerctl -p yesplaymusic,rhythmbox next",
@@ -120,13 +131,13 @@
     },
     "backlight": {
         "device": "intel_backlight",
-        "format": "{icon} {percent}%",
+        "format": "{icon} {percent}% ",
         "format-icons": [
             "󰃞",
             "󰃟",
             "󰃠"
         ],
-        "on-click": "/home/akira/.config/waybar/scripts/light",
+        "on-click": "python /home/akira/.config/waybar/scripts/light.py",
         "on-scroll-up": "brightnessctl set 1%+",
         "on-scroll-down": "brightnessctl set 1%-",
         "min-length": 6
@@ -134,8 +145,9 @@
     "bluetooth": {
         "format": "  {status} ",
         "format-disabled": "","format-connected": "  {num_connections} ",
-        "on-click": "bluetoothctl connect F0:BE:25:14:D3:3C",
-        "on-click-middle": "bluetoothctl disconnect F0:BE:25:14:D3:3C",
+        "on-click": "blueberry",
+        "on-click-left": "bluetoothctl connect 08:F0:B6:D9:43:92",
+        "on-click-middle": "bluetoothctl disconnect 08:F0:B6:D9:43:92",
         "tooltip-format": "{device_alias}",
         "tooltip-format-connected": "  {device_enumerate} ",
         "tooltip-format-enumerate-connected": "{device_alias}"
@@ -167,12 +179,12 @@
         "format": "{format_source}",
         "format-source": "  {volume}% ",
         "format-source-muted": "  Muted ",
-        "on-click": "pamixer --default-source -t",
+        "on-click": "python /home/akira/.config/waybar/scripts/volume.py",
+        "on-click-middle": "pamixer --default-source -t",
         "on-scroll-up": "pamixer --default-source -i 1",
         "on-scroll-down": "pamixer --default-source -d 1",
         "scroll-step": 1
     },
-
     "custom/idle": {
         "format": "  ",
         "on-click": "wlogout"

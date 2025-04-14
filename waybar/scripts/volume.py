@@ -85,7 +85,7 @@ class BluetoothApp:
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
         )
-        GLib.timeout_add_seconds(12, self.stop_scan)
+        GLib.timeout_add_seconds(5, self.stop_scan)
 
     def stop_scan(self):
         if self.scan_process:
@@ -207,7 +207,7 @@ class BluetoothApp:
         # 音量控制
         vol_label = Gtk.Label(label="播放音量")
         box.pack_start(vol_label, False, False, 0)
-        self.vol_scale = Gtk.Scale.new_with_range(Gtk.Orientation.HORIZONTAL, 0, 100, 5)
+        self.vol_scale = Gtk.Scale.new_with_range(Gtk.Orientation.HORIZONTAL, 0, 100, 1)
         self.vol_scale.set_value(self.get_volume())
         self.vol_scale.connect("value-changed", self.on_volume_changed)
         box.pack_start(self.vol_scale, False, False, 0)
@@ -215,7 +215,7 @@ class BluetoothApp:
         # 麦克风控制
         mic_label = Gtk.Label(label="麦克风")
         box.pack_start(mic_label, False, False, 0)
-        self.mic_scale = Gtk.Scale.new_with_range(Gtk.Orientation.HORIZONTAL, 0, 100, 5)
+        self.mic_scale = Gtk.Scale.new_with_range(Gtk.Orientation.HORIZONTAL, 0, 100, 1)
         self.mic_scale.set_value(self.get_mic_volume())
         self.mic_scale.connect("value-changed", self.on_mic_changed)
         box.pack_start(self.mic_scale, False, False, 0)

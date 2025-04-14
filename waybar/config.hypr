@@ -81,24 +81,12 @@
         }
     },
 
-//    "custom/media": {
-//        "mode": "dock",
-//        "exec": "playerctl metadata -p yesplaymusic,rhythmbox -f '{{lc(status)}}-{{title}}-{{artist}}' -F",
-//        "on-click": "playerctl -p yesplaymusic,rhythmbox play-pause",
-//        "on-scroll-up": "playerctl -p yesplaymusic,rhythmbox previous",
-//        "on-scroll-down": "playerctl -p yesplaymusic,rhythmbox next",
-//        "max-length": 25,
-//        "min-length": 25,
-//        "escape": true,
-//        "tooltip": true
-//    },
-
     "custom/media": {
         "mode": "dock",
-        "exec": "playerctl metadata -f '{{lc(status)}}-{{title}}-{{artist}}' -F",
-        "on-click": "playerctl play-pause",
-        "on-scroll-up": "playerctl previous",
-        "on-scroll-down": "playerctl next",
+        "exec": "/home/akira/.config/waybar/scripts/media.sh",
+        "on-click": "playerctl -p yesplaymusic,rhythmbox play-pause",
+        "on-scroll-up": "playerctl -p yesplaymusic,rhythmbox previous",
+        "on-scroll-down": "playerctl -p yesplaymusic,rhythmbox next",
         "max-length": 25,
         "min-length": 25,
         "escape": true,
@@ -143,7 +131,7 @@
     },
     "backlight": {
         "device": "intel_backlight",
-        "format": "{icon} {percent}%",
+        "format": "{icon} {percent}% ",
         "format-icons": [
             "󰃞",
             "󰃟",

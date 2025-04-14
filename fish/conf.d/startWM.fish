@@ -1,4 +1,5 @@
-set Start_Env null
+set Start_Env sway
+export XDG_CURRENT_DESKTOP=sway
 
 set TTY1 (tty)
 if [ "$TTY1" = /dev/tty1 ]

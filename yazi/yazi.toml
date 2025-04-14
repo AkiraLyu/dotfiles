@@ -8,6 +8,9 @@ edit = [
 pic = [
 	{ run = 'eog "$@"', block = true, for = "unix" },
 ]
+epub = [
+	{ run = 'foliate "$@"', block = true, for = "unix" },
+]
 open = [
 	{ run = 'xdg-open "$@"', desc = "Open" },
 ]
@@ -15,6 +18,7 @@ open = [
 [open]
 prepend_rules = [
 	{ name = "*.json", use = "edit" },
+	{ name = "*.epub", use = "epub" },
 
 	# Multiple openers for a single rule
 	{ name = "*.html", use = [ "open", "edit" ] },

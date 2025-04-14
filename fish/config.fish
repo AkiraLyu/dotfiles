@@ -12,6 +12,7 @@ alias n=neofetch
 alias l="ls -l"
 alias vim=nvim
 alias chat="python ~/.local/scripts/deepseek.py"
+alias cat=bat
 
 export PATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/home/akira/.cargo/bin
 
