@@ -14,7 +14,7 @@ alias vim=nvim
 alias chat="python ~/.local/scripts/deepseek.py"
 alias cat=bat
 
-export PATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/home/akira/.cargo/bin
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/home/akira/.cargo/bin:/home/akira/.nix-profile/bin
 
 export QT_XCB_GL_INTEGRATION=none
 export CRYPTOGRAPHY_OPENSSL_NO_LEGACY=none
