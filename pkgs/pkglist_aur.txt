@@ -14,7 +14,6 @@ fcitx5-skin-ori-git
 google-chrome
 hexo-cli
 hyprland-git
-hyprland-protocols-git
 jmtpfs
 katago-cpu
 lceda-pro-bin
@@ -25,11 +24,10 @@ ltspice
 matplotlib-cpp-git
 minecraft-launcher
 mpvpaper
-mysql
 noto-fonts-sc
 ntfsprogs-ntfs3
 paru-git
-pot-translation
+pot-translation-bin
 python-pyautogui
 q5go
 scala
@@ -51,9 +49,9 @@ waybar-git
 waydroid
 wayfire
 wechat-universal-bwrap
-wf-config
 wlogout
-wps-office-365
+wps-office-cn
+wps-office-mui-zh-cn
 xdg-desktop-portal-hyprland-git
 xmind
 xwayland-satellite-git

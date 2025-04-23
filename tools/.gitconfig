@@ -1,0 +1,16 @@
+[user]
+	name = Akira-uestc
+	email = akira.uestc@gmail.com
+[init]
+	defaultBranch = main
+[init]
+	defaultBranch = main
+[safe]
+	directory = /mnt/data/MyBlog/.deploy_git
+	directory = /mnt/data/Note
+	directory = /mnt/data/MyBlog
+[core]
+	editor = nvim
+[color]
+	ui = true
+

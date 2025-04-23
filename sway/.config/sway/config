@@ -10,11 +10,11 @@ default_border pixel 3
 gaps inner 1
 gaps outer 3
 smart_borders on
-#smart_gaps on
-client.focused          #ffefd5 #4bf1f7 #ffffff
+
+client.focused          #ffc0cb #ffc0cb #ffffff
 client.unfocused        #6e7b8b #6e7b8b #888888
 client.focused_inactive #6e7b8b #6e7b8b #888888 
-client.placeholder      #6e7b8b #6e7b8b #888888
+client.placeholder      #2e3440 #1f222d #888888
 client.urgent           #D08770 #D08770 #ffffff
 client.background       #242424
 

@@ -1,5 +1,3 @@
-@import url("./popup-search.css");
-
 /* Sidebery */
 #main-window[titlepreface*="🦊 "] .tabbrowser-tab {
   visibility: collapse !important;
