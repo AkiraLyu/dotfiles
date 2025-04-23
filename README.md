@@ -20,3 +20,13 @@ bar:waybar
 
 launcher:wofi
 
+## usage
+
+i use gnu stow to manage my dotfiles
+
+for example, to install the dotfiles for fish, run:
+
+```bash
+stow fish
+```
+
