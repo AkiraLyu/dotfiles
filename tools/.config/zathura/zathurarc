@@ -1,0 +1,67 @@
+set selection-clipboard clipboard
+map D set "first-page-column 1:1"
+map <C-d> set "first-page-column 1:2"
+set adjust-open "width"
+set font "Noto Sans CJK SC Regular 12"
+set guioptions " "
+set window-title-basename true
+set incremental-search false
+set show-v-scrollbar true
+set advance-pages-per-row true
+set pages-per-row 1
+
+#Color
+#set notification-error-bg       "#282828" # bg
+#set notification-error-fg       "#fb4934" # bright:red
+#set notification-warning-bg     "#282828" # bg
+#set notification-warning-fg     "#fabd2f" # bright:yellow
+#set notification-bg             "#282828" # bg
+#set notification-fg             "#b8bb26" # bright:green
+#
+#set completion-bg               "#504945" # bg2
+#set completion-fg               "#ebdbb2" # fg
+#set completion-group-bg         "#3c3836" # bg1
+#set completion-group-fg         "#928374" # gray
+#set completion-highlight-bg     "#83a598" # bright:blue
+#set completion-highlight-fg     "#504945" # bg2
+#
+# Define the color in index mode
+#set index-bg                    "#504945" # bg2
+#set index-fg                    "#ebdbb2" # fg
+#set index-active-bg             "#83a598" # bright:blue
+#set index-active-fg             "#504945" # bg2
+#
+#set inputbar-bg                 "#282828" # bg
+#set inputbar-fg                 "#ebdbb2" # fg
+#
+#set statusbar-bg                "#282828" # bg
+#set statusbar-fg                "#ebdbb2" # fg
+#
+#set highlight-color             "#fabd2f" # bright:yellow
+#set highlight-active-color      "#fe8019" # bright:orange
+#
+#set default-bg                  "#282828" # bg
+#set default-fg                  "#ebdbb2" # fg
+#set render-loading              true
+#set render-loading-bg           "#282828" # bg
+#set render-loading-fg           "#ebdbb2" # fg
+#
+# Recolor book content's color
+#set recolor-lightcolor          "#fffaf0" # bg
+#set recolor-darkcolor           "#000000" # fg
+#set recolor                     "true"
+# set recolor-keephue             true      # keep original color
+#
+#set ctermbg=none
+#
+#设置背景色
+#map <C-1> feedkeys ":set recolor-lightcolor \#002b36<Return>" #午夜背景
+#map <C-2> feedkeys ":set recolor-lightcolor \#000000<Return>" #黑绿背景
+#map <C-3> feedkeys ":set recolor-lightcolor \#cce8cf<Return>" #草绿
+#map <C-4> feedkeys ":set recolor-lightcolor \#ffffed<Return>" #明黄
+#map <C-5> feedkeys ":set recolor-lightcolor \#eefaee<Return>" #淡绿
+#map <C-6> feedkeys ":set recolor-lightcolor \#c0d3d7<Return>" #仿墨水屏
+#设置字体颜色
+#map <A-1> feedkeys ":set recolor-darkcolor \#839496<Return>" #午夜前景
+#map <A-2> feedkeys ":set recolor-darkcolor \#00B800<Return>" #黑绿前景
+#map <A-3> feedkeys ":set recolor-darkcolor \#111111<Return>" #仿墨水屏黑色
