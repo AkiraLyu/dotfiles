@@ -3,98 +3,428 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Homepage</title>
+    <title>Modern Homepage</title>
     <style>
         @font-face {
             font-family: "JetBrainsMono Nerd Font";
             src: local("JetBrainsMono Nerd Font"), local("JetBrainsMonoNF");
         }
 
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #8b5cf6;
+            --accent-color: #ec4899;
+            --text-color: #1e293b;
+            --light-color: #ffffff;
+            --glass-effect: rgba(255, 255, 255, 0.5);
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --glass-highlight: rgba(255, 255, 255, 0.95);
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
             margin: 0;
             padding: 0;
-            font-family: Arial, sans-serif;
-            color: #fff;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--text-color);
             background: url("wallpaper.png") no-repeat center center fixed;
             background-size: 788px 833px;
             height: 100vh;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: flex-start;
             align-items: center;
             text-align: center;
+            overflow: hidden;
+            padding-top: 77vh; /* Changed from justify-content: center to this */
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.0);
+            z-index: -1;
+        }
+
+        .content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem; /* Reduced from 2rem */
+            width: 90%;
+            max-width: 600px; /* Reduced from 800px */
+            padding: 1.5rem; /* Reduced from 2rem */
+            background: var(--glass-effect);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 1.5rem;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 32px var(--shadow-color);
+            animation: fadeIn 0.6s ease-out;
+            margin-top: -30vh; /* Added to pull it up from the 60vh position */
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .links {
-            position: absolute;
-            bottom: 40%;
             width: 100%;
             display: flex;
+            flex-wrap: wrap;
             justify-content: center;
-            gap: 15px;
+            gap: 0.75rem; /* Reduced from 1rem */
         }
 
         .links a {
             text-decoration: none;
-            color: #fff;
-            font-size: 1.2em;
-            padding: 10px 20px;
-            background-color: rgba(192, 192, 192, 0.7);
-            border-radius: 10px;
-            transition: background-color 0.3s, transform 0.2s;
+            color: var(--text-color);
+            font-size: 0.9rem; /* Reduced from 1rem */
+            font-weight: 500;
+            padding: 0.6rem 1rem; /* Reduced from 0.8rem 1.5rem */
+            background: var(--glass-effect);
+            border-radius: 0.75rem;
+            transition: all 0.3s ease;
             display: flex;
             align-items: center;
-            gap: 10px;
-            backdrop-filter: blur(10px);
-            font-family: "JetBrainsMono Nerd Font Mono";
+            gap: 0.5rem; /* Reduced from 0.75rem */
+            backdrop-filter: blur(5px);
+            border: 1px solid var(--glass-border);
+            min-width: 100px; /* Reduced from 120px */
+            justify-content: center;
         }
 
         .links a:hover {
-            background-color: rgba(0, 0, 0, 0.8);
-            transform: translateY(-5px);
+            background: var(--glass-highlight);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px var(--shadow-color);
+        }
+
+        .links a:active {
+            transform: translateY(0);
         }
 
         .links i {
-            font-size: 1.5em;
+            font-size: 1.1rem; /* Reduced from 1.25rem */
         }
 
-        /* 图标代码对应的字体代码点 */
+        /* 图标样式 */
         .icon-google::before {
-            content: "\f1a0"; /* Google图标 */
+            content: "\f1a0";
+            color: #4285F4;
         }
 
         .icon-youtube::before {
-            content: "\f16a"; /* YouTube图标 */
+            content: "\f16a";
+            color: #FF0000;
         }
 
         .icon-github::before {
-            content: "\f09b"; /* GitHub图标 */
+            content: "\f09b";
+            color: #181717;
         }
 
         .icon-wikipedia::before {
-            content: "\f266"; /* Wikipedia图标 */
+            content: "\f266";
+            color: #000000;
+        }
+        
+        .icon-search::before {
+            content: "\f002";
+            color: #000000;
+        }
+        
+        /* 搜索栏样式 */
+        .search-bar {
+            width: 100%;
+            max-width: 600px;
+            padding: 0.8rem 1.2rem; /* Reduced from 1rem 1.5rem */
+            border-radius: 2rem;
+            border: none;
+            outline: none;
+            background: rgba(255, 255, 255, 0.8);
+            color: var(--text-color);
+            font-size: 0.95rem; /* Reduced from 1rem */
+            font-weight: 500;
+            box-shadow: 0 4px 20px var(--shadow-color);
+            transition: all 0.3s ease;
+            font-family: "JetBrainsMono Nerd Font Mono", monospace;
+            text-align: center;
+            backdrop-filter: blur(5px);
+            border: 1px solid var(--glass-border);
+            cursor: pointer;
+        }
+        
+        .search-bar::placeholder {
+            color: rgba(30, 41, 59, 0.7);
+        }
+        
+        .search-bar:hover {
+            background: rgba(255, 255, 255, 0.9);
+        }
+        
+        .search-bar:focus {
+            box-shadow: 0 6px 24px var(--shadow-color);
+            transform: scale(1.02);
+            background: rgba(255, 255, 255, 0.95);
+        }
+        
+        /* 弹出搜索框样式 */
+        .search-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1.5rem; /* Reduced from 2rem */
+            border-radius: 1.5rem;
+            box-shadow: 0 12px 48px var(--shadow-color);
+            z-index: 1000;
+            width: 90%;
+            max-width: 500px; /* Reduced from 600px */
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            animation: popIn 0.3s ease-out;
+        }
+
+        @keyframes popIn {
+            from { opacity: 0; transform: translate(-50%, -45%); }
+            to { opacity: 1; transform: translate(-50%, -50%); }
+        }
+        
+        .search-popup input {
+            width: 100%;
+            padding: 1rem 1.2rem; /* Reduced from 1.2rem 1.5rem */
+            font-size: 1rem; /* Reduced from 1.1rem */
+            border-radius: 1rem;
+            border: none;
+            margin-bottom: 1rem; /* Reduced from 1.5rem */
+            background: rgba(255, 255, 255, 0.8);
+            color: var(--text-color);
+            outline: none;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .search-popup input:focus {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 0 0 2px var(--primary-color);
+        }
+        
+        .search-popup .search-engines {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); /* Reduced from 140px */
+            gap: 0.8rem; /* Reduced from 1rem */
+        }
+        
+        .search-popup .engine-option {
+            background: rgba(255, 255, 255, 0.7);
+            padding: 0.8rem; /* Reduced from 1rem */
+            border-radius: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem; /* Reduced from 0.75rem */
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            font-size: 0.85rem; /* Reduced from 0.9rem */
+            color: var(--text-color);
+        }
+        
+        .search-popup .engine-option:hover {
+            background: rgba(255, 255, 255, 0.9);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px var(--shadow-color);
+        }
+        
+        .search-popup .engine-option.active {
+            background: rgba(99, 102, 241, 0.2);
+            border-color: var(--primary-color);
+            color: var(--text-color);
+        }
+        
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+            z-index: 999;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            animation: fadeInOverlay 0.3s ease-out;
+        }
+
+        @keyframes fadeInOverlay {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .content {
+                width: 95%;
+                padding: 1.2rem; /* Reduced from 1.5rem */
+            }
+            
+            .links {
+                gap: 0.6rem; /* Reduced from 0.75rem */
+            }
+            
+            .links a {
+                padding: 0.5rem 0.8rem; /* Reduced from 0.7rem 1rem */
+                font-size: 0.85rem; /* Reduced from 0.9rem */
+                min-width: 90px; /* Reduced from 100px */
+            }
+            
+            .search-popup {
+                width: 95%;
+                padding: 1.2rem; /* Reduced from 1.5rem */
+            }
+            
+            .search-popup .search-engines {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); /* Reduced from 120px */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .search-popup .search-engines {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .links a {
+                flex-grow: 1;
+            }
         }
     </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <div class="links">
-        <a href="https://www.google.com" target="_blank" rel="noopener noreferrer">
-            <i class="icon-google"></i>
-            Google
-        </a>
-        <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer">
-            <i class="icon-youtube"></i>
-            YouTube
-        </a>
-        <a href="https://github.com" target="_blank" rel="noopener noreferrer">
-            <i class="icon-github"></i>
-            GitHub
-        </a>
-        <a href="https://www.wikipedia.org" target="_blank" rel="noopener noreferrer">
-            <i class="icon-wikipedia"></i>
-            Wikipedia
-        </a>
+    <div class="content">
+        <input type="text" class="search-bar" placeholder="Search the web..." id="mainSearchBar" readonly>
+        
+        <div class="links">
+            <a href="https://www.google.com" target="_blank" rel="noopener noreferrer">
+                <i class="icon-google fab fa-google"></i>
+                Google
+            </a>
+            <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer">
+                <i class="icon-youtube fab fa-youtube"></i>
+                YouTube
+            </a>
+            <a href="https://github.com" target="_blank" rel="noopener noreferrer">
+                <i class="icon-github fab fa-github"></i>
+                GitHub
+            </a>
+            <a href="https://www.wikipedia.org" target="_blank" rel="noopener noreferrer">
+                <i class="icon-wikipedia fab fa-wikipedia-w"></i>
+                Wikipedia
+            </a>
+        </div>
     </div>
+    
+    <!-- 弹出搜索框 -->
+    <div class="overlay" id="searchOverlay"></div>
+    <div class="search-popup" id="searchPopup">
+        <input type="text" id="searchInput" placeholder="Enter your search query..." autofocus>
+        <div class="search-engines">
+            <div class="engine-option active" data-engine="https://www.google.com/search?q=">
+                <i class="icon-google fab fa-google"></i> Google
+            </div>
+            <div class="engine-option" data-engine="https://www.youtube.com/results?search_query=">
+                <i class="icon-youtube fab fa-youtube"></i> YouTube
+            </div>
+            <div class="engine-option" data-engine="https://github.com/search?q=">
+                <i class="icon-github fab fa-github"></i> GitHub
+            </div>
+            <div class="engine-option" data-engine="https://en.wikipedia.org/w/index.php?search=">
+                <i class="icon-wikipedia fab fa-wikipedia-w"></i> Wikipedia
+            </div>
+            <div class="engine-option" data-engine="https://duckduckgo.com/?q=">
+                <i class="icon-search fas fa-search"></i> DuckDuckGo
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 获取DOM元素
+        const mainSearchBar = document.getElementById('mainSearchBar');
+        const searchPopup = document.getElementById('searchPopup');
+        const searchOverlay = document.getElementById('searchOverlay');
+        const searchInput = document.getElementById('searchInput');
+        const engineOptions = document.querySelectorAll('.engine-option');
+        
+        // 当前选中的搜索引擎
+        let currentEngine = "https://www.google.com/search?q=";
+        
+        // 点击搜索栏显示弹出框
+        mainSearchBar.addEventListener('click', () => {
+            searchPopup.style.display = 'block';
+            searchOverlay.style.display = 'block';
+            searchInput.focus();
+        });
+        
+        // 点击遮罩层关闭弹出框
+        searchOverlay.addEventListener('click', () => {
+            searchPopup.style.display = 'none';
+            searchOverlay.style.display = 'none';
+        });
+        
+        // 选择搜索引擎
+        engineOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                engineOptions.forEach(opt => opt.classList.remove('active'));
+                option.classList.add('active');
+                currentEngine = option.getAttribute('data-engine');
+                searchInput.focus();
+            });
+        });
+        
+        // 处理搜索
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const query = encodeURIComponent(searchInput.value.trim());
+                if (query) {
+                    window.open(currentEngine + query, '_blank');
+                    searchPopup.style.display = 'none';
+                    searchOverlay.style.display = 'none';
+                    searchInput.value = '';
+                }
+            }
+        });
+        
+        // 点击外部关闭弹出框
+        document.addEventListener('click', (e) => {
+            if (!searchPopup.contains(e.target) && e.target !== mainSearchBar) {
+                searchPopup.style.display = 'none';
+                searchOverlay.style.display = 'none';
+            }
+        });
+
+        // 添加ESC键关闭功能
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                searchPopup.style.display = 'none';
+                searchOverlay.style.display = 'none';
+            }
+        });
+    </script>
 </body>
 </html>
-
