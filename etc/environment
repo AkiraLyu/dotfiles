@@ -1,15 +1,3 @@
-#
-# This file is parsed by pam_env module
-#
-# Syntax: simple "KEY=VAL" pairs on separate lines
-#
-
-
-export http_proxy=http://127.0.0.1:7890/
-export https_proxy=http://127.0.0.1:7890/
-
-#GTK_IM_MODULE=fcitx
-QT_IM_MODULE=fcitx
 XMODIFIERS=@im=fcitx
 
 _JAVA_AWT_WM_NONREPARENTING=1
