@@ -1,4 +1,13 @@
-XMODIFIERS=@im=fcitx
+#
+# This file is parsed by pam_env module
+#
+# Syntax: simple "KEY=VAL" pairs on separate lines
+#
+
+export XMODIFIERS=@im=fcitx
+export GTK_IM_MODULE=fcitx
+#export QT_IM_MODULE=fcitx
+
 
 _JAVA_AWT_WM_NONREPARENTING=1
 

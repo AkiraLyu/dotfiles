@@ -21,6 +21,7 @@ return {
       c = true,
       python = true,
       tex = false,
+      gitcommit = true,
     },
   },
 }
