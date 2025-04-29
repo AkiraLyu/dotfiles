@@ -6,7 +6,7 @@ edit = [
 	{ run = '$EDITOR "$@"', block = true, for = "unix" },
 ]
 pic = [
-	{ run = 'eog "$@"', block = true, for = "unix" },
+	{ run = 'gwenview "$@"', block = true, for = "unix" },
 ]
 epub = [
 	{ run = 'foliate "$@"', block = true, for = "unix" },
