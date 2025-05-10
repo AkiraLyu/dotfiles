@@ -3,7 +3,6 @@ use std::fs::write;
 use std::io::{self, Read};
 use std::path::PathBuf;
 use std::process::Command;
-
 fn main() {
     kill(); // 停止现有壁纸进程
 
@@ -21,12 +20,10 @@ fn get_wallpaper_path() -> String {
 
     // 检查是否有标准输入内容
     let mut buffer = String::new();
-    if atty::isnt(atty::Stream::Stdin) {
-        if let Ok(_) = io::stdin().read_to_string(&mut buffer) {
-            let trimmed = buffer.trim();
-            if !trimmed.is_empty() {
-                return trimmed.to_string();
-            }
+    if atty::isnt(atty::Stream::Stdin) && io::stdin().read_to_string(&mut buffer).is_ok() {
+        let trimmed = buffer.trim();
+        if !trimmed.is_empty() {
+            return trimmed.to_string();
         }
     }
 
@@ -52,7 +49,7 @@ fn set_wallpaper(path: String) {
             .spawn()
     } else {
         Command::new("swaybg")
-            .args(&["-i", &path, "-m", "fill"])
+            .args(["-i", &path, "-m", "fill"])
             .spawn()
     };
 

@@ -179,3 +179,4 @@ function! TexCompile()
     echohl ErrorMsg | echo "Compilation failed!" | echohl None
   endif
 endfunction
+
