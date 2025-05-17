@@ -44,6 +44,14 @@ tooltip label {
     margin: 0 0px;
     transition: all 0.2s ease;
 }
+#custom-theme{
+    background: #ffffff;
+    color: #202124;
+    border-radius: 0 0 0 0;
+    padding: 0 2px;
+    margin: 0 0px;
+    transition: all 0.2s ease;
+}
 #custom-MyNoti {
     background: #ffffff;
     color: #202124;
@@ -72,6 +80,44 @@ tooltip label {
     transition: all 0.2s ease;
 }
 
+#temperature {
+    border-radius: 4 0 0 4px;
+    padding: 0px;
+    margin: 0px;
+}
+
+#battery {
+    border-radius: 0px;
+    padding: 0px;
+    margin: 0px;
+}
+
+#backlight {
+    border-radius: 0 4 4 0px;
+    padding: 0px;
+    margin-right: 2px;
+    margin-left: 0px;
+}
+
+#bluetooth {
+    border-radius: 4 0 0 4px;
+    padding: 0px;
+    margin: 0px;
+}
+
+#pulseaudio {
+    border-radius: 0px;
+    padding: 0px;
+    margin: 0px;
+}
+
+#pulseaudio.microphone {
+    border-radius: 0 4 4 0px;
+    padding: 0px;
+    margin-right: 2px;
+    margin-left: 0px;
+}
+
 #custom-os:hover,
 #custom-pacman:hover,
 #custom-MyNoti:hover,
@@ -84,6 +130,7 @@ tooltip label {
 #bluetooth:hover,
 #pulseaudio:hover,
 #pulseaudio.microphone:hover,
+#custom-theme:hover,
 #custom-idle:hover {
     background: #f1f3f4;
     color: #333333;
@@ -96,6 +143,10 @@ tooltip label {
 }
 #custom-pacman { 
     color: #188038;
+    background: #e6f4ea;
+}
+#custom-theme{ 
+    color: #74b4e0;
     background: #e6f4ea;
 }
 #custom-MyNoti { 
@@ -125,7 +176,7 @@ tooltip label {
 }
 #backlight { 
     color: #f29900;
-    background: #fef7e0;
+    background: #e6f4ea;
 }
 #bluetooth {
     color: #4285f4;
@@ -133,11 +184,11 @@ tooltip label {
 }
 #pulseaudio {
     color: #ea4335;
-    background: #fce8e6;
+    background: #e8f0fe;
 }
 #pulseaudio.microphone {
     color: #673ab7;
-    background: #ede7f6;
+    background: #e8f0fe;
 }
 #tray { 
     color: #5f6368;

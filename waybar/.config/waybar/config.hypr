@@ -9,6 +9,7 @@
     "modules-left": [
         "custom/os",
         "custom/pacman",
+        "custom/theme",
         "custom/MyNoti",
         "clock",
         "hyprland/workspaces",
@@ -40,6 +41,15 @@
         "tooltip": false,
         "on-click": "python /home/akira/.config/waybar/scripts/Notification.py"
     },
+
+    "custom/theme": {
+        "exec": "~/.config/waybar/scripts/check-theme.sh",
+        "interval": 1,
+        "format": "{}",
+        "on-click": "/home/akira/.config/waybar/scripts/switch_mode.fish",
+        "tooltip": "swithch terminal theme",
+        "signal": 2
+        },
 
     "custom/pacman": {
         "format": " 󰮯 ",
