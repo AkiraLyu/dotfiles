@@ -9,5 +9,13 @@ else
   vim.o.softtabstop = 4
   vim.o.shiftround = true
   vim.o.shiftwidth = 4
+  -- vim.o.background = "light"
   --vim.o.updatetime = 6000 require("config.template")
+end
+
+local theme = os.getenv("TERTHEME")
+if theme == "dark" then
+  vim.o.background = "dark"
+else
+  vim.o.background = "light"
 end

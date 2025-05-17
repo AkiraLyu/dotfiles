@@ -10,18 +10,17 @@
 }
 
 window#waybar {
-    /* background: #ffffff; */
     background : rgba(0,0,0,0);
     color: #202124;
-    padding: 2px 4px;  /* 添加轻微内边距 */
+    padding: 2px 4px;
     margin: 0;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.12);  /* 添加轻微阴影增加层次 */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12);
 }
 
 tooltip {
     background: #ffffff;
     border-radius: 4px;
-    border: 1px solid #dadce0;  /* 添加细边框 */
+    border: 1px solid #dadce0;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 tooltip label {
@@ -29,7 +28,6 @@ tooltip label {
     padding: 4px 8px;
 }
 
-/* 基础模块样式 */
 #custom-os {
     background: #ffffff;
     color: #202124;
@@ -74,7 +72,6 @@ tooltip label {
     transition: all 0.2s ease;
 }
 
-/* 模块悬停效果 */
 #custom-os:hover,
 #custom-pacman:hover,
 #custom-MyNoti:hover,
@@ -87,32 +84,32 @@ tooltip label {
 #bluetooth:hover,
 #pulseaudio:hover,
 #pulseaudio.microphone:hover,
-#tray:hover,
 #custom-idle:hover {
-    background: #f1f3f4;  /* 悬停时的浅灰色背景 */
+    background: #f1f3f4;
     color: #333333;
 }
 
-/* 更新后的配色方案 - 使用Google Material调色板 */
 #custom-os { 
     color: #1a73e8;
-    background: #e8f0fe;  /* 蓝色背景 */
+    margin-left: 5px;
+    background: #e6f4ea;
 }
 #custom-pacman { 
     color: #188038;
-    background: #e6f4ea;  /* 绿色背景 */
+    background: #e6f4ea;
 }
 #custom-MyNoti { 
     color: #188038;
+    margin-right: 2px;
     background: #e6f4ea;
 }
 #clock { 
     color: #ffffff;
-    background: #fbbc04;  /* 黄色背景 */
+    background: #fbbc04;
 }
 #custom-media { 
     color: #ffffff;
-    background: #34a853;  /* 绿色背景 */
+    background: #34a853;
 }
 #temperature { 
     color: #0d652d;
@@ -120,38 +117,42 @@ tooltip label {
 }
 #temperature.critical { 
     color: #ffffff;
-    background: #d93025;  /* 红色背景 */
+    background: #d93025;
 }
 #battery { 
     color: #188038;
     background: #e6f4ea;
 }
 #backlight { 
-    color: #f29900;  /* 橙色 */
+    color: #f29900;
     background: #fef7e0;
 }
 #bluetooth {
-    color: #4285f4;  /* Google蓝色 */
+    color: #4285f4;
     background: #e8f0fe;
 }
 #pulseaudio {
-    color: #ea4335;  /* Google红色 */
+    color: #ea4335;
     background: #fce8e6;
 }
 #pulseaudio.microphone {
-    color: #673ab7;  /* 深紫色 */
+    color: #673ab7;
     background: #ede7f6;
 }
 #tray { 
     color: #5f6368;
-    background: rgba(0,0,0,0);
+    margin-right: 5px;
+    background: rgba(100,100,100,0.6);
 }
-#custom-idle { 
-    color: #ffffff;
-    background: #d93025;  /* 红色背景 */
+#tray:hover {
+    background: rgba(100,100,100,1);
 }
 
-/* Workspaces 部分 */
+#custom-idle { 
+    color: #ffffff;
+    background: #d93025;
+}
+
 #workspaces {
     background: #f1f3f4;
     padding: 0 4px;
@@ -169,12 +170,12 @@ tooltip label {
 }
 #workspaces button.focused {
     color: #ffffff;
-    background: #1a73e8;  /* 蓝色背景 */
+    background: #1a73e8;
 }
-/* hyprland */
+
 #workspaces button.active{
     color: #ffffff;
-    background: #1a73e8;  /* 蓝色背景 */
+    background: #1a73e8;
 }
 #workspaces button.urgent {
     color: #ffffff;
@@ -185,16 +186,15 @@ tooltip label {
     color: #202124;
 }
 
-/* 电池状态指示 */
 #battery.charging {
     color: #ffffff;
-    background: #34a853;  /* 充电时显示绿色 */
+    background: #34a853;
 }
 #battery.warning:not(.charging) {
     color: #ffffff;
-    background: #f29900;  /* 警告时显示橙色 */
+    background: #f29900;
 }
 #battery.critical:not(.charging) {
     color: #ffffff;
-    background: #d93025;  /* 危险时显示红色 */
+    background: #d93025;
 }

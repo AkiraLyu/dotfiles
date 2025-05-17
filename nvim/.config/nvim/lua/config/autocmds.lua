@@ -19,7 +19,7 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 
 -- 禁止自动格式化
 vim.api.nvim_create_autocmd({ "FileType" }, {
-  pattern = { "c", "cpp", "shell" },
+  pattern = { "c", "cpp", "shell", "fish" },
   callback = function()
     vim.b.autoformat = false
   end,

@@ -6,3 +6,4 @@ export EDITOR=nvim
 export PATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/home/akira/.cargo/bin:/home/akira/.nix-profile/bin
 export QT_XCB_GL_INTEGRATION=none
 export CRYPTOGRAPHY_OPENSSL_NO_LEGACY=none
+export GTK_USE_PORTAL=1
