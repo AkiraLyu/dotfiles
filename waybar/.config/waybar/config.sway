@@ -39,14 +39,14 @@
     "custom/MyNoti": {
         "format": "   ",
         "tooltip": false,
-        "on-click": "python /home/akira/.config/waybar/scripts/Notification.py"
+        "on-click": "python $HOME/.config/waybar/scripts/Notification.py"
     },
 
     "custom/theme": {
         "exec": "~/.config/waybar/scripts/check-theme.sh",
         "interval": 1,
         "format": "{}",
-        "on-click": "/home/akira/.config/waybar/scripts/switch_mode.fish",
+        "on-click": "$HOME/.config/waybar/scripts/switch_mode.fish",
         "tooltip": "swithch terminal theme",
         "signal": 2
         },
@@ -93,7 +93,7 @@
 
     "custom/media": {
         "mode": "dock",
-        "exec": "/home/akira/.config/waybar/scripts/media.sh",
+        "exec": "$HOME/.config/waybar/scripts/media.sh",
         "on-click": "playerctl -p yesplaymusic,rhythmbox play-pause",
         "on-scroll-up": "playerctl -p yesplaymusic,rhythmbox previous",
         "on-scroll-down": "playerctl -p yesplaymusic,rhythmbox next",
@@ -147,7 +147,7 @@
             "󰃟",
             "󰃠"
         ],
-        "on-click": "python /home/akira/.config/waybar/scripts/light.py",
+        "on-click": "python $HOME/.config/waybar/scripts/light.py",
         "on-scroll-up": "brightnessctl set 1%+",
         "on-scroll-down": "brightnessctl set 1%-",
         "min-length": 6
@@ -166,7 +166,7 @@
         "format": " {icon} {volume}% ",
         "tooltip": false,
         "format-muted": "  Muted ",
-        "on-click": "python /home/akira/.config/waybar/scripts/volume.py",
+        "on-click": "python $HOME/.config/waybar/scripts/volume.py",
         "on-click-middle": "pamixer -t",
         "on-scroll-up": "pamixer -i 1",
         "on-scroll-down": "pamixer -d 1",
@@ -189,7 +189,7 @@
         "format": "{format_source}",
         "format-source": "  {volume}% ",
         "format-source-muted": "  Muted ",
-        "on-click": "python /home/akira/.config/waybar/scripts/volume.py",
+        "on-click": "python $HOME/.config/waybar/scripts/volume.py",
         "on-click-middle": "pamixer --default-source -t",
         "on-scroll-up": "pamixer --default-source -i 1",
         "on-scroll-down": "pamixer --default-source -d 1",

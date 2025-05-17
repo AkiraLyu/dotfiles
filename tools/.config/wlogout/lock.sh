@@ -1,13 +1,13 @@
 #!/bin/bash
 
-IMAGE="/home/akira/.config/wlogout/lock"
+IMAGE="$HOME/.config/wlogout/lock"
 
 if [ -d "$IMAGE" ]; then
     cd "$IMAGE"
     rm -rf ./*
     grim "$IMAGE/lock.png"
 else
-    cd /home/akira/.config/wlogout
+    cd $HOME/.config/wlogout
     mkdir lock
     cd lock
     grim "$IMAGE/lock.png"

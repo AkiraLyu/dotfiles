@@ -28,7 +28,7 @@ input 10182:480:GXTP7863:00_27C6:01E0_Touchpad {
 
 #壁纸
 #remember last wallpaper
-exec wallpaper < /home/akira/.config/sway/scripts/wallpaper.txt
+exec wallpaper < $HOME/.config/sway/scripts/wallpaper.txt
 
 include /etc/sway/config.d/*
-include /home/akira/.config/sway/*
+include $HOME/.config/sway/*

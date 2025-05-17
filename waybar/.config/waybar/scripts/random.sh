@@ -1,1 +1,1 @@
-wallpaper $(find /home/akira/Pictures/ -type f | shuf -n 1)
+wallpaper $(find $HOME/Pictures/ -type f | shuf -n 1)

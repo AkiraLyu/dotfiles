@@ -1,6 +1,6 @@
 {
     "label" : "lock",
-    "action" : "/home/akira/.config/wlogout/lock.sh",
+    "action" : "$HOME/.config/wlogout/lock.sh",
     "text" : "lock",
     "keybind" : "l"
 }
