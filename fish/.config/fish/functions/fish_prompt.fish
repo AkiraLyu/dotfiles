@@ -87,41 +87,41 @@ function fish_prompt
     end
 
     # distro
-    set_color 555555
+    set_color 34495e
     echo -n ''
-    set_color -b 555555
-    set_color white
+    set_color -b 34495e
+    set_color ffffff
     echo -n '󰣇 '
     echo -n (__print_exec_time)
     set_color -b normal
-    set_color 555555
+    set_color 34495e
     echo -n ''
 
     echo -n ' •• '
 
     # 显示当前路径
-    set_color 555555
+    set_color 34495e
     echo -n ''
-    set_color -b 555555
-    set_color white
+    set_color -b 34495e
+    set_color ffffff
     set -l cwd (__replace_home_symbol)
     echo -n $cwd
     set_color -b normal
-    set_color 555555
+    set_color 34495e
     echo -n ''
     set_color normal
 
     # git 信息
     if test -d .git
         echo -n ' • '
-        set_color blue
+        set_color 1b6fd8
         echo -n ''
-        set_color white
-        set_color -b blue
+        set_color ffffff
+        set_color -b 1b6fd8
         echo -n ''
         echo -n (__fish_git_prompt)
         set_color -b normal
-        set_color blue
+        set_color 1b6fd8
         echo -n ''
         set_color -b normal
     end
@@ -129,7 +129,7 @@ function fish_prompt
     echo
 
     # 彩色圆条配置
-    set_color 555555
+    set_color 34495e
     echo -n '•  '
     set_color normal
 end

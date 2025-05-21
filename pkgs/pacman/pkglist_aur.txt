@@ -1,6 +1,8 @@
 adobe-source-han-mono-cn-fonts
 aquamarine-git
+baidunetdisk-bin
 chatbox-bin
+clash-verge-rev-bin
 clion
 clion-cmake
 clion-gdb
@@ -8,6 +10,7 @@ clion-jre
 clipman
 downgrade
 dxvk-bin
+execstack
 fcitx5-pinyin-moegirl
 fcitx5-pinyin-sougou
 fcitx5-skin-ori-git
@@ -18,7 +21,6 @@ hyprland-git
 jmtpfs
 katago-cpu
 lceda-pro-bin
-libtiff5
 linuxqq
 logisim
 ltspice
@@ -31,13 +33,17 @@ paru-git
 pot-translation-bin
 python-pyautogui
 q5go
+qt6ct-kde
 scala
 sing-box
 sov
+stm32cubeclt
+stm32cubemx
 sunshine-git
 sway-git
 tlpui-git
 ttf-foundertype-sc-fonts
+ttf-i-ming-fonts
 ttf-lxgw-wenkai
 ttf-lxgw-wenkai-screen
 ttf-twemoji
@@ -50,11 +56,11 @@ watchman-bin
 waybar-git
 waydroid
 wechat-universal-bwrap
+weylus-git
 wlogout
 wps-office-cn
 wps-office-mui-zh-cn
 xdg-desktop-portal-hyprland-git
 xmind
-xwayland-satellite-git
 yesplaymusic
 zotero

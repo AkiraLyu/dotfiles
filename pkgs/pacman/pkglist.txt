@@ -16,6 +16,7 @@ ark
 arm-none-eabi-gcc
 arm-none-eabi-gdb
 arm-none-eabi-newlib
+audacious
 audacity
 autotiling
 baobab
@@ -23,8 +24,10 @@ base
 base-devel
 bat
 bc
+bear
 bind
 blender
+bless
 blueberry
 bluedevil
 bluez-utils
@@ -39,6 +42,8 @@ cava
 ccache
 chntpw
 chromium
+cjson
+clamav
 clash
 cliphist
 cmake
@@ -92,6 +97,7 @@ gwenview
 htop
 hugo
 hyprpicker
+i3blocks
 inetutils
 inkscape
 intel-compute-runtime
@@ -105,6 +111,7 @@ kactivitymanagerd
 kate
 kde-cli-tools
 kde-gtk-config
+kdeconnect
 kdecoration
 kdenlive
 kdeplasma-addons
@@ -161,10 +168,10 @@ mariadb
 mesa
 meson
 milou
+minicom
 mtpfs
 musescore
 nasm
-neofetch
 neovide
 neovim
 net-tools
@@ -250,9 +257,7 @@ qemu-full
 qqc2-breeze-style
 qt5-websockets
 qt5ct
-qt6ct
 rapidjson
-rhythmbox
 riscv64-elf-gcc
 riscv64-elf-newlib
 riscv64-linux-gnu-binutils
@@ -291,6 +296,7 @@ tesseract-data-chi_sim_vert
 tesseract-data-eng
 tesseract-data-jpn
 tesseract-data-jpn_vert
+testdisk
 texlive-basic
 texlive-bibtexextra
 texlive-binextra
@@ -335,6 +341,7 @@ vim
 vim-airline
 vim-nerdtree
 virt-manager
+vivid
 vkd3d
 vulkan-intel
 wacomtablet
