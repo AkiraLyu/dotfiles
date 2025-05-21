@@ -7,7 +7,7 @@ window {
 }
 
 button {
-    background-color: rgba(60, 60, 70, 0.8);
+    background-color: rgba(60, 60, 70, 1);
     border-radius: 16px;
     margin: 12px;
     padding: 18px 24px;

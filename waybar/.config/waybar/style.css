@@ -1,3 +1,4 @@
+/* ========== 全局设置 ========== */
 * {
     border: none;
     border-radius: 4px;
@@ -9,14 +10,16 @@
     margin: 0;
 }
 
+/* ========== Waybar 主体 ========== */
 window#waybar {
-    background : rgba(0,0,0,0);
+    background: rgba(0,0,0,0);
     color: #202124;
     padding: 2px 4px;
     margin: 0;
     box-shadow: 0 1px 3px rgba(0,0,0,0.12);
 }
 
+/* ========== Tooltip 样式 ========== */
 tooltip {
     background: #ffffff;
     border-radius: 4px;
@@ -28,38 +31,29 @@ tooltip label {
     padding: 4px 8px;
 }
 
-#custom-os {
-    background: #ffffff;
-    color: #202124;
-    border-radius: 4px 0 0 4px;
-    padding: 0 2px;
-    margin: 0 0px;
-    transition: all 0.2s ease;
-}
-#custom-pacman {
-    background: #ffffff;
-    color: #202124;
-    border-radius: 0 0 0 0;
-    padding: 0 2px;
-    margin: 0 0px;
-    transition: all 0.2s ease;
-}
-#custom-theme{
-    background: #ffffff;
-    color: #202124;
-    border-radius: 0 0 0 0;
-    padding: 0 2px;
-    margin: 0 0px;
-    transition: all 0.2s ease;
-}
+/* ========== 自定义模块基础样式 ========== */
+#custom-os,
+#custom-pacman,
+#custom-theme,
 #custom-MyNoti {
     background: #ffffff;
     color: #202124;
-    border-radius: 0 4 4 0;
     padding: 0 2px;
-    margin: 0 0px;
+    margin: 0;
     transition: all 0.2s ease;
 }
+#custom-os {
+    border-radius: 4px 0 0 4px;
+}
+#custom-pacman,
+#custom-theme {
+    border-radius: 0;
+}
+#custom-MyNoti {
+    border-radius: 0 4px 4px 0;
+}
+
+/* ========== 主要模块统一样式 ========== */
 #clock,
 #custom-media,
 #window,
@@ -80,44 +74,41 @@ tooltip label {
     transition: all 0.2s ease;
 }
 
+/* ========== 特定模块边角样式细化 ========== */
 #temperature {
-    border-radius: 4 0 0 4px;
-    padding: 0px;
-    margin: 0px;
+    border-radius: 4px 0 0 4px;
+    padding: 0;
+    margin: 0;
 }
-
 #battery {
-    border-radius: 0px;
-    padding: 0px;
-    margin: 0px;
+    border-radius: 0;
+    padding: 0;
+    margin: 0;
 }
-
 #backlight {
-    border-radius: 0 4 4 0px;
-    padding: 0px;
+    border-radius: 0 4px 4px 0;
+    padding: 0;
+    margin-left: 0;
     margin-right: 2px;
-    margin-left: 0px;
 }
-
 #bluetooth {
-    border-radius: 4 0 0 4px;
-    padding: 0px;
-    margin: 0px;
+    border-radius: 4px 0 0 4px;
+    padding: 0;
+    margin: 0;
 }
-
 #pulseaudio {
-    border-radius: 0px;
-    padding: 0px;
-    margin: 0px;
+    border-radius: 0;
+    padding: 0;
+    margin: 0;
 }
-
 #pulseaudio.microphone {
-    border-radius: 0 4 4 0px;
-    padding: 0px;
+    border-radius: 0 4px 4px 0;
+    padding: 0;
+    margin-left: 0;
     margin-right: 2px;
-    margin-left: 0px;
 }
 
+/* ========== Hover 效果 ========== */
 #custom-os:hover,
 #custom-pacman:hover,
 #custom-MyNoti:hover,
@@ -136,45 +127,46 @@ tooltip label {
     color: #333333;
 }
 
-#custom-os { 
+/* ========== 模块颜色主题细化 ========== */
+#custom-os {
     color: #1a73e8;
     margin-left: 5px;
     background: #e6f4ea;
 }
-#custom-pacman { 
+#custom-pacman {
     color: #188038;
     background: #e6f4ea;
 }
-#custom-theme{ 
+#custom-theme {
     color: #74b4e0;
     background: #e6f4ea;
 }
-#custom-MyNoti { 
+#custom-MyNoti {
     color: #188038;
     margin-right: 2px;
     background: #e6f4ea;
 }
-#clock { 
+#clock {
     color: #ffffff;
     background: #fbbc04;
 }
-#custom-media { 
+#custom-media {
     color: #ffffff;
     background: #34a853;
 }
-#temperature { 
+#temperature {
     color: #0d652d;
     background: #e6f4ea;
 }
-#temperature.critical { 
+#temperature.critical {
     color: #ffffff;
     background: #d93025;
 }
-#battery { 
+#battery {
     color: #188038;
     background: #e6f4ea;
 }
-#backlight { 
+#backlight {
     color: #f29900;
     background: #e6f4ea;
 }
@@ -190,7 +182,7 @@ tooltip label {
     color: #673ab7;
     background: #e8f0fe;
 }
-#tray { 
+#tray {
     color: #5f6368;
     margin-right: 5px;
     background: rgba(100,100,100,0.6);
@@ -198,12 +190,12 @@ tooltip label {
 #tray:hover {
     background: rgba(100,100,100,1);
 }
-
-#custom-idle { 
+#custom-idle {
     color: #ffffff;
     background: #d93025;
 }
 
+/* ========== Workspace 样式 ========== */
 #workspaces {
     background: #f1f3f4;
     padding: 0 4px;
@@ -219,12 +211,8 @@ tooltip label {
     color: #202124;
     background: #e8f0fe;
 }
-#workspaces button.focused {
-    color: #ffffff;
-    background: #1a73e8;
-}
-
-#workspaces button.active{
+#workspaces button.focused,
+#workspaces button.active {
     color: #ffffff;
     background: #1a73e8;
 }
@@ -237,15 +225,14 @@ tooltip label {
     color: #202124;
 }
 
+/* ========== 电池状态颜色 ========== */
 #battery.charging {
-    color: #ffffff;
-    background: #34a853;
+    color: #34a853;
 }
 #battery.warning:not(.charging) {
-    color: #ffffff;
-    background: #f29900;
+    color: #f29900;
 }
 #battery.critical:not(.charging) {
-    color: #ffffff;
-    background: #d93025;
+    color: #d93025;
 }
+

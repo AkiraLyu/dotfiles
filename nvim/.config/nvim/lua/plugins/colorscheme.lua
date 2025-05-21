@@ -30,7 +30,7 @@ else -- 默认使用 light（vscode）
           disable_nvimtree_bg = true,
           terminal_colors = true,
           color_overrides = {
-            vscLineNumber = "#FFFFFF",
+            vscLineNumber = "#000000",
           },
           group_overrides = {
             Cursor = { fg = c.vscDarkBlue, bg = c.vscLightGreen, bold = true },
