@@ -10,4 +10,4 @@ mount -o noatime,compress=zstd,subvol=_active/_log /dev/nvme0n1p2 /mnt/var/log
 mount -o noatime,compress=zstd,subvol=_active/_tmp /dev/nvme0n1p2 /mnt/tmp
 mount -o noatime,compress=zstd,subvol=/ /dev/nvme0n1p2 /mnt/mnt/defvol
 
-arch-chroot /mnt /bin/bash <<EOF
+arch-chroot /mnt /bin/bash

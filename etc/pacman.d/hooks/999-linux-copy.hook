@@ -1,0 +1,13 @@
+[Trigger]
+Type = Path
+Target = boot/vmlinuz-linux
+Target = boot/initramfs-linux.img
+Target = boot/initramfs-linux-fallback.img
+Operation = Install
+Operation = Upgrade
+
+[Action]
+Description = Copying Linux kernel and initramfs to /boot/EFI/Arch...
+When = PostTransaction
+Exec = /usr/bin/bash -c 'mv /boot/vmlinuz-linux /boot/EFI/Arch/ && mv /boot/initramfs-linux.img /boot/EFI/Arch/ && mv /boot/initramfs-linux-fallback.img /boot/EFI/Arch/'
+

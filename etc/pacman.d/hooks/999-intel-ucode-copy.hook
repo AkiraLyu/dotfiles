@@ -1,0 +1,11 @@
+[Trigger]
+Type = Path
+Target = boot/intel-ucode.img
+Operation = Install
+Operation = Upgrade
+
+[Action]
+Description = Copying Intel microcode to /boot/EFI/Arch...
+When = PostTransaction
+Exec = /usr/bin/bash -c 'mv /boot/intel-ucode.img /boot/EFI/Arch/'
+
