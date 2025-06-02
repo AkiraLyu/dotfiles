@@ -1,0 +1,7 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Exec=python $HOME/.local/scripts/mihomo.py
+MimeType=application/x-python-code
+Name=Mihomo
+Type=Application
+Icon=/home/akira/.local/share/icons/clash.png

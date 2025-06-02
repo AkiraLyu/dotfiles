@@ -9,4 +9,5 @@ alias ls="ls -a --color=auto"
 alias chat="python ~/.local/scripts/deepseek.py"
 alias snap="~/.local/scripts/snaps.sh create"
 alias check-lufs="~/.local/scripts/check-lufs.sh"
+alias st=systemctl
 

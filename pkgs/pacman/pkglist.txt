@@ -8,6 +8,7 @@ adobe-source-han-serif-cn-fonts
 alsa-firmware
 alsa-oss
 alsa-plugins
+alsa-tools
 alsa-utils
 android-tools
 ardour
@@ -44,7 +45,6 @@ chntpw
 chromium
 cjson
 clamav
-clash
 cliphist
 cmake
 compsize
@@ -58,9 +58,11 @@ docker
 dolphin
 dosbox
 dpkg
+drawio-desktop
 drkonqi
 easyeffects
 efibootmgr
+electron
 expect
 extra-cmake-modules
 fastfetch
@@ -88,8 +90,8 @@ go
 gparted
 graphviz
 grim
-grub
 gst-libav
+gst-plugin-va
 gst-plugins-ugly
 gtkwave
 gvfs-mtp
@@ -129,6 +131,7 @@ kscreen
 kscreenlocker
 ksshaskpass
 ksystemstats
+kvantum
 kwallet-pam
 kwallet5
 kwalletmanager
@@ -136,13 +139,23 @@ kwayland
 kwin
 kwrited
 layer-shell-qt
+lhasa
+lib32-alsa-plugins
 lib32-gnutls
 lib32-gst-plugins-base
 lib32-gst-plugins-good
+lib32-libnm
 lib32-libxcomposite
+lib32-libxcrypt-compat
+lib32-libxinerama
+lib32-libxss
+lib32-nspr
+lib32-nss
 lib32-pcsclite
 lib32-pipewire
 lib32-vkd3d
+lib32-vulkan-intel
+lib32-xcb-util-keysyms
 libc++
 libc++abi
 libfido2
@@ -159,6 +172,7 @@ linux-firmware
 linux-headers
 lld
 lrzip
+lsb-release
 lsp-plugins
 lzop
 mako
@@ -245,6 +259,7 @@ python-paramiko
 python-pip
 python-pyaudio
 python-pynvim
+python-pyqt5
 python-pytorch
 python-requests
 python-scikit-learn
@@ -258,6 +273,7 @@ qqc2-breeze-style
 qt5-websockets
 qt5ct
 rapidjson
+rclone
 riscv64-elf-gcc
 riscv64-elf-newlib
 riscv64-linux-gnu-binutils
@@ -280,7 +296,6 @@ slurp
 sof-firmware
 spectacle
 spice-vdagent
-steam
 stow
 strace
 swaybg
@@ -292,6 +307,7 @@ systemsettings
 telegram-desktop
 terminus-font
 termusic
+tesseract-data-chi_sim
 tesseract-data-chi_sim_vert
 tesseract-data-eng
 tesseract-data-jpn
@@ -334,7 +350,6 @@ tumbler
 unarchiver
 unrar
 unzip
-v2ray
 valgrind
 verilator
 vim
