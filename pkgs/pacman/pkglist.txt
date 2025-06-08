@@ -75,6 +75,7 @@ fcitx5-material-color
 fcitx5-mozc
 fcitx5-pinyin-zhwiki
 fcitx5-qt
+ffmpegthumbs
 firefox
 fish
 flameshot
@@ -298,6 +299,7 @@ spectacle
 spice-vdagent
 stow
 strace
+sudo
 swaybg
 swayidle
 swaylock

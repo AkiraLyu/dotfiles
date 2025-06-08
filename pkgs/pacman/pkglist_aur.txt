@@ -29,7 +29,6 @@ minecraft-launcher
 modprobed-db
 mpvpaper
 noto-fonts-sc
-ntfsprogs-ntfs3
 paru-git
 pot-translation-bin
 proton-ge-custom-bin
@@ -42,7 +41,7 @@ sing-box
 sov
 stm32cubeclt
 stm32cubemx
-sunshine-git
+sunshine-bin
 sway-git
 tlpui-git
 ttf-foundertype-sc-fonts
@@ -68,4 +67,4 @@ wps-office-mui-zh-cn
 xdg-desktop-portal-hyprland-git
 xmind
 yesplaymusic
-zotero
+zotero-bin

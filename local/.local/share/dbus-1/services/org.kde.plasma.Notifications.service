@@ -1,1 +1,3 @@
-/usr/share/dbus-1/services/org.kde.plasma.Notifications.service
+[D-BUS Service]
+Name=org.freedesktop.Notifications
+Exec=/usr/bin/plasma_waitforname org.freedesktop.Notifications
