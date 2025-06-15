@@ -7,7 +7,8 @@ if [ "$TTY1" = /dev/tty1 ]
     if [ "$Start_Env" = hypr ]
         exec Hyprland
     else if [ "$Start_Env" = sway ]
-        exec sway
+        # exec sway
+        export XDG_MENU_PREFIX=arch-
     else if [ "$Start_Env" = wf ]
         exec wayfire
     else if [ "$Start_Env" = kde ]

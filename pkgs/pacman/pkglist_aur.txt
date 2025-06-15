@@ -1,5 +1,6 @@
 adobe-source-han-mono-cn-fonts
 aquamarine-git
+aylurs-gtk-shell
 baidunetdisk-bin
 chatbox-bin
 clion
@@ -39,6 +40,7 @@ qt6ct-kde
 scala
 sing-box
 sov
+splayer-appimage
 stm32cubeclt
 stm32cubemx
 sunshine-bin
@@ -66,5 +68,4 @@ wps-office-cn
 wps-office-mui-zh-cn
 xdg-desktop-portal-hyprland-git
 xmind
-yesplaymusic
 zotero-bin

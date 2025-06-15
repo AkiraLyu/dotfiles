@@ -112,6 +112,7 @@ jdk-openjdk
 jdk21-openjdk
 kactivitymanagerd
 kate
+kcolorchooser
 kde-cli-tools
 kde-gtk-config
 kdeconnect
@@ -303,7 +304,6 @@ sudo
 swaybg
 swayidle
 swaylock
-swww
 syncthing
 systemsettings
 telegram-desktop
@@ -378,6 +378,7 @@ xdg-desktop-portal-gtk
 xdg-desktop-portal-kde
 xdg-desktop-portal-wlr
 xmlto
+xorg-xhost
 xorg-xwininfo
 yazi
 yt-dlp

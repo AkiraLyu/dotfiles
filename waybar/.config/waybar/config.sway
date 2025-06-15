@@ -30,7 +30,7 @@
     ],
 
     "custom/os": {
-        "format": " 󰣇 ",
+        "format": "  ",
         "tooltip-format": "Arch Linux",
         "on-click": "nohup ~/.config/waybar/scripts/random.sh > /dev/null 2>&1 &",
         "on-click-middle": "wallpaper"
@@ -64,7 +64,7 @@
     "clock": {
         "format": " <b>󰥔 {:%I:%M %p}</b> ",
         "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-        "on-click": "env GTK_IM_MODULE=fcitx nohup gnome-calendar > /dev/null 2>&1 &"
+        "on-click": "nohup gnome-calendar > /dev/null 2>&1 &"
     },
 
     "sway/workspaces": {
@@ -110,9 +110,9 @@
     "temperature": {
         "hwmon-path": "/sys/class/hwmon/hwmon1/temp1_input",
         "thermal-zone": 1,
-        "format": " {temperatureC}°C  ",
+        "format": "  {temperatureC}°C",
         "critical-threshold": 80,
-        "format-critical": "{temperatureC}°C "
+        "format-critical": " {temperatureC}°C"
     },
 
     "battery": {
