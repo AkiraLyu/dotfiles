@@ -1,3 +1,7 @@
+* {
+  font-family: ans-serif !important;
+  font-size: 10pt !important;
+}
 /* Sidebery */
 #main-window[titlepreface*="🦊 "] .tabbrowser-tab {
   visibility: collapse !important;

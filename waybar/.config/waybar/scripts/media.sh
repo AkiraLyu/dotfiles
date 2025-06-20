@@ -2,7 +2,7 @@
 
 # 事件监听协程
 coproc PLAYERCTL {
-    playerctl metadata -p yesplaymusic,rhythmbox -f '{{lc(status)}}-{{title}}-{{artist}}' -F 2>/dev/null
+    playerctl metadata -f '{{lc(status)}}-{{title}}-{{artist}}' -F 2>/dev/null
 }
 
 # 混合模式参数

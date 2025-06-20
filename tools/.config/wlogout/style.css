@@ -1,49 +1,28 @@
+* {
+	background-image: none;
+	transition: 0;
+}
 window {
-    background-color: rgba(40, 40, 45, 0);
-    border-radius: 24px;
-    padding: 24px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+	background-color: rgba(12, 12, 12, 0.1);
+	background-image: url('./noise.png');
 }
-
 button {
-    background-color: rgba(60, 60, 70, 1);
-    border-radius: 16px;
-    margin: 12px;
-    padding: 18px 24px;
-    transition: all 0.25s cubic-bezier(0.25, 0.1, 0.25, 1);
-    color: white;
-    font-size: 14pt;
-    font-family: "Inter", "Sans";
-    border: none;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    min-width: 120px;
-    background-size: 50% auto;
-    background-repeat: no-repeat;
-    background-position: center;
-    padding: 18px 24px;
+    color: #d4bff9;
+	background-color: rgba(252, 251, 254, 0.15);
+	border: 0 solid #d4bff9;
+	border-radius: 3rem;
+	margin: 0.8rem;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: 25%;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+	font-family: Roboto;
+	font-size: 1.7rem;
 }
 
-button:focus,
-button:hover {
-    background-color: rgba(80, 80, 90, 0.9);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-button:active {
-}
-
-image {
-    margin-bottom: 12px;
-    opacity: 0.9;
-}
-
-label {
-    color: rgba(0, 0, 0, 0);
-    font-size: 15pt;
-    font-family: "Inter", "Sans";
-    font-weight: 400;
-    margin-top: 8px;
+button:focus, button:active, button:hover {
+	background-color: rgba(237, 229, 252, 0.25);
+	outline-style: none;
 }
 
 #lock {

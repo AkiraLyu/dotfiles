@@ -11,6 +11,7 @@ alsa-plugins
 alsa-tools
 alsa-utils
 android-tools
+archlinux-xdg-menu
 ardour
 aria2
 ark
@@ -124,6 +125,7 @@ kglobalacceld
 kicad
 kicad-library
 kinfocenter
+kio-gdrive
 kitty
 kmenuedit
 kpipewire
@@ -234,6 +236,7 @@ plasma-sdk
 plasma-systemmonitor
 plasma-thunderbolt
 plasma-vault
+plasma-wayland-protocols
 plasma-welcome
 plasma-workspace
 plasma-workspace-wallpapers
@@ -298,6 +301,7 @@ slurp
 sof-firmware
 spectacle
 spice-vdagent
+steam
 stow
 strace
 sudo
@@ -343,6 +347,7 @@ thunderbird
 tk
 tlp
 tmux
+torbrowser-launcher
 tree
 tree-sitter-cli
 ttf-jetbrains-mono
@@ -368,10 +373,8 @@ wine-gecko
 wine-mono
 winetricks
 wireshark-qt
-wl-clip-persist
 wl-clipboard
 wlr-randr
-wofi
 wqy-zenhei
 xcb-imdkit
 xdg-desktop-portal-gtk
