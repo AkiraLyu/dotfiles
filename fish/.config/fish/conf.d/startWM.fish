@@ -1,5 +1,4 @@
 set Start_Env null
-#export XDG_CURRENT_DESKTOP=$Start_Env
 
 set TTY1 (tty)
 if [ "$TTY1" = /dev/tty1 ]

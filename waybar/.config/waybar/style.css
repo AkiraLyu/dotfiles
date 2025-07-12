@@ -1,45 +1,24 @@
-/* ========== 全局设置 ========== */
 * {
     border: none;
     border-radius: 4px;
     font-family: "JetBrainsMono Nerd Font";
     font-weight: bold;
     font-size: 100%;
-    min-height: 0;
     padding: 0;
     margin: 0;
 }
 
-/* ========== Waybar 主体 ========== */
 window#waybar {
     background: rgba(0, 0, 0, 0);
-    color: #202124;
-    padding: 2px 4px;
-    margin: 0;
     box-shadow: 0 1px 3px rgba(0,0,0,0.12);
 }
 
-/* ========== Tooltip 样式 ========== */
-tooltip {
-    background: #ffffff;
-    border-radius: 4px;
-    border: 1px solid #dadce0;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-tooltip label {
-    color: #5f6368;
-    padding: 4px 8px;
-}
-
-/* ========== 自定义模块基础样式 ========== */
 #custom-os,
 #custom-pacman,
 #custom-theme,
 #custom-MyNoti {
-    background: #ffffff;
+    background: #f1f2f3;
     color: #202124;
-    padding: 0 2px;
-    margin: 0;
     transition: all 0.2s ease;
 }
 #custom-os {
@@ -51,157 +30,25 @@ tooltip label {
 }
 #custom-MyNoti {
     border-radius: 0 4px 4px 0;
+    margin-right: 4px;
 }
 
-/* ========== 主要模块统一样式 ========== */
-#clock,
-#custom-media,
-#window,
-#temperature,
-#battery,
-#backlight,
-#bluetooth,
-#pulseaudio,
-#pulseaudio.microphone,
-#tray,
-#custom-idle,
+#clock {
+    background: #55c6fe;
+    color: #202124;
+    border-radius: 4px;
+    margin-right: 4px;
+}
+
 #workspaces {
     background: #f1f3f4;
     color: #202124;
     border-radius: 4px;
-    padding: 0 8px;
-    margin: 0 2px;
     transition: all 0.2s ease;
-}
-
-/* ========== 特定模块边角样式细化 ========== */
-#temperature {
-    border-radius: 4px 0 0 4px;
-    padding: 0;
-    margin: 0;
-}
-#battery {
-    border-radius: 0;
-    padding: 0;
-    margin: 0;
-}
-#backlight {
-    border-radius: 0 4px 4px 0;
-    padding: 0;
-    margin-left: 0;
-    margin-right: 2px;
-}
-#bluetooth {
-    border-radius: 4px 0 0 4px;
-    padding: 0;
-    margin: 0;
-}
-#pulseaudio {
-    border-radius: 0;
-    padding: 0;
-    margin: 0;
-}
-#pulseaudio.microphone {
-    border-radius: 0 4px 4px 0;
-    padding: 0;
-    margin-left: 0;
-    margin-right: 2px;
-}
-
-/* ========== Hover 效果 ========== */
-#custom-os:hover,
-#custom-pacman:hover,
-#custom-MyNoti:hover,
-#clock:hover,
-#custom-media:hover,
-#window:hover,
-#temperature:hover,
-#battery:hover,
-#backlight:hover,
-#bluetooth:hover,
-#pulseaudio:hover,
-#pulseaudio.microphone:hover,
-#custom-theme:hover,
-#custom-idle:hover {
-    background: #f1f3f4;
-    color: #333333;
-}
-
-/* ========== 模块颜色主题细化 ========== */
-#custom-os {
-    color: #1a73e8;
-    margin-left: 2px;
-    background: #e6f4ea;
-}
-#custom-pacman {
-    color: #188038;
-    background: #e6f4ea;
-}
-#custom-theme {
-    color: #74b4e0;
-    background: #e6f4ea;
-}
-#custom-MyNoti {
-    color: #188038;
-    margin-right: 2px;
-    background: #e6f4ea;
-}
-#clock {
-    color: #ffffff;
-    background: #fbbc04;
-}
-#custom-media {
-    color: #ffffff;
-    background: #34a853;
-}
-#temperature {
-    color: #0d652d;
-    background: #e6f4ea;
-}
-#temperature.critical {
-    color: #ffffff;
-    background: #d93025;
-}
-#battery {
-    color: #188038;
-    background: #e6f4ea;
-}
-#backlight {
-    color: #f29900;
-    background: #e6f4ea;
-}
-#bluetooth {
-    color: #4285f4;
-    background: #e8f0fe;
-}
-#pulseaudio {
-    color: #ea4335;
-    background: #e8f0fe;
-}
-#pulseaudio.microphone {
-    color: #673ab7;
-    background: #e8f0fe;
-}
-#tray {
-    color: #5f6368;
-    margin-right: 2px;
-    background: rgba(100,100,100,0.6);
-}
-#tray:hover {
-    background: rgba(100,100,100,1);
-}
-#custom-idle {
-    color: #ffffff;
-    background: #d93025;
-}
-
-/* ========== Workspace 样式 ========== */
-#workspaces {
-    background: #f1f3f4;
-    padding: 0 4px;
+    margin-right: 4px;
 }
 #workspaces button {
-    padding: 0 8px;
+    padding: 0 4px;
     margin: 0 2px;
     color: #5f6368;
     background: transparent;
@@ -214,11 +61,11 @@ tooltip label {
 }
 #workspaces button.focused,
 #workspaces button.active {
-    color: #ffffff;
+    color: #f1f2f3;
     background: #1a73e8;
 }
 #workspaces button.urgent {
-    color: #ffffff;
+    color: #f1f2f3;
     background: #d93025;
 }
 #workspaces button:hover {
@@ -226,14 +73,71 @@ tooltip label {
     color: #202124;
 }
 
-/* ========== 电池状态颜色 ========== */
-#battery.charging {
-    color: #34a853;
-}
-#battery.warning:not(.charging) {
-    color: #f29900;
-}
-#battery.critical:not(.charging) {
-    color: #d93025;
+#custom-media {
+    background: #f1f3f4;
+    color: #202124;
+    border-radius: 4px;
+    transition: all 0.2s ease;
 }
 
+#custom-media:hover {
+    background: #e8f0fe;
+    color: #202124;
+}
+
+#window,
+#temperature,
+#battery,
+#backlight,
+#bluetooth,
+#pulseaudio,
+#pulseaudio.microphone,
+#tray,
+#custom-idle {
+    background: #f1f3f4;
+    color: #202124;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+#temperature {
+    border-radius: 4px 0 0 4px;
+}
+#battery {
+    border-radius: 0;
+}
+#backlight {
+    border-radius: 0 4px 4px 0;
+    margin-right: 4px;
+}
+
+#bluetooth {
+    border-radius: 4px 0 0 4px;
+}
+#pulseaudio {
+    border-radius: 0;
+}
+#pulseaudio.microphone {
+    border-radius: 0 4px 4px 0;
+    margin-right: 4px;
+}
+
+#window {
+    margin-right: 4px;
+    margin-left: 4px;
+}
+
+#custom-idle {
+    color: #5f6368;
+    /* background: rgba(100,100,100,0.6); */
+    background: #f1f3f4;
+    border-radius: 4px 0px 0px 4px;
+    transition: all 0.2s ease;
+}
+#tray {
+    color: #5f6368;
+    /* background: rgba(100,100,100,0.6); */
+    background: #f1f3f4;
+    margin-right: 2px;
+    border-radius: 0px 4px 4px 0px;
+}

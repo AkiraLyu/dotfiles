@@ -47,8 +47,6 @@
   --wc-green: hsl(160, 90%, 40%); /* 自定义绿色 (最大化按钮) */
   --sidebar-collapsed-width: 40px; /* 侧边栏折叠宽度 */
   --sidebar-width: 250px;         /* 侧边栏展开宽度 */
-  --transition-duration: 0.2s;    /* 过渡动画时长 */
-  --transition-ease: ease-out;    /* 过渡动画缓动函数 */
 }
 
 /* 导航器工具箱设置 */

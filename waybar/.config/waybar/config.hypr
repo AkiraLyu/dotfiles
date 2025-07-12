@@ -1,11 +1,10 @@
 {
     "layer": "bottom",
     "position": "top",
-    "mod": "dock",
+    "mode": "dock",
     "exclusive": true,
+    "height": 24,
     "passthrough": false,
-    "gtk-layer-shell": true,
-    "height": 22,
     "modules-left": [
         "custom/os",
         "custom/pacman",
@@ -28,29 +27,12 @@
         "custom/idle",
         "tray"
     ],
-
     "custom/os": {
         "format": "  ",
         "tooltip-format": "Arch Linux",
         "on-click": "nohup ~/.config/waybar/scripts/random.sh > /dev/null 2>&1 &",
         "on-click-middle": "wallpaper"
     },
-
-    "custom/MyNoti": {
-        "format": "   ",
-        "tooltip": false,
-        "on-click": "python $HOME/.config/waybar/scripts/Notification.py"
-    },
-
-    "custom/theme": {
-        "exec": "~/.config/waybar/scripts/check-theme.sh",
-        "interval": 1,
-        "format": "{}",
-        "on-click": "$HOME/.config/waybar/scripts/switch_mode.fish",
-        "tooltip": "swithch terminal theme",
-        "signal": 2
-        },
-
     "custom/pacman": {
         "format": " 󰮯 ",
         "tooltip-format": " {} ",
@@ -60,13 +42,24 @@
         "on-click": "termite -e 'sudo pacman -Syu'; pkill -SIGRTMIN+8 waybar",
         "signal": 8
     },
-
+    "custom/theme": {
+        "exec": "~/.config/waybar/scripts/check-theme.sh",
+        "interval": 1,
+        "format": "{}",
+        "on-click": "$HOME/.config/waybar/scripts/switch_mode.fish",
+        "tooltip": "swithch terminal theme",
+        "signal": 2
+    },
+    "custom/MyNoti": {
+        "format": "   ",
+        "tooltip": false,
+        "on-click": "python $HOME/.config/waybar/scripts/Notification.py"
+    },
     "clock": {
-        "format": " <b>󰥔 {:%I:%M %p}</b> ",
+        "format": " <b>󰥔 {:%m/%d %I:%M %p}</b> ",
         "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
         "on-click": "nohup gnome-calendar > /dev/null 2>&1 &"
     },
-
     "hyprland/workspaces": {
         "disable-scroll": true,
         "all-otputs": true,
@@ -81,7 +74,7 @@
             "6": " ",
             "7": " ",
             "8": " ",
-            "9": " ",
+            "9": " "
         },
         "persistent-workspaces": {
             "1": [],
@@ -90,41 +83,37 @@
             "4": []
         }
     },
-
     "custom/media": {
-        "mode": "dock",
-        "exec": "$HOME/.config/waybar/scripts/media.sh",
-        "on-click": "playerctl -p yesplaymusic,rhythmbox play-pause",
-        "on-scroll-up": "playerctl -p yesplaymusic,rhythmbox previous",
-        "on-scroll-down": "playerctl -p yesplaymusic,rhythmbox next",
+        "format": "{}",
+        "exec": "~/.config/waybar/scripts/media.sh",
+        "interval": 5,
+        "return-type": "json",
+        "on-click": "playerctl play-pause",
+        "on-click-right": "playerctl next",
+        "on-click-middle": "playerctl previous",
         "max-length": 25,
-        "min-length": 25,
-        "escape": true,
-        "tooltip": true
+        "min-length": 25
     },
-
     "hyprland/window": {
         "format": " {title} "
     },
-
     "temperature": {
         "hwmon-path": "/sys/class/hwmon/hwmon1/temp1_input",
         "thermal-zone": 1,
-        "format": "  {temperatureC}°C",
+        "format": "  {temperatureC}°C ",
         "critical-threshold": 80,
-        "format-critical": " {temperatureC}°C"
+        "format-critical": "  {temperatureC}°C "
     },
-
     "battery": {
         "states": {
             "good": 95,
             "warning": 30,
             "critical": 20
         },
-        "format": " {icon} {capacity}% ",
-        "format-charging": "  {capacity}% ",
-        "format-plugged": "  {capacity}% ",
-        "format-alt": " {time} {icon} ",
+        "format": "{icon} {capacity}%",
+        "format-charging": " {capacity}% ",
+        "format-plugged": " {capacity}% ",
+        "format-alt": "{time} {icon}",
         "format-icons": [
             "󰂎",
             "󰁺",
@@ -154,7 +143,8 @@
     },
     "bluetooth": {
         "format": "  {status} ",
-        "format-disabled": "","format-connected": "  {num_connections} ",
+        "format-disabled": "",
+        "format-connected": " {num_connections} ",
         "on-click": "blueberry",
         "on-click-left": "bluetoothctl connect 08:F0:B6:D9:43:92",
         "on-click-middle": "bluetoothctl disconnect 08:F0:B6:D9:43:92",
@@ -163,9 +153,9 @@
         "tooltip-format-enumerate-connected": "{device_alias}"
     },
     "pulseaudio": {
-        "format": " {icon} {volume}% ",
+        "format": "{icon} {volume}% ",
         "tooltip": false,
-        "format-muted": "  Muted ",
+        "format-muted": " Muted ",
         "on-click": "python $HOME/.config/waybar/scripts/volume.py",
         "on-click-middle": "pamixer -t",
         "on-scroll-up": "pamixer -i 1",
@@ -187,20 +177,18 @@
     },
     "pulseaudio#microphone": {
         "format": "{format_source}",
-        "format-source": "  {volume}% ",
-        "format-source-muted": "  Muted ",
+        "format-source": " {volume}% ",
+        "format-source-muted": " Muted ",
         "on-click": "python $HOME/.config/waybar/scripts/volume.py",
         "on-click-middle": "pamixer --default-source -t",
         "on-scroll-up": "pamixer --default-source -i 1",
         "on-scroll-down": "pamixer --default-source -d 1",
         "scroll-step": 1
     },
-
     "custom/idle": {
         "format": "  ",
         "on-click": "wlogout"
     },
-
     "tray": {
         "icon-size": 18,
         "spacing": 5

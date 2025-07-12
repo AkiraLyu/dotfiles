@@ -22,7 +22,7 @@ See the above repository for updates as well as full license text. */
   --uc-sidebar-width: 1px;
 }
 #sidebar-box{
-  --uc-autohide-sidebar-delay: 600ms; /* Wait 0.6s before hiding sidebar */
+  --uc-autohide-sidebar-delay: 150ms; /* Wait 0.6s before hiding sidebar */
   --uc-autohide-transition-duration: 115ms;
   --uc-autohide-transition-type: linear;
   --browser-area-z-index-sidebar: 3;
