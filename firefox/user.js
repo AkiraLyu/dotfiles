@@ -8,3 +8,4 @@ user_pref("sidebar.revamp", false);
 user_pref("media.peerconnection.enabled", false);
 user_pref("devtools.debugger.remote-enabled", true);
 user_pref("devtools.chrome.enabled", true);
+user_pref("widget.use-xdg-desktop-portal.open-uri",2);
