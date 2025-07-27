@@ -1,0 +1,84 @@
+window-rule {
+    match app-id="Rofi"
+    open-floating true
+    draw-border-with-background false
+}
+
+window-rule {
+    match app-id="firefox"
+    open-maximized true
+    shadow {
+        off
+    }
+    border {
+        off
+    }
+    clip-to-geometry true
+    tiled-state true
+    draw-border-with-background true
+}
+
+window-rule {
+    match app-id="Notification.py"
+    open-floating true
+    default-column-width { fixed 960; }
+    default-window-height { fixed 540; }
+}
+
+window-rule {
+    match app-id="blueberry.py"
+    open-floating true
+    default-column-width { fixed 960; }
+    default-window-height { fixed 540; }
+}
+
+window-rule {
+    match app-id="light.py"
+    open-floating true
+    default-column-width { fixed 500; }
+    default-window-height { fixed 150; }
+}
+
+window-rule {
+    match app-id="volume.py"
+    open-floating true
+    default-column-width { fixed 500; }
+    default-window-height { fixed 150; }
+}
+
+window-rule {
+    match app-id="org.gnome.Calendar"
+    open-floating true
+    default-column-width { fixed 1200; }
+    default-window-height { fixed 700; }
+}
+
+window-rule {
+    match app-id="org.kde.dolphin"
+    open-floating true
+    default-column-width { fixed 1200; }
+    default-window-height { fixed 750; }
+}
+
+window-rule {
+    match app-id="org.freedesktop.impl.portal.desktop.kde"
+    open-floating true
+    default-column-width { fixed 950; }
+    default-window-height { fixed 580; }
+    default-floating-position x=485 y=250 relative-to="top-left"
+}
+
+window-rule {
+    match app-id="pot"
+    open-floating true
+}
+
+window-rule {
+    match app-id="Typora" title="License Info"
+    open-floating true
+    default-column-width { fixed 0; }
+    default-window-height { fixed 0; }
+}
+
+prefer-no-csd
+

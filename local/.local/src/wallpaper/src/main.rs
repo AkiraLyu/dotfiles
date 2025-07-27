@@ -59,6 +59,7 @@ fn set_wallpaper(path: String) {
 
     let desktop = match env::var("DESKTOP_SESSION").as_deref() {
         Ok("hyprland") => "hypr",
+        Ok("niri") => "niri",
         _ => "sway",
     };
 

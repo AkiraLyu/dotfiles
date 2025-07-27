@@ -64,6 +64,7 @@ drkonqi
 easyeffects
 efibootmgr
 electron
+element-desktop
 expect
 extra-cmake-modules
 fastfetch
@@ -92,6 +93,7 @@ go
 gparted
 graphviz
 grim
+grub
 gst-libav
 gst-plugin-va
 gst-plugins-ugly
@@ -200,6 +202,7 @@ nftables
 nginx
 nikto
 ninja
+niri
 nmap
 noto-fonts-cjk
 noto-fonts-extra
@@ -219,7 +222,9 @@ packagekit
 packagekit-qt5
 pamixer
 pavucontrol
+pdfarranger
 pdftricks
+persepolis
 pipewire-alsa
 plantuml
 plasma-activities
@@ -284,7 +289,7 @@ riscv64-elf-newlib
 riscv64-linux-gnu-binutils
 riscv64-linux-gnu-gcc
 riscv64-linux-gnu-gdb
-rofi
+rofi-wayland
 rpi-imager
 rust-analyzer
 rustup
@@ -312,7 +317,6 @@ syncthing
 systemsettings
 telegram-desktop
 terminus-font
-termusic
 tesseract-data-chi_sim
 tesseract-data-chi_sim_vert
 tesseract-data-eng
@@ -347,7 +351,6 @@ thunderbird
 tk
 tlp
 tmux
-torbrowser-launcher
 tree
 tree-sitter-cli
 ttf-jetbrains-mono
@@ -377,12 +380,15 @@ wl-clipboard
 wlr-randr
 wqy-zenhei
 xcb-imdkit
+xdg-desktop-portal-gnome
 xdg-desktop-portal-gtk
 xdg-desktop-portal-kde
 xdg-desktop-portal-wlr
+xf86-video-intel
 xmlto
 xorg-xhost
 xorg-xwininfo
+xwayland-satellite
 yazi
 yt-dlp
 zathura

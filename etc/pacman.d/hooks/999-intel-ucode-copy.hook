@@ -7,5 +7,5 @@ Operation = Upgrade
 [Action]
 Description = Copying Intel microcode to /boot/EFI/Arch...
 When = PostTransaction
-Exec = /usr/bin/bash -c 'mv /boot/intel-ucode.img /boot/EFI/Arch/'
+Exec = /usr/bin/bash -c 'cp /boot/intel-ucode.img /boot/EFI/Arch/'
 

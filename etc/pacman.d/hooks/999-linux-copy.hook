@@ -9,5 +9,5 @@ Operation = Upgrade
 [Action]
 Description = Copying Linux kernel and initramfs to /boot/EFI/Arch...
 When = PostTransaction
-Exec = /usr/bin/bash -c 'mv /boot/vmlinuz-linux /boot/EFI/Arch/ && mv /boot/initramfs-linux.img /boot/EFI/Arch/ && mv /boot/initramfs-linux-fallback.img /boot/EFI/Arch/'
+Exec = /usr/bin/bash -c 'cp /boot/vmlinuz-linux /boot/EFI/Arch/ && cp /boot/initramfs-linux.img /boot/EFI/Arch/ && cp /boot/initramfs-linux-fallback.img /boot/EFI/Arch/'
 

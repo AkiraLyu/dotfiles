@@ -1,8 +1,9 @@
 adobe-source-han-mono-cn-fonts
+ags-hyprpanel-git
 aquamarine-git
-aylurs-gtk-shell
 baidunetdisk-bin
 chatbox-bin
+clash-verge-rev-bin
 clion
 clion-cmake
 clion-gdb
@@ -22,6 +23,8 @@ hyprland-git
 jmtpfs
 katago-cpu
 lceda-pro-bin
+linux-akira
+linux-akira-headers
 linuxqq
 logisim
 ltspice
@@ -33,8 +36,6 @@ mpvpaper
 noto-fonts-sc
 paru-git
 pot-translation-bin
-proton-ge-custom-bin
-python-inquirerpy
 python-pyautogui
 q5go
 qt6ct-kde
@@ -44,6 +45,7 @@ sov
 splayer-appimage
 stm32cubeclt
 stm32cubemx
+sunshine-git
 sway-git
 tlpui-git
 ttf-foundertype-sc-fonts
@@ -62,6 +64,8 @@ waybar-git
 waydroid
 waydroid-image-gapps
 wechat-universal-bwrap
+wemeet-bin
+wemeet-wayland-screenshare-git
 weylus-git
 wlogout
 wps-office-cn
