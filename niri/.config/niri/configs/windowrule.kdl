@@ -2,6 +2,9 @@ window-rule {
     match app-id="Rofi"
     open-floating true
     draw-border-with-background false
+    focus-ring {
+        off
+    }
 }
 
 window-rule {
@@ -81,11 +84,25 @@ window-rule {
 }
 
 window-rule {
-    match app-id="Rofi"
+    match app-id="chromium"
     focus-ring {
         off
     }
+    shadow {
+        off
+    }
+    border {
+        off
+    }
+    clip-to-geometry true
+    tiled-state true
+    draw-border-with-background true
+    geometry-corner-radius 0
 }
 
 prefer-no-csd
 
+window-rule {
+    geometry-corner-radius 6
+    clip-to-geometry true
+}
