@@ -289,7 +289,7 @@ riscv64-elf-newlib
 riscv64-linux-gnu-binutils
 riscv64-linux-gnu-gcc
 riscv64-linux-gnu-gdb
-rofi-wayland
+rofi
 rpi-imager
 rust-analyzer
 rustup

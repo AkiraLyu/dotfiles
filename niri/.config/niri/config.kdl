@@ -181,6 +181,10 @@ animations {
 }
 
 screenshot-path "~/Pictures/Screenshots/%y-%m-%d_%H-%M-%S.png"
+
+hotkey-overlay {
+    skip-at-startup
+}
 environment {
     DISPLAY ":1"
     QT_QPA_PLATFORMTHEME "qt6ct"
@@ -232,7 +236,7 @@ binds {
     // apps
     Mod+Q hotkey-overlay-title="Open a Terminal: kitty" { spawn "kitty"; }
     Mod+E { spawn "dolphin"; }
-    Mod+R { spawn "rofi" "-show" "drun" "-show-icons"; }
+    Mod+R { spawn "rofi" "-show" "drun" "-show-icons" "-normal-window"; }
     Mod+Shift+V { spawn "sh" "-c" "cliphist list | rofi -dmenu | cliphist decode | wl-copy"; }
     Alt+L { spawn "brightnessctl" "set" "0"; }
     Alt+W { spawn "brightnessctl" "set" "100%"; }
@@ -433,6 +437,13 @@ window-rule {
     open-floating true
     default-column-width { fixed 0; }
     default-window-height { fixed 0; }
+}
+
+window-rule {
+    match app-id="Rofi"
+    focus-ring {
+        off
+    }
 }
 
 prefer-no-csd

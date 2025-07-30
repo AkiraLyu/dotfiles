@@ -80,5 +80,12 @@ window-rule {
     default-window-height { fixed 0; }
 }
 
+window-rule {
+    match app-id="Rofi"
+    focus-ring {
+        off
+    }
+}
+
 prefer-no-csd
 

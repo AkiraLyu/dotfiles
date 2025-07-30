@@ -181,3 +181,7 @@ animations {
 }
 
 screenshot-path "~/Pictures/Screenshots/%y-%m-%d_%H-%M-%S.png"
+
+hotkey-overlay {
+    skip-at-startup
+}

@@ -26,7 +26,7 @@ binds {
     // apps
     Mod+Q hotkey-overlay-title="Open a Terminal: kitty" { spawn "kitty"; }
     Mod+E { spawn "dolphin"; }
-    Mod+R { spawn "rofi" "-show" "drun" "-show-icons"; }
+    Mod+R { spawn "rofi" "-show" "drun" "-show-icons" "-normal-window"; }
     Mod+Shift+V { spawn "sh" "-c" "cliphist list | rofi -dmenu | cliphist decode | wl-copy"; }
     Alt+L { spawn "brightnessctl" "set" "0"; }
     Alt+W { spawn "brightnessctl" "set" "100%"; }

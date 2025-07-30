@@ -5,3 +5,4 @@ export EDITOR=nvim
 export PATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/home/akira/.cargo/bin
 export QT_XCB_GL_INTEGRATION=none
 export GTK_USE_PORTAL=1
+export ANV_DEBUG=video-decode,video-encode
