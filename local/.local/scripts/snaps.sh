@@ -3,16 +3,14 @@
 set date (date +%y-%m-%d_%H-%M-%S)
 
 set -gx SUBVOL_PATHS   \
-    "/_active/_root"   \
-    "/_active/_home"   \
-    "/_active/_var"
+    "_home"   \
+    "_root"
 
-set -gx SNAP_ROOT "/mnt/defvol/_snapshots"
+set -gx SNAP_ROOT "/mnt/defvol/@snapshots"
 
 function create_snaps
-    sudo btrfs subvolume snapshot /mnt/defvol/_active/_home/ /mnt/defvol/_snapshots/snap_home/"$date"
-    sudo btrfs subvolume snapshot /mnt/defvol/_active/_root/ /mnt/defvol/_snapshots/snap_root/"$date"
-    sudo btrfs subvolume snapshot /mnt/defvol/_active/_var/ /mnt/defvol/_snapshots/snap_var/"$date"
+    sudo btrfs subvolume snapshot /mnt/defvol/@home /mnt/defvol/@snapshots/snap_home/"$date"
+    sudo btrfs subvolume snapshot /mnt/defvol/@ /mnt/defvol/@snapshots/snap_root/"$date"
 end
 
 function cleanup_snapshots

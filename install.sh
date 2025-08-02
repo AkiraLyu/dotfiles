@@ -16,7 +16,7 @@ cd "$DOTFILES_DIR" || {
 for dir in */; do
     dir=${dir%/}
 
-    [[ "$dir" == ".git" || "$dir" == "README.md" || "$dir" == ".gitignore" || "$dir" == "install.sh" || "$dir" == "firefox" || "$dir" == "pkgs"]] && continue
+    [[ "$dir" == ".git" || "$dir" == "README.md" || "$dir" == ".gitignore" || "$dir" == "install.sh" || "$dir" == "firefox" || "$dir" == "pkgs" ]] && continue
 
     target=${TARGET_PATHS[$dir]:-$HOME}
 

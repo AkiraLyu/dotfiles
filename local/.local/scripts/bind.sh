@@ -1,11 +1,8 @@
 #!/bin/bash
 
-mount -o noatime,compress=zstd,subvol=_active/_root /dev/nvme0n1p2 /mnt/
-mkdir /mnt/{home,boot}
-mkdir -p /mnt/mnt/defvol /mnt/var/log
-mount /dev/nvme0n1p1 /mnt/boot/efi
-mount -o noatime,compress=zstd,subvol=_active/_home /dev/nvme0n1p2 /mnt/home
-mount -o noatime,compress=zstd,subvol=_active/_lgo /dev/nvme0n1p2 /mnt/log
-mount -o noatime,compress=zstd,subvol=/ /dev/nvme0n1p2 /mnt/mnt/defvol
-
-arch-chroot /mnt /bin/bash
+# swapon /dev/mapper/cryptswap
+mount -o noatime,compress=zstd,subvol=@ /dev/mapper/cryptroot /mnt/
+mount /dev/nvme0n1p1 /mnt/boot
+mount -o noatime,compress=zstd,subvol=@home /dev/mapper/cryptroot /mnt/home
+mount -o noatime,compress=zstd,subvol=@snapshots /dev/mapper/cryptroot /mnt/.snapshots
+mount -o noatime,compress=zstd,subvol=/ /dev/mapper/cryptroot /mnt/mnt/defvol

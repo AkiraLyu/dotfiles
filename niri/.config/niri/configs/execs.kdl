@@ -12,4 +12,4 @@ spawn-at-startup "~/.local/scripts/qq.sh"
 spawn-at-startup "gsettings set org.gnome.desktop.interface gtk-theme 'Breeze'"
 spawn-at-startup "gsettings set org.gnome.desktop.interface icon-theme 'Tela-purple-light'"
 
-spawn-at-startup "/home/akira/.config/niri/scripts/fcitx5-fix.sh"
+// spawn-at-startup "/home/akira/.config/niri/scripts/fcitx5-fix.sh"
