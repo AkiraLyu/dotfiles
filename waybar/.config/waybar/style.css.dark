@@ -1,0 +1,146 @@
+* {
+    border: none;
+    border-radius: 4px;
+    font-family: "JetBrainsMono Nerd Font";
+    font-weight: bold;
+    font-size: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+window#waybar {
+    background: rgba(0, 0, 0, 0);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+}
+
+/* 自定义模块 */
+#custom-os,
+#custom-pacman,
+#custom-theme,
+#custom-MyNoti {
+    background: #3a3a3f;
+    color: #f5f5f5;
+    transition: all 0.2s ease;
+}
+#custom-os {
+    border-radius: 4px 0 0 4px;
+}
+#custom-pacman,
+#custom-theme {
+    border-radius: 0;
+}
+#custom-MyNoti {
+    border-radius: 0 4px 4px 0;
+    margin-right: 4px;
+}
+
+/* 时钟 */
+#clock {
+    background: #3b82f6;
+    color: #f5f5f5;
+    border-radius: 4px;
+    margin-right: 4px;
+}
+
+/* 工作区 */
+#workspaces {
+    background: #2e2e33;
+    color: #f5f5f5;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    margin-right: 4px;
+}
+#workspaces button {
+    padding: 0 4px;
+    margin: 0 2px;
+    color: #cbd5e1;
+    background: transparent;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+#workspaces button.visible {
+    color: #f5f5f5;
+    background: #4a5568;
+}
+#workspaces button.focused,
+#workspaces button.active {
+    color: #ffffff;
+    background: #2563eb;
+}
+#workspaces button.urgent {
+    color: #ffffff;
+    background: #ef4444;
+}
+#workspaces button:hover {
+    background: #51576d;
+    color: #f5f5f5;
+}
+
+/* 媒体 */
+#custom-media {
+    background: #2e2e33;
+    color: #f5f5f5;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+#custom-media:hover {
+    background: #4a5568;
+    color: #f5f5f5;
+}
+
+/* 系统状态模块 */
+#window,
+#temperature,
+#battery,
+#backlight,
+#bluetooth,
+#pulseaudio,
+#pulseaudio.microphone,
+#tray,
+#custom-idle {
+    background: #2e2e33;
+    color: #f5f5f5;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+#temperature {
+    border-radius: 4px 0 0 4px;
+}
+#battery {
+    border-radius: 0;
+}
+#backlight {
+    border-radius: 0 4px 4px 0;
+    margin-right: 4px;
+}
+
+#bluetooth {
+    border-radius: 4px 0 0 4px;
+}
+#pulseaudio {
+    border-radius: 0;
+}
+#pulseaudio.microphone {
+    border-radius: 0 4px 4px 0;
+    margin-right: 4px;
+}
+
+#window {
+    margin-right: 4px;
+    margin-left: 4px;
+}
+
+#custom-idle {
+    color: #cbd5e1;
+    background: #2e2e33;
+    border-radius: 4px 0 0 4px;
+    transition: all 0.2s ease;
+}
+#tray {
+    color: #cbd5e1;
+    background: #2e2e33;
+    margin-right: 2px;
+    border-radius: 0 4px 4px 0;
+}
+
