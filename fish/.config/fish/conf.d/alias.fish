@@ -1,5 +1,4 @@
-alias n=neofetch
-alias l="ls -l"
+alias l="/bin/ls --color=auto"
 alias vim=/bin/nvim
 alias vi=/bin/vim
 alias cat=bat

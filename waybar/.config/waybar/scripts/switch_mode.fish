@@ -9,11 +9,11 @@ if test "$TERTHEME" = "dark"
 
     gsettings set org.gnome.desktop.interface color-scheme 'default'
     gsettings set org.gnome.desktop.interface gtk-theme Breeze
-    gsettings set org.gnome.desktop.interface icon-theme 'Tela-purple-light'
+    gsettings set org.gnome.desktop.interface icon-theme 'Papirus-Light'
 
     # 修改niri配置文件，替换spawn主题为浅色
     sed -i "s#spawn-at-startup \"gsettings set org.gnome.desktop.interface gtk-theme '.*'\"#spawn-at-startup \"gsettings set org.gnome.desktop.interface gtk-theme 'Breeze'\"#g" $CONFIG1 $CONFIG2
-    sed -i "s#spawn-at-startup \"gsettings set org.gnome.desktop.interface icon-theme '.*'\"#spawn-at-startup \"gsettings set org.gnome.desktop.interface icon-theme 'Tela-purple-light'\"#g" $CONFIG1 $CONFIG2
+    sed -i "s#spawn-at-startup \"gsettings set org.gnome.desktop.interface icon-theme '.*'\"#spawn-at-startup \"gsettings set org.gnome.desktop.interface icon-theme 'Papirus-Light'\"#g" $CONFIG1 $CONFIG2
 
     # 修改 qt6ct 主题配色路径为浅色
     sed -i "s#^color_scheme_path=.*#color_scheme_path=/usr/share/color-schemes/BreezeLight.colors#g" $QT6CT_CONF
@@ -28,11 +28,11 @@ else if test "$TERTHEME" = "light"
 
     gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
     gsettings set org.gnome.desktop.interface gtk-theme Breeze-Dark
-    gsettings set org.gnome.desktop.interface icon-theme 'Tela-purple-dark'
+    gsettings set org.gnome.desktop.interface icon-theme 'Papirus-Dark'
 
     # 修改niri配置文件，替换spawn主题为深色
     sed -i "s#spawn-at-startup \"gsettings set org.gnome.desktop.interface gtk-theme '.*'\"#spawn-at-startup \"gsettings set org.gnome.desktop.interface gtk-theme 'Breeze-Dark'\"#g" $CONFIG1 $CONFIG2
-    sed -i "s#spawn-at-startup \"gsettings set org.gnome.desktop.interface icon-theme '.*'\"#spawn-at-startup \"gsettings set org.gnome.desktop.interface icon-theme 'Tela-purple-dark'\"#g" $CONFIG1 $CONFIG2
+    sed -i "s#spawn-at-startup \"gsettings set org.gnome.desktop.interface icon-theme '.*'\"#spawn-at-startup \"gsettings set org.gnome.desktop.interface icon-theme 'Papirus-Dark'\"#g" $CONFIG1 $CONFIG2
 
     # 修改 qt6ct 主题配色路径为深色
     sed -i "s#^color_scheme_path=.*#color_scheme_path=/usr/share/color-schemes/BreezeDark.colors#g" $QT6CT_CONF

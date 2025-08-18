@@ -28,6 +28,7 @@ window#waybar {
 /* 自定义模块：系统信息（左圆角） */
 #custom-os {
     border-radius: 4px 0 0 4px;
+    margin-left: 2px;
 }
 
 /* 自定义模块：pacman & 主题切换（无圆角） */

@@ -1,4 +1,4 @@
-export TERTHEME=light
+export TERTHEME=dark
 
 function switch_color
     if test "$TERTHEME" = "dark"

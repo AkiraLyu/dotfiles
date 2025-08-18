@@ -24,6 +24,7 @@ window#waybar {
 }
 #custom-os {
     border-radius: 4px 0 0 4px;
+    margin-left: 2px;
 }
 #custom-pacman,
 #custom-theme {

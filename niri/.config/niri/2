@@ -369,6 +369,7 @@ window-rule {
     focus-ring {
         off
     }
+    opacity 0.1
 }
 
 window-rule {
