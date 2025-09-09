@@ -7,6 +7,7 @@
 -- Or remove existing autocmds by their group name (which is prefixed with `lazyvim_` for the defaults)
 -- e.g. vim.api.nvim_del_augroup_by_name("lazyvim_wrap_spell")
 
+-- 自动编译 LaTeX 文件
 vim.api.nvim_create_augroup("TexCompile", { clear = true })
 
 vim.api.nvim_create_autocmd("BufWritePost", {
@@ -67,4 +68,12 @@ vim.api.nvim_create_autocmd("InsertLeave", {
 vim.api.nvim_create_autocmd("InsertEnter", {
   pattern = "*",
   callback = restore_input_method,
+})
+
+-- 禁用latex preview
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "tex",
+  callback = function()
+    vim.opt_local.conceallevel = 0
+  end,
 })

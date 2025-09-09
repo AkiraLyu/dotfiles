@@ -77,14 +77,14 @@ return {
       ["<C-e>"] = { "hide", "fallback" },
       ["<CR>"] = { "accept", "fallback" },
 
-      ["<Tab>"] = {
+      ["<S-Tab>"] = {
         function(cmp)
           return cmp.select_next()
         end,
         "snippet_forward",
         "fallback",
       },
-      ["<S-Tab>"] = {
+      ["<C-Tab>"] = {
         function(cmp)
           return cmp.select_prev()
         end,
