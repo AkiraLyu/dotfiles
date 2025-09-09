@@ -186,7 +186,7 @@ hotkey-overlay {
     skip-at-startup
 }
 environment {
-    DISPLAY ":0"
+    // DISPLAY ":0"
     QT_QPA_PLATFORMTHEME "qt6ct"
     XDG_MENU_PREFIX "plasma-"
     XDG_SESSION_TYPE "wayland"
@@ -195,8 +195,9 @@ environment {
 }
 
 spawn-at-startup "waybar" "-c" "/home/akira/.config/waybar/config.niri" "-s" "/home/akira/.config/waybar/style.css"
+spawn-at-startup "scale"
 spawn-at-startup "sh" "-c" "wallpaper < ~/.config/niri/scripts/wallpaper.txt"
-spawn-at-startup "xwayland-satellite"
+// spawn-at-startup "xwayland-satellite"
 spawn-at-startup "mako"
 spawn-at-startup "kwalletd6"
 spawn-at-startup "fcitx5" "-d" "-r"
@@ -204,12 +205,13 @@ spawn-at-startup "nm-applet"
 spawn-at-startup "/usr/lib/polkit-kde-authentication-agent-1"
 spawn-at-startup "wl-paste" "--type" "text" "--watch" "cliphist" "store"
 spawn-at-startup "wl-paste" "--type" "image" "--watch" "cliphist" "store"
-spawn-at-startup "~/.local/scripts/qq.sh"
-spawn-at-startup "gsettings set org.gnome.desktop.interface gtk-theme 'Breeze-Dark'"
-spawn-at-startup "gsettings set org.gnome.desktop.interface icon-theme 'Papirus-Dark'"
+// spawn-at-startup "~/.local/scripts/qq.sh"
+spawn-at-startup "gsettings set org.gnome.desktop.interface gtk-theme 'Breeze'"
+spawn-at-startup "gsettings set org.gnome.desktop.interface icon-theme 'Papirus-Light'"
 spawn-at-startup "kbuildsycoca6"
+spawn-at-startup "/usr/lib/pam_kwallet_init"
 
-spawn-at-startup "/home/akira/.config/niri/scripts/fcitx5-fix.sh"
+// spawn-at-startup "/home/akira/.config/niri/scripts/fcitx5-fix.sh"
 
 // if start from tty
 spawn-at-startup "/usr/lib/xdg-desktop-portal-gnome"
@@ -448,21 +450,10 @@ window-rule {
 }
 
 window-rule {
-    match app-id="chromium"
-    focus-ring {
-        off
-    }
-    shadow {
-        off
-    }
-    border {
-        off
-    }
-    clip-to-geometry true
-    tiled-state true
-    draw-border-with-background true
-    geometry-corner-radius 0
+    match app-id=r#".*\.exe$"#
+    open-floating true
 }
+
 
 prefer-no-csd
 

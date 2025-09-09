@@ -84,21 +84,10 @@ window-rule {
 }
 
 window-rule {
-    match app-id="chromium"
-    focus-ring {
-        off
-    }
-    shadow {
-        off
-    }
-    border {
-        off
-    }
-    clip-to-geometry true
-    tiled-state true
-    draw-border-with-background true
-    geometry-corner-radius 0
+    match app-id=r#".*\.exe$"#
+    open-floating true
 }
+
 
 prefer-no-csd
 
