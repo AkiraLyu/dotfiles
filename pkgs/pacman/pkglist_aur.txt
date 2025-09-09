@@ -1,6 +1,5 @@
 baidunetdisk-bin
 btrfs-assistant
-chatbox-bin
 clash-verge-rev-bin
 clion
 clion-cmake
@@ -25,8 +24,11 @@ mihomo
 minecraft-launcher
 modprobed-db
 mpvpaper
+niri-git
 noto-fonts-sc
+packagekit-qt5
 paru
+phoronix-test-suite
 pot-translation-bin
 python-pyautogui
 q5go

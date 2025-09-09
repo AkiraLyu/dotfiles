@@ -52,6 +52,7 @@ ctags
 cups
 devtools
 discover
+distrobox
 docker
 dolphin
 dosbox
@@ -78,6 +79,7 @@ ffmpegthumbs
 firefox
 fish
 flameshot
+flashrom
 flatpak-kcm
 foliate
 gameconqueror
@@ -99,6 +101,7 @@ gvfs-mtp
 gwenview
 htop
 hugo
+hyprpicker
 i3blocks
 inetutils
 inkscape
@@ -107,6 +110,7 @@ intel-gpu-tools
 intel-media-driver
 intel-ucode
 inter-font
+iotop
 jdk-openjdk
 jdk21-openjdk
 kate
@@ -169,6 +173,7 @@ mako
 man-db
 man-pages
 mariadb
+markdownpart
 meson
 minicom
 mtpfs
@@ -184,7 +189,6 @@ nftables
 nginx
 nikto
 ninja
-niri
 nmap
 noto-fonts-cjk
 noto-fonts-extra
@@ -193,6 +197,7 @@ ntp
 obs-studio
 obsidian
 okular
+ollama
 openocd
 openssh
 openssl-1.1
@@ -200,7 +205,6 @@ os-prober
 oxygen
 oxygen-sounds
 packagekit
-packagekit-qt5
 pamixer
 pavucontrol
 pdfarranger
@@ -270,6 +274,7 @@ rust-analyzer
 rustup
 samba
 sane
+sbctl
 scdoc
 scrcpy
 screen
@@ -343,6 +348,7 @@ vim-nerdtree
 virt-manager
 vivid
 vkd3d
+vnstat
 vulkan-intel
 wacomtablet
 waybar
@@ -359,7 +365,6 @@ xcb-imdkit
 xdg-desktop-portal-gnome
 xdg-desktop-portal-gtk
 xdg-desktop-portal-wlr
-xf86-video-intel
 xmlto
 xorg-xhost
 xorg-xwininfo
