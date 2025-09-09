@@ -46,6 +46,6 @@ else
     echo "TERTHEME 变量不是 'dark' 或 'light'，当前值：$TERTHEME"
 end
 
- source ~/.config/fish/conf.d/colors.fish
+source ~/.config/fish/conf.d/colors.fish
 switch_color
 

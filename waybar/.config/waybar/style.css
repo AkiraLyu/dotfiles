@@ -1,95 +1,116 @@
+/* 全局通用样式 */
 * {
-    border: none;
-    border-radius: 4px;
-    font-family: "JetBrainsMono Nerd Font";
-    font-weight: bold;
-    font-size: 100%;
-    padding: 0;
-    margin: 0;
+    border: none; /* 去掉所有边框 */
+    border-radius: 4px; /* 默认圆角 */
+    font-family: "JetBrainsMono Nerd Font"; /* 使用 JetBrainsMono Nerd Font 字体 */
+    font-weight: bold; /* 粗体 */
+    font-size: 100%; /* 保持系统默认字体大小 */
+    padding: 0; /* 去掉内边距 */
+    margin: 0; /* 去掉外边距 */
 }
 
+/* Waybar 主窗口样式 */
 window#waybar {
-    background: rgba(0, 0, 0, 0);
-    box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    background: rgba(0, 0, 0, 0); /* 透明背景 */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12); /* 轻微阴影 */
 }
 
-/* 自定义模块 */
+/* ===== 自定义模块：系统信息 / pacman / 主题切换 / 通知按钮 ===== */
 #custom-os,
 #custom-pacman,
 #custom-theme,
 #custom-MyNoti {
-    background: #3a3a3f;
-    color: #f5f5f5;
-    transition: all 0.2s ease;
+    background: #f1f2f3; /* 浅灰背景 */
+    color: #202124; /* 深色文字 */
+    transition: all 0.2s ease; /* 平滑过渡效果 */
 }
+
+/* 自定义模块：系统信息（左圆角） */
 #custom-os {
     border-radius: 4px 0 0 4px;
     margin-left: 2px;
 }
+
+/* 自定义模块：pacman & 主题切换（无圆角） */
 #custom-pacman,
 #custom-theme {
     border-radius: 0;
 }
+
+/* 自定义模块：通知按钮（右圆角） */
 #custom-MyNoti {
     border-radius: 0 4px 4px 0;
     margin-right: 4px;
 }
 
-/* 时钟 */
+/* ===== 时钟模块 ===== */
 #clock {
-    background: #3b82f6;
-    color: #f5f5f5;
+    background: #55c6fe; /* 浅蓝背景 */
+    color: #202124; /* 深色文字 */
     border-radius: 4px;
     margin-right: 4px;
 }
 
-/* 工作区 */
+/* ===== 工作区切换模块 ===== */
 #workspaces {
-    background: #2e2e33;
-    color: #f5f5f5;
+    background: #f1f3f4;
+    color: #202124;
     border-radius: 4px;
     transition: all 0.2s ease;
     margin-right: 4px;
 }
+
+/* 工作区按钮基础样式 */
 #workspaces button {
     padding: 0 4px;
     margin: 0 2px;
-    color: #cbd5e1;
+    color: #5f6368; /* 默认灰色文字 */
     background: transparent;
     border-radius: 4px;
     transition: all 0.2s ease;
 }
+
+/* 可见但未激活的工作区 */
 #workspaces button.visible {
-    color: #f5f5f5;
-    background: #4a5568;
-}
-#workspaces button.focused,
-#workspaces button.active {
-    color: #ffffff;
-    background: #2563eb;
-}
-#workspaces button.urgent {
-    color: #ffffff;
-    background: #ef4444;
-}
-#workspaces button:hover {
-    background: #51576d;
-    color: #f5f5f5;
+    color: #202124;
+    background: #e8f0fe;
 }
 
-/* 媒体 */
+/* 当前激活或聚焦的工作区 */
+#workspaces button.focused,
+#workspaces button.active {
+    color: #f1f2f3;
+    background: #1a73e8; /* 蓝色背景 */
+}
+
+/* 紧急状态的工作区 */
+#workspaces button.urgent {
+    color: #f1f2f3;
+    background: #d93025; /* 红色背景 */
+}
+
+/* 鼠标悬停时 */
+#workspaces button:hover {
+    background: #dadce0;
+    color: #202124;
+}
+
+/* ===== 媒体信息模块 ===== */
 #custom-media {
-    background: #2e2e33;
-    color: #f5f5f5;
+    background: #f1f3f4;
+    color: #202124;
     border-radius: 4px;
     transition: all 0.2s ease;
 }
+
+/* 鼠标悬停媒体模块 */
 #custom-media:hover {
-    background: #4a5568;
-    color: #f5f5f5;
+    background: #e8f0fe;
+    color: #202124;
 }
 
-/* 系统状态模块 */
+/* ===== 系统状态类模块 ===== */
+/* 包括窗口标题 / 温度 / 电池 / 亮度 / 蓝牙 / 音量 / 麦克风 / 托盘 / 空闲状态 */
 #window,
 #temperature,
 #battery,
@@ -99,48 +120,62 @@ window#waybar {
 #pulseaudio.microphone,
 #tray,
 #custom-idle {
-    background: #2e2e33;
-    color: #f5f5f5;
+    background: #f1f3f4;
+    color: #202124;
     border-radius: 4px;
     transition: all 0.2s ease;
 }
 
+/* 温度（左圆角） */
 #temperature {
     border-radius: 4px 0 0 4px;
 }
+
+/* 电池（无圆角） */
 #battery {
     border-radius: 0;
 }
+
+/* 亮度（右圆角 + 间距） */
 #backlight {
     border-radius: 0 4px 4px 0;
     margin-right: 4px;
 }
 
+/* 蓝牙（左圆角） */
 #bluetooth {
     border-radius: 4px 0 0 4px;
 }
+
+/* 音量（无圆角） */
 #pulseaudio {
     border-radius: 0;
 }
+
+/* 麦克风（右圆角 + 间距） */
 #pulseaudio.microphone {
     border-radius: 0 4px 4px 0;
     margin-right: 4px;
 }
 
+/* 窗口标题模块（左右留白） */
 #window {
     margin-right: 4px;
     margin-left: 4px;
 }
 
+/* 空闲状态模块（左圆角） */
 #custom-idle {
-    color: #cbd5e1;
-    background: #2e2e33;
+    color: #5f6368; /* 灰色文字 */
+    background: #f1f3f4;
     border-radius: 4px 0 0 4px;
     transition: all 0.2s ease;
 }
+
+/* 系统托盘模块（右圆角 + 间距） */
 #tray {
-    color: #cbd5e1;
-    background: #2e2e33;
+    color: #5f6368;
+    background: #f1f3f4;
     margin-right: 2px;
     border-radius: 0 4px 4px 0;
 }
