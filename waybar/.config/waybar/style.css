@@ -120,7 +120,7 @@ window#waybar {
 #pulseaudio.microphone,
 #tray,
 #custom-idle {
-    background: #f1f3f4;
+    background: #f1f2f3;
     color: #202124;
     border-radius: 4px;
     transition: all 0.2s ease;
@@ -158,17 +158,15 @@ window#waybar {
     margin-right: 4px;
 }
 
-/* 窗口标题模块（左右留白） */
 #window {
-    margin-right: 4px;
-    margin-left: 4px;
+    margin-right: 2px;
 }
 
 /* 空闲状态模块（左圆角） */
 #custom-idle {
     color: #5f6368; /* 灰色文字 */
-    background: #f1f3f4;
-    border-radius: 4px 0 0 4px;
+    background: #f1f2f3;
+    border-radius: 0px 0 0 0px;
     transition: all 0.2s ease;
 }
 
@@ -177,6 +175,7 @@ window#waybar {
     color: #5f6368;
     background: #f1f3f4;
     margin-right: 2px;
-    border-radius: 0 4px 4px 0;
+    border-radius: 4px;
+    -gtk-icon-transform: scale(1); /* 保证缩放一致 */
 }
 

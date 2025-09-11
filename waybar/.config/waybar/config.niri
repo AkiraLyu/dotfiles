@@ -7,6 +7,7 @@
     "passthrough": false,
     "modules-left": [
         "custom/os",
+        "custom/idle",
         "custom/pacman",
         "custom/theme",
         "custom/MyNoti",
@@ -15,7 +16,7 @@
         "custom/media"
     ],
     "modules-center": [
-        "niri/window"
+        "tray"
     ],
     "modules-right": [
         "temperature",
@@ -24,8 +25,7 @@
         "bluetooth",
         "pulseaudio",
         "pulseaudio#microphone",
-        "custom/idle",
-        "tray"
+        "niri/window"
     ],
     "custom/os": {
         "format": "  ",
