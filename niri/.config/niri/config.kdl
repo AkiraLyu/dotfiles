@@ -194,11 +194,11 @@ environment {
     DESKTOP_SESSION "niri"
 }
 
-spawn-at-startup "waybar" "-c" "/home/akira/.config/waybar/config.niri" "-s" "/home/akira/.config/waybar/style.css"
+// spawn-at-startup "waybar" "-c" "/home/akira/.config/waybar/config.niri" "-s" "/home/akira/.config/waybar/style.css"
 spawn-at-startup "scale"
 spawn-at-startup "sh" "-c" "wallpaper < ~/.config/niri/scripts/wallpaper.txt"
-// spawn-at-startup "xwayland-satellite"
-spawn-at-startup "mako"
+// spawn-at-startup "mako"
+spawn-at-startup "quickshell"
 spawn-at-startup "kwalletd6"
 spawn-at-startup "fcitx5" "-d" "-r"
 spawn-at-startup "nm-applet"
@@ -206,8 +206,8 @@ spawn-at-startup "/usr/lib/polkit-kde-authentication-agent-1"
 spawn-at-startup "wl-paste" "--type" "text" "--watch" "cliphist" "store"
 spawn-at-startup "wl-paste" "--type" "image" "--watch" "cliphist" "store"
 // spawn-at-startup "~/.local/scripts/qq.sh"
-spawn-at-startup "gsettings set org.gnome.desktop.interface gtk-theme 'Breeze'"
-spawn-at-startup "gsettings set org.gnome.desktop.interface icon-theme 'Papirus-Light'"
+spawn-at-startup "gsettings set org.gnome.desktop.interface gtk-theme 'Breeze-Dark'"
+spawn-at-startup "gsettings set org.gnome.desktop.interface icon-theme 'Papirus-Dark'"
 spawn-at-startup "kbuildsycoca6"
 spawn-at-startup "/usr/lib/pam_kwallet_init"
 
@@ -241,6 +241,7 @@ binds {
     Alt+Print { screenshot-window; }
 
     // apps
+    Mod+Tab { spawn "~/.local/scripts/switcher.py"; }
     Mod+Q hotkey-overlay-title="Open a Terminal: kitty" { spawn "kitty"; }
     Mod+E { spawn "dolphin"; }
     Mod+R { spawn "rofi" "-show" "drun" "-show-icons" "-normal-window"; }
@@ -364,6 +365,11 @@ binds {
     XF86MonBrightnessDown { spawn "brightnessctl" "set" "5%-"; }
     XF86MonBrightnessUp { spawn "brightnessctl" "set" "5%+"; }
 }
+overview {
+    zoom 0.60
+    backdrop-color "#777777"
+}
+
 window-rule {
     match app-id="Rofi"
     open-floating true
@@ -443,6 +449,11 @@ window-rule {
 }
 
 window-rule {
+    match app-id="wpp"
+    open-floating true
+}
+
+window-rule {
     match app-id="Typora" title="License Info"
     open-floating true
     default-column-width { fixed 0; }
@@ -454,6 +465,21 @@ window-rule {
     open-floating true
 }
 
+window-rule {
+    match app-id=r#".*\wechat$"#
+    open-floating true
+    open-focused false
+}
+
+window-rule {
+    match app-id="python3"
+    match title="niri window switcher"
+    default-column-width { fixed 480; }
+    default-window-height { fixed 120; }
+    default-floating-position x=0 y=400 relative-to="top"
+    open-floating true
+
+}
 
 prefer-no-csd
 

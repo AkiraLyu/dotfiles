@@ -1,3 +1,8 @@
+overview {
+    zoom 0.60
+    backdrop-color "#777777"
+}
+
 window-rule {
     match app-id="Rofi"
     open-floating true
@@ -77,6 +82,11 @@ window-rule {
 }
 
 window-rule {
+    match app-id="wpp"
+    open-floating true
+}
+
+window-rule {
     match app-id="Typora" title="License Info"
     open-floating true
     default-column-width { fixed 0; }
@@ -88,6 +98,21 @@ window-rule {
     open-floating true
 }
 
+window-rule {
+    match app-id=r#".*\wechat$"#
+    open-floating true
+    open-focused false
+}
+
+window-rule {
+    match app-id="python3"
+    match title="niri window switcher"
+    default-column-width { fixed 480; }
+    default-window-height { fixed 120; }
+    default-floating-position x=0 y=400 relative-to="top"
+    open-floating true
+
+}
 
 prefer-no-csd
 

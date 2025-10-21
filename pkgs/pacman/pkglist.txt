@@ -11,6 +11,7 @@ alsa-plugins
 alsa-tools
 alsa-utils
 android-tools
+archiso
 archlinux-xdg-menu
 ardour
 aria2
@@ -36,6 +37,7 @@ breeze-gtk
 breeze-plymouth
 brightnessctl
 btop
+btrfs-assistant
 btrfs-progs
 calibre
 cava
@@ -53,7 +55,6 @@ cups
 devtools
 discover
 distrobox
-docker
 dolphin
 dosbox
 dpkg
@@ -75,6 +76,7 @@ fcitx5-material-color
 fcitx5-mozc
 fcitx5-pinyin-zhwiki
 fcitx5-qt
+fcitx5-rime
 ffmpegthumbs
 firefox
 fish
@@ -82,17 +84,16 @@ flameshot
 flashrom
 flatpak-kcm
 foliate
+freecad
 gameconqueror
 gd
 gimp
 git
 gnome-calendar
-gnu-netcat
 go
 gparted
 graphviz
 grim
-grub
 gst-libav
 gst-plugin-va
 gst-plugins-ugly
@@ -176,6 +177,7 @@ mariadb
 markdownpart
 meson
 minicom
+mission-center
 mtpfs
 musescore
 nasm
@@ -227,6 +229,7 @@ plasma-wayland-protocols
 plasma-welcome
 plasma-workspace-wallpapers
 plymouth-kcm
+podman
 polkit-kde-agent
 powerdevil
 powertop
@@ -263,6 +266,7 @@ qt5-websockets
 qt5ct
 rapidjson
 rclone
+rime-double-pinyin
 riscv64-elf-gcc
 riscv64-elf-newlib
 riscv64-linux-gnu-binutils

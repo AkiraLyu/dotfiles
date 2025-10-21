@@ -140,6 +140,9 @@ if has("autocmd")
   au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 endif
 
+" 按下 Esc 自动取消搜索高亮
+nnoremap <Esc> :nohlsearch<CR>
+
 " nerdtree config
 " 启动 vim 时自动打开 NERDTree(带参数时不打开)
 autocmd vimenter * if argc() == 0 | NERDTree | endif

@@ -1,4 +1,4 @@
-set Start_Env kde
+set Start_Env niri
 
 function switch_font
     if test "$Start_Env" = "kde"

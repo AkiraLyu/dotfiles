@@ -1,5 +1,5 @@
 {
-    "layer": "bottom",
+    "layer": "top",
     "position": "top",
     "mode": "dock",
     "exclusive": true,
@@ -7,28 +7,27 @@
     "passthrough": false,
     "modules-left": [
         "custom/os",
+        "clock",
         "custom/idle",
         "custom/pacman",
         "custom/theme",
         "custom/MyNoti",
-        "clock",
-        "niri/workspaces",
-        "custom/media"
+        "niri/window"
     ],
     "modules-center": [
-        "tray"
+        "niri/workspaces"
     ],
     "modules-right": [
+        "custom/media",
+        "tray",
         "temperature",
         "battery",
         "backlight",
         "bluetooth",
         "pulseaudio",
-        "pulseaudio#microphone",
-        "niri/window"
     ],
     "custom/os": {
-        "format": "  ",
+        "format": "   ",
         "tooltip-format": "Arch Linux",
         "on-click": "nohup ~/.config/waybar/scripts/random.sh > /dev/null 2>&1 &",
         "on-click-middle": "wallpaper"
@@ -66,15 +65,15 @@
         "on-click": "activate",
         "format": "{icon}",
         "format-icons": {
-            "1": " ",
-            "2": " ",
-            "3": " ",
-            "4": " ",
-            "5": " ",
-            "6": " ",
-            "7": " ",
-            "8": " ",
-            "9": " "
+            "1": " 1 ",
+            "2": " 2 ",
+            "3": " 3 ",
+            "4": " 4 ",
+            "5": " 5 ",
+            "6": " 6 ",
+            "7": " 7 ",
+            "8": " 8 ",
+            "9": " 9 "
         },
         "persistent-workspaces": {
             "1": [],
@@ -95,7 +94,8 @@
         "min-length": 25
     },
     "niri/window": {
-        "format": " {title} "
+        "format": " {title} ",
+        "max-length": 50,
     },
     "temperature": {
         "hwmon-path": "/sys/class/hwmon/hwmon1/temp1_input",
@@ -142,7 +142,7 @@
         "min-length": 6
     },
     "bluetooth": {
-        "format": "  {status} ",
+        "format": "  ",
         "format-disabled": "",
         "format-connected": " {num_connections} ",
         "on-click": "blueberry",
@@ -153,7 +153,7 @@
         "tooltip-format-enumerate-connected": "{device_alias}"
     },
     "pulseaudio": {
-        "format": "{icon} {volume}% ",
+        "format": " {icon} ",
         "tooltip": false,
         "format-muted": " Muted ",
         "on-click": "python $HOME/.config/waybar/scripts/volume.py",

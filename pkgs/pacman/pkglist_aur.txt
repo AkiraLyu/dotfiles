@@ -1,5 +1,4 @@
 baidunetdisk-bin
-btrfs-assistant
 clash-verge-rev-bin
 clion
 clion-cmake
@@ -12,10 +11,12 @@ execstack
 fcitx5-pinyin-moegirl
 fcitx5-skin-ori-git
 folo-bin
+gnu-netcat
 google-chrome
+gpu-screen-recorder
 jmtpfs
 katago-cpu
-lceda-pro-bin
+lceda-pro
 linuxqq
 logisim
 ltspice
@@ -26,13 +27,16 @@ modprobed-db
 mpvpaper
 niri-git
 noto-fonts-sc
+onlyoffice-bin
 packagekit-qt5
 paru
 phoronix-test-suite
 pot-translation-bin
+proton-ge-custom-bin
 python-pyautogui
 q5go
 qt6ct-kde
+quickshell-git
 scala
 sing-box
 sov
@@ -41,6 +45,7 @@ stlink-server
 stm32cubeclt
 stm32cubemx
 sunshine-git
+tkdnd2-git
 tlpui-git
 ttf-foundertype-sc-fonts
 ttf-i-ming-fonts

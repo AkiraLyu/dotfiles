@@ -68,10 +68,10 @@ opt.smoothscroll = true
 
 -- Folding
 vim.opt.foldlevel = 99
-vim.opt.foldtext = "v:lua.require'lazyvim.util'.ui.foldtext()"
+vim.opt.foldtext = "v:lua.require'lazyvim.util'.treesister.foldtext()"
 
 vim.opt.foldmethod = "expr"
-vim.opt.foldexpr = "v:lua.require'lazyvim.util'.ui.foldexpr()"
+vim.opt.foldexpr = "v:lua.require'lazyvim.util'.treesister.foldexpr()"
 
 vim.o.formatexpr = "v:lua.require'lazyvim.util'.format.formatexpr()"
 

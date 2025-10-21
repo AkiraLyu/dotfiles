@@ -6,7 +6,6 @@ set font "Noto Sans CJK SC Regular 12"
 set guioptions " "
 set window-title-basename true
 set incremental-search false
-set show-v-scrollbar true
 set advance-pages-per-row true
 set pages-per-row 1
 
