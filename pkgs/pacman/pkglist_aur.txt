@@ -1,4 +1,5 @@
 baidunetdisk-bin
+bless
 clash-verge-rev-bin
 clion
 clion-cmake
@@ -38,7 +39,6 @@ q5go
 qt6ct-kde
 quickshell-git
 scala
-sing-box
 sov
 splayer-appimage
 stlink-server
@@ -46,7 +46,6 @@ stm32cubeclt
 stm32cubemx
 sunshine-git
 tkdnd2-git
-tlpui-git
 ttf-foundertype-sc-fonts
 ttf-i-ming-fonts
 ttf-lxgw-wenkai

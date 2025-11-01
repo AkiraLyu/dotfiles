@@ -29,7 +29,6 @@ bc
 bear
 bind
 blender
-bless
 blueberry
 bluedevil
 bluez-utils
