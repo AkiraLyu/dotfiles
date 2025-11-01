@@ -29,6 +29,6 @@ for dir in */; do
     fi
 done
 
-$HOME/.local/scripts/firefox.sh
+$HOME/.local/scripts/tools/firefox.sh
 
 echo "所有 dotfiles 已成功部署"

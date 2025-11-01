@@ -24,7 +24,7 @@ binds {
     Alt+Print { screenshot-window; }
 
     // apps
-    Mod+Tab { spawn "~/.local/scripts/switcher.py"; }
+    Mod+Tab { spawn "~/.local/scripts/tools/switcher.py"; }
     Mod+Q hotkey-overlay-title="Open a Terminal: kitty" { spawn "kitty"; }
     Mod+E { spawn "dolphin"; }
     Mod+R { spawn "rofi" "-show" "drun" "-show-icons" "-normal-window"; }

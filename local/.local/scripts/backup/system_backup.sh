@@ -4,7 +4,7 @@
 # 作者: Akira
 # ==========================================================
 
-/home/akira/.local/scripts/mount_backup.sh
+/home/akira/.local/scripts/backup/mount_backup.sh
 
 # === 可自定义区域 ===
 BACKUP_SOURCES=(
