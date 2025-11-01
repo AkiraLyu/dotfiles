@@ -1,6 +1,6 @@
 #!/usr/bin/env xdg-open
 [Desktop Entry]
-Exec=python $HOME/.local/scripts/mihomo.py
+Exec=/home/akira/.local/scripts/mihomo/mihomo_tray.py
 MimeType=application/x-python-code
 Name=Mihomo
 Type=Application
