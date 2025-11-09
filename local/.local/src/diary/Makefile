@@ -2,4 +2,4 @@ build:
 	cargo build --release
 
 install:build
-	sudo cp ./target/release/wallpaper /usr/local/bin/
+	sudo cp ./target/release/diary /usr/local/bin/

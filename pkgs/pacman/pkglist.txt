@@ -210,7 +210,6 @@ pamixer
 pavucontrol
 pdfarranger
 pdftricks
-persepolis
 pipewire-alsa
 plantuml
 plasma-browser-integration
@@ -355,6 +354,7 @@ vnstat
 vulkan-intel
 wacomtablet
 waybar
+waydroid
 wget
 wine
 wine-gecko

@@ -58,7 +58,6 @@ visual-studio-code-bin
 vkd3d-proton-bin
 vofa+
 watchman-bin
-waydroid
 waydroid-image-gapps
 wechat-universal-bwrap
 wemeet-bin
