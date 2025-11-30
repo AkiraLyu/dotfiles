@@ -27,34 +27,6 @@ window-rule {
 }
 
 window-rule {
-    match app-id="Notification.py"
-    open-floating true
-    default-column-width { fixed 960; }
-    default-window-height { fixed 540; }
-}
-
-window-rule {
-    match app-id="blueberry.py"
-    open-floating true
-    default-column-width { fixed 960; }
-    default-window-height { fixed 540; }
-}
-
-window-rule {
-    match app-id="light.py"
-    open-floating true
-    default-column-width { fixed 500; }
-    default-window-height { fixed 150; }
-}
-
-window-rule {
-    match app-id="volume.py"
-    open-floating true
-    default-column-width { fixed 500; }
-    default-window-height { fixed 150; }
-}
-
-window-rule {
     match app-id="org.gnome.Calendar"
     open-floating true
     default-column-width { fixed 1200; }
@@ -64,8 +36,8 @@ window-rule {
 window-rule {
     match app-id="org.kde.dolphin"
     open-floating true
-    default-column-width { fixed 1200; }
-    default-window-height { fixed 750; }
+    default-column-width { fixed 1020; }
+    default-window-height { fixed 620; }
 }
 
 window-rule {
@@ -105,13 +77,19 @@ window-rule {
 }
 
 window-rule {
-    match app-id="python3"
-    match title="niri window switcher"
-    default-column-width { fixed 480; }
-    default-window-height { fixed 120; }
-    default-floating-position x=0 y=400 relative-to="top"
+    match title="plasmashell"
     open-floating true
+}
 
+window-rule {
+    match app-id="QQ"
+    open-floating true
+}
+window-rule {
+    match title="QQ"
+    open-floating true
+    default-column-width { fixed 1048; }
+    default-window-height { fixed 716; }
 }
 
 prefer-no-csd

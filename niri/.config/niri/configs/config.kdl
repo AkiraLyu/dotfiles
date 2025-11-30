@@ -44,7 +44,7 @@ input {
 
 output "eDP-1" {
     mode "1920x1080@60"
-    scale 1
+    scale 1.25
     transform "normal"
     position x=0 y=0
 }
@@ -149,7 +149,7 @@ layout {
     // You can enable drop shadows for windows.
     shadow {
         // Uncomment the next line to enable shadows.
-        // on
+        on
 
         // draw-behind-window true
 

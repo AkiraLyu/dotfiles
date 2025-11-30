@@ -12,7 +12,8 @@ binds {
     Mod+Ctrl+V { switch-focus-between-floating-and-tiling; }
     Mod+Shift+R { switch-preset-window-height; }
     Mod+Ctrl+R { reset-window-height; }
-    Mod+Shift+F { fullscreen-window; }
+    Mod+Shift+F { maximize-window-to-edges; }
+    Alt+Shift+F { fullscreen-window; }
     Mod+Ctrl+F { expand-column-to-available-width; }
     Mod+Alt+R { switch-preset-column-width; }
     Mod+Alt+C { center-visible-columns; }
@@ -24,7 +25,7 @@ binds {
     Alt+Print { screenshot-window; }
 
     // apps
-    Mod+Tab { spawn "~/.local/scripts/tools/switcher.py"; }
+    // Mod+Tab { spawn "~/.local/scripts/tools/switcher.py"; }
     Mod+Q hotkey-overlay-title="Open a Terminal: kitty" { spawn "kitty"; }
     Mod+E { spawn "dolphin"; }
     Mod+R { spawn "rofi" "-show" "drun" "-show-icons" "-normal-window"; }
@@ -32,10 +33,9 @@ binds {
     Alt+L { spawn "brightnessctl" "set" "0"; }
     Alt+W { spawn "brightnessctl" "set" "100%"; }
     Mod+P { spawn "sh" "-c" "notify-send $(hyprpicker)"; }
-    Ctrl+Alt+L hotkey-overlay-title="LogOut Options: wlogout" { spawn "wlogout"; }
-    Ctrl+Shift+L hotkey-overlay-title="Lock Screen: swaylock" { spawn "~/.config/wlogout/lock.sh"; }
-    Ctrl+Alt+W { spawn "~/.config/niri/scripts/toogle-waybar.sh"; }
-    Alt+R { spawn "~/.local/scripts/window-switcher.sh"; }
+    // Ctrl+Alt+L hotkey-overlay-title="LogOut Options: wlogout" { spawn "wlogout"; }
+    // Ctrl+Shift+L hotkey-overlay-title="Lock Screen: swaylock" { spawn "~/.config/wlogout/lock.sh"; }
+    // Ctrl+Alt+W { spawn "~/.config/niri/scripts/toogle-waybar.sh"; }
     F1 { spawn "curl" "127.0.0.1:60828/selection_translate";}
     F2 { spawn "~/.local/scripts/translate/ocr_translate.sh"; }
 

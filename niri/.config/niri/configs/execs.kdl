@@ -1,4 +1,3 @@
-// spawn-at-startup "waybar" "-c" "/home/akira/.config/waybar/config.niri" "-s" "/home/akira/.config/waybar/style.css"
 spawn-at-startup "scale"
 spawn-at-startup "sh" "-c" "wallpaper < ~/.config/niri/scripts/wallpaper.txt"
 // spawn-at-startup "mako"
@@ -14,8 +13,8 @@ spawn-at-startup "gsettings set org.gnome.desktop.interface gtk-theme 'Breeze'"
 spawn-at-startup "gsettings set org.gnome.desktop.interface icon-theme 'Papirus-Light'"
 spawn-at-startup "kbuildsycoca6"
 spawn-at-startup "/usr/lib/pam_kwallet_init"
-
-// spawn-at-startup "/home/akira/.config/niri/scripts/fcitx5-fix.sh"
+spawn-at-startup "/home/akira/.config/niri/scripts/xconfig.sh"
 
 // if start from tty
 spawn-at-startup "/usr/lib/xdg-desktop-portal-gnome"
+
