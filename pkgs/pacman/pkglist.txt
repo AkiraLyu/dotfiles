@@ -49,6 +49,7 @@ cliphist
 cmake
 compsize
 cpio
+cscope
 ctags
 cups
 devtools
@@ -88,6 +89,7 @@ gameconqueror
 gd
 gimp
 git
+global
 gnome-calendar
 go
 gparted
@@ -105,6 +107,7 @@ hyprpicker
 i3blocks
 inetutils
 inkscape
+inotify-tools
 intel-compute-runtime
 intel-gpu-tools
 intel-media-driver
@@ -174,6 +177,7 @@ man-db
 man-pages
 mariadb
 markdownpart
+marksman
 meson
 minicom
 mission-center
@@ -260,7 +264,6 @@ python-sympy
 python-websockets
 qbittorrent
 qemu-full
-qt5-websockets
 qt5ct
 rapidjson
 rclone
@@ -289,7 +292,6 @@ snapper
 sof-firmware
 spectacle
 spice-vdagent
-steam
 stow
 strace
 swaybg

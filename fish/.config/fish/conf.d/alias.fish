@@ -12,3 +12,6 @@ alias ec="gpg -e -r "akira.uestc@gmail.com""
 alias de="gpg -d"
 alias gi="~/.local/scripts/tools/init_git_repo.sh"
 
+function fd
+    find . -name "$argv" 2>/dev/null
+end

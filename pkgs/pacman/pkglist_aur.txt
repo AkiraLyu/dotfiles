@@ -16,6 +16,7 @@ gnu-netcat
 google-chrome
 gpu-screen-recorder
 jmtpfs
+jpdfbookmarks
 katago-cpu
 lceda-pro
 linuxqq
@@ -26,6 +27,7 @@ mihomo
 minecraft-launcher
 modprobed-db
 mpvpaper
+nipaplay-reload-bin
 niri-git
 noto-fonts-sc
 onlyoffice-bin
@@ -36,6 +38,7 @@ pot-translation-bin
 proton-ge-custom-bin
 python-pyautogui
 q5go
+qt5-websockets
 qt6ct-kde
 quickshell-git
 scala
