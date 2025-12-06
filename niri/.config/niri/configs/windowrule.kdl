@@ -1,31 +1,28 @@
+// global
 overview {
     zoom 0.60
     backdrop-color "#777777"
 }
 
 window-rule {
-    match app-id="Rofi"
-    open-floating true
-    draw-border-with-background false
-    focus-ring {
-        off
-    }
-}
-
-window-rule {
-    match app-id="firefox"
-    open-maximized true
-    shadow {
-        off
-    }
-    border {
-        off
-    }
+    geometry-corner-radius 6
     clip-to-geometry true
-    tiled-state true
-    draw-border-with-background true
 }
 
+prefer-no-csd
+
+// floating
+window-rule {
+    match app-id="pot"
+    match app-id="wpp"
+    match app-id=r#".*\.exe$"#
+    match app-id="steam_proton"
+    match title="plasmashell"
+    match app-id="Display"
+    open-floating true
+}
+
+// set window size
 window-rule {
     match app-id="org.gnome.Calendar"
     open-floating true
@@ -45,17 +42,13 @@ window-rule {
     open-floating true
     default-column-width { fixed 950; }
     default-window-height { fixed 580; }
-    // default-floating-position x=388 y=200 relative-to="top-left"
 }
 
 window-rule {
-    match app-id="pot"
+    match title="QQ"
     open-floating true
-}
-
-window-rule {
-    match app-id="wpp"
-    open-floating true
+    default-column-width { fixed 1048; }
+    default-window-height { fixed 716; }
 }
 
 window-rule {
@@ -65,41 +58,22 @@ window-rule {
     default-window-height { fixed 0; }
 }
 
-window-rule {
-    match app-id=r#".*\.exe$"#
-    open-floating true
-}
-
+// wechat fix
 window-rule {
     match app-id=r#".*\wechat$"#
     open-floating true
     open-focused false
 }
 
+// firefox maxmize
 window-rule {
-    match title="plasmashell"
-    open-floating true
-}
-
-window-rule {
-    match app-id="QQ"
-    open-floating true
-}
-window-rule {
-    match title="QQ"
-    open-floating true
-    default-column-width { fixed 1048; }
-    default-window-height { fixed 716; }
-}
-
-prefer-no-csd
-
-window-rule {
-    geometry-corner-radius 6
+    match app-id="firefox"
+    open-maximized true
+    shadow {
+        off
+    }
     clip-to-geometry true
+    tiled-state true
+    draw-border-with-background true
 }
 
-window-rule {
-    match app-id="Display"
-    open-floating true
-}
