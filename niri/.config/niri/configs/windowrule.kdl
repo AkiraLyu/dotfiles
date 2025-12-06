@@ -45,7 +45,7 @@ window-rule {
     open-floating true
     default-column-width { fixed 950; }
     default-window-height { fixed 580; }
-    default-floating-position x=485 y=250 relative-to="top-left"
+    // default-floating-position x=388 y=200 relative-to="top-left"
 }
 
 window-rule {
@@ -97,4 +97,9 @@ prefer-no-csd
 window-rule {
     geometry-corner-radius 6
     clip-to-geometry true
+}
+
+window-rule {
+    match app-id="Display"
+    open-floating true
 }

@@ -25,7 +25,6 @@ binds {
     Alt+Print { screenshot-window; }
 
     // apps
-    // Mod+Tab { spawn "~/.local/scripts/tools/switcher.py"; }
     Mod+Q hotkey-overlay-title="Open a Terminal: kitty" { spawn "kitty"; }
     Mod+E { spawn "dolphin"; }
     Mod+R { spawn "rofi" "-show" "drun" "-show-icons" "-normal-window"; }
@@ -33,9 +32,6 @@ binds {
     Alt+L { spawn "brightnessctl" "set" "0"; }
     Alt+W { spawn "brightnessctl" "set" "100%"; }
     Mod+P { spawn "sh" "-c" "notify-send $(hyprpicker)"; }
-    // Ctrl+Alt+L hotkey-overlay-title="LogOut Options: wlogout" { spawn "wlogout"; }
-    // Ctrl+Shift+L hotkey-overlay-title="Lock Screen: swaylock" { spawn "~/.config/wlogout/lock.sh"; }
-    // Ctrl+Alt+W { spawn "~/.config/niri/scripts/toogle-waybar.sh"; }
     F1 { spawn "curl" "127.0.0.1:60828/selection_translate";}
     F2 { spawn "~/.local/scripts/translate/ocr_translate.sh"; }
 
@@ -62,10 +58,6 @@ binds {
     Mod+Shift+J     { move-window-down; }
     Mod+Shift+K     { move-window-up; }
     Mod+Shift+L     { move-column-right; }
-    Mod+Ctrl+Home { move-column-to-first; }
-    Mod+Ctrl+End  { move-column-to-last; }
-    Mod+Ctrl+WheelScrollRight { move-column-right; }
-    Mod+Ctrl+WheelScrollLeft  { move-column-left; }
     Mod+Shift+WheelScrollDown      { move-column-right; }
     Mod+Shift+WheelScrollUp        { move-column-left; }
 
@@ -78,6 +70,13 @@ binds {
     Mod+Ctrl+J     { focus-monitor-down; }
     Mod+Ctrl+K     { focus-monitor-up; }
     Mod+Ctrl+L     { focus-monitor-right; }
+
+    Mod+Ctrl+Page_Down { focus-monitor-down; }
+    Mod+Ctrl+Page_Up   { focus-monitor-up; }
+    Mod+Ctrl+U         { focus-monitor-down; }
+    Mod+Ctrl+I         { focus-monitor-up; }
+    Mod+Ctrl+WheelScrollDown cooldown-ms=150 { focus-monitor-down; }
+    Mod+Ctrl+WheelScrollUp   cooldown-ms=150 { focus-monitor-up; }
 
     // monitor movement
     Mod+Shift+Ctrl+Left  { move-column-to-monitor-left; }
@@ -107,16 +106,8 @@ binds {
     Mod+9 { focus-workspace 9; }
 
     // workspaces movement
-    Mod+Ctrl+Page_Down { move-column-to-workspace-down; }
-    Mod+Ctrl+Page_Up   { move-column-to-workspace-up; }
-    Mod+Ctrl+U         { move-column-to-workspace-down; }
-    Mod+Ctrl+I         { move-column-to-workspace-up; }
-    Mod+Ctrl+WheelScrollDown cooldown-ms=150 { move-column-to-workspace-down; }
-    Mod+Ctrl+WheelScrollUp   cooldown-ms=150 { move-column-to-workspace-up; }
-    Mod+Shift+Page_Down { move-workspace-down; }
-    Mod+Shift+Page_Up   { move-workspace-up; }
-    Mod+Shift+U         { move-workspace-down; }
-    Mod+Shift+I         { move-workspace-up; }
+    Mod+Alt+Down { move-workspace-down; }
+    Mod+Alt+Up { move-workspace-up; }
     Mod+Shift+1 { move-column-to-workspace 1; }
     Mod+Shift+2 { move-column-to-workspace 2; }
     Mod+Shift+3 { move-column-to-workspace 3; }
@@ -126,6 +117,8 @@ binds {
     Mod+Shift+7 { move-column-to-workspace 7; }
     Mod+Shift+8 { move-column-to-workspace 8; }
     Mod+Shift+9 { move-column-to-workspace 9; }
+    Mod+Shift+U         { move-column-to-workspace-down; }
+    Mod+Shift+I         { move-column-to-workspace-up; }
 
     // resize
     Mod+Minus { set-column-width "-10%"; }
