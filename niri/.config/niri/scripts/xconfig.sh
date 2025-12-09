@@ -1,3 +1,3 @@
 #!/bin/bash
 
-xrdb -merge ~/.Xresources
+xrdb -merge ~/.config/niri/scripts/.Xresources

@@ -7,7 +7,8 @@
 # 作者: Akira
 # ============================================
 
-URL=$CLASH_SUBSCRIPTION
+# URL=$CLASH_SUBSCRIPTION
+URL=https://excellent.congyusub.top/sub/f7cfd4785a61b07f/clash
 CONFIG_PATH="/home/akira/.config/clash/config.yaml"
 TMP_FILE=$(mktemp)
 

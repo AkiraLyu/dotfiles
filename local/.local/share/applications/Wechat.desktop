@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=Wechat
+Icon=/home/akira/.local/share/icons/com.tencent.WeChat.png
+Exec=flatpak run com.tencent.WeChat
+Terminal=false

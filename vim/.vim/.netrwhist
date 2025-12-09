@@ -1,8 +1,0 @@
-let g:netrw_dirhistmax  =10
-let g:netrw_dirhistcnt =6
-let g:netrw_dirhist_6='/home/akira/.cache/KDE/plasma-welcome/qmlcache'
-let g:netrw_dirhist_5='/home/akira/.cache/KDE/plasma-welcome'
-let g:netrw_dirhist_4='/home/akira/.cache/KDE'
-let g:netrw_dirhist_3='/home/akira/.cache'
-let g:netrw_dirhist_2='/home/akira'
-let g:netrw_dirhist_1='/home/akira/codespace/rust'

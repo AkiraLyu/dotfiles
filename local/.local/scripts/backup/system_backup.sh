@@ -23,7 +23,7 @@ BACKUP_SOURCES=(
     /home/akira/Documents/FAVORITE
 )
 
-BACKUP_DEST="/mnt/backup/BackUp/"
+BACKUP_DEST="/mnt/backup/BackUp"
 ENABLE_LOG=true
 LOG_DIR="$BACKUP_DEST/logs"
 

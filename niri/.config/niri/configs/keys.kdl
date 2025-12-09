@@ -34,6 +34,7 @@ binds {
     Mod+P { spawn "sh" "-c" "notify-send $(hyprpicker)"; }
     F1 { spawn "curl" "127.0.0.1:60828/selection_translate";}
     F2 { spawn "~/.local/scripts/translate/ocr_translate.sh"; }
+    Ctrl+Print { spawn "~/.local/scripts/tools/pin-screenshot.sh"; }
 
     // window focus
     Mod+Left  { focus-column-left; }

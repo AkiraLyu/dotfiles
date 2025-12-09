@@ -1,0 +1,12 @@
+[Unit]
+Description=Mihomo User Service
+After=network.target
+
+[Service]
+ExecStart=mihomo -d /home/akira/.config/clash/
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=default.target
+

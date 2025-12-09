@@ -23,7 +23,6 @@ echo "===> Creating Btrfs subvolumes"
 mount /dev/mapper/cryptroot /mnt
 btrfs subvolume create /mnt/@
 btrfs subvolume create /mnt/@home
-btrfs subvolume create /mnt/@log
 btrfs subvolume create /mnt/@snapshots
 umount /mnt
 
@@ -43,3 +42,5 @@ pacstrap -K /mnt \
 
 genfstab -U /mnt >> /mnt/etc/fstab
 
+cp ./post-install.sh /mnt/
+arch-chroot /mnt bash /post-install.sh
