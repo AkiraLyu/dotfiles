@@ -9,6 +9,7 @@ folo-bin
 gnu-netcat
 google-chrome
 gpu-screen-recorder
+icu76
 jmtpfs
 jpdfbookmarks
 lceda-pro
@@ -32,6 +33,7 @@ sov
 splayer-appimage
 stlink-server
 stm32cubemx
+sunshine-bin
 tkdnd2-git
 ttf-foundertype-sc-fonts
 ttf-i-ming-fonts
@@ -53,4 +55,5 @@ wlogout
 wps-office-cn
 wps-office-mui-zh-cn
 xmind
+xwayland-satellite-git
 zotero-bin

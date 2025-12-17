@@ -74,6 +74,7 @@ flameshot
 flashrom
 foliate
 freecad
+fzf
 gameconqueror
 gimp
 git
@@ -285,7 +286,6 @@ xdg-desktop-portal-wlr
 xmlto
 xorg-xhost
 xorg-xwininfo
-xwayland-satellite
 yazi
 yt-dlp
 zathura

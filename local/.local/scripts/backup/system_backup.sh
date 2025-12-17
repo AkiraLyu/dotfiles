@@ -21,6 +21,7 @@ BACKUP_SOURCES=(
     /home/akira/.zotero
     /home/akira/Documents/AliceSoft
     /home/akira/Documents/FAVORITE
+    /home/akira/Templates
 )
 
 BACKUP_DEST="/mnt/backup/BackUp"
