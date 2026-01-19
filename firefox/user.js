@@ -5,7 +5,7 @@ user_pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);
 user_pref("browser.startup.homepage", "file:///home/akira/dotfiles/firefox/frontpage/index.html");
 user_pref("widget.gtk.rounded-bottom-corners.enabled", true);
 user_pref("sidebar.revamp", false);
-user_pref("media.peerconnection.enabled", false);
+user_pref("media.peerconnection.enabled", true);
 user_pref("devtools.debugger.remote-enabled", true);
 user_pref("devtools.chrome.enabled", true);
 user_pref("widget.use-xdg-desktop-portal.open-uri",2);

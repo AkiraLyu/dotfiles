@@ -1,0 +1,57 @@
+// floating and set window size
+window-rule {
+    match app-id="org.gnome.Calendar"
+    open-floating true
+    default-column-width { fixed 1200; }
+    default-window-height { fixed 700; }
+}
+
+window-rule {
+    match app-id="org.kde.dolphin"
+    open-floating true
+    default-column-width { fixed 1020; }
+    default-window-height { fixed 620; }
+}
+
+window-rule {
+    match app-id="org.freedesktop.impl.portal.desktop.kde"
+    open-floating true
+    default-column-width { fixed 950; }
+    default-window-height { fixed 580; }
+}
+
+window-rule {
+    match title="QQ"
+    open-floating true
+    default-column-width { fixed 1048; }
+    default-window-height { fixed 716; }
+}
+
+window-rule {
+    match app-id="Typora" title="License Info"
+    open-floating true
+    default-column-width { fixed 0; }
+    default-window-height { fixed 0; }
+}
+
+window-rule {
+    match app-id="kitty"
+    open-floating true
+    default-column-width { fixed 973; }
+    default-window-height { fixed 627; }
+}
+
+window-rule {
+    match app-id="org.telegram.desktop"
+    open-floating true
+    default-column-width { fixed 760; }
+    default-window-height { fixed 610; }
+}
+
+window-rule {
+    match app-id="SPlayer"
+    open-floating true
+    default-column-width { fixed 1055; }
+    default-window-height { fixed 655; }
+}
+

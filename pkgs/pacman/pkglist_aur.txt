@@ -6,7 +6,6 @@ execstack
 fcitx5-pinyin-moegirl
 fcitx5-skin-ori-git
 folo-bin
-gnu-netcat
 google-chrome
 gpu-screen-recorder
 icu76
@@ -53,7 +52,7 @@ wemeet-wayland-screenshare-git
 weylus-git
 wlogout
 wps-office-cn
+wps-office-mime-cn
 wps-office-mui-zh-cn
 xmind
-xwayland-satellite-git
 zotero-bin

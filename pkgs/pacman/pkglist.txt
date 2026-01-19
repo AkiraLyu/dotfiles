@@ -46,6 +46,7 @@ cliphist
 compsize
 cups
 devtools
+dialog
 distrobox
 dolphin
 dosbox
@@ -82,6 +83,7 @@ global
 gnome-calendar
 gst-libav
 gst-plugin-va
+gst-plugins-bad
 gst-plugins-ugly
 gtkwave
 gvfs-mtp
@@ -102,6 +104,7 @@ iotop
 jdk-openjdk
 jdk21-openjdk
 kate
+kclock
 kcolorchooser
 kdeconnect
 kdenlive
@@ -118,6 +121,7 @@ lhasa
 lib32-gnutls
 lib32-gst-plugins-base
 lib32-gst-plugins-good
+lib32-libwebp
 lib32-libxcomposite
 lib32-pcsclite
 libc++
@@ -157,6 +161,7 @@ obs-studio
 obsidian
 okular
 ollama
+openbsd-netcat
 openocd
 os-prober
 packagekit
@@ -171,6 +176,7 @@ plasma-sdk
 plasma-wayland-protocols
 plymouth-kcm
 podman
+podman-compose
 powertop
 praat
 pyalpm
@@ -286,6 +292,7 @@ xdg-desktop-portal-wlr
 xmlto
 xorg-xhost
 xorg-xwininfo
+xwayland-satellite
 yazi
 yt-dlp
 zathura

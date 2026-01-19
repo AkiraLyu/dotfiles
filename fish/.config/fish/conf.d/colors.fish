@@ -4,13 +4,13 @@
 set -gx TERTHEME light
 
 # 2. 使用 $HOME 变量代替硬编码路径，并且保留原有的 XDG_DATA_DIRS (如果存在)
-# set -l flatpak_dirs "$HOME/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share"
-# set -l system_dirs "/usr/local/share:/usr/share"
-# if set -q XDG_DATA_DIRS
-#     set -gx XDG_DATA_DIRS "$flatpak_dirs:$system_dirs:$XDG_DATA_DIRS"
-# else
-#     set -gx XDG_DATA_DIRS "$flatpak_dirs:$system_dirs"
-# end
+set -l flatpak_dirs "$HOME/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share"
+set -l system_dirs "/usr/local/share:/usr/share"
+if set -q XDG_DATA_DIRS
+    set -gx XDG_DATA_DIRS "$flatpak_dirs:$system_dirs:$XDG_DATA_DIRS"
+else
+    set -gx XDG_DATA_DIRS "$flatpak_dirs:$system_dirs"
+end
 
 # 定义一个帮助函数来安全地替换文本，避免重复写 sed
 # 用法: replace_text "旧文本" "新文本" "文件路径"

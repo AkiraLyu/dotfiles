@@ -17,6 +17,7 @@ export QT_QPA_PLATFORMTHEME=qt6ct
 
 
 export LANG=zh_CN.UTF-8
-export LC_MESSAGES=en_US.UTF-8
-export LC_TIME=en_US.UTF-8
+#export LC_MESSAGES=en_US.UTF-8
+#export LC_TIME=en_US.UTF-8
 
+LIBVIRT_DEFAULT_URI="qemu:///system"

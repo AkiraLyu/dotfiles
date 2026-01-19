@@ -6,6 +6,7 @@ DISK=/dev/nvme0n1
 EFI_DIR=/efi
 
 ROOT=$(blkid -s UUID -o value ${DISK}p3)
+SWAP=$(blkid -s UUID -o value ${DISK}p2)
 SWAP_UUID=$(blkid -s UUID -o value /dev/mapper/cryptswap)
 ROOT_UUID=$(blkid -s UUID -o value /dev/mapper/cryptroot)
 
@@ -40,7 +41,7 @@ default_options="--splash /usr/share/systemd/bootctl/splash-arch.bmp"
 EOF
 
 echo "===> 生成 UKI"
-mkinitcpio -p arch-uki
+mkinitcpio -P
 
 echo "===> 安装 systemd-boot"
 bootctl install
@@ -49,9 +50,9 @@ echo "===> 配置 kernel cmdline（/etc/cmdline.d/root.conf）"
 mkdir -p /etc/cmdline.d
 
 cat > /etc/cmdline.d/root.conf << EOF
-root=UUID=${ROOT} rw rootflags=subvol=@ \
-rd.luks.name=${ROOT_UUID}=cryptroot \
-rd.luks.name=${SWAP_UUID}=cryptswap \
+rd.luks.name=${ROOT}=cryptroot \
+rd.luks.name=${SWAP}=cryptswap \
+root=/dev/mapper/cryptroot rw rootflags=subvol=@ \
 resume=/dev/mapper/cryptswap \
 loglevel=3 \
 irqpoll \

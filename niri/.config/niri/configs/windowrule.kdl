@@ -1,3 +1,18 @@
+include "float.kdl"
+// Make the wallpaper stationary, rather than moving with workspaces.
+layer-rule {
+    // This is for swaybg; change for other wallpaper tools.
+    // Find the right namespace by running niri msg layers.
+    match namespace="^wallpaper$"
+    match namespace="^mpvpaper$"
+    place-within-backdrop true
+}
+
+// Set transparent workspace background color.
+layout {
+    background-color "transparent"
+}
+
 // global
 overview {
     zoom 0.60
@@ -14,64 +29,18 @@ prefer-no-csd
 // floating
 window-rule {
     match app-id="pot"
-    match app-id="wpp"
+    match app-id="wpsoffice"
+    match app-id="wps"
     match app-id=r#".*\.exe$"#
     match app-id="steam_proton"
     match title="plasmashell"
     match app-id="Display"
     match app-id="org.kde.kdenlive"
+    match app-id="org.kde.gwenview"
     open-floating true
 }
 
-window-rule {
-    match app-id="code"
-    open-maximized true
-}
-
-// set window size
-window-rule {
-    match app-id="org.gnome.Calendar"
-    open-floating true
-    default-column-width { fixed 1200; }
-    default-window-height { fixed 700; }
-}
-
-window-rule {
-    match app-id="org.kde.dolphin"
-    open-floating true
-    default-column-width { fixed 1020; }
-    default-window-height { fixed 620; }
-}
-
-window-rule {
-    match app-id="org.freedesktop.impl.portal.desktop.kde"
-    open-floating true
-    default-column-width { fixed 950; }
-    default-window-height { fixed 580; }
-}
-
-window-rule {
-    match title="QQ"
-    open-floating true
-    default-column-width { fixed 1048; }
-    default-window-height { fixed 716; }
-}
-
-window-rule {
-    match app-id="Typora" title="License Info"
-    open-floating true
-    default-column-width { fixed 0; }
-    default-window-height { fixed 0; }
-}
-
-// wechat fix
-window-rule {
-    match app-id=r#".*\wechat$"#
-    open-floating true
-    open-focused false
-}
-
-// firefox maxmize
+//maxmize
 window-rule {
     match app-id="firefox"
     open-maximized true
@@ -81,5 +50,17 @@ window-rule {
     clip-to-geometry true
     tiled-state true
     draw-border-with-background true
+}
+
+window-rule {
+    match app-id="code"
+    open-maximized true
+}
+
+// wechat fix
+window-rule {
+    match app-id=r#".*\wechat$"#
+    open-floating true
+    open-focused false
 }
 

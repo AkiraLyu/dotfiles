@@ -8,20 +8,21 @@
 
 # === 可自定义区域 ===
 BACKUP_SOURCES=(
-    /home/akira/dotfiles
-    /home/akira/Docs
-    /home/akira/Pictures
-    /home/akira/.ssh
-    /home/akira/.gnupg
-    /home/akira/.thunderbird
     /home/akira/codespace
     /home/akira/Desktop
-    /home/akira/Downloads
-    /home/akira/Zotero
-    /home/akira/.zotero
+    /home/akira/Docs
     /home/akira/Documents/AliceSoft
     /home/akira/Documents/FAVORITE
+    /home/akira/dotfiles
+    /home/akira/Downloads
+    /home/akira/Pictures
     /home/akira/Templates
+    /home/akira/Zotero
+    /home/akira/简历
+    /home/akira/.gnupg
+    /home/akira/.ssh
+    /home/akira/.thunderbird
+    /home/akira/.zotero
 )
 
 BACKUP_DEST="/mnt/backup/BackUp"

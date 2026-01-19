@@ -15,3 +15,5 @@ alias gi="~/.local/scripts/tools/init_git_repo.sh"
 function fd
     find . -name "$argv" 2>/dev/null
 end
+
+alias mpvb='mpv --ytdl-format="bestvideo+bestaudio/best" --ytdl-raw-options=cookies-from-browser=firefox'
