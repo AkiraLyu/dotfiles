@@ -8,3 +8,4 @@ export PATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/home/akira/.cargo/bin:/home
 export QT_XCB_GL_INTEGRATION=none
 export GTK_USE_PORTAL=1
 export LIBVIRT_DEFAULT_URI="qemu:///system"
+export WINEPREFIX=/home/akira/wine-pfx/default

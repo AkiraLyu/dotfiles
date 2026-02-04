@@ -9,7 +9,7 @@ window-rule {
 window-rule {
     match app-id="org.kde.dolphin"
     open-floating true
-    default-column-width { fixed 1020; }
+    default-column-width { fixed 1023; }
     default-window-height { fixed 620; }
 }
 
