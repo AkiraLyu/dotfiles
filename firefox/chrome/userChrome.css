@@ -133,3 +133,28 @@ toolbarbutton {
   height: 35px !important; /* 贴合工具栏 */
 }
 
+@media (-moz-platform: windows) {
+
+/* 修复nav-bar-customization-target的左侧和titlebar-buttonbox-container的右侧混叠 */
+:root {
+  --wc-area-width: 68px;
+}
+
+/* 标题栏按钮 */
+#navigator-toolbox .titlebar-buttonbox-container {
+  position: absolute !important;
+  left: var(--wc-left-margin) !important;
+  z-index: 10;
+}
+
+/* 让 nav-bar 明确避开 */
+#nav-bar-customization-target {
+  margin-left: var(--wc-area-width) !important;
+}
+
+#nav-bar {
+  padding-left: calc(var(--wc-area-width) + 8px) !important;
+}
+
+}
+
