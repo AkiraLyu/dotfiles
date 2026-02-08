@@ -1,0 +1,15 @@
+[Unit]
+Description=DAE Service
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/dae run -c /home/akira/.config/dae/config.dae
+WorkingDirectory=/home/akira
+User=root
+Group=root
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+
