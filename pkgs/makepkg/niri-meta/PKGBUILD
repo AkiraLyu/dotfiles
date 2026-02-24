@@ -1,0 +1,25 @@
+# Maintainer: Akira <akira@example.com>
+pkgname=niri-meta
+pkgver=1.0
+pkgrel=1
+pkgdesc="Meta package for fcitx5 and related addons"
+arch=('any')
+license=('custom:none')
+
+depends=(
+    niri
+    xwayland-satellite
+    network-manager-applet
+    quickshell-git
+    rofi
+    swaybg
+    mpvpaper
+    gpu-screen-recorder
+    # qt6ct-kde
+)
+
+package() {
+    mkdir -p "$pkgdir/usr/share/doc/$pkgname"
+    echo "Meta package for fcitx5 and related addons" > "$pkgdir/usr/share/doc/$pkgname/README"
+}
+

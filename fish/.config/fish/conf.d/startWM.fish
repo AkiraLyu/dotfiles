@@ -1,4 +1,6 @@
-set Start_Env kde
+set Start_Env none
+
+# do not use this function
 
 function switch_font
     if test "$Start_Env" = "kde"

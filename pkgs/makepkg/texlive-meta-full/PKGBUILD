@@ -1,0 +1,39 @@
+# Maintainer: Akira <akira.uestc at gmail.com>
+
+pkgname=texlive-meta-full
+pkgver=1
+pkgrel=2
+pkgdesc="Meta package that depends on all texlive packages"
+arch=('any')
+license=('custom:none')
+
+depends=(
+    texlive-basic
+    texlive-bibtexextra
+    texlive-binextra
+    texlive-context
+    texlive-fontsextra
+    texlive-fontsrecommended
+    texlive-fontutils
+    texlive-formatsextra
+    texlive-games
+    texlive-humanities
+    texlive-latex
+    texlive-latexextra
+    texlive-latexrecommended
+    texlive-luatex
+    texlive-mathscience
+    texlive-metapost
+    texlive-music
+    texlive-pictures
+    texlive-plaingeneric
+    texlive-pstricks
+    texlive-publishers
+    texlive-xetex
+)
+
+package() {
+    mkdir -p "$pkgdir/usr/share/doc/$pkgname"
+    echo "Meta package for full texlive" > "$pkgdir/usr/share/doc/$pkgname/README"
+}
+
