@@ -1,0 +1,108 @@
+<domain type="kvm">
+  <name>win11</name>
+  <uuid>49090911-bae1-456c-8f51-535d0b2ffa88</uuid>
+  <metadata>
+    <libosinfo:libosinfo xmlns:libosinfo="http://libosinfo.org/xmlns/libvirt/domain/1.0">
+      <libosinfo:os id="http://microsoft.com/win/11"/>
+    </libosinfo:libosinfo>
+  </metadata>
+  <memory>12697600</memory>
+  <currentMemory>1048576</currentMemory>
+  <vcpu>8</vcpu>
+  <os firmware="efi">
+    <type arch="x86_64" machine="q35">hvm</type>
+    <boot dev="hd"/>
+  </os>
+  <features>
+    <acpi/>
+    <apic/>
+<hyperv>
+  <relaxed state="on"/>
+  <vapic state="on"/>
+  <spinlocks state="on" retries="8191"/>
+  <vpindex state="on"/>
+  <synic state="on"/>
+  <stimer state="on">
+    <direct state="on"/>
+  </stimer>
+  <reset state="on"/>
+  <frequencies state="on"/>
+  <reenlightenment state="on"/>
+  <tlbflush state="on"/>
+  <ipi state="on"/>
+</hyperv>
+    <vmport state="off"/>
+  </features>
+  <cpu mode="host-passthrough"/>
+<clock offset="localtime">
+  <timer name="rtc" present="no" tickpolicy="catchup"/>
+  <timer name="pit" present="no" tickpolicy="delay"/>
+  <timer name="hpet" present="no"/>
+  <timer name="kvmclock" present="no"/>
+  <timer name="hypervclock" present="yes"/>
+</clock>
+  <pm>
+    <suspend-to-mem enabled="no"/>
+    <suspend-to-disk enabled="no"/>
+  </pm>
+  <devices>
+  <channel type="unix">
+  <source mode="bind"/>
+  <target type="virtio" name="org.qemu.guest_agent.0"/>
+  <address type="virtio-serial" controller="0" bus="0" port="2"/>
+</channel>
+    <emulator>/usr/bin/qemu-system-x86_64</emulator>
+    <disk type="file" device="disk">
+      <driver name="qemu" type="qcow2"/>
+      <source file="/home/akira/Workspace/VM/winapps/win11.qcow2"/>
+      <target dev="vda" bus="virtio"/>
+    </disk>
+    <disk type="file" device="cdrom">
+      <driver name="qemu" type="raw"/>
+      <source file="/home/akira/SW_DVD9_Win_Pro_11_24H2_64BIT_ChnSimp_Pro_Ent_EDU_N_MLF_X23-69833.iso"/>
+      <target dev="sdb" bus="sata"/>
+      <readonly/>
+    </disk>
+    <controller type="usb" model="qemu-xhci" ports="15"/>
+    <controller type="pci" model="pcie-root"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <interface type="network">
+      <source network="default"/>
+      <mac address="52:54:00:e0:15:43"/>
+      <model type="virtio"/>
+    </interface>
+    <console type="pty"/>
+    <channel type="spicevmc">
+      <target type="virtio" name="com.redhat.spice.0"/>
+    </channel>
+    <input type="tablet" bus="usb"/>
+    <graphics type="spice" port="-1" tlsPort="-1" autoport="yes">
+      <image compression="off"/>
+    </graphics>
+    <sound model="ich9"/>
+    <video>
+      <model type="qxl"/>
+    </video>
+    <redirdev bus="usb" type="spicevmc"/>
+    <redirdev bus="usb" type="spicevmc"/>
+    <disk type="file" device="cdrom">
+      <driver name="qemu" type="raw"/>
+      <source file="/home/akira/Downloads/virtio-win-0.1.285.iso"/>
+      <target dev="sdc" bus="sata"/>
+      <readonly/>
+    </disk>
+  </devices>
+</domain>

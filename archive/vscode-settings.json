@@ -1,12 +1,49 @@
 {
+    "update.mode": "manual",
+    // vscode ui configuration
+    "workbench.activityBar.location": "bottom",
+    "workbench.colorCustomizations": {
+        "editor.background": "#181818",
+        "sideBar.background": "#101010",
+        "sideBar.border": "#101010",
+        "activityBar.background": "#101010",
+        "activityBar.border": "#101010",
+        "statusBar.background": "#101010",
+        "statusBar.border": "#101010",
+        "panel.background": "#101010",
+        "panel.border": "#101010",
+        "titleBar.activeBackground": "#101010",
+        "titleBar.inactiveBackground": "#101010",
+        "sideBarSectionHeader.background": "#101010"
+    },
+    // "window.titleBarStyle": "native",
+    // "window.menuBarVisibility": "toggle",
+    // "window.customTitleBarVisibility": "never",
+    "window.autoDetectColorScheme": true,
+    "workbench.preferredDarkColorTheme": "Default Dark Modern",
+    "workbench.preferredLightColorTheme": "Default Dark Modern",
+    // editor configuration
+    "[cpp]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd"
+    },
+    "[c]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd"
+    },
+    "editor.fontFamily": "JetBrainsMono Nerd Font",
+    "editor.wordWrap": "on",
+    "editor.unicodeHighlight.ambiguousCharacters": false,
+    "editor.unicodeHighlight.includeComments": false,
+    "editor.unicodeHighlight.includeStrings": false,
+    "editor.unicodeHighlight.nonBasicASCII": false,
+    "editor.fontWeight": "500",
+    "editor.minimap.enabled": false,
+    "editor.cursorSmoothCaretAnimation": "on",
+    // extensions configuration
     "extensions.experimental.affinity": {
         "asvetliakov.vscode-neovim": 1
     },
-    "editor.fontFamily": "JetBrainsMono Nerd Font",
-    "makefile.configureOnOpen": false,
-    "workbench.activityBar.location": "bottom",
-    "editor.wordWrap": "on",
-    "cmake.generator": "Ninja",
     "terminal.integrated.commandsToSkipShell": [
         "matlab.interrupt"
     ],
@@ -15,18 +52,23 @@
         "*.copilotmd": "vscode.markdown.preview.editor",
         "*.doc": "default"
     },
+    "extensions.ignoreRecommendations": true,
+    "vscode-neovim.neovimExecutablePaths.linux": "/usr/bin/nvim",
+    "vscode-neovim.useWSL": true,
+    // coding configuration
+    "makefile.configureOnOpen": false,
+    "cmake.generator": "Ninja",
     "git.openRepositoryInParentFolders": "never",
     "redhat.telemetry.enabled": false,
-
-    "editor.unicodeHighlight.ambiguousCharacters": false,
-    "editor.unicodeHighlight.includeComments": false,
-    "editor.unicodeHighlight.includeStrings": false,
-    "editor.unicodeHighlight.nonBasicASCII": false,
-
+    "github.copilot.nextEditSuggestions.enabled": true,
+    "chat.disableAIFeatures": true,
+    "chat.agent.enabled": false,
+    "rust-analyzer.check.command": "clippy",
+    "python.analysis.typeCheckingMode": "standard",
+    // latex configuration
     "latex-workshop.hover.preview.mathjax.extensions": [
         "boldsymbol"
     ],
-
     "latex-workshop.latex.autoClean.run": "onFailed",
     "latex-workshop.view.pdf.internal.synctex.keybinding": "double-click",
     // "latex-workshop.latex.outDir": "./tmp",
@@ -37,7 +79,6 @@
     "latex-workshop.intellisense.package.enabled": true,
     "latex-workshop.message.error.show": false,
     "latex-workshop.message.warning.show": false,
-
     "latex-workshop.latex.tools": [
         {
             "name": "xelatex",
@@ -146,39 +187,5 @@
         "*.log",
         "*.fdb_latexmk",
         "*.synctex.gz"
-    ],
-    "editor.minimap.enabled": false,
-    "extensions.ignoreRecommendations": true,
-    "github.copilot.nextEditSuggestions.enabled": true,
-    "editor.cursorSmoothCaretAnimation": "on",
-    "workbench.preferredDarkColorTheme": "Default Dark Modern",
-    "window.autoDetectColorScheme": true,
-    "rust-analyzer.check.command": "clippy",
-    "chat.agent.enabled": false,
-    "vscode-neovim.neovimExecutablePaths.linux": "/usr/bin/nvim",
-    "vscode-neovim.useWSL": true,
-    "update.mode": "manual",
-    "chat.disableAIFeatures": true,
-    "workbench.preferredLightColorTheme": "Default Dark Modern",
-    "python.analysis.typeCheckingMode": "standard",
-    "settingsSync.ignoredSettings": [
-        "workbench.colorCustomizations",
-        "editor.fontWeight"
-    ],
-    // linux specified
-    "editor.fontWeight": "600",
-    "workbench.colorCustomizations": {
-        "editor.background": "#181818",
-        "sideBar.background": "#101010",
-        "sideBar.border": "#101010",
-        "activityBar.background": "#101010",
-        "activityBar.border": "#101010",
-        "statusBar.background": "#101010",
-        "statusBar.border": "#101010",
-        "panel.background": "#101010",
-        "panel.border": "#101010",
-        "titleBar.activeBackground": "#101010",
-        "titleBar.inactiveBackground": "#101010",
-        "sideBarSectionHeader.background": "#101010"
-    }
+    ]
 }

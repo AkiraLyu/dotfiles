@@ -26,41 +26,8 @@ window-rule {
 
 prefer-no-csd
 
-// floating
-window-rule {
-    match app-id="pot"
-    match app-id="wpsoffice"
-    match app-id="wps"
-    match app-id=r#".*\.exe$"#
-    match app-id="steam_proton"
-    match title="plasmashell"
-    match app-id="Display"
-    match app-id="org.kde.kdenlive"
-    match app-id="org.kde.gwenview"
-    open-floating true
-}
-
-//maxmize
-window-rule {
-    match app-id="firefox"
-    open-maximized true
-    shadow {
-        off
-    }
-    clip-to-geometry true
-    tiled-state true
-    draw-border-with-background true
-}
-
 window-rule {
     match app-id="code"
     open-maximized true
-}
-
-// wechat fix
-window-rule {
-    match app-id=r#".*\wechat$"#
-    open-floating true
-    open-focused false
 }
 

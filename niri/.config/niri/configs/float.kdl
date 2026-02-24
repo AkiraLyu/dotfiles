@@ -1,3 +1,24 @@
+// floating
+window-rule {
+    match app-id="pot"
+    match app-id="wpsoffice"
+    match app-id="wps"
+    match app-id=r#".*\.exe$"#
+    match app-id="steam_proton"
+    match title="plasmashell"
+    match app-id="Display"
+    match app-id="org.kde.kdenlive"
+    match app-id="org.kde.gwenview"
+    open-floating true
+}
+
+// wechat fix
+window-rule {
+    match app-id=r#".*\wechat$"#
+    open-floating true
+    open-focused false
+}
+
 // floating and set window size
 window-rule {
     match app-id="org.gnome.Calendar"
@@ -9,7 +30,7 @@ window-rule {
 window-rule {
     match app-id="org.kde.dolphin"
     open-floating true
-    default-column-width { fixed 1023; }
+    default-column-width { fixed 990; }
     default-window-height { fixed 620; }
 }
 
@@ -23,8 +44,8 @@ window-rule {
 window-rule {
     match title="QQ"
     open-floating true
-    default-column-width { fixed 1048; }
-    default-window-height { fixed 716; }
+    default-column-width { fixed 940; }
+    default-window-height { fixed 660; }
 }
 
 window-rule {
@@ -44,8 +65,8 @@ window-rule {
 window-rule {
     match app-id="org.telegram.desktop"
     open-floating true
-    default-column-width { fixed 760; }
-    default-window-height { fixed 610; }
+    default-column-width { fixed 608; }
+    default-window-height { fixed 488; }
 }
 
 window-rule {
@@ -53,5 +74,10 @@ window-rule {
     open-floating true
     default-column-width { fixed 1055; }
     default-window-height { fixed 655; }
+}
+
+window-rule {
+    match app-id="org.mozilla.Thunderbird"
+    default-column-width { fixed 1032; }
 }
 

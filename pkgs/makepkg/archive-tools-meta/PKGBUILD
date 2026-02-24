@@ -1,0 +1,27 @@
+# Maintainer: Akira <akira.uestc@gmail.com>
+pkgname=archive-tools-meta
+pkgver=1.0
+pkgrel=1
+pkgdesc="Meta package for common archive and compression tools"
+arch=('any')
+license=('custom:none')
+
+depends=(
+    ark
+    7zip
+    zip
+    unzip
+    unrar
+    lrzip
+    lzip
+    xz
+    bzip2
+    gzip
+    tar
+)
+
+package() {
+    mkdir -p "$pkgdir/usr/share/doc/$pkgname"
+    echo "Meta package for common archive and compression tools" > "$pkgdir/usr/share/doc/$pkgname/README"
+}
+

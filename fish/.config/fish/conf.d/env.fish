@@ -1,7 +1,6 @@
 # export QT_SCREEN_SCALE_FACTORS=1
 # export QT_FONT_DPI=120
 export LIBVA_DRIVER_NAME=iHD
-# export ANV_DEBUG=video-decode,video-encode
 export QT_SCALE_FACTOR_ROUNDING_POLICY=Round
 export EDITOR=nvim
 export PATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/home/akira/.cargo/bin:/home/akira/.local/bin
@@ -9,3 +8,4 @@ export QT_XCB_GL_INTEGRATION=none
 export GTK_USE_PORTAL=1
 export LIBVIRT_DEFAULT_URI="qemu:///system"
 export WINEPREFIX=/home/akira/wine-pfx/default
+export CALIBRE_USE_SYSTEM_THEME=true
