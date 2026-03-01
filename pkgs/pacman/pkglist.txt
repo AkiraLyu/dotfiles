@@ -49,6 +49,7 @@ fzf
 gameconqueror
 gimp
 git
+git-lfs
 gtkwave
 gvfs-mtp
 gwenview
@@ -74,7 +75,6 @@ libvirt
 linux
 linux-cachyos
 linux-firmware
-lutris
 man-db
 man-pages
 marksman
@@ -132,6 +132,7 @@ strace
 syncthing
 telegram-desktop
 tesseract-data-eng
+texlive-langchinese
 texstudio
 thunderbird
 tlp
@@ -139,6 +140,7 @@ tmux
 tree
 ttf-jetbrains-mono
 ttf-jetbrains-mono-nerd
+typst
 ventoy-bin
 vim
 vim-airline

@@ -65,8 +65,8 @@ window-rule {
 window-rule {
     match app-id="org.telegram.desktop"
     open-floating true
-    default-column-width { fixed 608; }
-    default-window-height { fixed 488; }
+    default-column-width { fixed 788; }
+    default-window-height { fixed 610; }
 }
 
 window-rule {
