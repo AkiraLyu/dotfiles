@@ -156,5 +156,11 @@ toolbarbutton {
   padding-left: calc(var(--wc-area-width) + 8px) !important;
 }
 
+/* 修复windows字体 */
+.titlebar-button {
+    font-family: "Segoe UI" !important;
+    font-size: 11px;
+}
+
 }
 
