@@ -18,11 +18,14 @@ ltspice
 minecraft-launcher
 mpvpaper
 nipaplay-reload-bin
+niri-meta
+niri-wip-git
 papirus-folders-git
 plasma6-applets-panel-colorizer
 plasma6-themes-layan-git
 pot-translation-bin
 proton-ge-custom-bin
+qt6ct-kde
 splayer-appimage
 sunshine-bin
 texlive-meta-full
