@@ -11,3 +11,4 @@ user_pref("devtools.chrome.enabled", true);
 user_pref("widget.use-xdg-desktop-portal.open-uri",2);
 user_pref("full-screen-api.transition-duration.enter", 0 0);
 user_pref("full-screen-api.transition-duration.leave", 0 0);
+user_pref("ui.scrollToClick", 1);
