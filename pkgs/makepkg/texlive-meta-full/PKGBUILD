@@ -30,6 +30,7 @@ depends=(
     texlive-pstricks
     texlive-publishers
     texlive-xetex
+    texlive-langchinese
 )
 
 package() {

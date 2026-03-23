@@ -10,7 +10,7 @@ depends=(
     niri
     xwayland-satellite
     network-manager-applet
-    quickshell-git
+    # quickshell-git
     rofi
     swaybg
     mpvpaper

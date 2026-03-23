@@ -1,7 +1,8 @@
+antigravity
 archive-tools-meta
 baidunetdisk-bin
 chatbox-bin
-dae-avx2-bin
+daed-avx2-bin
 dxvk-bin
 execstack
 fcitx5-meta
@@ -9,7 +10,9 @@ fcitx5-pinyin-moegirl
 fcitx5-pinyin-sougou-dict-git
 folo-bin
 google-chrome
+icu76
 jpdfbookmarks
+kazumi-bin
 kwin-effect-rounded-corners-git
 lceda-pro
 linuxqq

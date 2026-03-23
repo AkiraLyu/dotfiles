@@ -47,6 +47,7 @@ foliate
 freecad
 fzf
 gameconqueror
+gemini-cli
 gimp
 git
 git-lfs
@@ -74,6 +75,7 @@ libinput-tools
 libvirt
 linux
 linux-cachyos
+linux-cachyos-rc
 linux-firmware
 man-db
 man-pages
@@ -88,12 +90,14 @@ nasm
 neovim
 networkmanager
 nmap
+noctalia-shell
 noto-fonts-cjk
 npm
 obs-studio
 obsidian
 okular
 ollama
+openai-codex
 openbsd-netcat
 openocd
 openssh
@@ -105,6 +109,7 @@ pavucontrol
 pdfarranger
 pdftricks
 plasma-meta
+pngquant
 podman
 podman-compose
 powertop
@@ -114,6 +119,7 @@ python-opencv
 python-pytorch
 python-scikit-learn
 python-scipy
+python-seaborn
 qbittorrent
 qemu-full
 rclone
@@ -132,7 +138,6 @@ strace
 syncthing
 telegram-desktop
 tesseract-data-eng
-texlive-langchinese
 texstudio
 thunderbird
 tlp
@@ -149,6 +154,7 @@ virt-manager
 vulkan-intel
 waydroid
 wget
+wireless-regdb
 wireshark-qt
 wl-clipboard
 xorg-xhost

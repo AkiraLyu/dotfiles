@@ -15,6 +15,7 @@ mapfile -t NEW_PKGS < <(pacman -Sgq texlive | sort -u)
     for pkg in "${NEW_PKGS[@]}"; do
         echo "    $pkg"
     done
+    echo "    texlive-langchinese"
     echo ")"
 } > "$TMP_FILE.depends"
 
