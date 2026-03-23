@@ -11,6 +11,9 @@
   "completedCount": 0,
   "isExpanded": false,
   "useCustomColors": false,
+  "exportPath": "~/Documents",
+  "exportFormat": "markdown",
+  "exportEmptySections": false,
   "priorityColors": {
     "high": {
       "r": 0.9921568632125854,

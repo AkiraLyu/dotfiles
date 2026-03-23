@@ -1,18 +1,4 @@
 include "float.kdl"
-// Make the wallpaper stationary, rather than moving with workspaces.
-layer-rule {
-    // This is for swaybg; change for other wallpaper tools.
-    // Find the right namespace by running niri msg layers.
-    match namespace="^wallpaper$"
-    match namespace="^mpvpaper$"
-    place-within-backdrop true
-}
-
-// Set transparent workspace background color.
-layout {
-    background-color "transparent"
-}
-
 // global
 overview {
     zoom 0.60
@@ -48,12 +34,3 @@ window-rule {
     }
 }
 
-layer-rule {
-    match namespace="^noctalia-bar-content-.*$"
-    // opacity 0.8
-
-    background-effect {
-        blur true
-        xray false
-    }
-}
