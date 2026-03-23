@@ -14,6 +14,9 @@ epub = [
 open = [
 	{ run = 'xdg-open "$@"', desc = "Open" },
 ]
+pdf = [
+    { run = 'zathura "$@"', block = true, for = "unix" },
+]
 
 [open]
 prepend_rules = [
@@ -26,4 +29,6 @@ prepend_rules = [
 	{ name = "*.png", use = [ "pic" ] },
 	{ name = "*.jpg", use = [ "pic" ] },
 	{ name = "*.jpeg", use = [ "pic" ] },
+
+    { name = "*.pdf", use = [ "pdf"] },
 ]

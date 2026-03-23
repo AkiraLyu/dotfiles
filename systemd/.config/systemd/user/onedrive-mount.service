@@ -1,0 +1,13 @@
+[Unit]
+Description=Mount OneDrive via Rclone
+# 确保在网络连接建立后运行
+After=network-online.target
+
+[Service]
+Type=oneshot
+# 这里填入你脚本的绝对路径，并带上 --autostart 参数
+ExecStart=/home/akira/.local/scripts/rclone/rclone-onedrive.sh --autostart
+RemainAfterExit=yes
+
+[Install]
+WantedBy=default.target

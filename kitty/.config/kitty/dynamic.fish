@@ -15,3 +15,4 @@ if test "$XDG_CURRENT_DEKSTOP" = "niri"
 else if test "$XDG_CURRENT_DEKSTOP" = "KDE"
     echo "background_opacity 1.0"
 end
+echo "background_opacity 0.8"
