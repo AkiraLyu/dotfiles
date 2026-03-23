@@ -5,7 +5,8 @@
 #
 
 export XMODIFIERS=@im=fcitx
-export GTK_IM_MODULE=fcitx
+export GTK_IM_MODULE=wayland;fcitx
+export QT_IM_MODULES=wayland;fcitx
 export QT_IM_MODULE=fcitx
 
 
@@ -13,7 +14,8 @@ _JAVA_AWT_WM_NONREPARENTING=1
 
 #export QT_SCREEN_SCALE_FACTORS=1
 #export QT_FONT_DPI=120
-export QT_QPA_PLATFORMTHEME=qt6ct
+#export QT_QPA_PLATFORMTHEME=qt6ct
+export QT_QPA_PLATFORMTHEME=kde
 
 
 export LANG=zh_CN.UTF-8
