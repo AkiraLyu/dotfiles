@@ -1,0 +1,9 @@
+# Built-in keyboard on HUAWEI BoDE-WXX9
+evdev:name:AT Translated Set 2 keyboard:dmi:*:svnHUAWEI:pnBoDE-WXX9*:*
+ KEYBOARD_KEY_01=capslock
+ KEYBOARD_KEY_3a=esc
+
+# External Compx 2.4G Wireless Receiver Keyboard (USB 3554:fa09)
+evdev:input:b0003v3554pFA09*
+ KEYBOARD_KEY_70029=capslock
+ KEYBOARD_KEY_70039=esc
