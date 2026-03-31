@@ -26,11 +26,3 @@ window-rule {
     }
 }
 
-window-rule {
-    match app-id="code"
-    background-effect {
-        blur true
-        xray true
-    }
-}
-

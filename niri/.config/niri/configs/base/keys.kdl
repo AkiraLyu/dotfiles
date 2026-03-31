@@ -141,4 +141,8 @@ binds {
     XF86AudioMicMute     allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SOURCE@" "toggle"; }
     XF86MonBrightnessDown { spawn "brightnessctl" "set" "5%-"; }
     XF86MonBrightnessUp { spawn "brightnessctl" "set" "5%+"; }
+
+    // noctalia keybind
+    Mod+Space { spawn-sh "qs -c noctalia-shell ipc call sessionMenu toggle"; }
+    Mod+Shift+Space { spawn-sh "qs -c noctalia-shell ipc call launcher toggle"; }
 }

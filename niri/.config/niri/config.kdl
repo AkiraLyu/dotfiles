@@ -1,7 +1,17 @@
-include "configs/config.kdl"
-include "configs/env.kdl"
-include "configs/execs.kdl"
-include "configs/keys.kdl"
-include "configs/windowrule.kdl"
-include "configs/recent.kdl"
-include "configs/layer.kdl"
+// base configuration
+include "configs/base/input.kdl"
+include "configs/base/env.kdl"
+include "configs/base/keys.kdl"
+include "configs/base/animation.kdl"
+
+// exec management
+include "configs/exec/execs.kdl"
+include "configs/exec/plugins.kdl"
+
+// display management
+include "configs/display/float.kdl"
+include "configs/display/layer.kdl"
+include "configs/display/layout.kdl"
+include "configs/display/recent.kdl"
+include "configs/display/windowrule.kdl"
+include "configs/display/screen.kdl"
