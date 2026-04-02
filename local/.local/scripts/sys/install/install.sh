@@ -38,7 +38,7 @@ mount -o noatime,compress=zstd,subvol=/ /dev/mapper/cryptroot /mnt/mnt/defvol
 echo "===> Installing system"
 pacstrap -K /mnt \
   base base-devel linux linux-firmware sof-firmware \
-  networkmanager btrfs-progs vim tmux
+  networkmanager btrfs-progs cryptsetup vim tmux
 
 genfstab -U /mnt >> /mnt/etc/fstab
 

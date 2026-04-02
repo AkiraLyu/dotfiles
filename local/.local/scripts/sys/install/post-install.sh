@@ -4,11 +4,11 @@ set -euo pipefail
 ### 变量
 DISK=/dev/nvme0n1
 EFI_DIR=/efi
+ROOT_PART=${DISK}p3
+SWAP_PART=${DISK}p2
 
-ROOT=$(blkid -s UUID -o value ${DISK}p3)
-SWAP=$(blkid -s UUID -o value ${DISK}p2)
-SWAP_UUID=$(blkid -s UUID -o value /dev/mapper/cryptswap)
-ROOT_UUID=$(blkid -s UUID -o value /dev/mapper/cryptroot)
+ROOT_LUKS_UUID=$(blkid -s UUID -o value "${ROOT_PART}")
+SWAP_LUKS_UUID=$(blkid -s UUID -o value "${SWAP_PART}")
 
 echo "===> 设置时区"
 ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
@@ -26,9 +26,19 @@ echo "Akira" > /etc/hostname
 echo "===> 启用 NetworkManager"
 systemctl enable NetworkManager
 
+echo "===> 生成 LUKS 密钥文件"
+(umask 0077 && dd if=/dev/urandom of=/etc/luks.key bs=4096 count=1 iflag=fullblock status=none)
+
+echo "===> 将密钥加入 LUKS keyslot（root，需要输入现有 LUKS 口令）"
+cryptsetup luksAddKey "${ROOT_PART}" /etc/luks.key
+
+echo "===> 将密钥加入 LUKS keyslot（swap，需要输入现有 LUKS 口令）"
+cryptsetup luksAddKey "${SWAP_PART}" /etc/luks.key
+
 echo "===> 配置 mkinitcpio（systemd 模式，用于 UKI）"
 sed -i 's/^HOOKS=.*/HOOKS=(base systemd autodetect microcode modconf kms keyboard sd-vconsole block sd-encrypt filesystems fsck)/' \
     /etc/mkinitcpio.conf
+sed -i 's|^FILES=()|FILES=(/etc/luks.key)|' /etc/mkinitcpio.conf
 
 # 生成用于 UKI 的 preset
 echo "===> 生成 UKI preset"
@@ -50,14 +60,18 @@ echo "===> 配置 kernel cmdline（/etc/cmdline.d/root.conf）"
 mkdir -p /etc/cmdline.d
 
 cat > /etc/cmdline.d/root.conf << EOF
-rd.luks.name=${ROOT}=cryptroot \
-rd.luks.name=${SWAP}=cryptswap \
-root=/dev/mapper/cryptroot rw rootflags=subvol=@ \
-resume=/dev/mapper/cryptswap \
-loglevel=3 \
-irqpoll \
-drm.edid_firmware=HDMI-A-1:edid/s.bin \
-video=HDMI-A-1:1920x1080@60e \
+rd.luks.name=${ROOT_LUKS_UUID}=cryptroot
+rd.luks.name=${SWAP_LUKS_UUID}=cryptswap
+rd.luks.key=/etc/luks.key
+
+root=/dev/mapper/cryptroot rw rootflags=subvol=@
+resume=/dev/mapper/cryptswap
+
+loglevel=3
+# irqpoll
+
+drm.edid_firmware=HDMI-A-1:edid/edid.bin \
+video=HDMI-A-1:1920x1080@60e
 EOF
 
 echo "===> 配置 systemd-boot loader"
@@ -65,24 +79,24 @@ cat > ${EFI_DIR}/loader/loader.conf <<EOF
 timeout 3
 console-mode keep
 editor yes
+default @saved
 EOF
 
-echo "===> 创建 UKI 引导入口"
-mkdir -p ${EFI_DIR}/loader/entries
-
-cat > ${EFI_DIR}/loader/entries/arch.conf <<EOF
-title   Arch Linux (UKI)
-efi     /EFI/Linux/arch-linux.efi
-EOF
+# echo "===> 创建 UKI 引导入口"
+# mkdir -p ${EFI_DIR}/loader/entries
+# 
+# cat > ${EFI_DIR}/loader/entries/arch.conf <<EOF
+# title   Arch Linux (UKI)
+# efi     /EFI/Linux/arch-linux.efi
+# EOF
 
 echo "===> 写入 crypttab"
 cat > /etc/crypttab <<EOF
-cryptroot  UUID=${ROOT_UUID}  none  luks
-cryptswap  UUID=${SWAP_UUID}  none  luks,swap
+cryptroot  UUID=${ROOT_LUKS_UUID}  /etc/luks.key  luks
+cryptswap  UUID=${SWAP_LUKS_UUID}  /etc/luks.key  luks,swap
 EOF
 
 echo "===> 设置 root 密码"
 passwd
 
 echo "===> 全部完成"
-

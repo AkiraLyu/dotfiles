@@ -12,13 +12,13 @@ BACKUP_SOURCES=(
     /home/akira/Desktop
     /home/akira/Docs
     /home/akira/Documents/AliceSoft
+    /home/akira/Documents/AliceInCradle
     /home/akira/Documents/FAVORITE
     /home/akira/dotfiles
     /home/akira/Downloads
     /home/akira/Pictures
     /home/akira/Templates
     /home/akira/Zotero
-    /home/akira/简历
     /home/akira/.gnupg
     /home/akira/.ssh
     /home/akira/.thunderbird
