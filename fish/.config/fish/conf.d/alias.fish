@@ -3,6 +3,7 @@ alias l="/bin/ls --color=auto"
 alias vim=/bin/nvim
 alias vi=/bin/vim
 alias cat=bat
+alias rm='trash-put'
 
 # scripts
 alias snap="~/.local/scripts/tools/snaps.sh create"

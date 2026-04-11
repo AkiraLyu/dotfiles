@@ -5,7 +5,7 @@
 #
 
 export XMODIFIERS=@im=fcitx
-export GTK_IM_MODULE=wayland;fcitx
+#export GTK_IM_MODULE=wayland;fcitx
 export QT_IM_MODULES=wayland;fcitx
 export QT_IM_MODULE=fcitx
 

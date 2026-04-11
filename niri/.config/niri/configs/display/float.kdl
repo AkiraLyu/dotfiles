@@ -30,8 +30,8 @@ window-rule {
 window-rule {
     match app-id="org.kde.dolphin"
     open-floating true
-    default-column-width { fixed 990; }
-    default-window-height { fixed 620; }
+    // default-column-width { fixed 990; }
+    // default-window-height { fixed 620; }
 }
 
 window-rule {
@@ -71,6 +71,7 @@ window-rule {
 
 window-rule {
     match app-id="SPlayer"
+    opacity 0.8
     open-floating true
     default-column-width { fixed 1055; }
     default-window-height { fixed 655; }
