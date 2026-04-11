@@ -1,6 +1,7 @@
 if vim.g.vscode then
   require("vsconfig.autocmds")
   require("vsconfig.options")
+  vim.o.stl = ""
 else
   -- bootstrap lazy.nvim, LazyVim and your plugins
   require("config.lazy")
