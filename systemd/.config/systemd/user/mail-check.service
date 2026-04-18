@@ -1,5 +1,0 @@
-[Unit]
-Description=Mail Sync
-
-[Service]
-ExecStart=/home/akira/.local/scripts/tools/mail-check.sh
