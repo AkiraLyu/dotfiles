@@ -1,7 +1,7 @@
-antigravity
 archive-tools-meta
 baidunetdisk-bin
 chatbox-bin
+comalot-clipsync-git
 daed-avx2-bin
 dxvk-bin
 execstack
@@ -10,6 +10,7 @@ fcitx5-pinyin-moegirl
 fcitx5-pinyin-sougou-dict-git
 folo-bin
 google-chrome
+hapi-git
 icu76
 jpdfbookmarks
 kazumi-bin
@@ -20,9 +21,8 @@ logisim
 ltspice
 minecraft-launcher
 mpvpaper
-nipaplay-reload-bin
 niri-meta
-niri-wip-git
+okular-session-git
 papirus-folders-git
 plasma6-applets-panel-colorizer
 plasma6-themes-layan-git
@@ -37,6 +37,7 @@ ttf-lxgw-wenkai
 ttf-lxgw-wenkai-screen
 ttf-wps-fonts
 typora
+vim-airline
 visual-studio-code-bin
 vkd3d-proton-bin
 vofa+

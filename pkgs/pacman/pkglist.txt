@@ -23,7 +23,6 @@ chntpw
 cjson
 clamav
 clang
-claude-code
 cliphist
 cmake
 compsize
@@ -39,6 +38,8 @@ easyeffects
 efibootmgr
 element-desktop
 fastfetch
+fcitx5-mozc
+fd
 ffmpegthumbs
 firefox
 fish
@@ -47,7 +48,6 @@ foliate
 freecad
 fzf
 gameconqueror
-gemini-cli
 gimp
 git
 git-lfs
@@ -70,6 +70,8 @@ kicad
 kicad-library
 kitty
 krita
+kvantum
+kwalletmanager
 less
 libinput-tools
 libvirt
@@ -89,6 +91,7 @@ musescore
 nasm
 neovim
 networkmanager
+niri-git
 nmap
 noctalia-shell
 noto-fonts-cjk
@@ -123,6 +126,7 @@ python-seaborn
 qbittorrent
 qemu-full
 rclone
+riscv64-elf-gcc
 rpi-imager
 rsync
 rust-analyzer
@@ -132,6 +136,7 @@ scrcpy
 scx-scheds
 scx-tools
 sof-firmware
+sqlitebrowser
 steam
 stow
 strace
@@ -142,15 +147,16 @@ texstudio
 thunderbird
 tlp
 tmux
+trash-cli
 tree
 ttf-jetbrains-mono
 ttf-jetbrains-mono-nerd
 typst
 ventoy-bin
 vim
-vim-airline
 vim-nerdtree
 virt-manager
+vnstat
 vulkan-intel
 waydroid
 wget
