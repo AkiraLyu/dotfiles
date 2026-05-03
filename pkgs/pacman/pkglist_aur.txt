@@ -8,9 +8,7 @@ execstack
 fcitx5-meta
 fcitx5-pinyin-moegirl
 fcitx5-pinyin-sougou-dict-git
-folo-bin
 google-chrome
-hapi-git
 icu76
 jpdfbookmarks
 kazumi-bin
@@ -26,8 +24,6 @@ okular-session-git
 papirus-folders-git
 plasma6-applets-panel-colorizer
 plasma6-themes-layan-git
-pot-translation-bin
-proton-ge-custom-bin
 qt6ct-kde
 splayer-appimage
 sunshine-bin

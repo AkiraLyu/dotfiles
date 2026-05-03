@@ -36,7 +36,7 @@ dosbox
 drawio-desktop
 easyeffects
 efibootmgr
-element-desktop
+exfatprogs
 fastfetch
 fcitx5-mozc
 fd
@@ -50,6 +50,7 @@ fzf
 gameconqueror
 gimp
 git
+git-filter-repo
 git-lfs
 gtkwave
 gvfs-mtp
@@ -73,11 +74,11 @@ krita
 kvantum
 kwalletmanager
 less
+libfaketime
 libinput-tools
 libvirt
 linux
 linux-cachyos
-linux-cachyos-rc
 linux-firmware
 man-db
 man-pages
@@ -91,7 +92,7 @@ musescore
 nasm
 neovim
 networkmanager
-niri-git
+niri
 nmap
 noctalia-shell
 noto-fonts-cjk
