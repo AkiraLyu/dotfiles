@@ -10,9 +10,8 @@ else
 end
 
 # different opacity for niri and kde
-if test "$XDG_CURRENT_DEKSTOP" = "niri"
+if test "$XDG_CURRENT_DESKTOP" = "niri"
     echo "background_opacity 0.8"
-else if test "$XDG_CURRENT_DEKSTOP" = "KDE"
+else if test "$XDG_CURRENT_DESKTOP" = "KDE"
     echo "background_opacity 1.0"
 end
-echo "background_opacity 0.8"
