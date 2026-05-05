@@ -92,7 +92,7 @@ musescore
 nasm
 neovim
 networkmanager
-niri
+niri-git
 nmap
 noctalia-shell
 noto-fonts-cjk

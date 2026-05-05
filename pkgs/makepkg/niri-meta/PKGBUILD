@@ -12,8 +12,10 @@ depends=(
     network-manager-applet
     # quickshell-git
     rofi
-    swaybg
-    mpvpaper
+    # swaybg
+    # mpvpaper
+    noctalia-qs
+    noctalia-shell
     gpu-screen-recorder
     # qt6ct-kde
 )
