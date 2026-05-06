@@ -5,6 +5,6 @@ Type=Application
 Name=OneDrive
 Comment=Mount and open OneDrive
 Icon=ms-onedrive
-Exec=~/.local/scripts/rclone/rclone-onedrive.sh
+Exec=/home/akira/.local/scripts/rclone/rclone-onedrive.sh
 Terminal=false
 Categories=Network;CloudStorage;
