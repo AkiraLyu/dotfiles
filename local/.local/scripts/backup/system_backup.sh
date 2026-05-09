@@ -17,6 +17,7 @@ BACKUP_SOURCES=(
     /home/akira/dotfiles
     /home/akira/Downloads
     /home/akira/Pictures
+    /home/akira/Projects
     /home/akira/Templates
     /home/akira/Zotero
     /home/akira/.gnupg
