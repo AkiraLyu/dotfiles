@@ -1,34 +1,43 @@
 [opener]
 play = [
-	{ run = 'mpv "$@"', orphan = true, for = "unix" },
+    { run = 'mpv "$@"', orphan = true, for = "unix" },
 ]
+
 edit = [
-	{ run = '$EDITOR "$@"', block = true, for = "unix" },
+    { run = '$EDITOR "$@"', block = true, for = "unix" },
 ]
+
 pic = [
-	{ run = 'gwenview "$@"', block = true, for = "unix" },
+    { run = 'gwenview "$@"', block = true, for = "unix" },
 ]
+
 epub = [
-	{ run = 'foliate "$@"', block = true, for = "unix" },
+    { run = 'foliate "$@"', block = true, for = "unix" },
 ]
+
 open = [
-	{ run = 'xdg-open "$@"', desc = "Open" },
+    { run = 'xdg-open "$@"', desc = "Open" },
 ]
+
 pdf = [
     { run = 'zathura "$@"', block = true, for = "unix" },
 ]
 
 [open]
 prepend_rules = [
-	{ name = "*.json", use = "edit" },
-	{ name = "*.epub", use = "epub" },
+    # JSON
+    { mime = "application/json", use = "edit" },
 
-	# Multiple openers for a single rule
-	{ name = "*.html", use = [ "open", "edit" ] },
+    # EPUB
+    { mime = "application/epub+zip", use = "epub" },
 
-	{ name = "*.png", use = [ "pic" ] },
-	{ name = "*.jpg", use = [ "pic" ] },
-	{ name = "*.jpeg", use = [ "pic" ] },
+    # HTML
+    { mime = "text/html", use = ["open", "edit"] },
 
-    { name = "*.pdf", use = [ "pdf"] },
+    # Images
+    { mime = "image/png",  use = "pic" },
+    { mime = "image/jpeg", use = "pic" },
+
+    # PDF
+    { mime = "application/pdf", use = "pdf" },
 ]
