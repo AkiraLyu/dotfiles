@@ -1,6 +1,15 @@
 set -g __startup 1
 set -g __clear 1
 
+if not set -q __fish_prompt_segment_color
+    set -g __fish_prompt_segment_color white
+    set -g __fish_prompt_segment_text_color black
+    set -g __fish_prompt_git_color white
+    set -g __fish_prompt_git_text_color black
+    set -g __fish_prompt_tail_color white
+    set -g __fish_prompt_tail_opts -o
+end
+
 set __fish_git_prompt_show_informative_status yes
 set __fish_git_prompt_showdirtystate yes
 set __fish_git_prompt_showstashstate yes
@@ -87,41 +96,41 @@ function fish_prompt
     end
 
     # distro
-    set_color 34495e
+    set_color $__fish_prompt_segment_color
     echo -n ''
-    set_color -b 34495e
-    set_color ffffff
+    set_color -b $__fish_prompt_segment_color
+    set_color $__fish_prompt_segment_text_color
     echo -n '󰣇 '
     echo -n (__print_exec_time)
     set_color -b normal
-    set_color 34495e
+    set_color $__fish_prompt_segment_color
     echo -n ''
 
     echo -n ' •• '
 
     # 显示当前路径
-    set_color 34495e
+    set_color $__fish_prompt_segment_color
     echo -n ''
-    set_color -b 34495e
-    set_color ffffff
+    set_color -b $__fish_prompt_segment_color
+    set_color $__fish_prompt_segment_text_color
     set -l cwd (__replace_home_symbol)
     echo -n $cwd
     set_color -b normal
-    set_color 34495e
+    set_color $__fish_prompt_segment_color
     echo -n ''
     set_color normal
 
     # git 信息
     if test -d .git
         echo -n ' • '
-        set_color 1b6fd8
+        set_color $__fish_prompt_git_color
         echo -n ''
-        set_color ffffff
-        set_color -b 1b6fd8
+        set_color $__fish_prompt_git_text_color
+        set_color -b $__fish_prompt_git_color
         echo -n ''
         echo -n (__fish_git_prompt)
         set_color -b normal
-        set_color 1b6fd8
+        set_color $__fish_prompt_git_color
         echo -n ''
         set_color -b normal
     end
@@ -129,7 +138,10 @@ function fish_prompt
     echo
 
     # 彩色圆条配置
-    set_color 34495e
+    set_color $__fish_prompt_tail_opts $__fish_prompt_tail_color
     echo -n '•  '
     set_color normal
+end
+
+function fish_right_prompt
 end
