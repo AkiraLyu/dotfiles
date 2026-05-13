@@ -6,8 +6,7 @@ alias cat=bat
 alias rm='trash-put'
 
 # scripts
-alias snap="~/.local/scripts/tools/snaps.sh create"
+alias snap="~/.local/scripts/backup/btrfs/snapshots.fish create"
 alias ec="gpg -e -r "akira.uestc@gmail.com""
 alias de="gpg -d"
-alias gi="~/.local/scripts/tools/init_git_repo.sh"
-
+alias gi="~/.local/scripts/dev/git/init-repo.sh"

@@ -1,9 +1,16 @@
-#!/bin/python
+#!/usr/bin/env python3
 
 import sys
-from PyQt5.QtWidgets import QApplication, QSystemTrayIcon, QMenu, QAction
-from PyQt5.QtGui import QIcon
 import subprocess
+from pathlib import Path
+
+from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import QAction, QApplication, QMenu, QSystemTrayIcon
+
+
+SCRIPT_DIR = Path(__file__).resolve().parent
+CHECK_CAPABILITY = SCRIPT_DIR / "check-capability.sh"
+AUTO_UPDATE = SCRIPT_DIR / "auto-update.sh"
 
 
 def start_mihomo():
@@ -24,13 +31,13 @@ def restart_mihomo():
 
 
 def update_sub():
-    subprocess.run(["/home/akira/.local/scripts/mihomo/auto_update.sh"])
+    subprocess.run([str(AUTO_UPDATE)])
     check_cap()
     restart_mihomo()
 
 
 def check_cap():
-    subprocess.run(["/home/akira/.local/scripts/mihomo/check_cap.sh"])
+    subprocess.run([str(CHECK_CAPABILITY)])
 
 
 def exit_app():

@@ -53,7 +53,6 @@ switch $argv[1]
     case "list"
         list_snapshots
     case "*"
-        echo "Usage: ./snapman.fish [create|cleanup|list]"
+        echo "Usage: ./snapshots.fish [create|cleanup|list]"
         exit 1
 end
-

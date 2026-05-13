@@ -4,7 +4,8 @@
 # 作者: Akira
 # ==========================================================
 
-/home/akira/.local/scripts/backup/mount_backup.sh
+SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+"$SCRIPT_DIR/mount.sh"
 
 # === 可自定义区域 ===
 BACKUP_SOURCES=(
@@ -71,4 +72,3 @@ done
 
 echo "=== 系统备份完成: $(date) ===" | tee -a "$LOG_FILE"
 echo "备份结果已保存到: $TARGET_DIR"
-

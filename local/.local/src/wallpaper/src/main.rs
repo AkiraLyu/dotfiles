@@ -44,7 +44,7 @@ fn find_wallpaper() -> String {
 
 fn set_wallpaper(path: String) {
     let result = if path.ends_with(".mp4") {
-        Command::new("/home/akira/.local/scripts/tools/set-wallpaper.sh")
+        Command::new("/home/akira/.local/scripts/apps/desktop/video-wallpaper.sh")
             .arg(&path)
             .spawn()
     } else {

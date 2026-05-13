@@ -1,6 +1,8 @@
 #!/bin/bash
 set -euo pipefail
 
+SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+
 DISK=/dev/nvme0n1
 EFI_PART=${DISK}p1
 SWAP_PART=${DISK}p2
@@ -42,5 +44,5 @@ pacstrap -K /mnt \
 
 genfstab -U /mnt >> /mnt/etc/fstab
 
-cp ./post-install.sh /mnt/
+cp "$SCRIPT_DIR/post-install.sh" /mnt/
 arch-chroot /mnt bash /post-install.sh
