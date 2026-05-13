@@ -58,6 +58,7 @@ gwenview
 hexedit
 htop
 hugo
+hyfetch
 inkscape
 intel-gpu-tools
 intel-media-driver
@@ -169,3 +170,4 @@ yazi
 yt-dlp
 zathura
 zathura-pdf-mupdf
+zed
