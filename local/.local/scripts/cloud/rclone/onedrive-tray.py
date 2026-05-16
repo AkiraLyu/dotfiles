@@ -85,12 +85,15 @@ def icon_from_theme():
 
 
 def is_mounted():
-    return subprocess.run(
-        ["mountpoint", "-q", str(MOUNTPOINT)],
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
-        check=False,
-    ).returncode == 0
+    return (
+        subprocess.run(
+            ["mountpoint", "-q", str(MOUNTPOINT)],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            check=False,
+        ).returncode
+        == 0
+    )
 
 
 def run_script(*args):
@@ -177,9 +180,9 @@ menu.aboutToShow.connect(update_status)
 
 tray_icon.setContextMenu(menu)
 tray_icon.activated.connect(
-    lambda reason: open_mountpoint()
-    if reason == ACTIVATION_TRIGGER and is_mounted()
-    else None
+    lambda reason: (
+        open_mountpoint() if reason == ACTIVATION_TRIGGER and is_mounted() else None
+    )
 )
 tray_icon.show()
 
