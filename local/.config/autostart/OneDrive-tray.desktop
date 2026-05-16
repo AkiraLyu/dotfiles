@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=OneDrive Tray
+Comment=Show OneDrive tray icon
+Icon=ms-onedrive
+Exec=/home/akira/.local/scripts/cloud/rclone/onedrive.sh --tray
+Terminal=false
+StartupNotify=false
+X-GNOME-Autostart-enabled=true

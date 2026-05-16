@@ -3,8 +3,8 @@
 Version=1.0
 Type=Application
 Name=OneDrive
-Comment=Mount and open OneDrive
+Comment=Mount, open and show OneDrive tray
 Icon=ms-onedrive
 Exec=/home/akira/.local/scripts/cloud/rclone/onedrive.sh
 Terminal=false
-Categories=Network;CloudStorage;
+Categories=Network;X-CloudStorage;
