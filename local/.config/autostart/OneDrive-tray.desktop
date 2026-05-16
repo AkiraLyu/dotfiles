@@ -2,7 +2,7 @@
 Type=Application
 Name=OneDrive Tray
 Comment=Show OneDrive tray icon
-Icon=ms-onedrive
+Icon=/home/akira/.local/share/icons/Microsoft_OneDrive_Icon_(2025_-_present).svg
 Exec=/home/akira/.local/scripts/cloud/rclone/onedrive.sh --tray
 Terminal=false
 StartupNotify=false

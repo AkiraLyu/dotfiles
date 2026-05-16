@@ -50,6 +50,9 @@ except ImportError:
 
 SCRIPT = Path(__file__).with_name("onedrive.sh")
 MOUNTPOINT = Path("/mnt/network/onedrive")
+ONEDRIVE_ICON = Path(
+    "/home/akira/.local/share/icons/Microsoft_OneDrive_Icon_(2025_-_present).svg"
+)
 
 
 def acquire_lock():
@@ -73,7 +76,7 @@ def acquire_lock():
 
 
 def icon_from_theme():
-    icon = QIcon.fromTheme("ms-onedrive")
+    icon = QIcon(str(ONEDRIVE_ICON))
     if icon.isNull():
         icon = QIcon.fromTheme("folder-cloud")
     if icon.isNull():
