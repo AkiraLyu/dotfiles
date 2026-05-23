@@ -4,3 +4,4 @@ local/.local/share/fish/fish_history
 config/
 nvim/.config/nvim/lazy-lock.json
 .codex
+firefox/bookmarks.html
