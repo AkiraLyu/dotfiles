@@ -21,6 +21,7 @@ minecraft-launcher
 mpvpaper
 niri-meta
 okular-session-git
+openai-codex-desktop
 papirus-folders-git
 plasma6-applets-panel-colorizer
 plasma6-themes-layan-git

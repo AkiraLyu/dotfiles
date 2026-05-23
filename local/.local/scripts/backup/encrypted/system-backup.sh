@@ -25,6 +25,7 @@ BACKUP_SOURCES=(
     /home/akira/.ssh
     /home/akira/.thunderbird
     /home/akira/.zotero
+    /home/akira/.codex
 )
 
 BACKUP_DEST="/mnt/backup/BackUp"

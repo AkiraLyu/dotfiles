@@ -89,6 +89,7 @@ mission-center
 modprobed-db
 mpv
 mtpfs
+mupdf-tools
 musescore
 nasm
 neovim
