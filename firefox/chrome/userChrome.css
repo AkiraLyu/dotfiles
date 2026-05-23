@@ -16,6 +16,9 @@
   --sidebar-width: 250px;             /* 侧边栏展开宽度 */
   --urlbar-min-height: 28px !important;
   --navbar-toolbar-height: 34px !important;
+  --bookmarks-toolbar-height: 40px !important;
+  --bookmarks-toolbar-sidebar-gap: var(--sidebar-collapsed-width);
+  --toolbar-protection-z-index: 300;
 }
 
 /* 允许拖动窗口 */
@@ -105,6 +108,38 @@ toolbarbutton {
   max-width: var(--sidebar-collapsed-width) !important;
 }
 
+/* 普通顶栏始终压在展开后的 Sidebery 上面，避免按钮被遮盖 */
+#toolbar-menubar,
+#nav-bar {
+  position: relative !important;
+  z-index: var(--toolbar-protection-z-index) !important;
+}
+
+#TabsToolbar {
+  z-index: var(--toolbar-protection-z-index) !important;
+}
+
+/* 书签栏显示时，左侧留给 Sidebery */
+#PersonalToolbar:not([collapsed]):not([moz-collapsed]):not([hidden]) {
+  margin-left: var(--bookmarks-toolbar-sidebar-gap) !important;
+  width: calc(100% - var(--bookmarks-toolbar-sidebar-gap)) !important;
+  max-width: calc(100% - var(--bookmarks-toolbar-sidebar-gap)) !important;
+  box-sizing: border-box !important;
+}
+
+/* 默认不越过 #navigator-toolbox；书签栏隐藏时 Sidebery 从顶栏下方开始 */
+#sidebar-box:not([positionend], [sidebar-positionend]) {
+  margin-top: 0 !important;
+  height: 100% !important;
+}
+
+/* 只有书签栏实际显示时才上提到书签栏这一行 */
+#main-window:has(#PersonalToolbar:not([collapsed]):not([moz-collapsed]):not([hidden]))
+  #sidebar-box:not([positionend], [sidebar-positionend]) {
+  margin-top: calc(-1 * var(--bookmarks-toolbar-height)) !important;
+  height: calc(100% + var(--bookmarks-toolbar-height)) !important;
+}
+
 /* ============================= */
 /* 标题栏按钮优化 */
 /* ============================= */
@@ -163,4 +198,3 @@ toolbarbutton {
 }
 
 }
-
