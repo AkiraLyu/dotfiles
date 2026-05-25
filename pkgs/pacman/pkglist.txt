@@ -20,6 +20,7 @@ cachyos-v4-mirrorlist
 calibre
 cava
 chntpw
+chromium
 cjson
 clamav
 clang
@@ -59,6 +60,7 @@ hexedit
 htop
 hugo
 hyfetch
+img2pdf
 inkscape
 intel-gpu-tools
 intel-media-driver
@@ -81,6 +83,7 @@ libvirt
 linux
 linux-cachyos
 linux-firmware
+lld
 man-db
 man-pages
 marksman

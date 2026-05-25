@@ -3,6 +3,7 @@ baidunetdisk-bin
 chatbox-bin
 comalot-clipsync-git
 daed-avx2-bin
+dwproton-bin
 dxvk-bin
 execstack
 fcitx5-meta
