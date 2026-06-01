@@ -19,7 +19,7 @@ check_data_mount() {
     if ! mountpoint -q "$DATA_MOUNT"; then
         echo "⚠️  检测到 $DATA_MOUNT 未挂载！"
         echo "开始挂载数据分区"
-        sudo mount -t btrfs -o rw,noatime,nofail,compress=zstd:3 UUID=df70ec07-eb3a-42e2-aa6b-e16e8df01d9a /mnt/data
+        sudo mount -t btrfs -o rw,noatime,nofail,compress=zstd:3 UUID=b6c62f44-c0c8-41da-8550-5d54ecfbe964 /mnt/data
 
     fi
 }
