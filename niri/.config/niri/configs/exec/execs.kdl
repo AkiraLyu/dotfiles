@@ -1,5 +1,6 @@
 // spawn-at-startup "sh" "-c" "wallpaper < ~/.config/niri/scripts/wallpaper.txt"
-spawn-at-startup "qs" "-c" "noctalia-shell"
+// spawn-at-startup "qs" "-c" "noctalia-shell"
+spawn-at-startup "noctalia"
 spawn-at-startup "kwalletd6"
 // spawn-at-startup "fcitx5" "-d" "-r"
 spawn-at-startup "nm-applet"

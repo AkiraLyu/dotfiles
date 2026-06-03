@@ -20,6 +20,7 @@ logisim
 ltspice
 minecraft-launcher
 mpvpaper
+netease-cloud-music-web-player
 niri-meta
 okular-session-git
 openai-codex-desktop

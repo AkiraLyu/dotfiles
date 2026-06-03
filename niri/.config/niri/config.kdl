@@ -15,3 +15,5 @@ include "configs/display/layout.kdl"
 include "configs/display/recent.kdl"
 include "configs/display/windowrule.kdl"
 include "configs/display/screen.kdl"
+
+include "noctalia.kdl"
