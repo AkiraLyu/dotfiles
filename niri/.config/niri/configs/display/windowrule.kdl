@@ -47,3 +47,14 @@ window-rule {
         }
     }
 }
+
+window-rule {
+    match app-id="Codex"
+    background-effect {
+        blur false
+    }
+    shadow {
+        off
+    }
+}
+
