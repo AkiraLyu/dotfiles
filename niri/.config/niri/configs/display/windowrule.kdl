@@ -6,7 +6,7 @@ overview {
 }
 
 window-rule {
-    // draw-border-with-background false
+    draw-border-with-background false
     geometry-corner-radius 6
     clip-to-geometry true
 }
@@ -31,21 +31,21 @@ window-rule {
 window-rule {
     match app-id="dolphin"
 
-    popups {
-        // Matches the default libadwaita pop-up corner radius.
-        geometry-corner-radius 15
-
-        // Note: it'll look better to set background opacity
-        // through your GTK theme CSS and not here.
-        // This is just an example that makes it look obvious.
-        opacity 0.8
-
-        background-effect {
-            blur true
-            // Unlike normal windows, popups default to "xray false"
-            xray false
-        }
-    }
+//     popups {
+//         // Matches the default libadwaita pop-up corner radius.
+//         geometry-corner-radius 15
+// 
+//         // Note: it'll look better to set background opacity
+//         // through your GTK theme CSS and not here.
+//         // This is just an example that makes it look obvious.
+//         opacity 0.8
+// 
+//         background-effect {
+//             blur true
+//             // Unlike normal windows, popups default to "xray false"
+//             xray false
+//         }
+//     }
 }
 
 window-rule {
