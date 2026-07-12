@@ -4,6 +4,7 @@ alias vim=/bin/nvim
 alias vi=/bin/vim
 alias cat=bat
 alias rm='trash-put'
+alias cls="printf '\e[H\e[3J'"
 
 # scripts
 alias snap="~/.local/scripts/backup/btrfs/snapshots.fish create"
