@@ -26,6 +26,7 @@ window-rule {
 layer-rule {
   match namespace="^noctalia-(background|launcher-overlay|dock)-.*$"
   match namespace="^noctalia-bar-default$"
+  match namespace="^noctalia-attached-panel$"
   background-effect {
     blur true
     xray false

@@ -16,3 +16,4 @@ spawn-at-startup "/home/akira/.config/niri/scripts/xconfig.sh"
 spawn-at-startup "/usr/lib/xdg-desktop-portal-gnome"
 
 spawn-at-startup "mirador" "watch"
+spawn-at-startup "/home/akira/.config/niri/scripts/x-font-fix.sh"
