@@ -4,7 +4,7 @@ Convert Clash / Mihomo YAML vmess proxies to vmess:// share links.
 
 Usage:
   python3 clash_to_vmess.py clash.yaml vmess.txt
-  python3 clash_to_vmess.py clash.yaml vmess.txt --line-mode newline
+  python3 clash_to_vmess.py clash.yaml vmess.txt --line-mode space
   python3 clash_to_vmess.py clash.yaml vmess.txt --name-filter Finland
 
 Notes:
@@ -203,8 +203,8 @@ def main() -> int:
     parser.add_argument(
         "--line-mode",
         choices=["space", "newline"],
-        default="space",
-        help="vmess.txt separator; daed-style subscription files often use space, default: space",
+        default="newline",
+        help="vmess.txt separator; daed-style subscription files often use space, default: newline",
     )
     parser.add_argument("--name-filter", help="only convert nodes whose name contains this text")
     parser.add_argument("--include-extra", action="store_true", help="include optional fields: scy, sni, alpn, fp")
@@ -228,7 +228,7 @@ def main() -> int:
             skipped += 1
             continue
         decoded.append(vmess_json)
-        links.append(to_vmess_link(vmess_json))
+        links.append(f"{name}:{to_vmess_link(vmess_json)}")
 
     if args.dry_run:
         print(json.dumps(decoded, ensure_ascii=False, indent=2))
