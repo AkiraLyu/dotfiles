@@ -5,3 +5,4 @@ SETUVAR __fish_initialized:4300
 SETUVAR _tide_left_items:os\x1epwd\x1egit\x1enewline\x1echaracter
 SETUVAR _tide_right_items:status\x1ecmd_duration\x1econtext\x1ejobs\x1enode\x1epython\x1erustc\x1ejava\x1eruby\x1ego\x1etime
 SETUVAR fish_greeting:\x1d
+SETUVAR fish_user_paths:/home/akira/\x2elocal/bin
