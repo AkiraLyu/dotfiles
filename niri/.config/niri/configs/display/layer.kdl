@@ -1,6 +1,6 @@
 layer-rule {
-  // match namespace="^noctalia-wallpaper*"
-  match namespace="waywallen-wallpaper"
+  match namespace="^noctalia-wallpaper"
+  // match namespace="waywallen-wallpaper"
   place-within-backdrop true
 }
 
@@ -15,6 +15,13 @@ overview {
   }
 }
 
+blur {
+  passes 2        // more passes = stronger blur (default: 3)
+  offset 3.0      // sample distance per pass (default: 3.0)
+  noise 0.03      // grain overlay (default: 0.02)
+  saturation 1.0  // color saturation boost (default: 1.5)
+}
+
 window-rule {
   background-effect {
     blur true
@@ -24,18 +31,11 @@ window-rule {
 
 /* Noctalia: blur everywhere without xray for a better look */
 layer-rule {
-  match namespace="^noctalia-(background|launcher-overlay|dock)-.*$"
+  match namespace="^noctalia-(background|launcher-overlay)-.*$"
   match namespace="^noctalia-bar-default$"
   match namespace="^noctalia-attached-panel$"
   background-effect {
     blur true
     xray false
   }
-}
-
-blur {
-  passes 2        // more passes = stronger blur (default: 3)
-  offset 3.0      // sample distance per pass (default: 3.0)
-  noise 0.03      // grain overlay (default: 0.02)
-  saturation 1.0  // color saturation boost (default: 1.5)
 }

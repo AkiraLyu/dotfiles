@@ -1,1 +1,2 @@
 spawn-at-startup "scale"
+spawn-at-startup "niri-first-window" "973" "627"
