@@ -1,18 +1,17 @@
 [Unit]
 Description=Waywallen Wallpaper Daemon
 Documentation=https://github.com/waywallen/waywallen
-PartOf=plasma-workspace.target
-
-After=plasma-plasmashell.service
+PartOf=graphical-session.target
+After=graphical-session.target
+Requisite=graphical-session.target
 
 [Service]
 Type=simple
 ExecStartPre=/usr/bin/mkdir -p %t/waywallen
-ExecStartPre=/bin/sh -c 'for i in $(seq 1 50); do qdbus6 org.kde.StatusNotifierWatcher /StatusNotifierWatcher >/dev/null 2>&1 && exit 0; sleep 0.1; done; exit 0'
 # ExecStart=/usr/bin/waywallen --ui /usr/bin/waywallen-ui --plugin /usr/share/waywallen
 ExecStart=/usr/bin/waywallen --no-ui --plugin /usr/share/waywallen
 Restart=on-failure
 RestartSec=2s
 
 [Install]
-WantedBy=plasma-workspace.target
+WantedBy=graphical-session.target

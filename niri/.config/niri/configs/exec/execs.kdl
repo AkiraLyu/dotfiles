@@ -1,18 +1,20 @@
-// spawn-at-startup "sh" "-c" "wallpaper < ~/.config/niri/scripts/wallpaper.txt"
-// spawn-at-startup "qs" "-c" "noctalia-shell"
 spawn-at-startup "noctalia"
 spawn-at-startup "kwalletd6"
-// spawn-at-startup "fcitx5" "-d" "-r"
 spawn-at-startup "nm-applet"
-spawn-at-startup "/usr/lib/polkit-kde-authentication-agent-1"
+
 spawn-at-startup "wl-paste" "--type" "text" "--watch" "cliphist" "store"
 spawn-at-startup "wl-paste" "--type" "image" "--watch" "cliphist" "store"
-spawn-at-startup "kbuildsycoca6"
+
 spawn-at-startup "/usr/lib/pam_kwallet_init"
+spawn-at-startup "/usr/lib/polkit-kde-authentication-agent-1"
+
 spawn-at-startup "/home/akira/.config/niri/scripts/xconfig.sh"
+
 // spawn-at-startup "xembedsniproxy"
+// spawn-at-startup "fcitx5" "-d" "-r"
+// spawn-at-startup "kbuildsycoca6"
 
 // if start from tty
-spawn-at-startup "/usr/lib/xdg-desktop-portal-gnome"
+// spawn-at-startup "/usr/lib/xdg-desktop-portal-gnome"
 
 spawn-at-startup "mirador" "watch"

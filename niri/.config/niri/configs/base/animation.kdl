@@ -1,49 +1,44 @@
 animations {
-    // macOS 风格：窗口轻微放大、上移并淡入。
     window-open {
-        duration-ms 200
-        curve "cubic-bezier" 0.16 1.0 0.3 1.0
+        duration-ms 165
+        curve "cubic-bezier" 0.0 0.0 0.58 1.0
 
         custom-shader r"
             vec4 open_color(vec3 coords_geo, vec3 size_geo) {
                 float p = niri_clamped_progress;
-                float scale = mix(0.94, 1.0, p);
-                float y_offset = mix(8.0, 0.0, p) / max(size_geo.y, 1.0);
+                float scale = mix(0.97, 1.0, p);
+                float y_offset = mix(4.0, 0.0, p) / max(size_geo.y, 1.0);
 
                 vec2 sample_geo =
                     (coords_geo.xy - vec2(0.5, 0.5 + y_offset)) / scale + vec2(0.5);
                 vec3 coords_tex = niri_geo_to_tex * vec3(sample_geo, 1.0);
                 vec4 color = texture2D(niri_tex, coords_tex.st);
 
-                float opacity = smoothstep(0.0, 0.65, p);
-                return color * opacity;
+                return color * p;
             }
         "
     }
 
-    // macOS 风格：窗口轻微缩小、下移并淡出。
     window-close {
-        duration-ms 160
-        curve "cubic-bezier" 0.4 0.0 0.8 0.2
+        duration-ms 150
+        curve "cubic-bezier" 0.25 0.1 0.25 1.0
 
         custom-shader r"
             vec4 close_color(vec3 coords_geo, vec3 size_geo) {
                 float p = niri_clamped_progress;
-                float scale = mix(1.0, 0.96, p);
-                float y_offset = mix(0.0, 6.0, p) / max(size_geo.y, 1.0);
+                float scale = mix(1.0, 0.97, p);
+                float y_offset = mix(0.0, 4.0, p) / max(size_geo.y, 1.0);
 
                 vec2 sample_geo =
                     (coords_geo.xy - vec2(0.5, 0.5 + y_offset)) / scale + vec2(0.5);
                 vec3 coords_tex = niri_geo_to_tex * vec3(sample_geo, 1.0);
                 vec4 color = texture2D(niri_tex, coords_tex.st);
 
-                float opacity = 1.0 - smoothstep(0.15, 1.0, p);
-                return color * opacity;
+                return color * (1.0 - p);
             }
         "
     }
 
-    // 窗口尺寸变化：使用同一组快速、低回弹弹簧，并平滑交叉淡化内容。
     window-resize {
         spring damping-ratio=0.9 stiffness=1000 epsilon=0.0001
 
@@ -54,13 +49,11 @@ animations {
                 vec4 color_prev = texture2D(niri_tex_prev, coords_tex_prev.st);
                 vec4 color_next = texture2D(niri_tex_next, coords_tex_next.st);
 
-                float blend = smoothstep(0.15, 0.85, niri_clamped_progress);
-                return mix(color_prev, color_next, blend);
+                return mix(color_prev, color_next, niri_clamped_progress);
             }
         "
     }
 
-    // 窗口、视角和工作区移动共享参数，避免组合动画速度不一致。
     window-movement {
         spring damping-ratio=0.9 stiffness=1000 epsilon=0.0001
     }

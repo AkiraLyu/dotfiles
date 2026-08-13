@@ -1,0 +1,18 @@
+[package]
+name = "niri-first-window"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.85"
+description = "Float and resize the first window on an empty niri workspace"
+license = "GPL-3.0-or-later"
+publish = false
+
+[dependencies]
+anyhow = "1.0.102"
+clap = { version = "4.6.0", features = ["derive"] }
+kdl = { version = "6.5.0", features = ["v1"] }
+niri-ipc = "=26.4.0"
+regex = "1.12.3"
+wayland-client = "0.31.14"
+wayland-protocols = { version = "0.32.12", features = ["client", "staging"] }
+wayland-protocols-wlr = { version = "0.3.12", features = ["client"] }

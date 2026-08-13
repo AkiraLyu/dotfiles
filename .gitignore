@@ -1,7 +1,5 @@
 fish/.config/fish/conf.d/chromium.fish
-hypr/.config/hypr/hyprland.conf.bak
 local/.local/share/fish/fish_history
-config/
 nvim/.config/nvim/lazy-lock.json
 .codex
-firefox/bookmarks.html
+backup/
