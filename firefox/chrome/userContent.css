@@ -42,3 +42,27 @@
     background-image: url(firefox.png);
   }
 }
+
+/* Sidebery 透出由 Firefox 外层绘制的 Nova 面板底色。 */
+@-moz-document regexp("^moz-extension://.*/sidebar/sidebar[.]html.*$") {
+  :root,
+  body,
+  #root_container,
+  #root {
+    background: transparent !important;
+  }
+
+  #root {
+    /* Sidebery 5 使用这些变量绘制标签区、工具栏与底部新建标签区。 */
+    --bg: transparent !important;
+    --frame-bg: transparent !important;
+    --toolbar-bg: transparent !important;
+    --frame-el-bg: transparent !important;
+    --frame-el-shadow: none !important;
+  }
+
+  /* 底部“新建标签页”按钮需要遮住其后方滚动的标签内容。 */
+  .TabsPanel .new-tab-btn {
+    background-color: #f9f9fb !important;
+  }
+}

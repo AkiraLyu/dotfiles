@@ -1,181 +1,90 @@
-@import 'sidebar.css';
-
-* {
-  font-family: sans-serif !important;
-  font-size: 10pt !important;
-}
+@import "sidebar.css";
 
 :root {
-  /* 顶栏与窗口按钮 */
-  --navbar-height: 48px;
-  --wc-height: 10px;
-  --wc-left-margin: 10px;
-  --toolbar-protection-z-index: 300;
-
-  /* 地址栏高度变量保留给 Firefox 内置样式读取 */
-  --urlbar-min-height: 28px !important;
-  --navbar-toolbar-height: 34px !important;
-
-  /* Sidebery 与书签工具栏的对齐 */
-  --sidebar-collapsed-width: 40px;
-  --bookmarks-toolbar-height: 40px !important;
-  --bookmarks-toolbar-sidebar-gap: var(--sidebar-collapsed-width);
+  /* 用户提供的参考截图：sRGB #f9f9fb。 */
+  --uc-panel-background: #f9f9fb;
+  /* 改为 0px 可完全关闭；默认跟随 Firefox Nova 原生圆角。 */
+  --uc-panel-radius: var(--chrome-block-radius, 0px);
+  --uc-sidebar-collapsed-width: 40px;
+  --uc-bookmarks-toolbar-height: 32px;
 }
 
-/* navigator-toolbox 是顶栏定位容器，同时保留窗口拖动区域 */
-#navigator-toolbox {
-  -moz-window-dragging: drag;
-  position: relative !important;
-}
-
-#titlebar {
-  appearance: none !important;
-}
-
-/* 狐狸模式：隐藏水平标签栏，并把导航栏抬进标题栏区域 */
-#main-window[titlepreface*="🦊 "] {
-  .tabbrowser-tab {
-    visibility: collapse !important;
-  }
-
-  .titlebar-button {
-    height: 40px !important;
-  }
-
-  #nav-bar {
-    margin: -40px 137px 0 0;
-    box-shadow: none !important;
-  }
-
-  #titlebar-spacer,
-  #titlebar-buttonbox-container {
-    background-color: var(--chrome-secondary-background-color);
-  }
-
-  .titlebar-color {
-    background-color: var(--toolbar-bgcolor);
+/*
+ * 让 Firefox 原生 Nova UI 管理顶栏、窗口按钮、字体、间距与主题配色。
+ * Firefox 的垂直标签模式负责原生单行标题栏，标签内容仍由 Sidebery 提供，
+ * 因此只隐藏重复的原生侧栏启动器。
+ */
+@media -moz-pref("sidebar.verticalTabs") {
+  #sidebar-container,
+  #sidebar-launcher-splitter {
+    display: none !important;
   }
 }
 
-/* 水平标签栏只保留定位外壳，标签内容隐藏 */
-#TabsToolbar .toolbar-items {
-  display: none !important;
-}
-
-#TabsToolbar.browser-toolbar {
-  display: block !important;
-  position: absolute;
-  right: 0;
-  top: calc((var(--navbar-height) - var(--wc-height)) / 2);
-}
-
-/* 导航栏左侧预留窗口控制按钮空间 */
-#nav-bar {
-  padding: calc((var(--navbar-height) - 40px) / 2) 0;
-  padding-left: 80px !important;
-}
-
-#urlbar {
-  --urlbar-toolbar-height: 40px !important;
-  z-index: 200 !important;
-}
-
-/* 统一顶栏按钮图标大小 */
-toolbarbutton {
-  --toolbarbutton-icon-size: 18px !important;
-}
-
-/* 隐藏隐私浏览标识 */
-#private-browsing-indicator-with-label {
-  display: none !important;
-}
-
-/* 侧边栏折叠宽度由 userChrome 固定，覆盖导入的 autohide 默认值 */
-#sidebar-box {
-  z-index: 100 !important;
-  position: relative !important;
-  min-width: var(--sidebar-collapsed-width) !important;
-  max-width: var(--sidebar-collapsed-width) !important;
-}
-
-/* 普通顶栏始终压在展开后的 Sidebery 上面，避免按钮被遮盖 */
-#toolbar-menubar,
-#nav-bar {
-  position: relative !important;
-  z-index: var(--toolbar-protection-z-index) !important;
-}
-
-#TabsToolbar {
-  z-index: var(--toolbar-protection-z-index) !important;
-}
-
-/* 书签栏显示时左侧留给 Sidebery；隐藏时不影响布局 */
-#PersonalToolbar:not([collapsed]):not([moz-collapsed]):not([hidden]) {
-  margin-left: var(--bookmarks-toolbar-sidebar-gap) !important;
-  width: calc(100% - var(--bookmarks-toolbar-sidebar-gap)) !important;
-  max-width: calc(100% - var(--bookmarks-toolbar-sidebar-gap)) !important;
-  box-sizing: border-box !important;
-}
-
-/* 默认不越过 #navigator-toolbox；书签栏隐藏时 Sidebery 从顶栏下方开始 */
-#sidebar-box:not([positionend], [sidebar-positionend]) {
-  margin-top: 0 !important;
-  height: 100% !important;
-}
-
-/* 只有书签栏实际显示时才上提到书签栏这一行 */
-#main-window:has(#PersonalToolbar:not([collapsed]):not([moz-collapsed]):not([hidden]))
-  #sidebar-box:not([positionend], [sidebar-positionend]) {
-  margin-top: calc(-1 * var(--bookmarks-toolbar-height)) !important;
-  height: calc(100% + var(--bookmarks-toolbar-height)) !important;
-}
-
-/* 标题栏窗口控制按钮放到左侧 */
-#navigator-toolbox .titlebar-buttonbox-container {
-  position: absolute !important;
-  top: 2px;
-  left: var(--wc-left-margin) !important;
-  right: auto !important;
-  z-index: 9999;
-  display: flex !important;
-  align-items: center;
-  pointer-events: auto !important;
-}
-
-/* 避免窗口控制按钮与菜单栏、标签栏左侧元素重叠 */
-#TabsToolbar,
-#toolbar-menubar {
-  padding-left: 80px !important;
-}
-
-#TabsToolbar .titlebar-buttonbox-container {
-  visibility: hidden !important;
-}
-
-#navigator-toolbox .titlebar-buttonbox {
-  height: 35px !important;
-}
-
-@media (-moz-platform: windows) {
-  /* Windows 下导航栏需要明确避开左侧窗口控制按钮区域 */
-  :root {
-    --wc-area-width: 68px;
+/* 把 Nova 顶栏、书签栏和内容区整理成间距一致的独立圆角块。 */
+@media -moz-pref("browser.nova.enabled") {
+  #navigator-toolbox {
+    overflow: visible !important;
+    background: transparent !important;
+    border: 0 !important;
+    border-radius: 0 !important;
   }
 
-  #navigator-toolbox .titlebar-buttonbox-container {
-    z-index: 10;
-  }
-
-  #nav-bar-customization-target {
-    margin-left: var(--wc-area-width) !important;
+  #nav-bar,
+  #PersonalToolbar:not([collapsed], [moz-collapsed], [hidden]) {
+    box-sizing: border-box !important;
+    border: 1px solid var(--chrome-content-separator-color) !important;
+    border-radius: var(--uc-panel-radius) !important;
+    background-clip: padding-box !important;
   }
 
   #nav-bar {
-    padding-left: calc(var(--wc-area-width) + 8px) !important;
+    background-color: var(--toolbar-background-color) !important;
+    background-image: var(--toolbox-background-image) !important;
+    background-repeat: var(--toolbox-background-repeat) !important;
+    background-position: var(--toolbox-background-position) !important;
+    background-size: var(--toolbox-background-size) !important;
   }
 
-  .titlebar-button {
-    font-family: "Segoe UI" !important;
-    font-size: 10px;
+  #PersonalToolbar:not([collapsed], [moz-collapsed], [hidden]) {
+    min-height: var(--uc-bookmarks-toolbar-height) !important;
+    height: var(--uc-bookmarks-toolbar-height) !important;
+    margin-block-start: var(--chrome-window-gap) !important;
+    margin-inline-start: calc(
+      var(--uc-sidebar-collapsed-width) + var(--chrome-window-gap)
+    ) !important;
+    width: calc(
+      100% - var(--uc-sidebar-collapsed-width) - var(--chrome-window-gap)
+    ) !important;
+    max-width: calc(
+      100% - var(--uc-sidebar-collapsed-width) - var(--chrome-window-gap)
+    ) !important;
+    overflow: clip !important;
+    background-color: var(--uc-panel-background) !important;
+    background-image: none !important;
+  }
+
+  #main-window:has(
+      #PersonalToolbar:not([collapsed], [moz-collapsed], [hidden])
+    )
+    #sidebar-box:not([positionend], [sidebar-positionend]) {
+    margin-block-start: calc(
+      -1 * var(--uc-bookmarks-toolbar-height) - var(--chrome-window-gap)
+    ) !important;
+    height: calc(
+      100% + var(--uc-bookmarks-toolbar-height) + var(--chrome-window-gap)
+    ) !important;
+  }
+}
+
+/* Firefox 153 会在新版 WebExtension 侧栏内部再注入一套标题和关闭按钮。 */
+@-moz-document url("chrome://browser/content/webext-panels.xhtml") {
+  #webextpanels-window,
+  #webext-panels-stack {
+    background-color: transparent !important;
+  }
+
+  #sidebar-panel-header {
+    display: none !important;
   }
 }

@@ -1,9 +1,9 @@
 /* 基于 MrOtherGuy 的 autohide_sidebar.css，原始代码使用 MPL 2.0 许可。 */
 /* https://github.com/MrOtherGuy/firefox-csshacks/tree/master/chrome/autohide_sidebar.css */
 
-/* Sidebery 自动隐藏：默认只保留窄条，鼠标悬停时展开。 */
+/* 仅实现 Sidebery 自动折叠；其余外观直接沿用 Firefox Nova 原生样式。 */
 :where(#main-window) #browser {
-  --uc-sidebar-width: 40px;
+  --uc-sidebar-width: var(--uc-sidebar-collapsed-width, 40px);
   --uc-sidebar-hover-width: 300px;
 }
 
@@ -11,13 +11,25 @@
   --uc-sidebar-width: 1px;
 }
 
-/* 外层容器宽度由折叠态控制；展开宽度交给内部 #sidebar。 */
 #sidebar-box {
   --uc-autohide-sidebar-delay: 150ms;
   --uc-autohide-transition-duration: 115ms;
   --uc-autohide-transition-type: linear;
-  width: var(--uc-sidebar-width) !important;
-  background-color: inherit;
+  --uc-sidebar-edge-gap: 0px;
+  position: relative !important;
+  box-sizing: border-box !important;
+  min-width: calc(var(--uc-sidebar-width) + var(--uc-sidebar-edge-gap)) !important;
+  width: calc(var(--uc-sidebar-width) + var(--uc-sidebar-edge-gap)) !important;
+  max-width: calc(var(--uc-sidebar-width) + var(--uc-sidebar-edge-gap)) !important;
+  margin-inline-start: calc(-1 * var(--uc-sidebar-edge-gap)) !important;
+  padding-inline-start: var(--uc-sidebar-edge-gap) !important;
+  z-index: var(--browser-area-z-index-sidebar-expand-on-hover, 4) !important;
+
+  /* Nova 的 .chrome-block 默认会裁掉悬停后变宽的内部浏览器。 */
+  overflow: visible !important;
+  background-color: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
   direction: ltr;
 
   /* 右侧侧栏在非 RTL 语言中反向展开。 */
@@ -26,22 +38,33 @@
   }
 }
 
-.sidebar-browser-stack {
-  background: inherit;
+/* 把 Nova 的视觉留白纳入 #sidebar-box 的真实命中区域，避免伪元素命中不稳定。 */
+@media -moz-pref("browser.nova.enabled") {
+  #sidebar-box {
+    --uc-sidebar-edge-gap: var(--chrome-window-gap);
+  }
+
+  #sidebar {
+    /* Sidebery 文档保持透明，但浏览器外壳必须是不透明的 Nova 面板。 */
+    background-color: var(--uc-panel-background, #f9f9fb) !important;
+    background-image: none !important;
+    /* border-radius: var(--uc-panel-radius, 4px) !important; */
+    border-radius: var(--uc-panel-radius, 8px) !important;
+    outline: 1px solid var(--chrome-content-separator-color) !important;
+    outline-offset: -1px !important;
+    overflow: clip !important;
+  }
 }
 
-#sidebar-splitter {
-  display: none;
-}
-
-/* 侧栏头部和默认控制项隐藏，只保留 Sidebery 内容。 */
+#sidebar-splitter,
 #sidebar-header {
   display: none !important;
 }
 
 #sidebar {
-  transition: min-width var(--uc-autohide-transition-duration) var(--uc-autohide-transition-type) var(--uc-autohide-sidebar-delay) !important;
   min-width: var(--uc-sidebar-width) !important;
+  transition: min-width var(--uc-autohide-transition-duration)
+    var(--uc-autohide-transition-type) var(--uc-autohide-sidebar-delay) !important;
   will-change: min-width;
   direction: ltr;
 
@@ -56,53 +79,49 @@
   transition-delay: 0ms !important;
 }
 
-.sidebar-panel {
-  background-color: transparent !important;
-  color: var(--newtab-text-primary-color) !important;
+/* DOM 视频全屏必须完全越过 Nova 留白、侧栏命中区和内容区描边。 */
+:root[inDOMFullscreen] #browser {
+  padding: 0 !important;
+  gap: 0 !important;
 }
 
-.sidebar-panel #search-box {
-  -moz-appearance: none !important;
-  background-color: rgba(249, 249, 250, 0.1) !important;
-  color: inherit !important;
+:root[inDOMFullscreen]
+  :is(
+    #sidebar-box,
+    #sidebar-container,
+    #sidebar-splitter,
+    #sidebar-launcher-splitter
+  ) {
+  display: none !important;
 }
 
-/* 侧栏右侧分隔线。 */
-#sidebar {
-  background-color: inherit !important;
-  border-inline: 1px solid rgba(80, 80, 80, 0.3);
-  border-inline-width: 0px 2px;
+:root[inDOMFullscreen] #tabbrowser-tabbox,
+:root[inDOMFullscreen] #tabbrowser-tabpanels,
+:root[inDOMFullscreen] #tabbrowser-tabpanels .browserContainer {
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
 }
 
-#sidebar-box:not([positionend], [sidebar-positionend]) > :-moz-locale-dir(rtl),
-#sidebar-box:is([positionend], [sidebar-positionend]) > * {
-  border-inline-width: 1px 0px;
+/* 展开时把链接状态提示移到另一侧，避免被 Sidebery 遮挡。 */
+#sidebar-box:not([positionend], [sidebar-positionend]):hover
+  ~ #tabbrowser-tabbox
+  #statuspanel {
+  inset-inline: auto 0 !important;
 }
 
-@media -moz-pref("sidebar.revamp") {
-  #sidebar {
-    border-style: none;
-  }
-
-  #sidebar-box {
-    padding: 0 !important;
-  }
-}
-
-/* 悬停展开时，把状态提示移到右侧，避免被侧栏盖住。 */
-#sidebar-box:not([positionend], [sidebar-positionend]):hover ~ #appcontent #statuspanel {
-  inset-inline: auto 0px !important;
-}
-
-#sidebar-box:not([positionend], [sidebar-positionend]):hover ~ #appcontent #statuspanel-label {
-  margin-inline: 0px !important;
+#sidebar-box:not([positionend], [sidebar-positionend]):hover
+  ~ #tabbrowser-tabbox
+  #statuspanel-label {
+  margin-inline: 0 !important;
   border-left-style: solid !important;
 }
 
-/* 可选静态布局：开启对应 pref 后，侧栏内部宽度固定为展开宽度。 */
+/* 可选静态布局：开启对应 pref 后，Sidebery 内容始终按展开宽度排版。 */
 @media -moz-pref("userchrome.autohide-sidebar.static-layout.enabled") {
   #sidebar-box {
-    min-width: var(--uc-sidebar-width) !important;
     contain: size;
     box-shadow: var(--content-area-shadow);
   }
@@ -114,16 +133,17 @@
   .sidebar-browser-stack {
     overflow: hidden;
     width: 100%;
-    transition: width var(--uc-autohide-transition-duration) var(--uc-autohide-transition-type) var(--uc-autohide-sidebar-delay);
+    transition: width var(--uc-autohide-transition-duration)
+      var(--uc-autohide-transition-type) var(--uc-autohide-sidebar-delay);
     direction: ltr;
 
     &:hover {
-      transition-delay: 0ms;
       width: var(--uc-sidebar-hover-width);
+      transition-delay: 0ms;
     }
 
     &:-moz-locale-dir(rtl) {
-      transition-property: transform,width !important;
+      transition-property: transform, width !important;
     }
   }
 
@@ -132,24 +152,18 @@
     transition-delay: 0ms !important;
   }
 
-  #sidebar-box:not([sidebar-positionend]):hover .sidebar-browser-stack:-moz-locale-dir(rtl) {
-    transform: translateX(calc(-1 * var(--uc-sidebar-hover-width) + var(--uc-sidebar-width)));
+  #sidebar-box:not([sidebar-positionend]):hover
+    .sidebar-browser-stack:-moz-locale-dir(rtl) {
+    transform: translateX(
+      calc(-1 * var(--uc-sidebar-hover-width) + var(--uc-sidebar-width))
+    );
   }
 
-  #sidebar-box[sidebar-positionend]:hover > .sidebar-browser-stack:-moz-locale-dir(rtl) {
-    transform: translateX(calc(var(--uc-sidebar-hover-width) - var(--uc-sidebar-width)));
+  #sidebar-box[sidebar-positionend]:hover
+    > .sidebar-browser-stack:-moz-locale-dir(rtl) {
+    transform: translateX(
+      calc(var(--uc-sidebar-hover-width) - var(--uc-sidebar-width))
+    );
     transition-delay: 0ms !important;
   }
-}
-
-/* 隐藏 Firefox 原生侧栏切换和关闭按钮。 */
-#sidebar-switcher-target,
-#sidebar-close {
-  width: 0 !important;
-  height: 0 !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  border: none !important;
-  overflow: hidden !important;
-  visibility: hidden !important;
 }
