@@ -1,8 +1,7 @@
+@import "theme.css";
 @import "sidebar.css";
 
 :root {
-  /* 用户提供的参考截图：sRGB #f9f9fb。 */
-  --uc-panel-background: #f9f9fb;
   /* 改为 0px 可完全关闭；默认跟随 Firefox Nova 原生圆角。 */
   --uc-panel-radius: var(--chrome-block-radius, 0px);
   --uc-sidebar-collapsed-width: 40px;
@@ -19,6 +18,11 @@
   #sidebar-launcher-splitter {
     display: none !important;
   }
+}
+
+/* 保留 Firefox/GTK 原生按钮样式，只把整组窗口控制按钮移到顶栏左侧。 */
+#nav-bar > .titlebar-buttonbox-container {
+  order: -1 !important;
 }
 
 /* 把 Nova 顶栏、书签栏和内容区整理成间距一致的独立圆角块。 */

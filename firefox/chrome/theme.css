@@ -1,0 +1,13 @@
+/*
+ * Firefox UI color configuration.
+ * Change only these two values to update the bookmarks toolbar and Sidebery.
+ */
+:root {
+  --uc-panel-background-light: #f9f9fb;
+  --uc-panel-background-dark: #121114;
+
+  --uc-panel-background: light-dark(
+    var(--uc-panel-background-light),
+    var(--uc-panel-background-dark)
+  );
+}

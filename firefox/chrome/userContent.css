@@ -1,3 +1,5 @@
+@import "theme.css";
+
 @-moz-document url(about:home), url(about:newtab), url(about:privatebrowsing) {
   /* 首页搜索框居中偏上，避开背景主体。 */
   .search-wrapper .search-inner-wrapper {
@@ -43,26 +45,29 @@
   }
 }
 
-/* Sidebery 透出由 Firefox 外层绘制的 Nova 面板底色。 */
+/* Sidebery 内部与 Firefox 外层使用同一面板底色，避免悬浮控件透出内容。 */
 @-moz-document regexp("^moz-extension://.*/sidebar/sidebar[.]html.*$") {
   :root,
   body,
   #root_container,
   #root {
-    background: transparent !important;
+    background: var(--uc-panel-background) !important;
   }
 
   #root {
     /* Sidebery 5 使用这些变量绘制标签区、工具栏与底部新建标签区。 */
-    --bg: transparent !important;
-    --frame-bg: transparent !important;
-    --toolbar-bg: transparent !important;
-    --frame-el-bg: transparent !important;
+    --bg: var(--uc-panel-background) !important;
+    --frame-bg: var(--uc-panel-background) !important;
+    --toolbar-bg: var(--uc-panel-background) !important;
+    --frame-el-bg: var(--uc-panel-background) !important;
     --frame-el-shadow: none !important;
   }
 
-  /* 底部“新建标签页”按钮需要遮住其后方滚动的标签内容。 */
+  /* 底部按钮、其留白父层和防穿透伪元素都使用不透明面板色。 */
+  .TabsPanel .bottom-space,
+  .TabsPanel .new-tab-btns,
+  .TabsPanel .new-tab-btns::after,
   .TabsPanel .new-tab-btn {
-    background-color: #f9f9fb !important;
+    background-color: var(--uc-panel-background) !important;
   }
 }

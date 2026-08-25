@@ -3,10 +3,10 @@
   --tabs-count-font: .625rem system-ui;
   --bookmarks-bookmark-font: .875rem system-ui;
   --bookmarks-folder-font: 10pt system-ui;
-  --bg: transparent !important;
-  --frame-bg: transparent !important;
-  --toolbar-bg: transparent !important;
-  --frame-el-bg: transparent !important;
+  --bg: var(--uc-panel-background) !important;
+  --frame-bg: var(--uc-panel-background) !important;
+  --toolbar-bg: var(--uc-panel-background) !important;
+  --frame-el-bg: var(--uc-panel-background) !important;
   --frame-el-shadow: none !important;
 }
 
@@ -14,12 +14,15 @@ html,
 body,
 #root_container,
 #root {
-  background: transparent !important;
+  background: var(--uc-panel-background) !important;
 }
 
-/* Keep the bottom new-tab button opaque above the scrolling tab list. */
+/* Keep the bottom new-tab area opaque above the scrolling tab list. */
+.TabsPanel .bottom-space,
+.TabsPanel .new-tab-btns,
+.TabsPanel .new-tab-btns::after,
 .TabsPanel .new-tab-btn {
-  background-color: #f9f9fb !important;
+  background-color: var(--uc-panel-background) !important;
 }
  
 /* Adjust styles according to sidebar width */
@@ -77,7 +80,7 @@ body,
     --tabs-bg-active: var(--tabs-activated-bg) !important;
     --tabs-selected-fg: var(--tabs-activated-fg) !important;
     --tabs-selected-bg: var(--tabs-activated-bg) !important;
-    --bg: transparent !important;
+    --bg: var(--uc-panel-background) !important;
   }
   .Tab[data-selected] .lvl-wrapper:after,
   .Tab[data-active] .lvl-wrapper:after {
