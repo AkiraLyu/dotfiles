@@ -1,0 +1,12 @@
+[Unit]
+Description=OneDrive system tray
+Requisite=graphical-session.target
+After=graphical-session.target onedrive-mount.service
+PartOf=graphical-session.target personal-graphical.target
+Wants=onedrive-mount.service
+
+[Service]
+Type=simple
+ExecStart=%h/.local/scripts/cloud/rclone/onedrive.py --tray --systemd-mount
+Restart=on-failure
+RestartSec=3s

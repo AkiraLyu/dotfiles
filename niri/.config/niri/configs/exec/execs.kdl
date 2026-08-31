@@ -1,14 +1,8 @@
-spawn-at-startup "noctalia"
 spawn-at-startup "kwalletd6"
-spawn-at-startup "nm-applet"
-
-spawn-at-startup "wl-paste" "--type" "text" "--watch" "cliphist" "store"
-spawn-at-startup "wl-paste" "--type" "image" "--watch" "cliphist" "store"
-
 spawn-at-startup "/usr/lib/pam_kwallet_init"
-spawn-at-startup "/usr/lib/polkit-kde-authentication-agent-1"
-
 spawn-at-startup "/home/akira/.config/niri/scripts/xconfig.sh"
+
+// Long-running session helpers are managed by personal-niri.target.
 
 // spawn-at-startup "xembedsniproxy"
 // spawn-at-startup "fcitx5" "-d" "-r"
@@ -16,5 +10,3 @@ spawn-at-startup "/home/akira/.config/niri/scripts/xconfig.sh"
 
 // if start from tty
 // spawn-at-startup "/usr/lib/xdg-desktop-portal-gnome"
-
-spawn-at-startup "mirador" "watch"

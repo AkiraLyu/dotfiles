@@ -13,6 +13,7 @@ from pathlib import Path
 MOUNTPOINT = Path("/mnt/network/onedrive")
 CACHE_DIR = Path("/mnt/network/cache/onedrive")
 REMOTE = "onedrive:"
+SYSTEMD_MOUNT_UNIT = "onedrive-mount.service"
 ICON_PATH = Path(
     "/home/akira/.local/share/icons/Microsoft_OneDrive_Icon_(2025_-_present).svg"
 )
@@ -78,6 +79,39 @@ def unmount_onedrive() -> bool:
             return True
         break
     return False
+
+
+def wait_for_mount_state(expected: bool) -> bool:
+    deadline = time.monotonic() + MOUNT_TIMEOUT
+    while time.monotonic() < deadline:
+        if is_mounted() == expected:
+            return True
+        time.sleep(MOUNT_POLL_INTERVAL)
+    return is_mounted() == expected
+
+
+def manage_mount_service(action: str) -> bool:
+    result = subprocess.run(
+        ["systemctl", "--user", action, SYSTEMD_MOUNT_UNIT],
+        check=False,
+    )
+    if result.returncode != 0:
+        return False
+    return wait_for_mount_state(action != "stop")
+
+
+def start_systemd_onedrive() -> bool:
+    result = subprocess.run(
+        [
+            "systemctl",
+            "--user",
+            "start",
+            SYSTEMD_MOUNT_UNIT,
+            "onedrive-tray.service",
+        ],
+        check=False,
+    )
+    return result.returncode == 0 and wait_for_mount_state(True)
 
 
 def open_mountpoint() -> None:
@@ -168,7 +202,7 @@ def icon_from_theme(QIcon):
     return icon
 
 
-def run_tray() -> int:
+def run_tray(systemd_mount: bool = False) -> int:
     if not os.environ.get("DISPLAY") and not os.environ.get("WAYLAND_DISPLAY"):
         return 0
 
@@ -205,17 +239,25 @@ def run_tray() -> int:
         open_mountpoint()
 
     def tray_mount():
-        ok = mount_onedrive()
+        ok = (
+            manage_mount_service("start") if systemd_mount else mount_onedrive()
+        )
         update_status()
         notify("OneDrive", "已挂载" if ok else "挂载失败")
 
     def tray_unmount():
-        ok = unmount_onedrive()
+        ok = (
+            manage_mount_service("stop") if systemd_mount else unmount_onedrive()
+        )
         update_status()
         notify("OneDrive", "已卸载" if ok else "卸载失败")
 
     def tray_remount():
-        ok = unmount_onedrive() and mount_onedrive()
+        ok = (
+            manage_mount_service("restart")
+            if systemd_mount
+            else unmount_onedrive() and mount_onedrive()
+        )
         update_status()
         notify("OneDrive", "已重新挂载" if ok else "重新挂载失败")
 
@@ -272,12 +314,28 @@ def main(argv=None) -> int:
     parser.add_argument("--unmount", action="store_true", help="unmount")
     parser.add_argument("--remount", action="store_true", help="remount")
     parser.add_argument("--no-tray", action="store_true", help="do not start tray")
+    parser.add_argument(
+        "--systemd-mount",
+        action="store_true",
+        help="manage onedrive-mount.service from the tray",
+    )
+    parser.add_argument(
+        "--systemd-start",
+        action="store_true",
+        help="start the systemd mount and tray services, then open OneDrive",
+    )
     args = parser.parse_args(argv)
+
+    if args.systemd_start:
+        if not start_systemd_onedrive():
+            return 1
+        open_mountpoint()
+        return 0
 
     if args.tray:
         if args.no_tray:
             return 0
-        return run_tray()
+        return run_tray(args.systemd_mount)
 
     if args.unmount:
         return 0 if unmount_onedrive() else 1

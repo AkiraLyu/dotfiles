@@ -1,0 +1,8 @@
+[Unit]
+Description=Export Firefox history with FoxVault
+Documentation=https://github.com/AkiraLyu/FoxVault
+ConditionPathExists=%h/.config/FoxVault/config.toml
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/FoxVault

@@ -1,0 +1,11 @@
+[Unit]
+Description=KDE PolicyKit authentication agent for Niri
+Requisite=niri.service
+After=niri.service
+PartOf=personal-niri.target
+
+[Service]
+Type=simple
+ExecStart=/usr/lib/polkit-kde-authentication-agent-1
+Restart=on-failure
+RestartSec=2s

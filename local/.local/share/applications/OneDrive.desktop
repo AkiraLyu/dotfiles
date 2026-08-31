@@ -5,6 +5,6 @@ Type=Application
 Name=OneDrive
 Comment=Mount, open and show OneDrive tray
 Icon=/home/akira/.local/share/icons/Microsoft_OneDrive_Icon_(2025_-_present).svg
-Exec=/home/akira/.local/scripts/cloud/rclone/onedrive.sh
+Exec=/home/akira/.local/scripts/cloud/rclone/onedrive.py --systemd-start
 Terminal=false
 Categories=Network;X-CloudStorage;

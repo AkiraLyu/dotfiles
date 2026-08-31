@@ -1,0 +1,14 @@
+[Unit]
+Description=Personal graphical session services
+Requisite=graphical-session.target
+After=graphical-session.target
+PartOf=graphical-session.target
+Wants=ocx.service
+Wants=mirador.service
+Wants=onedrive-mount.service
+Wants=onedrive-tray.service
+Wants=qq.service
+Wants=waywallen.service
+
+[Install]
+WantedBy=graphical-session.target

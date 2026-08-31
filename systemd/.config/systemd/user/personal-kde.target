@@ -1,0 +1,9 @@
+[Unit]
+Description=Personal KDE Plasma session services
+Requisite=plasma-workspace.target
+After=plasma-workspace.target plasma-kwin_wayland.service
+PartOf=plasma-workspace.target
+Wants=kwin-gesture.service
+
+[Install]
+WantedBy=plasma-workspace.target

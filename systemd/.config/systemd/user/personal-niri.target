@@ -1,0 +1,14 @@
+[Unit]
+Description=Personal Niri session services
+Requisite=niri.service
+After=niri.service
+PartOf=niri.service
+Wants=niri-noctalia.service
+Wants=niri-clipboard-text.service
+Wants=niri-clipboard-image.service
+Wants=niri-polkit-agent.service
+Wants=niri-scale.service
+Wants=niri-first-window.service
+
+[Install]
+WantedBy=niri.service

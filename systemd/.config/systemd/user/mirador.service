@@ -1,0 +1,12 @@
+[Unit]
+Description=Mirador mail watcher
+Requisite=graphical-session.target
+After=graphical-session.target
+PartOf=graphical-session.target personal-graphical.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/mirador watch Akira
+Restart=on-failure
+RestartSec=10s

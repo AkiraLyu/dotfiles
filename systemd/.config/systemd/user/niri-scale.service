@@ -1,0 +1,11 @@
+[Unit]
+Description=Dynamic output scale helper for Niri
+Requisite=niri.service
+After=niri.service
+PartOf=personal-niri.target
+
+[Service]
+Type=simple
+ExecStart=%h/.local/bin/scale
+Restart=on-failure
+RestartSec=2s

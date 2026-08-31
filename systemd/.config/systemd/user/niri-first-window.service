@@ -1,0 +1,11 @@
+[Unit]
+Description=Initial window placement helper for Niri
+Requisite=niri.service
+After=niri.service
+PartOf=personal-niri.target
+
+[Service]
+Type=simple
+ExecStart=%h/.local/bin/niri-first-window 973 627
+Restart=on-failure
+RestartSec=2s

@@ -1,0 +1,14 @@
+[Unit]
+Description=OneDrive rclone mount
+Requisite=graphical-session.target
+After=graphical-session.target
+PartOf=graphical-session.target personal-graphical.target
+
+[Service]
+Type=simple
+ExecStartPre=/usr/bin/mkdir -p /mnt/network/onedrive /mnt/network/cache/onedrive
+ExecStart=/usr/bin/rclone mount onedrive: /mnt/network/onedrive --vfs-cache-mode full --cache-dir /mnt/network/cache/onedrive
+ExecStop=-/usr/bin/fusermount3 -uz /mnt/network/onedrive
+Restart=on-failure
+RestartSec=5s
+TimeoutStopSec=20s

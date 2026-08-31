@@ -1,0 +1,7 @@
+[Unit]
+Description=Personal background services
+Wants=foxvault.service
+After=basic.target
+
+[Install]
+WantedBy=default.target

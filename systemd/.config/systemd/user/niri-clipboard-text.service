@@ -1,0 +1,11 @@
+[Unit]
+Description=Text clipboard history watcher for Niri
+Requisite=niri.service
+After=niri.service
+PartOf=personal-niri.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/wl-paste --type text --watch /usr/bin/cliphist store
+Restart=on-failure
+RestartSec=2s

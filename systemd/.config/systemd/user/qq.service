@@ -1,0 +1,9 @@
+[Unit]
+Description=QQ
+Requisite=graphical-session.target
+After=graphical-session.target
+PartOf=graphical-session.target personal-graphical.target
+
+[Service]
+Type=simple
+ExecStart=%h/.config/niri/scripts/linuxqq-fix.sh

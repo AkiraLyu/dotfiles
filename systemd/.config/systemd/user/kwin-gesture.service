@@ -1,0 +1,11 @@
+[Unit]
+Description=KWin gesture daemon
+Requisite=plasma-kwin_wayland.service
+After=plasma-kwin_wayland.service
+PartOf=personal-kde.target
+
+[Service]
+Type=simple
+ExecStart=%h/.local/bin/kwin_gesture
+Restart=on-failure
+RestartSec=2s

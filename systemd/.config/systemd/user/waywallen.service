@@ -1,7 +1,7 @@
 [Unit]
 Description=Waywallen Wallpaper Daemon
 Documentation=https://github.com/waywallen/waywallen
-PartOf=graphical-session.target
+PartOf=graphical-session.target personal-graphical.target
 After=graphical-session.target
 Requisite=graphical-session.target
 
@@ -12,6 +12,3 @@ ExecStartPre=/usr/bin/mkdir -p %t/waywallen
 ExecStart=/usr/bin/waywallen --no-ui --plugin /usr/share/waywallen
 Restart=on-failure
 RestartSec=2s
-
-[Install]
-WantedBy=graphical-session.target
