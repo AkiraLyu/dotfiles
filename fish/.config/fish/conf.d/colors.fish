@@ -1,79 +1,75 @@
-# 通过gsettings管理kitty & fish prompt & neovim theme
-#
-# 1. 设置默认主题，防止后面获取失败
-set -gx TERTHEME light
-set -l fish_prompt_theme_suffix ".light"
+# 根据 GNOME 配色统一管理 GTK、Qt、Kitty、Fish 和 Neovim 主题。
+begin
+    set -l data_dirs \
+        "$HOME/.local/share/flatpak/exports/share" \
+        /var/lib/flatpak/exports/share \
+        /usr/local/share \
+        /usr/share
 
-# 2. 使用 $HOME 变量代替硬编码路径，并且保留原有的 XDG_DATA_DIRS (如果存在)
-set -l flatpak_dirs "$HOME/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share"
-set -l system_dirs "/usr/local/share:/usr/share"
-if set -q XDG_DATA_DIRS
-    set -gx XDG_DATA_DIRS "$flatpak_dirs:$system_dirs:$XDG_DATA_DIRS"
-else
-    set -gx XDG_DATA_DIRS "$flatpak_dirs:$system_dirs"
-end
-
-# 定义一个帮助函数来安全地替换文本，避免重复写 sed
-# 用法: replace_text "旧文本" "新文本" "文件路径"
-function _safe_replace
-    set -l target_file $argv[3]
-    if test -f "$target_file"
-        # 只有文件存在且内容真的包含旧文本时才执行替换，减少磁盘写入
-        if grep -q "$argv[1]" "$target_file"
-            sed -i "s/$argv[1]/$argv[2]/g" "$target_file"
+    # 保留自定义数据目录，并避免嵌套 Fish 重复追加。
+    if set -q XDG_DATA_DIRS
+        for data_dir in (string split : -- "$XDG_DATA_DIRS")
+            if test -n "$data_dir"; and not contains -- "$data_dir" $data_dirs
+                set -a data_dirs "$data_dir"
+            end
         end
     end
-end
+    set -gx XDG_DATA_DIRS (string join : -- $data_dirs)
 
-if type -q gsettings
-    # 获取主题并去除多余的引号
-    set -l detected_theme (gsettings get org.gnome.desktop.interface color-scheme 2>/dev/null | string trim --chars="'")
+    # 设置默认值；gsettings 不可用或读取失败时使用浅色主题。
+    set -l theme light
+    set -l gtk_theme Breeze
+    set -l icon_theme Papirus-Light
+    set -l qt_style Breeze
+    set -l qt_color_scheme /usr/share/color-schemes/LayanLight.colors
 
-    # 3. 默认为 Light 模式的参数
-    set -l gtk_theme "Breeze"
-    set -l icon_theme "Papirus-Light"
-    set -l sed_from "Dark"
-    set -l sed_to "Light"
+    if command -sq gsettings
+        set -l detected_theme (command gsettings get org.gnome.desktop.interface color-scheme 2>/dev/null | string trim --chars="'")
 
-    # 如果检测到是深色模式，切换变量
-    if test "$detected_theme" = "prefer-dark"
-        set -gx TERTHEME dark
-        set fish_prompt_theme_suffix ".dark"
-        set gtk_theme "Breeze-Dark"
-        set icon_theme "Papirus-Dark"
-        set sed_from "Light"
-        set sed_to "Dark"
+        if test "$detected_theme" = prefer-dark
+            set theme dark
+            set gtk_theme Breeze-Dark
+            set icon_theme Papirus-Dark
+            set qt_color_scheme /usr/share/color-schemes/BreezeDark.colors
+        end
+
+        command gsettings set org.gnome.desktop.interface gtk-theme "$gtk_theme" 2>/dev/null
+        command gsettings set org.gnome.desktop.interface icon-theme "$icon_theme" 2>/dev/null
     end
 
-    # 4. 执行变更
-    # 应用 Gsettings (加了错误屏蔽，防止有些系统没有这个 schema 报错)
-    gsettings set org.gnome.desktop.interface gtk-theme "$gtk_theme" 2>/dev/null
-    gsettings set org.gnome.desktop.interface icon-theme "$icon_theme" 2>/dev/null
+    set -gx TERTHEME "$theme"
 
-    # 5. 批量安全替换配置文件
-    # 定义需要修改的文件列表
-    set -l config_files \
-        "$HOME/.config/qt6ct/qt6ct.conf" \
-        "$HOME/.config/gtk-3.0/settings.ini" \
-        "$HOME/.config/gtk-4.0/settings.ini" \
-        "$HOME/.gtkrc-2.0"
+    # 集中同步 Qt6ct 外观，仅在配置变化时写入一次。
+    set -l qt6ct_config "$HOME/.config/qt6ct/qt6ct.conf"
+    if test -f "$qt6ct_config"; and test -w "$qt6ct_config"
+        set -l qt6ct_settings \
+            "icon_theme=$icon_theme" \
+            "style=$qt_style" \
+            "color_scheme_path=$qt_color_scheme"
+        set -l qt6ct_needs_update false
 
-    for file in $config_files
-        # 针对 Breeze 和 Papirus 分别进行替换，使用上面的辅助函数
-        _safe_replace "Breeze$sed_from" "Breeze$sed_to" "$file"
-        _safe_replace "Papirus-$sed_from" "Papirus-$sed_to" "$file"
+        for setting in $qt6ct_settings
+            if not grep -qxF -- "$setting" "$qt6ct_config"
+                set qt6ct_needs_update true
+                break
+            end
+        end
+
+        if test "$qt6ct_needs_update" = true
+            sed -i \
+                -e "s|^icon_theme=.*|icon_theme=$icon_theme|" \
+                -e "s|^style=.*|style=$qt_style|" \
+                -e "s|^color_scheme_path=.*|color_scheme_path=$qt_color_scheme|" \
+                "$qt6ct_config"
+        end
     end
-end
 
-functions -e _safe_replace
-
-set -l fish_prompt_theme "$HOME/.config/fish/functions/themes/fish_prompt.fish$fish_prompt_theme_suffix"
-if test -f "$fish_prompt_theme"
-    source "$fish_prompt_theme"
-end
-
-# LS_COLORS 单独拆到 conf.d/colors/ 下，避免这个文件过长。
-set -l ls_colors_theme "$HOME/.config/fish/conf.d/colors/ls_colors.$TERTHEME.fish"
-if test -f "$ls_colors_theme"
-    source "$ls_colors_theme"
+    # 加载与当前配色对应的 Fish prompt 和 LS_COLORS。
+    for theme_file in \
+        "$HOME/.config/fish/functions/themes/fish_prompt.fish.$theme" \
+        "$HOME/.config/fish/conf.d/colors/ls_colors.$theme.fish"
+        if test -f "$theme_file"; and test -r "$theme_file"
+            source "$theme_file"
+        end
+    end
 end

@@ -9,6 +9,7 @@ window-rule {
     match app-id="Display"
     match app-id="org.kde.kdenlive"
     match app-id="org.kde.gwenview"
+    match title=r#"^(我的足迹|Library)$"# app-id="firefox"
     open-floating true
 }
 

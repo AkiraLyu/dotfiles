@@ -9,7 +9,6 @@ SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 
 # === 可自定义区域 ===
 BACKUP_SOURCES=(
-    /home/akira/codespace
     /home/akira/Desktop
     /home/akira/Docs
     /home/akira/Documents/AliceSoft
