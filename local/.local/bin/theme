@@ -1,0 +1,659 @@
+#!/usr/bin/env bash
+
+set -Eeuo pipefail
+
+PROGRAM=${0##*/}
+STATE_HOME=${XDG_STATE_HOME:-"$HOME/.local/state"}
+STATE_DIR=${THEME_STATE_DIR:-"$STATE_HOME/theme"}
+MODE_FILE="$STATE_DIR/mode"
+LOCK_ROOT=${XDG_RUNTIME_DIR:-"$STATE_DIR"}
+LOCK_FILE="$LOCK_ROOT/theme.lock"
+CONFIG_HOME=${XDG_CONFIG_HOME:-"$HOME/.config"}
+
+QUIET=0
+DRY_RUN=0
+FAILURES=0
+
+usage() {
+    cat <<EOF
+Usage:
+  $PROGRAM light|dark          Set and apply a theme
+  $PROGRAM set light|dark      Set and apply a theme
+  $PROGRAM toggle              Toggle light/dark
+  $PROGRAM apply               Reconcile every backend with saved state
+  $PROGRAM current             Print the saved theme
+  $PROGRAM status              Show state and backend values
+
+Options:
+  -n, --dry-run                Show the target state without changing it
+  -q, --quiet                  Suppress normal progress output
+  -h, --help                   Show this help
+EOF
+}
+
+say() {
+    if ((QUIET == 0)); then
+        printf '%s\n' "$*"
+    fi
+}
+
+warn() {
+    printf '%s: %s\n' "$PROGRAM" "$*" >&2
+}
+
+valid_mode() {
+    [[ ${1:-} == light || ${1:-} == dark ]]
+}
+
+read_saved_mode() {
+    local mode
+
+    if [[ -r $MODE_FILE ]]; then
+        IFS= read -r mode <"$MODE_FILE" || true
+        if valid_mode "$mode"; then
+            printf '%s\n' "$mode"
+            return 0
+        fi
+    fi
+
+    return 1
+}
+
+desktop_name() {
+    local desktop=${XDG_CURRENT_DESKTOP:-}
+
+    if [[ -z $desktop ]] && command -v systemctl >/dev/null 2>&1; then
+        desktop=$(systemctl --user show-environment 2>/dev/null | sed -n 's/^XDG_CURRENT_DESKTOP=//p' | head -n 1)
+    fi
+
+    printf '%s\n' "${desktop:-unknown}"
+}
+
+detect_initial_mode() {
+    local desktop lower value rgb red green blue average
+
+    desktop=$(desktop_name)
+    lower=${desktop,,}
+
+    if [[ $lower == *kde* ]] && command -v kreadconfig6 >/dev/null 2>&1; then
+        rgb=$(kreadconfig6 --file kdeglobals --group 'Colors:Window' --key BackgroundNormal 2>/dev/null || true)
+        IFS=, read -r red green blue _ <<<"$rgb"
+        if [[ $red =~ ^[0-9]+$ && $green =~ ^[0-9]+$ && $blue =~ ^[0-9]+$ ]]; then
+            average=$(((red + green + blue) / 3))
+            if ((average < 192)); then
+                printf 'dark\n'
+            else
+                printf 'light\n'
+            fi
+            return 0
+        fi
+    fi
+
+    if [[ $lower == *niri* ]] && command -v noctalia >/dev/null 2>&1; then
+        value=$(noctalia msg theme-mode-get 2>/dev/null || true)
+        if valid_mode "$value"; then
+            printf '%s\n' "$value"
+            return 0
+        fi
+    fi
+
+    if command -v gsettings >/dev/null 2>&1; then
+        value=$(gsettings get org.gnome.desktop.interface color-scheme 2>/dev/null || true)
+        case $value in
+            *prefer-dark*)
+                printf 'dark\n'
+                return 0
+                ;;
+            *prefer-light*)
+                printf 'light\n'
+                return 0
+                ;;
+        esac
+    fi
+
+    printf 'light\n'
+}
+
+current_mode() {
+    local mode
+
+    if mode=$(read_saved_mode); then
+        printf '%s\n' "$mode"
+    else
+        detect_initial_mode
+    fi
+}
+
+lock_changes() {
+    if ((DRY_RUN)); then
+        return 0
+    fi
+
+    mkdir -p "$STATE_DIR" "$LOCK_ROOT"
+    exec 9>"$LOCK_FILE"
+    flock 9
+}
+
+write_mode() {
+    local mode=$1 tmp
+
+    if ((DRY_RUN)); then
+        say "would save mode: $mode"
+        return 0
+    fi
+
+    if [[ -r $MODE_FILE ]] && [[ $(<"$MODE_FILE") == "$mode" ]]; then
+        return 0
+    fi
+
+    mkdir -p "$STATE_DIR"
+    tmp=$(mktemp "$STATE_DIR/.mode.XXXXXX")
+    printf '%s\n' "$mode" >"$tmp"
+    chmod 0644 "$tmp"
+    mv -f "$tmp" "$MODE_FILE"
+}
+
+run_backend() {
+    local label=$1 output
+    shift
+
+    if ((DRY_RUN)); then
+        printf 'would %-13s' "$label:"
+        printf ' %q' "$@"
+        printf '\n'
+        return 0
+    fi
+
+    if output=$("$@" 2>&1); then
+        return 0
+    fi
+
+    warn "$label failed${output:+: $output}"
+    FAILURES=$((FAILURES + 1))
+    return 1
+}
+
+lookandfeel_exists() {
+    local package=$1
+    [[ -d $HOME/.local/share/plasma/look-and-feel/$package || -d /usr/share/plasma/look-and-feel/$package ]]
+}
+
+color_scheme_path() {
+    local scheme=$1 candidate
+
+    for candidate in \
+        "$HOME/.local/share/color-schemes/$scheme.colors" \
+        "/usr/local/share/color-schemes/$scheme.colors" \
+        "/usr/share/color-schemes/$scheme.colors"; do
+        if [[ -r $candidate ]]; then
+            printf '%s\n' "$candidate"
+            return 0
+        fi
+    done
+
+    return 1
+}
+
+load_profile() {
+    local mode=$1
+
+    ICON_THEME=Papirus
+    GTK_THEME=Breeze
+    QT_STYLE=Breeze
+
+    if [[ $mode == dark ]]; then
+        KDE_LOOKANDFEEL=custom_dark
+        KDE_FALLBACK_LOOKANDFEEL=org.kde.breezedark.desktop
+        KDE_COLOR_SCHEME=BreezeDark
+        COLOR_PREFERENCE=prefer-dark
+        GTK_PREFER_DARK=true
+        ROFI_THEME="$HOME/.local/share/rofi/themes/rounded-purple-dark.rasi"
+        QT_COLOR_SCHEME=$(color_scheme_path BreezeDark || true)
+    else
+        KDE_LOOKANDFEEL=custom_light
+        KDE_FALLBACK_LOOKANDFEEL=org.kde.breeze.desktop
+        KDE_COLOR_SCHEME=LayanLight
+        COLOR_PREFERENCE=prefer-light
+        GTK_PREFER_DARK=false
+        ROFI_THEME="$HOME/.local/share/rofi/themes/rounded-white.rasi"
+        QT_COLOR_SCHEME=$(color_scheme_path LayanLight || true)
+
+        if [[ -z $QT_COLOR_SCHEME ]]; then
+            KDE_COLOR_SCHEME=BreezeLight
+            QT_COLOR_SCHEME=$(color_scheme_path BreezeLight || true)
+        fi
+    fi
+
+    if ! lookandfeel_exists "$KDE_LOOKANDFEEL"; then
+        KDE_LOOKANDFEEL=$KDE_FALLBACK_LOOKANDFEEL
+    fi
+}
+
+atomic_symlink() {
+    local target=$1 link=$2 tmp
+
+    if [[ -L $link && $(readlink "$link") == "$target" ]]; then
+        return 0
+    fi
+
+    if ((DRY_RUN)); then
+        say "would link: $link -> $target"
+        return 0
+    fi
+
+    mkdir -p "$(dirname "$link")"
+    tmp="$link.tmp.$$"
+    rm -f "$tmp"
+    ln -s "$target" "$tmp"
+    mv -Tf "$tmp" "$link"
+}
+
+apply_state_artifacts() {
+    if [[ -n $QT_COLOR_SCHEME ]]; then
+        atomic_symlink "$QT_COLOR_SCHEME" "$STATE_DIR/qt6ct.colors"
+    else
+        warn "no readable Qt color scheme found for $KDE_COLOR_SCHEME"
+        FAILURES=$((FAILURES + 1))
+    fi
+
+    if [[ -r $ROFI_THEME ]]; then
+        atomic_symlink "$ROFI_THEME" "$STATE_DIR/rofi.rasi"
+    else
+        warn "Rofi theme is missing: $ROFI_THEME"
+        FAILURES=$((FAILURES + 1))
+    fi
+}
+
+apply_environment() {
+    local mode=$1 desktop lower platform_theme
+
+    desktop=$(desktop_name)
+    lower=${desktop,,}
+    platform_theme=
+
+    case $lower in
+        *kde*) platform_theme=kde ;;
+        *niri*) platform_theme=qt6ct ;;
+    esac
+
+    export TERTHEME=$mode
+    if [[ -n $platform_theme ]]; then
+        export QT_QPA_PLATFORMTHEME=$platform_theme
+    fi
+
+    if command -v systemctl >/dev/null 2>&1 && systemctl --user show-environment >/dev/null 2>&1; then
+        if [[ -n $platform_theme ]]; then
+            run_backend environment systemctl --user set-environment \
+                "TERTHEME=$mode" "QT_QPA_PLATFORMTHEME=$platform_theme" || true
+        else
+            run_backend environment systemctl --user set-environment "TERTHEME=$mode" || true
+        fi
+    fi
+
+    if command -v dbus-update-activation-environment >/dev/null 2>&1; then
+        if [[ -n $platform_theme ]]; then
+            run_backend dbus-env env \
+                "TERTHEME=$mode" "QT_QPA_PLATFORMTHEME=$platform_theme" \
+                dbus-update-activation-environment --systemd TERTHEME QT_QPA_PLATFORMTHEME || true
+        else
+            run_backend dbus-env env "TERTHEME=$mode" \
+                dbus-update-activation-environment --systemd TERTHEME || true
+        fi
+    fi
+}
+
+kde_value() {
+    kreadconfig6 --file kdeglobals --group "$1" --key "$2" 2>/dev/null || true
+}
+
+set_kde_value() {
+    local group=$1 key=$2 value=$3 current
+
+    current=$(kde_value "$group" "$key")
+    if [[ $current == "$value" ]]; then
+        return 0
+    fi
+
+    run_backend "KDE $key" kwriteconfig6 --file kdeglobals \
+        --group "$group" --key "$key" --notify "$value" || true
+}
+
+apply_kde() {
+    local current
+
+    if ! command -v kreadconfig6 >/dev/null 2>&1 || ! command -v kwriteconfig6 >/dev/null 2>&1; then
+        return 0
+    fi
+
+    if command -v plasma-apply-lookandfeel >/dev/null 2>&1; then
+        current=$(kde_value KDE LookAndFeelPackage)
+        if [[ $current != "$KDE_LOOKANDFEEL" ]]; then
+            run_backend KDE-look plasma-apply-lookandfeel --apply "$KDE_LOOKANDFEEL" || true
+        fi
+    fi
+
+    if command -v plasma-apply-colorscheme >/dev/null 2>&1; then
+        current=$(kde_value General ColorScheme)
+        if [[ $current != "$KDE_COLOR_SCHEME" ]]; then
+            run_backend KDE-colors plasma-apply-colorscheme "$KDE_COLOR_SCHEME" || true
+        fi
+    fi
+
+    set_kde_value Icons Theme "$ICON_THEME"
+    set_kde_value KDE widgetStyle "$QT_STYLE"
+}
+
+gsettings_value() {
+    local value
+    value=$(gsettings get "$1" "$2" 2>/dev/null || true)
+    value=${value#\'}
+    value=${value%\'}
+    printf '%s\n' "$value"
+}
+
+set_gsettings_value() {
+    local schema=$1 key=$2 value=$3 current
+
+    current=$(gsettings_value "$schema" "$key")
+    if [[ $current == "$value" ]]; then
+        return 0
+    fi
+
+    run_backend "GTK $key" gsettings set "$schema" "$key" "$value" || true
+}
+
+apply_gsettings() {
+    local schema=org.gnome.desktop.interface
+
+    if ! command -v gsettings >/dev/null 2>&1; then
+        return 0
+    fi
+
+    set_gsettings_value "$schema" color-scheme "$COLOR_PREFERENCE"
+    set_gsettings_value "$schema" gtk-theme "$GTK_THEME"
+    set_gsettings_value "$schema" icon-theme "$ICON_THEME"
+}
+
+set_ini_value() {
+    local file=$1 section=$2 key=$3 value=$4 tmp
+
+    mkdir -p "$(dirname "$file")"
+    tmp=$(mktemp "$(dirname "$file")/.${file##*/}.XXXXXX")
+
+    if [[ -r $file ]]; then
+        awk -v section="$section" -v key="$key" -v value="$value" '
+            BEGIN {
+                in_section = 0
+                section_seen = 0
+                key_written = 0
+            }
+            $0 == "[" section "]" {
+                in_section = 1
+                section_seen = 1
+                print
+                next
+            }
+            /^\[[^]]+\]$/ {
+                if (in_section && !key_written) {
+                    print key "=" value
+                    key_written = 1
+                }
+                in_section = 0
+            }
+            in_section && index($0, key "=") == 1 {
+                if (!key_written) {
+                    print key "=" value
+                    key_written = 1
+                }
+                next
+            }
+            { print }
+            END {
+                if (in_section && !key_written) {
+                    print key "=" value
+                } else if (!section_seen) {
+                    if (NR > 0) {
+                        print ""
+                    }
+                    print "[" section "]"
+                    print key "=" value
+                }
+            }
+        ' "$file" >"$tmp"
+        chmod --reference="$file" "$tmp"
+    else
+        printf '[%s]\n%s=%s\n' "$section" "$key" "$value" >"$tmp"
+        chmod 0644 "$tmp"
+    fi
+
+    if [[ -r $file ]] && cmp -s "$file" "$tmp"; then
+        rm -f "$tmp"
+        return 0
+    fi
+
+    mv -f "$tmp" "$file"
+}
+
+apply_gtk_files() {
+    local version file
+
+    for version in 3.0 4.0; do
+        file="$CONFIG_HOME/gtk-$version/settings.ini"
+        run_backend "GTK$version dark" set_ini_value "$file" Settings \
+            gtk-application-prefer-dark-theme "$GTK_PREFER_DARK" || true
+        run_backend "GTK$version theme" set_ini_value "$file" Settings \
+            gtk-theme-name "$GTK_THEME" || true
+        run_backend "GTK$version icons" set_ini_value "$file" Settings \
+            gtk-icon-theme-name "$ICON_THEME" || true
+    done
+}
+
+apply_noctalia() {
+    local desktop lower current attempt
+
+    if ! command -v noctalia >/dev/null 2>&1; then
+        return 0
+    fi
+
+    desktop=$(desktop_name)
+    lower=${desktop,,}
+    if [[ $lower != *niri* ]]; then
+        return 0
+    fi
+
+    current=
+    if ((DRY_RUN)); then
+        run_backend Noctalia noctalia msg theme-mode-set "$MODE" || true
+        return 0
+    fi
+
+    for attempt in {1..10}; do
+        current=$(noctalia msg theme-mode-get 2>/dev/null || true)
+        if valid_mode "$current"; then
+            break
+        fi
+        sleep 0.2
+    done
+
+    if [[ $current == "$MODE" ]]; then
+        return 0
+    fi
+
+    run_backend Noctalia noctalia msg theme-mode-set "$MODE" || true
+}
+
+reload_kitty() {
+    if ! command -v pgrep >/dev/null 2>&1 || ! pgrep -x kitty >/dev/null 2>&1; then
+        return 0
+    fi
+
+    if ((DRY_RUN)); then
+        say 'would reload: all running kitty instances'
+        return 0
+    fi
+
+    pkill -USR1 -x kitty 2>/dev/null || true
+}
+
+notify_change() {
+    local mode=$1
+
+    if ((DRY_RUN)) || ! command -v notify-send >/dev/null 2>&1; then
+        return 0
+    fi
+
+    notify-send -a Theme -i preferences-desktop-theme \
+        "Theme: $mode" 'KDE, Niri and applications are synchronized.' >/dev/null 2>&1 || true
+}
+
+apply_all() {
+    local mode=$1 notify=${2:-0}
+
+    MODE=$mode
+    load_profile "$MODE"
+    apply_environment "$MODE"
+    apply_state_artifacts
+    apply_kde
+    apply_gsettings
+    apply_gtk_files
+    apply_noctalia
+    reload_kitty
+
+    if ((notify)); then
+        notify_change "$MODE"
+    fi
+
+    if ((FAILURES)); then
+        warn "$FAILURES backend operation(s) failed; run '$PROGRAM apply' to retry"
+        return 1
+    fi
+
+    say "theme synchronized: $MODE"
+}
+
+status() {
+    local mode desktop manager_mode manager_qt kde_look kde_color kde_style kde_icon
+    local gtk_color gtk_theme gtk_icon noctalia_mode qt_color rofi_theme
+
+    mode=$(current_mode)
+    desktop=$(desktop_name)
+    manager_mode=unavailable
+    manager_qt=unavailable
+
+    if command -v systemctl >/dev/null 2>&1; then
+        manager_mode=$(systemctl --user show-environment 2>/dev/null | sed -n 's/^TERTHEME=//p' | head -n 1)
+        manager_qt=$(systemctl --user show-environment 2>/dev/null | sed -n 's/^QT_QPA_PLATFORMTHEME=//p' | head -n 1)
+    fi
+
+    kde_look=$(command -v kreadconfig6 >/dev/null 2>&1 && kde_value KDE LookAndFeelPackage || true)
+    kde_color=$(command -v kreadconfig6 >/dev/null 2>&1 && kde_value General ColorScheme || true)
+    kde_style=$(command -v kreadconfig6 >/dev/null 2>&1 && kde_value KDE widgetStyle || true)
+    kde_icon=$(command -v kreadconfig6 >/dev/null 2>&1 && kde_value Icons Theme || true)
+
+    gtk_color=$(command -v gsettings >/dev/null 2>&1 && gsettings_value org.gnome.desktop.interface color-scheme || true)
+    gtk_theme=$(command -v gsettings >/dev/null 2>&1 && gsettings_value org.gnome.desktop.interface gtk-theme || true)
+    gtk_icon=$(command -v gsettings >/dev/null 2>&1 && gsettings_value org.gnome.desktop.interface icon-theme || true)
+
+    noctalia_mode=not-running
+    if command -v noctalia >/dev/null 2>&1; then
+        noctalia_mode=$(noctalia msg theme-mode-get 2>/dev/null || printf 'not-running')
+    fi
+
+    qt_color=$(readlink "$STATE_DIR/qt6ct.colors" 2>/dev/null || printf 'missing')
+    rofi_theme=$(readlink "$STATE_DIR/rofi.rasi" 2>/dev/null || printf 'missing')
+
+    printf '%-18s %s\n' \
+        mode "$mode" \
+        desktop "$desktop" \
+        state-file "$MODE_FILE" \
+        manager-theme "${manager_mode:-unset}" \
+        manager-qt "${manager_qt:-unset}" \
+        KDE-look-and-feel "${kde_look:-unavailable}" \
+        KDE-colors "${kde_color:-unavailable}" \
+        KDE-style "${kde_style:-unavailable}" \
+        KDE-icons "${kde_icon:-unavailable}" \
+        GTK-preference "${gtk_color:-unavailable}" \
+        GTK-theme "${gtk_theme:-unavailable}" \
+        GTK-icons "${gtk_icon:-unavailable}" \
+        Noctalia "$noctalia_mode" \
+        qt6ct-colors "$qt_color" \
+        Rofi-theme "$rofi_theme"
+}
+
+while (($#)); do
+    case $1 in
+        -n | --dry-run)
+            DRY_RUN=1
+            shift
+            ;;
+        -q | --quiet)
+            QUIET=1
+            shift
+            ;;
+        -h | --help)
+            usage
+            exit 0
+            ;;
+        --)
+            shift
+            break
+            ;;
+        *) break ;;
+    esac
+done
+
+COMMAND=${1:-status}
+if (($#)); then
+    shift
+fi
+
+case $COMMAND in
+    light | dark)
+        MODE=$COMMAND
+        lock_changes
+        write_mode "$MODE"
+        apply_all "$MODE" 1
+        ;;
+    set)
+        MODE=${1:-}
+        if ! valid_mode "$MODE"; then
+            warn "set requires 'light' or 'dark'"
+            usage >&2
+            exit 2
+        fi
+        lock_changes
+        write_mode "$MODE"
+        apply_all "$MODE" 1
+        ;;
+    toggle)
+        MODE=$(current_mode)
+        if [[ $MODE == dark ]]; then
+            MODE=light
+        else
+            MODE=dark
+        fi
+        lock_changes
+        write_mode "$MODE"
+        apply_all "$MODE" 1
+        ;;
+    apply | sync)
+        MODE=$(current_mode)
+        lock_changes
+        write_mode "$MODE"
+        apply_all "$MODE" 0
+        ;;
+    current | get)
+        current_mode
+        ;;
+    status)
+        status
+        ;;
+    help)
+        usage
+        ;;
+    *)
+        warn "unknown command: $COMMAND"
+        usage >&2
+        exit 2
+        ;;
+esac
