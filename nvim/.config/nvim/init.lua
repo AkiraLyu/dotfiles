@@ -1,3 +1,6 @@
+vim.g.appearance_mode = require("config.appearance").mode()
+vim.o.background = vim.g.appearance_mode
+
 if vim.g.vscode then
   require("vsconfig.autocmds")
   require("vsconfig.options")
@@ -13,11 +16,4 @@ else
   vim.o.shiftwidth = 4
   -- vim.o.background = "light"
   --vim.o.updatetime = 6000 require("config.template")
-end
-
-local theme = os.getenv("TERTHEME")
-if theme == "dark" then
-  vim.o.background = "dark"
-else
-  vim.o.background = "light"
 end

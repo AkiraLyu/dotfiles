@@ -1,12 +1,26 @@
 #!/bin/fish
 
+set -l theme light
+set -l state_home "$HOME/.local/state"
 
-if test "$TERTHEME" = "dark"
+if set -q XDG_STATE_HOME; and test -n "$XDG_STATE_HOME"
+    set state_home "$XDG_STATE_HOME"
+end
+
+set -l mode_file "$state_home/theme/mode"
+if test -r "$mode_file"
+    read -l saved_theme <"$mode_file"
+    if contains -- "$saved_theme" light dark
+        set theme "$saved_theme"
+    end
+else if contains -- "$TERTHEME" light dark
+    set theme "$TERTHEME"
+end
+
+if test "$theme" = dark
     echo "include themes/kitty.conf.dark"
-else if test "$TERTHEME" = "light"
-    echo "include themes/kitty.conf.light"
 else
-    echo "No valid TERMTHEME found. Please set TERM_THEME to 'dark' or 'light'."
+    echo "include themes/kitty.conf.light"
 end
 
 # different opacity for niri and kde

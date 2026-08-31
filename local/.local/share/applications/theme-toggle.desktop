@@ -1,0 +1,21 @@
+[Desktop Entry]
+Type=Application
+Name=Toggle Color Theme
+Name[zh_CN]=切换明暗主题
+Comment=Synchronize KDE, Niri and application colors
+Comment[zh_CN]=同步 KDE、Niri 和应用程序配色
+Exec=theme toggle
+Icon=preferences-desktop-theme
+Terminal=false
+Categories=Settings;DesktopSettings;
+Actions=Light;Dark;
+
+[Desktop Action Light]
+Name=Use Light Theme
+Name[zh_CN]=使用浅色主题
+Exec=theme light
+
+[Desktop Action Dark]
+Name=Use Dark Theme
+Name[zh_CN]=使用深色主题
+Exec=theme dark

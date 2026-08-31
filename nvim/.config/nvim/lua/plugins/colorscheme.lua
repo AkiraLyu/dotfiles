@@ -1,4 +1,4 @@
-local theme = os.getenv("TERTHEME")
+local theme = vim.g.appearance_mode or require("config.appearance").mode()
 
 if theme == "dark" then
   return {
@@ -18,12 +18,24 @@ if theme == "dark" then
 else -- 默认使用 light（vscode）
   return {
     {
+      "LazyVim/LazyVim",
+      opts = {
+        -- LazyVim 默认会先加载深色 TokyoNight；在这里明确指定
+        -- VSCode Light，避免插件加载顺序把 background 留在 dark。
+        colorscheme = function()
+          require("vscode").load("light")
+        end,
+      },
+    },
+    {
       "Mofiqul/vscode.nvim",
       lazy = false,
       priority = 1000,
       config = function()
+        vim.o.background = "light"
         local c = require("vscode.colors").get_colors()
         require("vscode").setup({
+          style = "light",
           transparent = true,
           italic_comments = true,
           underline_links = true,
@@ -36,7 +48,7 @@ else -- 默认使用 light（vscode）
             Cursor = { fg = c.vscDarkBlue, bg = c.vscLightGreen, bold = true },
           },
         })
-        vim.cmd("colorscheme vscode")
+        require("vscode").load("light")
       end,
     },
   }

@@ -4,23 +4,21 @@
 # Syntax: simple "KEY=VAL" pairs on separate lines
 #
 
-export XMODIFIERS=@im=fcitx
-#export GTK_IM_MODULE=wayland;fcitx
-export QT_IM_MODULES=wayland;fcitx
-export QT_IM_MODULE=fcitx
+XMODIFIERS=@im=fcitx
+# GTK_IM_MODULE=wayland;fcitx
+QT_IM_MODULES=wayland;fcitx
+QT_IM_MODULE=fcitx
 
 
 _JAVA_AWT_WM_NONREPARENTING=1
 
-#export QT_SCREEN_SCALE_FACTORS=1
-#export QT_FONT_DPI=120
-#export QT_QPA_PLATFORMTHEME=qt6ct
-#export QT_QPA_PLATFORMTHEME=kde
-export QT_QPA_PLATFORMTHEME=qt6ct
+# QT_SCREEN_SCALE_FACTORS=1
+# QT_FONT_DPI=120
+# QT_QPA_PLATFORMTHEME is session-specific: KDE uses kde, Niri uses qt6ct.
 
 
-export LANG=zh_CN.UTF-8
-#export LC_MESSAGES=en_US.UTF-8
-#export LC_TIME=en_US.UTF-8
+LANG=zh_CN.UTF-8
+# LC_MESSAGES=en_US.UTF-8
+# LC_TIME=en_US.UTF-8
 
 LIBVIRT_DEFAULT_URI="qemu:///system"

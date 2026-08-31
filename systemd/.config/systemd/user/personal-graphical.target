@@ -8,6 +8,7 @@ Wants=mirador.service
 Wants=onedrive-mount.service
 Wants=onedrive-tray.service
 Wants=qq.service
+Wants=theme-sync.service
 Wants=waywallen.service
 
 [Install]

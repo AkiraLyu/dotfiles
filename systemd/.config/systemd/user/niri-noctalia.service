@@ -6,6 +6,7 @@ PartOf=personal-niri.target
 
 [Service]
 Type=simple
+Environment=QT_QPA_PLATFORMTHEME=qt6ct
 ExecStart=/usr/bin/noctalia
 Restart=on-failure
 RestartSec=2s
