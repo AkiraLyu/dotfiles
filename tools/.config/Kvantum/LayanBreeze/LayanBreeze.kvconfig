@@ -128,13 +128,13 @@ style_vertical_toolbars=false
 
 [PanelButtonCommand]
 frame=true
-frame.element=button
-frame.top=2
-frame.bottom=2
-frame.left=2
-frame.right=2
+frame.element=breezebutton
+frame.top=5
+frame.bottom=6
+frame.left=5
+frame.right=5
 interior=true
-interior.element=button
+interior.element=breezebutton
 indicator.element=arrow
 indicator.size=10
 text.normal.color=#333333
@@ -143,13 +143,13 @@ text.press.color=#333333
 text.toggle.color=#333333
 text.shadow=0
 text.iconspacing=4
-text.margin.top=4
-text.margin.bottom=4
-text.margin.left=4
-text.margin.right=4
+text.margin.top=1
+text.margin.bottom=1
+text.margin.left=2
+text.margin.right=2
 min_width=84
 min_height=34
-frame.expansion=5
+frame.expansion=0
 
 [PanelButtonTool]
 inherits=PanelButtonCommand
@@ -193,12 +193,12 @@ min_height=0
 inherits=PanelButtonCommand
 frame=true
 interior=true
-frame.element=lineedit
+frame.element=breezeinput
 interior.element=lineedit
-frame.top=6
+frame.top=5
 frame.bottom=6
-frame.left=6
-frame.right=6
+frame.left=5
+frame.right=5
 indicator.element=spin
 indicator.size=10
 text.normal.color=#333333
@@ -208,12 +208,12 @@ text.margin.left=0
 text.margin.right=0
 min_width=0
 min_height=32
-frame.expansion=5
+frame.expansion=0
 
 [RadioButton]
 inherits=PanelButtonCommand
 frame=false
-interior.element=radio
+interior.element=breezeradio
 text.normal.color=#333333
 text.focus.color=#333333
 text.iconspacing=4
@@ -228,7 +228,7 @@ frame.expansion=0
 [CheckBox]
 inherits=PanelButtonCommand
 frame=false
-interior.element=checkbox
+interior.element=breezecheckbox
 text.normal.color=#333333
 text.focus.color=#333333
 text.iconspacing=4
@@ -270,19 +270,19 @@ frame.expansion=5
 
 [LineEdit]
 inherits=PanelButtonCommand
-frame.element=lineedit
+frame.element=breezeinput
 interior.element=lineedit
-frame.top=6
+frame.top=5
 frame.bottom=6
-frame.left=6
-frame.right=6
+frame.left=5
+frame.right=5
 text.margin.top=0
 text.margin.bottom=0
 text.margin.left=0
 text.margin.right=0
 min_width=0
 min_height=32
-frame.expansion=5
+frame.expansion=0
 
 [ToolbarLineEdit]
 inherits=LineEdit
@@ -591,11 +591,11 @@ frame.expansion=0
 [ComboBox]
 inherits=PanelButtonCommand
 interior.element=combo
-frame.element=combo
-frame.top=6
+frame.element=breezeinput
+frame.top=5
 frame.bottom=6
-frame.left=6
-frame.right=6
+frame.left=5
+frame.right=5
 text.margin.top=0
 text.margin.bottom=0
 text.margin.left=0
@@ -608,7 +608,7 @@ indicator.element=carrow
 indicator.size=10
 min_width=0
 min_height=32
-frame.expansion=5
+frame.expansion=0
 
 [GroupBox]
 inherits=GenericFrame

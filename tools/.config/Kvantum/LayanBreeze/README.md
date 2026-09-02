@@ -14,6 +14,19 @@ and handle extent resolve to Breeze's 0, 6, 0, and 10 px respectively.
 The light window/menu and dark window/menu artwork retains Layan's 80% opacity;
 tooltips also retain Layan's 80% opacity. Blur remains enabled.
 
+Command buttons use a dedicated Breeze-style nine-slice frame with 5 px corner
+radii, a single-pixel outline, and a subtle two-stage bottom shadow. The pressed
+state removes the shadow, while hover, focus, default, and toggled states keep
+Layan's fills and purple accent. Compensating content margins preserve the
+84×34 px widget metric despite the larger visual corner slices. Combo boxes,
+spin boxes, and line edits use matching Breeze-style input frames whose inner
+edge colors follow their Layan interiors in every state, avoiding a visible
+color ring while retaining their original indicators.
+
+Radio buttons and check boxes keep Breeze's 20 px layout slot but render the
+Layan glyph at 16 px, centered with 2 px of transparent padding on each side,
+instead of enlarging the visible glyph to fill the whole slot.
+
 The SVG widget artwork is adapted from
 [KvKonqi](https://github.com/Niru2169/KvKonqi) commit
 `c7e66c755623c2b9f02288994c9292a18082134e`, under GPL-3.0. Its license is

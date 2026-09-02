@@ -2313,6 +2313,321 @@
       <rect x="104" y="289" width="92" height="1" style="opacity:0.15;fill:#ffffff"/>
     </g>
   </g>
+
+  <g id="breezeradio-checked-normal">
+    <rect x="95" y="218" width="20" height="20" style="fill:#000000;fill-opacity:0.001"/>
+    <use xlink:href="#radio-checked-normal"/>
+  </g>
+  <g id="breezeradio-focused">
+    <rect x="56.9039" y="220.022" width="20" height="20" style="fill:#000000;fill-opacity:0.001"/>
+    <use xlink:href="#radio-focused"/>
+  </g>
+  <g id="breezeradio-checked-focused">
+    <rect x="95" y="218" width="20" height="20" style="fill:#000000;fill-opacity:0.001"/>
+    <use xlink:href="#radio-checked-focused"/>
+  </g>
+  <g id="breezeradio-normal">
+    <rect x="21.4897" y="219.712" width="20" height="20" style="fill:#000000;fill-opacity:0.001"/>
+    <use xlink:href="#radio-normal"/>
+  </g>
+  <g id="breezecheckbox-focused">
+    <rect x="225.903" y="220.02" width="20" height="20" style="fill:#000000;fill-opacity:0.001"/>
+    <use xlink:href="#checkbox-focused"/>
+  </g>
+  <g id="breezecheckbox-checked-normal">
+    <rect x="270" y="218" width="20" height="20" style="fill:#000000;fill-opacity:0.001"/>
+    <use xlink:href="#checkbox-checked-normal"/>
+  </g>
+  <g id="breezecheckbox-checked-focused">
+    <rect x="306" y="218" width="20" height="20" style="fill:#000000;fill-opacity:0.001"/>
+    <use xlink:href="#checkbox-checked-focused"/>
+  </g>
+  <g id="breezecheckbox-tristate-normal">
+    <rect x="345" y="218" width="20" height="20" style="fill:#000000;fill-opacity:0.001"/>
+    <use xlink:href="#checkbox-tristate-normal"/>
+  </g>
+  <g id="breezecheckbox-tristate-focused">
+    <rect x="385" y="218" width="20" height="20" style="fill:#000000;fill-opacity:0.001"/>
+    <use xlink:href="#checkbox-tristate-focused"/>
+  </g>
+  <g id="breezecheckbox-normal">
+    <rect x="187.903" y="220.02" width="20" height="20" style="fill:#000000;fill-opacity:0.001"/>
+    <use xlink:href="#checkbox-normal"/>
+  </g>
+
+  <rect id="breezebutton-normal" x="105" y="1145" width="4" height="4" style="fill:#44454b"/>
+  <g id="breezebutton-normal-top">
+    <rect x="105" y="1140" width="4" height="5" style="fill:#44454b"/>
+    <rect x="105" y="1140" width="4" height="1" style="fill:#989898;fill-opacity:0.6"/>
+  </g>
+  <g id="breezebutton-normal-left">
+    <rect x="100" y="1145" width="5" height="4" style="fill:#44454b"/>
+    <rect x="100" y="1145" width="1" height="4" style="fill:#989898;fill-opacity:0.6"/>
+  </g>
+  <use id="breezebutton-normal-right" xlink:href="#breezebutton-normal-left" transform="matrix(-1,0,0,1,214,0)"/>
+  <g id="breezebutton-normal-topleft">
+    <rect x="100" y="1140" width="5" height="5" style="fill:#000000;fill-opacity:0.001"/>
+    <path d="m 105,1140 c -2.7614,0 -5,2.2386 -5,5 h 5 z" style="fill:#989898;fill-opacity:0.6"/>
+    <path d="m 105,1141 c -2.2091,0 -4,1.7909 -4,4 h 4 z" style="fill:#44454b"/>
+  </g>
+  <use id="breezebutton-normal-topright" xlink:href="#breezebutton-normal-topleft" transform="matrix(-1,0,0,1,214,0)"/>
+  <g id="breezebutton-normal-bottom">
+    <rect x="105" y="1149" width="4" height="7" style="fill:#000000;fill-opacity:0.04"/>
+    <rect x="105" y="1149" width="4" height="6" style="fill:#000000;fill-opacity:0.06"/>
+    <rect x="105" y="1149" width="4" height="5" style="fill:#989898;fill-opacity:0.6"/>
+    <rect x="105" y="1149" width="4" height="4" style="fill:#44454b"/>
+  </g>
+  <g id="breezebutton-normal-bottomleft">
+    <rect x="100" y="1149" width="5" height="7" style="fill:#000000;fill-opacity:0.001"/>
+    <path d="m 100,1149 v 2 c 0,2.7614 2.2386,5 5,5 v -7 z" style="fill:#000000;fill-opacity:0.04"/>
+    <path d="m 100,1149 v 1 c 0,2.7614 2.2386,5 5,5 v -6 z" style="fill:#000000;fill-opacity:0.06"/>
+    <path d="m 100,1149 c 0,2.7614 2.2386,5 5,5 v -5 z" style="fill:#989898;fill-opacity:0.6"/>
+    <path d="m 101,1149 c 0,2.2091 1.7909,4 4,4 v -4 z" style="fill:#44454b"/>
+  </g>
+  <use id="breezebutton-normal-bottomright" xlink:href="#breezebutton-normal-bottomleft" transform="matrix(-1,0,0,1,214,0)"/>
+
+  <rect id="breezebutton-focused" x="105" y="1165" width="4" height="4" style="fill:#4f5055;fill-opacity:1"/>
+  <g id="breezebutton-focused-top">
+    <rect x="105" y="1160" width="4" height="5" style="fill:#4f5055;fill-opacity:1"/>
+    <rect x="105" y="1160" width="4" height="1" style="fill:#7c4dff;fill-opacity:1"/>
+  </g>
+  <g id="breezebutton-focused-left">
+    <rect x="100" y="1165" width="5" height="4" style="fill:#4f5055;fill-opacity:1"/>
+    <rect x="100" y="1165" width="1" height="4" style="fill:#7c4dff;fill-opacity:1"/>
+  </g>
+  <use id="breezebutton-focused-right" xlink:href="#breezebutton-focused-left" transform="matrix(-1,0,0,1,214,0)"/>
+  <g id="breezebutton-focused-topleft">
+    <rect x="100" y="1160" width="5" height="5" style="fill:#000000;fill-opacity:0.001"/>
+    <path d="m 105,1160 c -2.7614,0 -5,2.2386 -5,5 h 5 z" style="fill:#7c4dff;fill-opacity:1"/>
+    <path d="m 105,1161 c -2.2091,0 -4,1.7909 -4,4 h 4 z" style="fill:#4f5055;fill-opacity:1"/>
+  </g>
+  <use id="breezebutton-focused-topright" xlink:href="#breezebutton-focused-topleft" transform="matrix(-1,0,0,1,214,0)"/>
+  <g id="breezebutton-focused-bottom">
+    <rect x="105" y="1169" width="4" height="7" style="fill:#000000;fill-opacity:0.04"/>
+    <rect x="105" y="1169" width="4" height="6" style="fill:#000000;fill-opacity:0.06"/>
+    <rect x="105" y="1169" width="4" height="5" style="fill:#7c4dff;fill-opacity:1"/>
+    <rect x="105" y="1169" width="4" height="4" style="fill:#4f5055;fill-opacity:1"/>
+  </g>
+  <g id="breezebutton-focused-bottomleft">
+    <rect x="100" y="1169" width="5" height="7" style="fill:#000000;fill-opacity:0.001"/>
+    <path d="m 100,1169 v 2 c 0,2.7614 2.2386,5 5,5 v -7 z" style="fill:#000000;fill-opacity:0.04"/>
+    <path d="m 100,1169 v 1 c 0,2.7614 2.2386,5 5,5 v -6 z" style="fill:#000000;fill-opacity:0.06"/>
+    <path d="m 100,1169 c 0,2.7614 2.2386,5 5,5 v -5 z" style="fill:#7c4dff;fill-opacity:1"/>
+    <path d="m 101,1169 c 0,2.2091 1.7909,4 4,4 v -4 z" style="fill:#4f5055;fill-opacity:1"/>
+  </g>
+  <use id="breezebutton-focused-bottomright" xlink:href="#breezebutton-focused-bottomleft" transform="matrix(-1,0,0,1,214,0)"/>
+  <rect id="breezebutton-default" x="105" y="1185" width="4" height="4" style="fill:#5657f5;fill-opacity:0.45"/>
+  <g id="breezebutton-default-top">
+    <rect x="105" y="1180" width="4" height="5" style="fill:#5657f5;fill-opacity:0.45"/>
+    <rect x="105" y="1180" width="4" height="1" style="fill:#7c4dff;fill-opacity:1"/>
+  </g>
+  <g id="breezebutton-default-left">
+    <rect x="100" y="1185" width="5" height="4" style="fill:#5657f5;fill-opacity:0.45"/>
+    <rect x="100" y="1185" width="1" height="4" style="fill:#7c4dff;fill-opacity:1"/>
+  </g>
+  <use id="breezebutton-default-right" xlink:href="#breezebutton-default-left" transform="matrix(-1,0,0,1,214,0)"/>
+  <g id="breezebutton-default-topleft">
+    <rect x="100" y="1180" width="5" height="5" style="fill:#000000;fill-opacity:0.001"/>
+    <path d="m 105,1180 c -2.7614,0 -5,2.2386 -5,5 h 5 z" style="fill:#7c4dff;fill-opacity:1"/>
+    <path d="m 105,1181 c -2.2091,0 -4,1.7909 -4,4 h 4 z" style="fill:#5657f5;fill-opacity:0.45"/>
+  </g>
+  <use id="breezebutton-default-topright" xlink:href="#breezebutton-default-topleft" transform="matrix(-1,0,0,1,214,0)"/>
+  <g id="breezebutton-default-bottom">
+    <rect x="105" y="1189" width="4" height="7" style="fill:#000000;fill-opacity:0.04"/>
+    <rect x="105" y="1189" width="4" height="6" style="fill:#000000;fill-opacity:0.06"/>
+    <rect x="105" y="1189" width="4" height="5" style="fill:#7c4dff;fill-opacity:1"/>
+    <rect x="105" y="1189" width="4" height="4" style="fill:#5657f5;fill-opacity:0.45"/>
+  </g>
+  <g id="breezebutton-default-bottomleft">
+    <rect x="100" y="1189" width="5" height="7" style="fill:#000000;fill-opacity:0.001"/>
+    <path d="m 100,1189 v 2 c 0,2.7614 2.2386,5 5,5 v -7 z" style="fill:#000000;fill-opacity:0.04"/>
+    <path d="m 100,1189 v 1 c 0,2.7614 2.2386,5 5,5 v -6 z" style="fill:#000000;fill-opacity:0.06"/>
+    <path d="m 100,1189 c 0,2.7614 2.2386,5 5,5 v -5 z" style="fill:#7c4dff;fill-opacity:1"/>
+    <path d="m 101,1189 c 0,2.2091 1.7909,4 4,4 v -4 z" style="fill:#5657f5;fill-opacity:0.45"/>
+  </g>
+  <use id="breezebutton-default-bottomright" xlink:href="#breezebutton-default-bottomleft" transform="matrix(-1,0,0,1,214,0)"/>
+  <rect id="breezebutton-pressed" x="105" y="1205" width="4" height="4" style="fill:#57585d;fill-opacity:1"/>
+  <g id="breezebutton-pressed-top">
+    <rect x="105" y="1200" width="4" height="5" style="fill:#57585d;fill-opacity:1"/>
+    <rect x="105" y="1200" width="4" height="1" style="fill:#7c4dff;fill-opacity:1"/>
+  </g>
+  <g id="breezebutton-pressed-left">
+    <rect x="100" y="1205" width="5" height="4" style="fill:#57585d;fill-opacity:1"/>
+    <rect x="100" y="1205" width="1" height="4" style="fill:#7c4dff;fill-opacity:1"/>
+  </g>
+  <use id="breezebutton-pressed-right" xlink:href="#breezebutton-pressed-left" transform="matrix(-1,0,0,1,214,0)"/>
+  <g id="breezebutton-pressed-topleft">
+    <rect x="100" y="1200" width="5" height="5" style="fill:#000000;fill-opacity:0.001"/>
+    <path d="m 105,1200 c -2.7614,0 -5,2.2386 -5,5 h 5 z" style="fill:#7c4dff;fill-opacity:1"/>
+    <path d="m 105,1201 c -2.2091,0 -4,1.7909 -4,4 h 4 z" style="fill:#57585d;fill-opacity:1"/>
+  </g>
+  <use id="breezebutton-pressed-topright" xlink:href="#breezebutton-pressed-topleft" transform="matrix(-1,0,0,1,214,0)"/>
+  <g id="breezebutton-pressed-bottom">
+    <rect x="105" y="1209" width="4" height="7" style="fill:#7c4dff;fill-opacity:1"/>
+    <rect x="105" y="1209" width="4" height="6" style="fill:#57585d;fill-opacity:1"/>
+  </g>
+  <g id="breezebutton-pressed-bottomleft">
+    <rect x="100" y="1209" width="5" height="7" style="fill:#000000;fill-opacity:0.001"/>
+    <path d="m 100,1209 v 2 c 0,2.7614 2.2386,5 5,5 v -7 z" style="fill:#7c4dff;fill-opacity:1"/>
+    <path d="m 101,1209 v 2 c 0,2.2091 1.7909,4 4,4 v -6 z" style="fill:#57585d;fill-opacity:1"/>
+  </g>
+  <use id="breezebutton-pressed-bottomright" xlink:href="#breezebutton-pressed-bottomleft" transform="matrix(-1,0,0,1,214,0)"/>
+  <rect id="breezebutton-toggled" x="105" y="1225" width="4" height="4" style="fill:#5657f5;fill-opacity:1"/>
+  <g id="breezebutton-toggled-top">
+    <rect x="105" y="1220" width="4" height="5" style="fill:#5657f5;fill-opacity:1"/>
+    <rect x="105" y="1220" width="4" height="1" style="fill:#7c4dff;fill-opacity:1"/>
+  </g>
+  <g id="breezebutton-toggled-left">
+    <rect x="100" y="1225" width="5" height="4" style="fill:#5657f5;fill-opacity:1"/>
+    <rect x="100" y="1225" width="1" height="4" style="fill:#7c4dff;fill-opacity:1"/>
+  </g>
+  <use id="breezebutton-toggled-right" xlink:href="#breezebutton-toggled-left" transform="matrix(-1,0,0,1,214,0)"/>
+  <g id="breezebutton-toggled-topleft">
+    <rect x="100" y="1220" width="5" height="5" style="fill:#000000;fill-opacity:0.001"/>
+    <path d="m 105,1220 c -2.7614,0 -5,2.2386 -5,5 h 5 z" style="fill:#7c4dff;fill-opacity:1"/>
+    <path d="m 105,1221 c -2.2091,0 -4,1.7909 -4,4 h 4 z" style="fill:#5657f5;fill-opacity:1"/>
+  </g>
+  <use id="breezebutton-toggled-topright" xlink:href="#breezebutton-toggled-topleft" transform="matrix(-1,0,0,1,214,0)"/>
+  <g id="breezebutton-toggled-bottom">
+    <rect x="105" y="1229" width="4" height="7" style="fill:#000000;fill-opacity:0.04"/>
+    <rect x="105" y="1229" width="4" height="6" style="fill:#000000;fill-opacity:0.06"/>
+    <rect x="105" y="1229" width="4" height="5" style="fill:#7c4dff;fill-opacity:1"/>
+    <rect x="105" y="1229" width="4" height="4" style="fill:#5657f5;fill-opacity:1"/>
+  </g>
+  <g id="breezebutton-toggled-bottomleft">
+    <rect x="100" y="1229" width="5" height="7" style="fill:#000000;fill-opacity:0.001"/>
+    <path d="m 100,1229 v 2 c 0,2.7614 2.2386,5 5,5 v -7 z" style="fill:#000000;fill-opacity:0.04"/>
+    <path d="m 100,1229 v 1 c 0,2.7614 2.2386,5 5,5 v -6 z" style="fill:#000000;fill-opacity:0.06"/>
+    <path d="m 100,1229 c 0,2.7614 2.2386,5 5,5 v -5 z" style="fill:#7c4dff;fill-opacity:1"/>
+    <path d="m 101,1229 c 0,2.2091 1.7909,4 4,4 v -4 z" style="fill:#5657f5;fill-opacity:1"/>
+  </g>
+  <use id="breezebutton-toggled-bottomright" xlink:href="#breezebutton-toggled-bottomleft" transform="matrix(-1,0,0,1,214,0)"/>
+
+  <rect id="breezeinput-normal" x="105" y="1145" width="4" height="4" style="fill:#34343b"/>
+  <g id="breezeinput-normal-top">
+    <use xlink:href="#breezebutton-normal-top"/>
+    <rect x="105" y="1141" width="4" height="4" style="fill:#34343b"/>
+  </g>
+  <g id="breezeinput-normal-left">
+    <use xlink:href="#breezebutton-normal-left"/>
+    <rect x="101" y="1145" width="4" height="4" style="fill:#34343b"/>
+  </g>
+  <use id="breezeinput-normal-right" xlink:href="#breezeinput-normal-left" transform="matrix(-1,0,0,1,214,0)"/>
+  <g id="breezeinput-normal-topleft">
+    <use xlink:href="#breezebutton-normal-topleft"/>
+    <path d="m 105,1141 c -2.2091,0 -4,1.7909 -4,4 h 4 z" style="fill:#34343b"/>
+  </g>
+  <use id="breezeinput-normal-topright" xlink:href="#breezeinput-normal-topleft" transform="matrix(-1,0,0,1,214,0)"/>
+  <g id="breezeinput-normal-bottom">
+    <use xlink:href="#breezebutton-normal-bottom"/>
+    <rect x="105" y="1149" width="4" height="4" style="fill:#34343b"/>
+  </g>
+  <g id="breezeinput-normal-bottomleft">
+    <use xlink:href="#breezebutton-normal-bottomleft"/>
+    <path d="m 101,1149 c 0,2.2091 1.7909,4 4,4 v -4 z" style="fill:#34343b"/>
+  </g>
+  <use id="breezeinput-normal-bottomright" xlink:href="#breezeinput-normal-bottomleft" transform="matrix(-1,0,0,1,214,0)"/>
+
+  <rect id="breezeinput-focused" x="105" y="1165" width="4" height="4" style="fill:#34343b"/>
+  <g id="breezeinput-focused-top">
+    <use xlink:href="#breezebutton-focused-top"/>
+    <rect x="105" y="1161" width="4" height="4" style="fill:#34343b"/>
+  </g>
+  <g id="breezeinput-focused-left">
+    <use xlink:href="#breezebutton-focused-left"/>
+    <rect x="101" y="1165" width="4" height="4" style="fill:#34343b"/>
+  </g>
+  <use id="breezeinput-focused-right" xlink:href="#breezeinput-focused-left" transform="matrix(-1,0,0,1,214,0)"/>
+  <g id="breezeinput-focused-topleft">
+    <use xlink:href="#breezebutton-focused-topleft"/>
+    <path d="m 105,1161 c -2.2091,0 -4,1.7909 -4,4 h 4 z" style="fill:#34343b"/>
+  </g>
+  <use id="breezeinput-focused-topright" xlink:href="#breezeinput-focused-topleft" transform="matrix(-1,0,0,1,214,0)"/>
+  <g id="breezeinput-focused-bottom">
+    <use xlink:href="#breezebutton-focused-bottom"/>
+    <rect x="105" y="1169" width="4" height="4" style="fill:#34343b"/>
+  </g>
+  <g id="breezeinput-focused-bottomleft">
+    <use xlink:href="#breezebutton-focused-bottomleft"/>
+    <path d="m 101,1169 c 0,2.2091 1.7909,4 4,4 v -4 z" style="fill:#34343b"/>
+  </g>
+  <use id="breezeinput-focused-bottomright" xlink:href="#breezeinput-focused-bottomleft" transform="matrix(-1,0,0,1,214,0)"/>
+
+  <rect id="breezeinput-default" x="105" y="1185" width="4" height="4" style="fill:#34343b"/>
+  <g id="breezeinput-default-top">
+    <use xlink:href="#breezebutton-default-top"/>
+    <rect x="105" y="1181" width="4" height="4" style="fill:#34343b"/>
+  </g>
+  <g id="breezeinput-default-left">
+    <use xlink:href="#breezebutton-default-left"/>
+    <rect x="101" y="1185" width="4" height="4" style="fill:#34343b"/>
+  </g>
+  <use id="breezeinput-default-right" xlink:href="#breezeinput-default-left" transform="matrix(-1,0,0,1,214,0)"/>
+  <g id="breezeinput-default-topleft">
+    <use xlink:href="#breezebutton-default-topleft"/>
+    <path d="m 105,1181 c -2.2091,0 -4,1.7909 -4,4 h 4 z" style="fill:#34343b"/>
+  </g>
+  <use id="breezeinput-default-topright" xlink:href="#breezeinput-default-topleft" transform="matrix(-1,0,0,1,214,0)"/>
+  <g id="breezeinput-default-bottom">
+    <use xlink:href="#breezebutton-default-bottom"/>
+    <rect x="105" y="1189" width="4" height="4" style="fill:#34343b"/>
+  </g>
+  <g id="breezeinput-default-bottomleft">
+    <use xlink:href="#breezebutton-default-bottomleft"/>
+    <path d="m 101,1189 c 0,2.2091 1.7909,4 4,4 v -4 z" style="fill:#34343b"/>
+  </g>
+  <use id="breezeinput-default-bottomright" xlink:href="#breezeinput-default-bottomleft" transform="matrix(-1,0,0,1,214,0)"/>
+
+  <rect id="breezeinput-pressed" x="105" y="1205" width="4" height="4" style="fill:#57585d"/>
+  <g id="breezeinput-pressed-top">
+    <use xlink:href="#breezebutton-pressed-top"/>
+    <rect x="105" y="1201" width="4" height="4" style="fill:#57585d"/>
+  </g>
+  <g id="breezeinput-pressed-left">
+    <use xlink:href="#breezebutton-pressed-left"/>
+    <rect x="101" y="1205" width="4" height="4" style="fill:#57585d"/>
+  </g>
+  <use id="breezeinput-pressed-right" xlink:href="#breezeinput-pressed-left" transform="matrix(-1,0,0,1,214,0)"/>
+  <g id="breezeinput-pressed-topleft">
+    <use xlink:href="#breezebutton-pressed-topleft"/>
+    <path d="m 105,1201 c -2.2091,0 -4,1.7909 -4,4 h 4 z" style="fill:#57585d"/>
+  </g>
+  <use id="breezeinput-pressed-topright" xlink:href="#breezeinput-pressed-topleft" transform="matrix(-1,0,0,1,214,0)"/>
+  <g id="breezeinput-pressed-bottom">
+    <use xlink:href="#breezebutton-pressed-bottom"/>
+    <rect x="105" y="1209" width="4" height="6" style="fill:#57585d"/>
+  </g>
+  <g id="breezeinput-pressed-bottomleft">
+    <use xlink:href="#breezebutton-pressed-bottomleft"/>
+    <path d="m 101,1209 v 2 c 0,2.2091 1.7909,4 4,4 v -6 z" style="fill:#57585d"/>
+  </g>
+  <use id="breezeinput-pressed-bottomright" xlink:href="#breezeinput-pressed-bottomleft" transform="matrix(-1,0,0,1,214,0)"/>
+
+  <rect id="breezeinput-toggled" x="105" y="1225" width="4" height="4" style="fill:#5657f5"/>
+  <g id="breezeinput-toggled-top">
+    <use xlink:href="#breezebutton-toggled-top"/>
+    <rect x="105" y="1221" width="4" height="4" style="fill:#5657f5"/>
+  </g>
+  <g id="breezeinput-toggled-left">
+    <use xlink:href="#breezebutton-toggled-left"/>
+    <rect x="101" y="1225" width="4" height="4" style="fill:#5657f5"/>
+  </g>
+  <use id="breezeinput-toggled-right" xlink:href="#breezeinput-toggled-left" transform="matrix(-1,0,0,1,214,0)"/>
+  <g id="breezeinput-toggled-topleft">
+    <use xlink:href="#breezebutton-toggled-topleft"/>
+    <path d="m 105,1221 c -2.2091,0 -4,1.7909 -4,4 h 4 z" style="fill:#5657f5"/>
+  </g>
+  <use id="breezeinput-toggled-topright" xlink:href="#breezeinput-toggled-topleft" transform="matrix(-1,0,0,1,214,0)"/>
+  <g id="breezeinput-toggled-bottom">
+    <use xlink:href="#breezebutton-toggled-bottom"/>
+    <rect x="105" y="1229" width="4" height="4" style="fill:#5657f5"/>
+  </g>
+  <g id="breezeinput-toggled-bottomleft">
+    <use xlink:href="#breezebutton-toggled-bottomleft"/>
+    <path d="m 101,1229 c 0,2.2091 1.7909,4 4,4 v -4 z" style="fill:#5657f5"/>
+  </g>
+  <use id="breezeinput-toggled-bottomright" xlink:href="#breezeinput-toggled-bottomleft" transform="matrix(-1,0,0,1,214,0)"/>
+
   <g id="breezescrollbar-normal-topleft" transform="translate(-135.5,5.749757)" style="fill-rule:evenodd">
     <path d="m 155,1089 c -6.648,0 -12,5.3521 -12,12 h 12 z" style="fill:#999999;fill-opacity:0.001"/>
     <path d="m 155,1092.5 c -4,0.011 -4,2.7501 -4,8.4998 h 4 z" style="fill:#999999;fill-opacity:0.5"/>
