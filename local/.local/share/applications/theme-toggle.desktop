@@ -8,7 +8,7 @@ Exec=theme toggle
 Icon=preferences-desktop-theme
 Terminal=false
 Categories=Settings;DesktopSettings;
-Actions=Light;Dark;
+Actions=Light;Dark;BreezePreset;KvantumPreset;
 
 [Desktop Action Light]
 Name=Use Light Theme
@@ -19,3 +19,13 @@ Exec=theme light
 Name=Use Dark Theme
 Name[zh_CN]=使用深色主题
 Exec=theme dark
+
+[Desktop Action BreezePreset]
+Name=Use Breeze Preset
+Name[zh_CN]=使用 Breeze 预设
+Exec=theme preset breeze
+
+[Desktop Action KvantumPreset]
+Name=Use Kvantum Preset
+Name[zh_CN]=使用 Kvantum 预设
+Exec=theme preset kvantum

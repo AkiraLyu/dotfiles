@@ -6,6 +6,7 @@ PROGRAM=${0##*/}
 STATE_HOME=${XDG_STATE_HOME:-"$HOME/.local/state"}
 STATE_DIR=${THEME_STATE_DIR:-"$STATE_HOME/theme"}
 MODE_FILE="$STATE_DIR/mode"
+PRESET_FILE="$STATE_DIR/preset"
 LOCK_ROOT=${XDG_RUNTIME_DIR:-"$STATE_DIR"}
 LOCK_FILE="$LOCK_ROOT/theme.lock"
 CONFIG_HOME=${XDG_CONFIG_HOME:-"$HOME/.config"}
@@ -13,16 +14,19 @@ CONFIG_HOME=${XDG_CONFIG_HOME:-"$HOME/.config"}
 QUIET=0
 DRY_RUN=0
 FAILURES=0
+KVANTUM_CHANGED=0
 
 usage() {
     cat <<EOF
 Usage:
-  $PROGRAM light|dark          Set and apply a theme
-  $PROGRAM set light|dark      Set and apply a theme
-  $PROGRAM toggle              Toggle light/dark
-  $PROGRAM apply               Reconcile every backend with saved state
-  $PROGRAM current             Print the saved theme
-  $PROGRAM status              Show state and backend values
+  $PROGRAM light|dark              Set and apply a color mode
+  $PROGRAM set light|dark          Set and apply a color mode
+  $PROGRAM toggle                  Toggle light/dark
+  $PROGRAM preset [breeze|kvantum] Show or switch the widget preset
+  $PROGRAM presets                 List available widget presets
+  $PROGRAM apply                   Reconcile every backend with saved state
+  $PROGRAM current                 Print the saved color mode
+  $PROGRAM status                  Show state and backend values
 
 Options:
   -n, --dry-run                Show the target state without changing it
@@ -45,6 +49,14 @@ valid_mode() {
     [[ ${1:-} == light || ${1:-} == dark ]]
 }
 
+valid_preset() {
+    [[ ${1:-} == breeze || ${1:-} == kvantum ]]
+}
+
+list_presets() {
+    printf '%s\n' breeze kvantum
+}
+
 read_saved_mode() {
     local mode
 
@@ -52,6 +64,20 @@ read_saved_mode() {
         IFS= read -r mode <"$MODE_FILE" || true
         if valid_mode "$mode"; then
             printf '%s\n' "$mode"
+            return 0
+        fi
+    fi
+
+    return 1
+}
+
+read_saved_preset() {
+    local preset
+
+    if [[ -r $PRESET_FILE ]]; then
+        IFS= read -r preset <"$PRESET_FILE" || true
+        if valid_preset "$preset"; then
+            printf '%s\n' "$preset"
             return 0
         fi
     fi
@@ -124,6 +150,55 @@ current_mode() {
     fi
 }
 
+preset_from_style() {
+    case ${1,,} in
+        kvantum*) printf 'kvantum\n' ;;
+        breeze*) printf 'breeze\n' ;;
+        *) return 1 ;;
+    esac
+}
+
+detect_initial_preset() {
+    local desktop lower kde_style qt_style style preset
+
+    desktop=$(desktop_name)
+    lower=${desktop,,}
+    kde_style=
+    qt_style=$(ini_value "$CONFIG_HOME/qt6ct/qt6ct.conf" Appearance style)
+
+    if command -v kreadconfig6 >/dev/null 2>&1; then
+        kde_style=$(kde_value KDE widgetStyle)
+    fi
+
+    if [[ $lower == *kde* ]]; then
+        for style in "$kde_style" "$qt_style"; do
+            if preset=$(preset_from_style "$style"); then
+                printf '%s\n' "$preset"
+                return 0
+            fi
+        done
+    else
+        for style in "$qt_style" "$kde_style"; do
+            if preset=$(preset_from_style "$style"); then
+                printf '%s\n' "$preset"
+                return 0
+            fi
+        done
+    fi
+
+    printf 'breeze\n'
+}
+
+current_preset() {
+    local preset
+
+    if preset=$(read_saved_preset); then
+        printf '%s\n' "$preset"
+    else
+        detect_initial_preset
+    fi
+}
+
 lock_changes() {
     if ((DRY_RUN)); then
         return 0
@@ -151,6 +226,25 @@ write_mode() {
     printf '%s\n' "$mode" >"$tmp"
     chmod 0644 "$tmp"
     mv -f "$tmp" "$MODE_FILE"
+}
+
+write_preset() {
+    local preset=$1 tmp
+
+    if ((DRY_RUN)); then
+        say "would save preset: $preset"
+        return 0
+    fi
+
+    if [[ -r $PRESET_FILE ]] && [[ $(<"$PRESET_FILE") == "$preset" ]]; then
+        return 0
+    fi
+
+    mkdir -p "$STATE_DIR"
+    tmp=$(mktemp "$STATE_DIR/.preset.XXXXXX")
+    printf '%s\n' "$preset" >"$tmp"
+    chmod 0644 "$tmp"
+    mv -f "$tmp" "$PRESET_FILE"
 }
 
 run_backend() {
@@ -194,12 +288,39 @@ color_scheme_path() {
     return 1
 }
 
+kvantum_theme_exists() {
+    local theme=$1 family candidate
+
+    family=${theme%Dark}
+    for candidate in \
+        "$CONFIG_HOME/Kvantum/$theme/$theme.kvconfig" \
+        "$CONFIG_HOME/Kvantum/$family/$theme.kvconfig" \
+        "$HOME/.themes/$theme/Kvantum/$theme.kvconfig" \
+        "$HOME/.themes/$family/Kvantum/$theme.kvconfig" \
+        "$HOME/.local/share/themes/$theme/Kvantum/$theme.kvconfig" \
+        "$HOME/.local/share/themes/$family/Kvantum/$theme.kvconfig" \
+        "/usr/share/Kvantum/$theme/$theme.kvconfig" \
+        "/usr/share/Kvantum/$family/$theme.kvconfig"; do
+        if [[ -r $candidate ]]; then
+            return 0
+        fi
+    done
+
+    return 1
+}
+
 load_profile() {
-    local mode=$1
+    local mode=$1 preset=$2
 
     ICON_THEME=Papirus
     GTK_THEME=Breeze
     QT_STYLE=Breeze
+    KVANTUM_THEME=
+
+    if [[ $preset == kvantum ]]; then
+        QT_STYLE=kvantum
+        KVANTUM_THEME=LayanBreeze
+    fi
 
     if [[ $mode == dark ]]; then
         KDE_LOOKANDFEEL=custom_dark
@@ -209,6 +330,17 @@ load_profile() {
         GTK_PREFER_DARK=true
         ROFI_THEME="$HOME/.local/share/rofi/themes/rounded-purple-dark.rasi"
         QT_COLOR_SCHEME=$(color_scheme_path BreezeDark || true)
+
+        if [[ $preset == kvantum ]]; then
+            KDE_COLOR_SCHEME=Layan
+            QT_COLOR_SCHEME=$(color_scheme_path Layan || true)
+            KVANTUM_THEME=LayanBreezeDark
+
+            if [[ -z $QT_COLOR_SCHEME ]]; then
+                KDE_COLOR_SCHEME=BreezeDark
+                QT_COLOR_SCHEME=$(color_scheme_path BreezeDark || true)
+            fi
+        fi
     else
         KDE_LOOKANDFEEL=custom_light
         KDE_FALLBACK_LOOKANDFEEL=org.kde.breeze.desktop
@@ -306,6 +438,24 @@ kde_value() {
     kreadconfig6 --file kdeglobals --group "$1" --key "$2" 2>/dev/null || true
 }
 
+ini_value() {
+    local file=$1 section=$2 key=$3
+
+    if command -v kreadconfig6 >/dev/null 2>&1; then
+        kreadconfig6 --file "$file" --group "$section" --key "$key" 2>/dev/null || true
+        return
+    fi
+
+    awk -v section="$section" -v key="$key" '
+        $0 == "[" section "]" { in_section = 1; next }
+        /^\[[^]]+\]$/ { in_section = 0 }
+        in_section && index($0, key "=") == 1 {
+            print substr($0, length(key) + 2)
+            exit
+        }
+    ' "$file" 2>/dev/null || true
+}
+
 set_kde_value() {
     local group=$1 key=$2 value=$3 current
 
@@ -340,7 +490,15 @@ apply_kde() {
     fi
 
     set_kde_value Icons Theme "$ICON_THEME"
-    set_kde_value KDE widgetStyle "$QT_STYLE"
+    current=$(kde_value KDE widgetStyle)
+    if ((KVANTUM_CHANGED)) && [[ $current == "$QT_STYLE" ]]; then
+        run_backend "KDE style reset" kwriteconfig6 --file kdeglobals \
+            --group KDE --key widgetStyle --notify Breeze || true
+        run_backend "KDE widgetStyle" kwriteconfig6 --file kdeglobals \
+            --group KDE --key widgetStyle --notify "$QT_STYLE" || true
+    else
+        set_kde_value KDE widgetStyle "$QT_STYLE"
+    fi
 }
 
 gsettings_value() {
@@ -434,6 +592,31 @@ set_ini_value() {
     mv -f "$tmp" "$file"
 }
 
+apply_kvantum() {
+    local file="$CONFIG_HOME/Kvantum/kvantum.kvconfig" current
+
+    if ! kvantum_theme_exists "$KVANTUM_THEME"; then
+        warn "Kvantum theme is missing: $KVANTUM_THEME"
+        FAILURES=$((FAILURES + 1))
+        return 0
+    fi
+
+    current=$(ini_value "$file" General theme)
+    if [[ $current == "$KVANTUM_THEME" ]]; then
+        return 0
+    fi
+
+    if ! run_backend Kvantum set_ini_value "$file" General theme "$KVANTUM_THEME"; then
+        return 0
+    fi
+    KVANTUM_CHANGED=1
+}
+
+apply_qt6ct() {
+    run_backend qt6ct-style set_ini_value \
+        "$CONFIG_HOME/qt6ct/qt6ct.conf" Appearance style "$QT_STYLE" || true
+}
+
 apply_gtk_files() {
     local version file
 
@@ -496,23 +679,29 @@ reload_kitty() {
 }
 
 notify_change() {
-    local mode=$1
+    local mode=$1 preset=$2
 
     if ((DRY_RUN)) || ! command -v notify-send >/dev/null 2>&1; then
         return 0
     fi
 
     notify-send -a Theme -i preferences-desktop-theme \
-        "Theme: $mode" 'KDE, Niri and applications are synchronized.' >/dev/null 2>&1 || true
+        "Theme: $mode / $preset" 'KDE, Niri and applications are synchronized.' >/dev/null 2>&1 || true
 }
 
 apply_all() {
-    local mode=$1 notify=${2:-0}
+    local mode=$1 preset=$2 notify=${3:-0}
 
     MODE=$mode
-    load_profile "$MODE"
+    PRESET=$preset
+    KVANTUM_CHANGED=0
+    load_profile "$MODE" "$PRESET"
     apply_environment "$MODE"
     apply_state_artifacts
+    if [[ -n $KVANTUM_THEME ]]; then
+        apply_kvantum
+    fi
+    apply_qt6ct
     apply_kde
     apply_gsettings
     apply_gtk_files
@@ -520,7 +709,7 @@ apply_all() {
     reload_kitty
 
     if ((notify)); then
-        notify_change "$MODE"
+        notify_change "$MODE" "$PRESET"
     fi
 
     if ((FAILURES)); then
@@ -528,14 +717,15 @@ apply_all() {
         return 1
     fi
 
-    say "theme synchronized: $MODE"
+    say "theme synchronized: $MODE / $PRESET"
 }
 
 status() {
-    local mode desktop manager_mode manager_qt kde_look kde_color kde_style kde_icon
-    local gtk_color gtk_theme gtk_icon noctalia_mode qt_color rofi_theme
+    local mode preset desktop manager_mode manager_qt kde_look kde_color kde_style kde_icon
+    local gtk_color gtk_theme gtk_icon noctalia_mode qt_color qt_style kvantum_theme rofi_theme
 
     mode=$(current_mode)
+    preset=$(current_preset)
     desktop=$(desktop_name)
     manager_mode=unavailable
     manager_qt=unavailable
@@ -560,12 +750,16 @@ status() {
     fi
 
     qt_color=$(readlink "$STATE_DIR/qt6ct.colors" 2>/dev/null || printf 'missing')
+    qt_style=$(ini_value "$CONFIG_HOME/qt6ct/qt6ct.conf" Appearance style)
+    kvantum_theme=$(ini_value "$CONFIG_HOME/Kvantum/kvantum.kvconfig" General theme)
     rofi_theme=$(readlink "$STATE_DIR/rofi.rasi" 2>/dev/null || printf 'missing')
 
     printf '%-18s %s\n' \
         mode "$mode" \
+        preset "$preset" \
         desktop "$desktop" \
         state-file "$MODE_FILE" \
+        preset-file "$PRESET_FILE" \
         manager-theme "${manager_mode:-unset}" \
         manager-qt "${manager_qt:-unset}" \
         KDE-look-and-feel "${kde_look:-unavailable}" \
@@ -577,6 +771,8 @@ status() {
         GTK-icons "${gtk_icon:-unavailable}" \
         Noctalia "$noctalia_mode" \
         qt6ct-colors "$qt_color" \
+        qt6ct-style "${qt_style:-unavailable}" \
+        Kvantum-theme "${kvantum_theme:-unavailable}" \
         Rofi-theme "$rofi_theme"
 }
 
@@ -611,8 +807,10 @@ case $COMMAND in
     light | dark)
         MODE=$COMMAND
         lock_changes
+        PRESET=$(current_preset)
         write_mode "$MODE"
-        apply_all "$MODE" 1
+        write_preset "$PRESET"
+        apply_all "$MODE" "$PRESET" 1
         ;;
     set)
         MODE=${1:-}
@@ -622,25 +820,56 @@ case $COMMAND in
             exit 2
         fi
         lock_changes
+        PRESET=$(current_preset)
         write_mode "$MODE"
-        apply_all "$MODE" 1
+        write_preset "$PRESET"
+        apply_all "$MODE" "$PRESET" 1
         ;;
     toggle)
+        lock_changes
         MODE=$(current_mode)
+        PRESET=$(current_preset)
         if [[ $MODE == dark ]]; then
             MODE=light
         else
             MODE=dark
         fi
-        lock_changes
         write_mode "$MODE"
-        apply_all "$MODE" 1
+        write_preset "$PRESET"
+        apply_all "$MODE" "$PRESET" 1
+        ;;
+    preset)
+        if (($# == 0)); then
+            current_preset
+            exit 0
+        fi
+        PRESET=$1
+        if (($# != 1)) || ! valid_preset "$PRESET"; then
+            warn "preset requires 'breeze' or 'kvantum'"
+            usage >&2
+            exit 2
+        fi
+        lock_changes
+        MODE=$(current_mode)
+        write_mode "$MODE"
+        write_preset "$PRESET"
+        apply_all "$MODE" "$PRESET" 1
+        ;;
+    presets)
+        if (($# != 0)); then
+            warn "presets takes no arguments"
+            usage >&2
+            exit 2
+        fi
+        list_presets
         ;;
     apply | sync)
-        MODE=$(current_mode)
         lock_changes
+        MODE=$(current_mode)
+        PRESET=$(current_preset)
         write_mode "$MODE"
-        apply_all "$MODE" 0
+        write_preset "$PRESET"
+        apply_all "$MODE" "$PRESET" 0
         ;;
     current | get)
         current_mode
