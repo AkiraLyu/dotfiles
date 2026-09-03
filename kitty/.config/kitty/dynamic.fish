@@ -26,6 +26,8 @@ end
 # different opacity for niri and kde
 if test "$XDG_CURRENT_DESKTOP" = "niri"
     echo "background_opacity 0.8"
+    echo "background_blur 0"
 else if test "$XDG_CURRENT_DESKTOP" = "KDE"
-    echo "background_opacity 1.0"
+    echo "background_opacity 0.8"
+    echo "background_blur 1"
 end
