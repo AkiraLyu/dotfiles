@@ -15,6 +15,7 @@ QUIET=0
 DRY_RUN=0
 FAILURES=0
 KVANTUM_CHANGED=0
+KDE_STYLE_CHANGED=0
 
 usage() {
     cat <<EOF
@@ -492,11 +493,15 @@ apply_kde() {
     set_kde_value Icons Theme "$ICON_THEME"
     current=$(kde_value KDE widgetStyle)
     if ((KVANTUM_CHANGED)) && [[ $current == "$QT_STYLE" ]]; then
+        KDE_STYLE_CHANGED=1
         run_backend "KDE style reset" kwriteconfig6 --file kdeglobals \
             --group KDE --key widgetStyle --notify Breeze || true
         run_backend "KDE widgetStyle" kwriteconfig6 --file kdeglobals \
             --group KDE --key widgetStyle --notify "$QT_STYLE" || true
     else
+        if [[ $current != "$QT_STYLE" ]]; then
+            KDE_STYLE_CHANGED=1
+        fi
         set_kde_value KDE widgetStyle "$QT_STYLE"
     fi
 }
@@ -678,6 +683,25 @@ reload_kitty() {
     pkill -USR1 -x kitty 2>/dev/null || true
 }
 
+reload_plasma_style() {
+    local desktop lower
+
+    if ((KVANTUM_CHANGED == 0 && KDE_STYLE_CHANGED == 0)) || ! command -v systemctl >/dev/null 2>&1; then
+        return 0
+    fi
+
+    desktop=$(desktop_name)
+    lower=${desktop,,}
+    if [[ $lower != *kde* ]] || ! systemctl --user is-active --quiet plasma-plasmashell.service; then
+        return 0
+    fi
+
+    # Live widget-style changes update colors, but existing plasmashell
+    # processes can retain the old popup-window mask. Restarting only the shell
+    # makes tray QMenus recreate their translucent rounded corners.
+    run_backend Plasma-style systemctl --user restart plasma-plasmashell.service || true
+}
+
 notify_change() {
     local mode=$1 preset=$2
 
@@ -695,6 +719,7 @@ apply_all() {
     MODE=$mode
     PRESET=$preset
     KVANTUM_CHANGED=0
+    KDE_STYLE_CHANGED=0
     load_profile "$MODE" "$PRESET"
     apply_environment "$MODE"
     apply_state_artifacts
@@ -707,6 +732,7 @@ apply_all() {
     apply_gtk_files
     apply_noctalia
     reload_kitty
+    reload_plasma_style
 
     if ((notify)); then
         notify_change "$MODE" "$PRESET"

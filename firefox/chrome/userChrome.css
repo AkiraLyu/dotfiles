@@ -8,6 +8,13 @@
   --uc-bookmarks-toolbar-height: 32px;
 }
 
+/* 保留 */
+/* Firefox 地址栏是浏览器自绘控件，不会直接使用 Kvantum 的选中文字色。 */
+/* #urlbar-input:focus::selection, */
+/* .searchbar-textbox:focus::selection { */
+/*   color: #fff !important; */
+/* } */
+
 /*
  * 让 Firefox 原生 Nova UI 管理顶栏、窗口按钮、字体、间距与主题配色。
  * Firefox 的垂直标签模式负责原生单行标题栏，标签内容仍由 Sidebery 提供，

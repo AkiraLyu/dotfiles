@@ -18,7 +18,7 @@ menu_separator_height=9
 spread_menuitems=false
 tooltip_shadow_depth=6
 splitter_width=1
-scroll_width=21
+scroll_width=8
 scroll_arrows=false
 scroll_min_extent=20
 slider_width=6
@@ -129,6 +129,7 @@ style_vertical_toolbars=false
 [PanelButtonCommand]
 frame=true
 frame.element=breezebutton
+focusFrame=true
 frame.top=5
 frame.bottom=6
 frame.left=5
@@ -140,22 +141,25 @@ indicator.size=10
 text.normal.color=#dfdfdf
 text.focus.color=#dfdfdf
 text.press.color=#dfdfdf
-text.toggle.color=#dfdfdf
+text.toggle.color=white
 text.shadow=0
 text.iconspacing=4
 text.margin.top=1
 text.margin.bottom=1
 text.margin.left=2
 text.margin.right=2
-min_width=84
-min_height=34
+min_width=0
+min_height=36
 frame.expansion=0
 
 [PanelButtonTool]
 inherits=PanelButtonCommand
+focusFrame=false
 interior.element=tbutton
 frame.element=tbutton
 indicator.element=tarrow
+text.press.color=#ffffff
+text.toggle.color=white
 frame.top=2
 frame.bottom=2
 frame.left=2
@@ -173,6 +177,7 @@ inherits=PanelButtonTool
 
 [Dock]
 inherits=PanelButtonCommand
+focusFrame=false
 interior=false
 frame=false
 text.normal.color=#dfdfdf
@@ -181,6 +186,7 @@ min_height=0
 
 [DockTitle]
 inherits=PanelButtonCommand
+focusFrame=false
 frame=false
 interior=false
 text.normal.color=#dfdfdf
@@ -191,6 +197,7 @@ min_height=0
 
 [IndicatorSpinBox]
 inherits=PanelButtonCommand
+focusFrame=false
 frame=true
 interior=true
 frame.element=breezeinput
@@ -212,6 +219,7 @@ frame.expansion=0
 
 [RadioButton]
 inherits=PanelButtonCommand
+focusFrame=false
 frame=false
 interior.element=breezeradio
 text.normal.color=#dfdfdf
@@ -227,6 +235,7 @@ frame.expansion=0
 
 [CheckBox]
 inherits=PanelButtonCommand
+focusFrame=false
 frame=false
 interior.element=breezecheckbox
 text.normal.color=#dfdfdf
@@ -242,7 +251,8 @@ frame.expansion=0
 
 [Focus]
 inherits=PanelButtonCommand
-frame=true
+focusFrame=false
+frame=false
 interior=false
 frame.element=focus
 frame.top=2
@@ -256,6 +266,7 @@ frame.expansion=0
 
 [GenericFrame]
 inherits=PanelButtonCommand
+focusFrame=false
 frame=true
 interior=false
 frame.element=button
@@ -270,6 +281,7 @@ frame.expansion=5
 
 [LineEdit]
 inherits=PanelButtonCommand
+focusFrame=false
 frame.element=breezeinput
 interior.element=lineedit
 frame.top=5
@@ -291,6 +303,7 @@ inherits=LineEdit
 inherits=PanelButtonTool
 indicator.element=arrow-down
 indicator.size=10
+text.press.color=#dfdfdf
 
 [IndicatorArrow]
 indicator.element=arrow
@@ -310,6 +323,7 @@ min_height=30
 
 [Tab]
 inherits=PanelButtonCommand
+focusFrame=false
 interior.element=tab
 frame.element=tab
 indicator.element=tab
@@ -334,6 +348,7 @@ frame.expansion=5
 
 [TabFrame]
 inherits=PanelButtonCommand
+focusFrame=false
 frame.element=button
 interior.element=tabframe
 interior=false
@@ -347,6 +362,7 @@ frame.expansion=5
 
 [TreeExpander]
 inherits=PanelButtonCommand
+focusFrame=false
 indicator.size=10
 indicator.element=tree
 min_width=0
@@ -354,6 +370,7 @@ min_height=0
 
 [HeaderSection]
 inherits=PanelButtonCommand
+focusFrame=false
 interior.element=header
 frame.element=header
 frame.top=2
@@ -369,8 +386,8 @@ text.margin.right=4
 text.bold=false
 text.normal.color=#dfdfdf
 text.focus.color=#dfdfdf
-text.press.color=#dfdfdf
-text.toggle.color=#dfdfdf
+text.press.color=white
+text.toggle.color=white
 min_width=0
 min_height=30
 frame.expansion=0
@@ -380,6 +397,7 @@ indicator.element=resize-grip
 
 [Toolbar]
 inherits=PanelButtonCommand
+focusFrame=false
 indicator.element=toolbar
 indicator.size=7
 text.margin=0
@@ -388,6 +406,8 @@ interior.element=menubar
 frame.element=menubar
 text.normal.color=#dfdfdf
 text.focus.color=#dfdfdf
+text.press.color=#dfdfdf
+text.toggle.color=white
 frame.left=6
 frame.right=6
 frame.top=6
@@ -398,6 +418,7 @@ frame.expansion=0
 
 [Slider]
 inherits=PanelButtonCommand
+focusFrame=false
 frame.element=slider
 interior.element=slider
 frame.top=3
@@ -410,6 +431,7 @@ frame.expansion=0
 
 [SliderCursor]
 inherits=PanelButtonCommand
+focusFrame=false
 frame=false
 interior.element=slidercursor
 min_width=0
@@ -418,6 +440,7 @@ frame.expansion=0
 
 [Progressbar]
 inherits=PanelButtonCommand
+focusFrame=false
 frame.element=progress
 interior.element=progress
 frame.top=3
@@ -436,6 +459,7 @@ frame.expansion=3
 
 [ProgressbarContents]
 inherits=PanelButtonCommand
+focusFrame=false
 frame=true
 frame.element=progress-pattern
 interior.element=progress-pattern
@@ -449,6 +473,7 @@ frame.expansion=3
 
 [ItemView]
 inherits=PanelButtonCommand
+focusFrame=false
 frame.element=itemview
 interior.element=itemview
 frame.top=2
@@ -465,13 +490,14 @@ text.press.color=#ffffff
 text.toggle.color=#ffffff
 min_width=0
 min_height=+0.2font
-frame.expansion=4
+frame.expansion=10
 
 [Splitter]
 indicator.size=6
 
 [Scrollbar]
 inherits=PanelButtonCommand
+focusFrame=false
 indicator.element=arrow
 indicator.size=10
 min_width=0
@@ -479,12 +505,13 @@ min_height=0
 
 [ScrollbarSlider]
 inherits=PanelButtonCommand
+focusFrame=false
 frame.element=breezescrollbar
 frame=true
-frame.left=10
-frame.right=11
-frame.top=10
-frame.bottom=11
+frame.left=4
+frame.right=4
+frame.top=4
+frame.bottom=4
 interior=false
 min_width=0
 min_height=0
@@ -492,6 +519,7 @@ frame.expansion=0
 
 [ScrollbarGroove]
 inherits=PanelButtonCommand
+focusFrame=false
 interior=false
 frame=false
 min_width=0
@@ -500,12 +528,13 @@ frame.expansion=48
 
 [Menu]
 inherits=PanelButtonCommand
-frame.top=1
-frame.bottom=1
-frame.left=1
-frame.right=1
-frame.element=menu
-interior.element=menu
+focusFrame=false
+frame.top=3
+frame.bottom=3
+frame.left=3
+frame.right=3
+frame.element=breezemenu
+interior.element=breezemenu
 text.normal.color=#dfdfdf
 text.shadow=false
 min_width=0
@@ -514,13 +543,14 @@ frame.expansion=0
 
 [MenuItem]
 inherits=PanelButtonCommand
+focusFrame=false
 frame=true
 frame.element=menuitem
 interior.element=menuitem
 indicator.element=menuitem
 text.normal.color=#dfdfdf
 text.focus.color=#dfdfdf
-text.press.color=#ffffff
+text.press.color=#dfdfdf
 text.toggle.color=#ffffff
 text.iconspacing=10
 text.margin.top=0
@@ -538,6 +568,7 @@ frame.expansion=5
 
 [MenuBar]
 inherits=PanelButtonCommand
+focusFrame=false
 frame.element=menubar
 interior.element=menubar
 frame.top=0
@@ -545,6 +576,8 @@ frame.bottom=0
 frame.left=0
 frame.right=0
 text.normal.color=#dfdfdf
+text.press.color=#ffffff
+text.toggle.color=#ffffff
 min_width=0
 min_height=0
 frame.expansion=0
@@ -564,14 +597,15 @@ text.margin.top=4
 text.margin.bottom=4
 text.normal.color=#dfdfdf
 text.focus.color=#dfdfdf
-text.press.color=#dfdfdf
-text.toggle.color=#dfdfdf
+text.press.color=#ffffff
+text.toggle.color=#ffffff
 min_width=0
 min_height=0
 frame.expansion=5
 
 [TitleBar]
 inherits=PanelButtonCommand
+focusFrame=false
 frame=false
 text.margin.top=4
 text.margin.bottom=4
@@ -590,6 +624,7 @@ frame.expansion=0
 
 [ComboBox]
 inherits=PanelButtonCommand
+focusFrame=false
 interior.element=combo
 frame.element=breezeinput
 frame.top=5
@@ -603,7 +638,7 @@ text.margin.right=0
 text.normal.color=#dfdfdf
 text.focus.color=#dfdfdf
 text.press.color=#dfdfdf
-text.toggle.color=#dfdfdf
+text.toggle.color=white
 indicator.element=carrow
 indicator.size=10
 min_width=0
