@@ -16,6 +16,7 @@ theme light
 theme dark
 theme toggle
 theme preset breeze
+theme preset darkly
 theme preset kvantum
 theme preset      # print the active preset
 theme presets     # list available presets
@@ -24,22 +25,23 @@ theme apply       # idempotently repair drift
 theme --dry-run preset breeze
 ```
 
-Niri also binds `Mod+Shift+T` to `theme toggle`. “Toggle Color Theme” is available in desktop application launchers, with explicit Light, Dark, Breeze and Kvantum actions.
+Niri also binds `Mod+Shift+T` to `theme toggle`. “Toggle Color Theme” is available in desktop application launchers, with explicit Light, Dark, Breeze, Darkly and Kvantum actions.
 
-## Widget presets
+## Appearance presets
 
-| Preset | Qt widget style | Light colors | Dark colors | Kvantum theme |
-| --- | --- | --- | --- | --- |
-| `breeze` | KDE Breeze | `LayanLight` | `BreezeDark` | Not used |
-| `kvantum` | Kvantum | `LayanLight` | `Layan` | `LayanBreeze` / `LayanBreezeDark` |
+| Preset | Qt style | Plasma theme | KWin decoration | Light colors | Dark colors | Kvantum theme |
+| --- | --- | --- | --- | --- | --- | --- |
+| `breeze` | KDE Breeze | Breeze | Breeze | `LayanLight` | `BreezeDark` | Not used |
+| `darkly` | Darkly | Darkly | Darkly | `LayanLight` | `BreezeDark` | Not used |
+| `kvantum` | Kvantum | Breeze | Breeze | `LayanLight` | `Layan` | `LayanBreeze` / `LayanBreezeDark` |
 
-The `breeze` preset preserves the original setup. The `kvantum` preset keeps Layan's palette and translucency while using Breeze-compatible widget geometry and styling. Its theme files live at `~/.config/Kvantum/LayanBreeze`.
+The `breeze` preset preserves the original setup. The `darkly` preset captures the current light configuration with the Darkly application style, Plasma theme, window decoration, saved opacity settings, and LayanLight colors. Its dark mode retains that appearance and changes only the Qt/KDE color scheme to BreezeDark. The saved Darkly settings live at `~/.config/darklyrc`, and the required `darkly-bin` package is recorded in the AUR package list. The `kvantum` preset keeps Layan's palette and translucency while using Breeze-compatible widget geometry and styling. Its theme files live at `~/.config/Kvantum/LayanBreeze`.
 
 ## Managed backends
 
 | Consumer | Light | Dark |
 | --- | --- | --- |
-| KDE global theme | `custom_light` | `custom_dark` |
+| KDE global theme | `custom_light` | `custom_dark` (`darkly` retains `custom_light`) |
 | KDE color scheme | Preset-defined | Preset-defined |
 | Qt widget style | Preset-defined | Preset-defined |
 | GTK preference | `prefer-light` | `prefer-dark` |

@@ -16,6 +16,8 @@ DRY_RUN=0
 FAILURES=0
 KVANTUM_CHANGED=0
 KDE_STYLE_CHANGED=0
+PLASMA_THEME_CHANGED=0
+KWIN_DECORATION_CHANGED=0
 
 usage() {
     cat <<EOF
@@ -23,7 +25,8 @@ Usage:
   $PROGRAM light|dark              Set and apply a color mode
   $PROGRAM set light|dark          Set and apply a color mode
   $PROGRAM toggle                  Toggle light/dark
-  $PROGRAM preset [breeze|kvantum] Show or switch the widget preset
+  $PROGRAM preset [breeze|darkly|kvantum]
+                                   Show or switch the widget preset
   $PROGRAM presets                 List available widget presets
   $PROGRAM apply                   Reconcile every backend with saved state
   $PROGRAM current                 Print the saved color mode
@@ -51,11 +54,11 @@ valid_mode() {
 }
 
 valid_preset() {
-    [[ ${1:-} == breeze || ${1:-} == kvantum ]]
+    [[ ${1:-} == breeze || ${1:-} == darkly || ${1:-} == kvantum ]]
 }
 
 list_presets() {
-    printf '%s\n' breeze kvantum
+    printf '%s\n' breeze darkly kvantum
 }
 
 read_saved_mode() {
@@ -154,6 +157,7 @@ current_mode() {
 preset_from_style() {
     case ${1,,} in
         kvantum*) printf 'kvantum\n' ;;
+        darkly*) printf 'darkly\n' ;;
         breeze*) printf 'breeze\n' ;;
         *) return 1 ;;
     esac
@@ -317,11 +321,19 @@ load_profile() {
     GTK_THEME=Breeze
     QT_STYLE=Breeze
     KVANTUM_THEME=
+    PLASMA_THEME=default
+    KWIN_DECORATION_LIBRARY=org.kde.breeze
+    KWIN_DECORATION_THEME=Breeze
 
-    if [[ $preset == kvantum ]]; then
-        QT_STYLE=kvantum
-        KVANTUM_THEME=LayanBreeze
-    fi
+    case $preset in
+        darkly)
+            QT_STYLE=Darkly
+            ;;
+        kvantum)
+            QT_STYLE=kvantum
+            KVANTUM_THEME=LayanBreeze
+            ;;
+    esac
 
     if [[ $mode == dark ]]; then
         KDE_LOOKANDFEEL=custom_dark
@@ -346,6 +358,7 @@ load_profile() {
         KDE_LOOKANDFEEL=custom_light
         KDE_FALLBACK_LOOKANDFEEL=org.kde.breeze.desktop
         KDE_COLOR_SCHEME=LayanLight
+        KWIN_DECORATION_THEME='Breeze 微风'
         COLOR_PREFERENCE=prefer-light
         GTK_PREFER_DARK=false
         ROFI_THEME="$HOME/.local/share/rofi/themes/rounded-white.rasi"
@@ -355,6 +368,17 @@ load_profile() {
             KDE_COLOR_SCHEME=BreezeLight
             QT_COLOR_SCHEME=$(color_scheme_path BreezeLight || true)
         fi
+    fi
+
+    if [[ $preset == darkly ]]; then
+        # Darkly is a snapshot of the current light appearance. Keeping the
+        # light look-and-feel package prevents a mode change from replacing
+        # its Plasma theme and window decoration; only the palette changes.
+        KDE_LOOKANDFEEL=custom_light
+        KDE_FALLBACK_LOOKANDFEEL=org.kde.breeze.desktop
+        PLASMA_THEME=darkly
+        KWIN_DECORATION_LIBRARY=org.kde.darkly
+        KWIN_DECORATION_THEME='Darkly 微风'
     fi
 
     if ! lookandfeel_exists "$KDE_LOOKANDFEEL"; then
@@ -503,6 +527,32 @@ apply_kde() {
             KDE_STYLE_CHANGED=1
         fi
         set_kde_value KDE widgetStyle "$QT_STYLE"
+    fi
+
+    current=$(kreadconfig6 --file plasmarc --group Theme --key name 2>/dev/null || true)
+    if [[ $current != "$PLASMA_THEME" ]]; then
+        PLASMA_THEME_CHANGED=1
+        run_backend "Plasma theme" kwriteconfig6 --file plasmarc \
+            --group Theme --key name --notify "$PLASMA_THEME" || true
+    fi
+
+    current=$(kreadconfig6 --file kwinrc --group org.kde.kdecoration2 --key library 2>/dev/null || true)
+    if [[ $current != "$KWIN_DECORATION_LIBRARY" ]]; then
+        KWIN_DECORATION_CHANGED=1
+        run_backend "KWin decoration" kwriteconfig6 --file kwinrc \
+            --group org.kde.kdecoration2 --key library --notify "$KWIN_DECORATION_LIBRARY" || true
+    fi
+
+    current=$(kreadconfig6 --file kwinrc --group org.kde.kdecoration2 --key theme 2>/dev/null || true)
+    if [[ $current != "$KWIN_DECORATION_THEME" ]]; then
+        KWIN_DECORATION_CHANGED=1
+        run_backend "KWin deco theme" kwriteconfig6 --file kwinrc \
+            --group org.kde.kdecoration2 --key theme --notify "$KWIN_DECORATION_THEME" || true
+    fi
+
+    if ((KWIN_DECORATION_CHANGED)) && command -v qdbus6 >/dev/null 2>&1 && \
+        qdbus6 org.kde.KWin >/dev/null 2>&1; then
+        run_backend KWin-style qdbus6 org.kde.KWin /KWin reconfigure || true
     fi
 }
 
@@ -686,7 +736,8 @@ reload_kitty() {
 reload_plasma_style() {
     local desktop lower
 
-    if ((KVANTUM_CHANGED == 0 && KDE_STYLE_CHANGED == 0)) || ! command -v systemctl >/dev/null 2>&1; then
+    if ((KVANTUM_CHANGED == 0 && KDE_STYLE_CHANGED == 0 && PLASMA_THEME_CHANGED == 0)) || \
+        ! command -v systemctl >/dev/null 2>&1; then
         return 0
     fi
 
@@ -720,6 +771,8 @@ apply_all() {
     PRESET=$preset
     KVANTUM_CHANGED=0
     KDE_STYLE_CHANGED=0
+    PLASMA_THEME_CHANGED=0
+    KWIN_DECORATION_CHANGED=0
     load_profile "$MODE" "$PRESET"
     apply_environment "$MODE"
     apply_state_artifacts
@@ -748,6 +801,7 @@ apply_all() {
 
 status() {
     local mode preset desktop manager_mode manager_qt kde_look kde_color kde_style kde_icon
+    local plasma_theme kwin_decoration kwin_decoration_theme
     local gtk_color gtk_theme gtk_icon noctalia_mode qt_color qt_style kvantum_theme rofi_theme
 
     mode=$(current_mode)
@@ -765,6 +819,9 @@ status() {
     kde_color=$(command -v kreadconfig6 >/dev/null 2>&1 && kde_value General ColorScheme || true)
     kde_style=$(command -v kreadconfig6 >/dev/null 2>&1 && kde_value KDE widgetStyle || true)
     kde_icon=$(command -v kreadconfig6 >/dev/null 2>&1 && kde_value Icons Theme || true)
+    plasma_theme=$(command -v kreadconfig6 >/dev/null 2>&1 && kreadconfig6 --file plasmarc --group Theme --key name 2>/dev/null || true)
+    kwin_decoration=$(command -v kreadconfig6 >/dev/null 2>&1 && kreadconfig6 --file kwinrc --group org.kde.kdecoration2 --key library 2>/dev/null || true)
+    kwin_decoration_theme=$(command -v kreadconfig6 >/dev/null 2>&1 && kreadconfig6 --file kwinrc --group org.kde.kdecoration2 --key theme 2>/dev/null || true)
 
     gtk_color=$(command -v gsettings >/dev/null 2>&1 && gsettings_value org.gnome.desktop.interface color-scheme || true)
     gtk_theme=$(command -v gsettings >/dev/null 2>&1 && gsettings_value org.gnome.desktop.interface gtk-theme || true)
@@ -792,6 +849,8 @@ status() {
         KDE-colors "${kde_color:-unavailable}" \
         KDE-style "${kde_style:-unavailable}" \
         KDE-icons "${kde_icon:-unavailable}" \
+        Plasma-theme "${plasma_theme:-unavailable}" \
+        KWin-decoration "${kwin_decoration:-unavailable} / ${kwin_decoration_theme:-default}" \
         GTK-preference "${gtk_color:-unavailable}" \
         GTK-theme "${gtk_theme:-unavailable}" \
         GTK-icons "${gtk_icon:-unavailable}" \
@@ -871,7 +930,7 @@ case $COMMAND in
         fi
         PRESET=$1
         if (($# != 1)) || ! valid_preset "$PRESET"; then
-            warn "preset requires 'breeze' or 'kvantum'"
+            warn "preset requires 'breeze', 'darkly' or 'kvantum'"
             usage >&2
             exit 2
         fi

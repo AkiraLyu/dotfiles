@@ -1,0 +1,15 @@
+[Common]
+OutlineCloseButton=true
+ShadowStrength=51
+
+[Style]
+DolphinSidebarOpacity=60
+DolphinViewOpacity=60
+MenuBarOpacity=60
+MenuOpacity=60
+TabBarOpacity=60
+ToolBarOpacity=60
+
+[Windeco]
+BlurTransparentTitleBar=true
+DrawBackgroundGradient=true
