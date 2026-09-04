@@ -1,0 +1,33 @@
+# KWin effect settings exported on 2026-09-04.
+# Merge these groups into ~/.config/kwinrc; do not replace that file wholesale.
+
+[Effect-better-blur-dx]
+BlurStrength=2
+Saturation=250
+WindowClasses=md.obsidian.Obsidian
+
+[Plugins]
+better_blur_dxEnabled=true
+blurEnabled=false
+shapecornersEnabled=true
+
+[Round-Corners]
+ActiveOutlineAlpha=0
+ActiveSecondOutlineAlpha=2
+AnimationDuration=0
+DisableRoundMaximize=false
+DisableRoundTile=false
+InactiveCornerRadius=16
+InactiveOutlineAlpha=0
+InactiveOutlineColor=255,255,255
+InactiveOutlineThickness=0
+InactiveSecondOutlineAlpha=0
+InactiveSecondOutlineThickness=0
+InactiveShadowSize=25
+Inclusions=code
+OutlineColor=255,255,255
+OutlineThickness=0
+SecondOutlineThickness=0
+ShadowSize=50
+Size=16
+Squircleness=0

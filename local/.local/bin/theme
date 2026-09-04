@@ -277,6 +277,13 @@ lookandfeel_exists() {
     [[ -d $HOME/.local/share/plasma/look-and-feel/$package || -d /usr/share/plasma/look-and-feel/$package ]]
 }
 
+plasma_theme_exists() {
+    local theme=$1
+    [[ -d ${XDG_DATA_HOME:-"$HOME/.local/share"}/plasma/desktoptheme/$theme || \
+        -d /usr/local/share/plasma/desktoptheme/$theme || \
+        -d /usr/share/plasma/desktoptheme/$theme ]]
+}
+
 color_scheme_path() {
     local scheme=$1 candidate
 
@@ -376,7 +383,11 @@ load_profile() {
         # its Plasma theme and window decoration; only the palette changes.
         KDE_LOOKANDFEEL=custom_light
         KDE_FALLBACK_LOOKANDFEEL=org.kde.breeze.desktop
-        PLASMA_THEME=darkly
+        if plasma_theme_exists darkly-translucent; then
+            PLASMA_THEME=darkly-translucent
+        else
+            PLASMA_THEME=darkly
+        fi
         KWIN_DECORATION_LIBRARY=org.kde.darkly
         KWIN_DECORATION_THEME='Darkly 微风'
     fi

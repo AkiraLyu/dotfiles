@@ -1,0 +1,89 @@
+#!/usr/bin/env bash
+
+set -Eeuo pipefail
+
+PROGRAM=${0##*/}
+DATA_HOME=${XDG_DATA_HOME:-"$HOME/.local/share"}
+CACHE_HOME=${XDG_CACHE_HOME:-"$HOME/.cache"}
+CONFIG_HOME=${XDG_CONFIG_HOME:-"$HOME/.config"}
+TARGET_NAME=darkly-translucent
+TARGET_DIR="$DATA_HOME/plasma/desktoptheme/$TARGET_NAME"
+MARKER=.darkly-translucent-generated
+REPLACEMENT_THEME=darkly
+DRY_RUN=0
+
+usage() {
+    printf 'Usage: %s [--dry-run]\n' "$PROGRAM"
+}
+
+case ${1:-} in
+    '') ;;
+    -n | --dry-run) DRY_RUN=1 ;;
+    -h | --help)
+        usage
+        exit 0
+        ;;
+    *)
+        usage >&2
+        exit 2
+        ;;
+esac
+
+if (($# > 1)); then
+    usage >&2
+    exit 2
+fi
+
+selected_theme=
+if command -v kreadconfig6 >/dev/null 2>&1; then
+    selected_theme=$(kreadconfig6 --file "$CONFIG_HOME/plasmarc" \
+        --group Theme --key name 2>/dev/null || true)
+fi
+
+if [[ -e $TARGET_DIR || -L $TARGET_DIR ]]; then
+    if [[ ! -f $TARGET_DIR/$MARKER ]] || \
+        ! grep -qF '"Id": "darkly-translucent"' "$TARGET_DIR/metadata.json" 2>/dev/null; then
+        printf '%s: refusing to remove unrecognized path: %s\n' "$PROGRAM" "$TARGET_DIR" >&2
+        exit 1
+    fi
+fi
+
+if ((DRY_RUN)); then
+    if [[ $selected_theme == "$TARGET_NAME" ]]; then
+        printf 'Would switch Plasma theme to %s.\n' "$REPLACEMENT_THEME"
+    fi
+    if [[ -e $TARGET_DIR || -L $TARGET_DIR ]]; then
+        printf 'Would remove %s.\n' "$TARGET_DIR"
+    fi
+    printf 'Would remove the generated Plasma theme cache for %s.\n' "$TARGET_NAME"
+    exit 0
+fi
+
+theme_was_selected=0
+if [[ $selected_theme == "$TARGET_NAME" ]]; then
+    theme_was_selected=1
+    if command -v plasma-apply-desktoptheme >/dev/null 2>&1; then
+        plasma-apply-desktoptheme "$REPLACEMENT_THEME"
+    elif command -v kwriteconfig6 >/dev/null 2>&1; then
+        kwriteconfig6 --file "$CONFIG_HOME/plasmarc" \
+            --group Theme --key name --notify "$REPLACEMENT_THEME"
+    else
+        printf '%s: cannot safely switch away from the active custom theme\n' "$PROGRAM" >&2
+        exit 1
+    fi
+fi
+
+if [[ -e $TARGET_DIR || -L $TARGET_DIR ]]; then
+    find -P "$TARGET_DIR" -depth -delete
+fi
+
+rm -f -- "$CACHE_HOME/plasma_theme_${TARGET_NAME}.kcache" \
+    "$CACHE_HOME/plasma_theme_${TARGET_NAME}.kcache.lock"
+
+if ((theme_was_selected)) && command -v systemctl >/dev/null 2>&1 && \
+    systemctl --user is-active --quiet plasma-plasmashell.service; then
+    systemctl --user restart plasma-plasmashell.service
+fi
+
+printf 'Removed %s and restored Plasma theme %s where necessary.\n' \
+    "$TARGET_NAME" "$REPLACEMENT_THEME"

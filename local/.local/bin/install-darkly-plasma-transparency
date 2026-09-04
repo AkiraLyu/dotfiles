@@ -1,0 +1,99 @@
+#!/usr/bin/env bash
+
+set -Eeuo pipefail
+
+PROGRAM=${0##*/}
+SOURCE_DIR=${DARKLY_PLASMA_SOURCE_DIR:-/usr/share/plasma/desktoptheme/darkly}
+DATA_HOME=${XDG_DATA_HOME:-"$HOME/.local/share"}
+CACHE_HOME=${XDG_CACHE_HOME:-"$HOME/.cache"}
+TARGET_NAME=darkly-translucent
+TARGET_PARENT="$DATA_HOME/plasma/desktoptheme"
+TARGET_DIR="$TARGET_PARENT/$TARGET_NAME"
+MARKER=.darkly-translucent-generated
+OPACITY=0.60
+STAGING_DIR=
+BACKUP_DIR=
+
+die() {
+    printf '%s: %s\n' "$PROGRAM" "$*" >&2
+    exit 1
+}
+
+cleanup() {
+    local status=$?
+    trap - EXIT
+
+    if [[ -n $STAGING_DIR && -e $STAGING_DIR ]]; then
+        rm -rf -- "$STAGING_DIR"
+    fi
+
+    if ((status != 0)) && [[ -n $BACKUP_DIR && -e $BACKUP_DIR && ! -e $TARGET_DIR ]]; then
+        mv -- "$BACKUP_DIR" "$TARGET_DIR"
+    fi
+
+    exit "$status"
+}
+trap cleanup EXIT
+
+for required in metadata.json dialogs/background.svg widgets/background.svg; do
+    [[ -r $SOURCE_DIR/$required ]] || die "missing Darkly source file: $SOURCE_DIR/$required"
+done
+
+mkdir -p -- "$TARGET_PARENT"
+STAGING_DIR=$(mktemp -d "$TARGET_PARENT/.${TARGET_NAME}.install.XXXXXX")
+cp -a --no-preserve=ownership -- "$SOURCE_DIR/." "$STAGING_DIR/"
+
+dialog_file="$STAGING_DIR/dialogs/background.svg"
+widget_file="$STAGING_DIR/widgets/background.svg"
+metadata_file="$STAGING_DIR/metadata.json"
+
+dialog_count=$(grep -cF 'style="opacity:1;fill:currentColor"' "$dialog_file" || true)
+[[ $dialog_count == 9 ]] || die "unexpected Darkly dialog layout: expected 9 background tiles, found $dialog_count"
+
+widget_count=$(grep -cF 'style="opacity:0.96;fill:currentColor;fill-opacity:1"' "$widget_file" || true)
+[[ $widget_count == 6 ]] || die "unexpected Darkly widget layout: expected 6 background tiles, found $widget_count"
+
+metadata_id_count=$(grep -cF '"Id": "darkly"' "$metadata_file" || true)
+metadata_name_count=$(grep -cF '"Name": "Darkly"' "$metadata_file" || true)
+[[ $metadata_id_count == 1 && $metadata_name_count == 1 ]] || \
+    die 'unexpected Darkly metadata; refusing to create a misidentified theme'
+
+sed -i \
+    -e "s/style=\"opacity:1;fill:currentColor\"/style=\"opacity:$OPACITY;fill:currentColor\"/g" \
+    "$dialog_file"
+sed -i \
+    -e "s/style=\"opacity:0\.96;fill:currentColor;fill-opacity:1\"/style=\"opacity:$OPACITY;fill:currentColor;fill-opacity:1\"/g" \
+    "$widget_file"
+sed -i \
+    -e 's/"Id": "darkly"/"Id": "darkly-translucent"/' \
+    -e 's/"Name": "Darkly"/"Name": "Darkly Translucent"/' \
+    "$metadata_file"
+
+printf 'Generated from %s with background opacity %s.\n' "$SOURCE_DIR" "$OPACITY" >"$STAGING_DIR/$MARKER"
+
+patched_dialog_count=$(grep -cF "style=\"opacity:$OPACITY;fill:currentColor\"" "$dialog_file" || true)
+patched_widget_count=$(grep -cF "style=\"opacity:$OPACITY;fill:currentColor;fill-opacity:1\"" "$widget_file" || true)
+[[ $patched_dialog_count == 9 && $patched_widget_count == 6 ]] || \
+    die 'generated theme failed opacity validation'
+
+if [[ -e $TARGET_DIR || -L $TARGET_DIR ]]; then
+    [[ -f $TARGET_DIR/$MARKER ]] || \
+        die "refusing to replace unrecognized path: $TARGET_DIR"
+    BACKUP_DIR="$TARGET_PARENT/.${TARGET_NAME}.previous.$$"
+    [[ ! -e $BACKUP_DIR ]] || die "temporary backup already exists: $BACKUP_DIR"
+    mv -- "$TARGET_DIR" "$BACKUP_DIR"
+fi
+
+mv -- "$STAGING_DIR" "$TARGET_DIR"
+STAGING_DIR=
+
+if [[ -n $BACKUP_DIR ]]; then
+    rm -rf -- "$BACKUP_DIR"
+    BACKUP_DIR=
+fi
+
+rm -f -- "$CACHE_HOME/plasma_theme_${TARGET_NAME}.kcache" \
+    "$CACHE_HOME/plasma_theme_${TARGET_NAME}.kcache.lock"
+
+printf 'Installed %s at %s\n' "$TARGET_NAME" "$TARGET_DIR"
+printf 'Run "theme apply" to select it for the Darkly preset.\n'

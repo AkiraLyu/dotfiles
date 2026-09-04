@@ -28,6 +28,6 @@ if test "$XDG_CURRENT_DESKTOP" = "niri"
     echo "background_opacity 0.8"
     echo "background_blur 0"
 else if test "$XDG_CURRENT_DESKTOP" = "KDE"
-    echo "background_opacity 0.6"
+    echo "background_opacity 0.9"
     echo "background_blur 1"
 end
