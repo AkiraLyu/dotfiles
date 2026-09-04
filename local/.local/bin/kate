@@ -1,0 +1,32 @@
+#!/bin/bash
+
+set -euo pipefail
+
+plugin_root=${KATE_TRANSLUCENT_BARS_PLUGIN_ROOT:-"$HOME/.local/lib/qt6/plugins"}
+kate_data_home=${XDG_DATA_HOME:-"$HOME/.local/share"}/kate
+
+# Kate stores enabled plugins in each session file, not in katerc. Keep the
+# plugin enabled for the anonymous session and any named sessions that already
+# exist before Kate reads them.
+if command -v kwriteconfig6 >/dev/null 2>&1; then
+    mkdir -p "$kate_data_home"
+    kwriteconfig6 --file "$kate_data_home/anonymous.katesession" \
+        --group 'Kate Plugins' --key katetranslucentbarsplugin --type bool true
+
+    if [[ -d $kate_data_home/sessions ]]; then
+        while IFS= read -r -d '' session_file; do
+            kwriteconfig6 --file "$session_file" --group 'Kate Plugins' \
+                --key katetranslucentbarsplugin --type bool true
+        done < <(find "$kate_data_home/sessions" -maxdepth 1 -type f -name '*.katesession' -print0)
+    fi
+fi
+
+if [[ -d $plugin_root/kf6/ktexteditor ]]; then
+    if [[ -n ${QT_PLUGIN_PATH:-} ]]; then
+        export QT_PLUGIN_PATH="$plugin_root:$QT_PLUGIN_PATH"
+    else
+        export QT_PLUGIN_PATH=$plugin_root
+    fi
+fi
+
+exec /usr/bin/kate "$@"

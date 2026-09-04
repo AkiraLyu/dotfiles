@@ -1,0 +1,37 @@
+#!/bin/bash
+
+set -euo pipefail
+
+script_path=$(readlink -f -- "${BASH_SOURCE[0]}")
+script_dir=$(dirname -- "$script_path")
+install_prefix=${KATE_TRANSLUCENT_BARS_PREFIX:-"$HOME/.local"}
+plugin_file=$install_prefix/lib/qt6/plugins/kf6/ktexteditor/katetranslucentbarsplugin.so
+plugin_dir=$(dirname -- "$plugin_file")
+wrapper_link=$HOME/.local/bin/kate
+wrapper_source=$script_dir/kate
+kate_data_home=${XDG_DATA_HOME:-"$HOME/.local/share"}/kate
+
+if [[ -f $plugin_file ]]; then
+    rm -- "$plugin_file"
+fi
+rmdir --ignore-fail-on-non-empty -- "$plugin_dir" 2>/dev/null || true
+
+if [[ -L $wrapper_link && $(readlink -f -- "$wrapper_link") == $(readlink -f -- "$wrapper_source") ]]; then
+    rm -- "$wrapper_link"
+fi
+
+kwriteconfig6 --file katerc --group 'Kate Plugins' \
+    --key katetranslucentbarsplugin --delete ''
+
+if [[ -f $kate_data_home/anonymous.katesession ]]; then
+    kwriteconfig6 --file "$kate_data_home/anonymous.katesession" \
+        --group 'Kate Plugins' --key katetranslucentbarsplugin --delete ''
+fi
+if [[ -d $kate_data_home/sessions ]]; then
+    while IFS= read -r -d '' session_file; do
+        kwriteconfig6 --file "$session_file" --group 'Kate Plugins' \
+            --key katetranslucentbarsplugin --delete ''
+    done < <(find "$kate_data_home/sessions" -maxdepth 1 -type f -name '*.katesession' -print0)
+fi
+
+printf 'Removed the Kate translucent-bars plugin. Restart Kate to finish.\n'
