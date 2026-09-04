@@ -63,6 +63,33 @@
     --frame-el-shadow: none !important;
   }
 
+  /* Sidebery 可能仍保留亮色属性；暗色时显式修正其文字和浮层配色。 */
+  @media (prefers-color-scheme: dark) {
+    :root,
+    body,
+    #root_container,
+    #root {
+      color: #ccc !important;
+    }
+
+    #root {
+      --frame-fg: #ccc !important;
+      --toolbar-fg: #eee !important;
+      --frame-el-fg: #eee !important;
+      --active-el-bg: rgba(255, 255, 255, 0.141) !important;
+      --active-el-fg: #fff !important;
+      --popup-bg: var(--uc-panel-background) !important;
+      --popup-fg: #fafafa !important;
+      --notification-bg: var(--uc-panel-background) !important;
+      --notification-fg: #fafafa !important;
+      --tabs-normal-fg: #ccc !important;
+      --tabs-activated-bg: rgba(255, 255, 255, 0.141) !important;
+      --tabs-activated-fg: #fff !important;
+      --tabs-selected-bg: rgba(255, 255, 255, 0.141) !important;
+      --tabs-selected-fg: #fff !important;
+    }
+  }
+
   /* 底部按钮、其留白父层和防穿透伪元素都使用不透明面板色。 */
   .TabsPanel .bottom-space,
   .TabsPanel .new-tab-btns,

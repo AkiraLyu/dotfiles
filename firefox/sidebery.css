@@ -57,6 +57,33 @@ body,
 #root {
   --tabs-height: 33px;
 }
+
+/* Keep dark colors correct even when Sidebery retains its light scheme attributes. */
+@media (prefers-color-scheme: dark) {
+  html,
+  body,
+  #root_container,
+  #root {
+    color: #ccc !important;
+  }
+
+  #root {
+    --frame-fg: #ccc !important;
+    --toolbar-fg: #eee !important;
+    --frame-el-fg: #eee !important;
+    --active-el-bg: rgba(255, 255, 255, 0.141) !important;
+    --active-el-fg: #fff !important;
+    --popup-bg: var(--uc-panel-background) !important;
+    --popup-fg: #fafafa !important;
+    --notification-bg: var(--uc-panel-background) !important;
+    --notification-fg: #fafafa !important;
+    --tabs-normal-fg: #ccc !important;
+    --tabs-activated-bg: rgba(255, 255, 255, 0.141) !important;
+    --tabs-activated-fg: #fff !important;
+    --tabs-selected-bg: rgba(255, 255, 255, 0.141) !important;
+    --tabs-selected-fg: #fff !important;
+  }
+}
  
 /* Background layer */
  
