@@ -1,0 +1,31 @@
+import QtQuick.tooling 1.2
+
+Module {
+    Component {
+        name: "SearchIndex"
+        prototype: "QObject"
+        exports: ["org.kde.plasma.appgrid.core/SearchIndex 1.0"]
+        exportMetaObjectRevisions: [256]
+        Property { name: "applications"; type: "QJSValue" }
+        Property { name: "count"; type: "int"; isReadonly: true }
+        Signal { name: "applicationsChanged" }
+        Signal { name: "resultsChanged" }
+        Method {
+            name: "search"
+            type: "bool"
+            Parameter { name: "query"; type: "QString" }
+            Parameter { name: "includeDescriptions"; type: "bool" }
+        }
+        Method { name: "entryAt"; type: "QJSValue"; Parameter { name: "index"; type: "int" } }
+        Method { name: "application"; type: "QJSValue"; Parameter { name: "id"; type: "QString" } }
+        Method { name: "contains"; type: "bool"; Parameter { name: "id"; type: "QString" } }
+    }
+    Component {
+        name: "PageModel"
+        prototype: "QAbstractListModel"
+        exports: ["org.kde.plasma.appgrid.core/PageModel 1.0"]
+        exportMetaObjectRevisions: [256]
+        Property { name: "count"; type: "int" }
+        Signal { name: "countChanged" }
+    }
+}
