@@ -8,8 +8,15 @@ Module {
         exportMetaObjectRevisions: [256]
         Property { name: "applications"; type: "QJSValue" }
         Property { name: "count"; type: "int"; isReadonly: true }
+        Property { name: "historyData"; type: "QString" }
+        Property { name: "historyEnabled"; type: "bool" }
+        Property { name: "historyCount"; type: "int"; isReadonly: true }
         Signal { name: "applicationsChanged" }
         Signal { name: "resultsChanged" }
+        Signal { name: "historyChanged" }
+        Signal { name: "historyEnabledChanged" }
+        Method { name: "recordLaunch"; type: "bool"; Parameter { name: "id"; type: "QString" } }
+        Method { name: "historyScoreFor"; type: "double"; Parameter { name: "id"; type: "QString" } }
         Method {
             name: "search"
             type: "bool"

@@ -129,6 +129,7 @@ TestCase {
         testCase.height = 864;
         wait(0);
         view.searchText = "";
+        controller.launchHistoryData = "";
         controller.serializedLayout = "";
         controller.synchronize();
         view.reset();
@@ -457,6 +458,38 @@ TestCase {
         compare(draggedTile.dragVisualOffset, Qt.point(0, 0));
         tryCompare(targetSlot, "shiftAnimationRunning", false, 500);
         tryCompare(targetSlot, "renderedShiftOffset", Qt.point(0, 0), 500);
+    }
+
+    function test_rememberedSearchKeepsLayoutAndDragMergeBehavior() {
+        testCase.visible = true;
+        controller.launchHistoryData = JSON.stringify({version: 1, apps: [
+            {id: "application-30.desktop", weight: 10, lastUsed: Math.floor(Date.now() / 1000)},
+        ]});
+        const history = controller.launchHistoryData;
+        const layout = controller.serializedLayout;
+        view.playEntrance();
+        tryCompare(view, "transitionRunning", false, 800);
+        const first = findSlot(view.grid, 0);
+        view.searchText = "app";
+        tryCompare(view.grid, "itemCount", 31, 500);
+        compare(first.entry.id, "application-30.desktop");
+        compare(controller.serializedLayout, layout);
+        view.searchText = "";
+        wait(0);
+        verify(findSlot(view.grid, 0) === first);
+        compare(controller.rootEntryAt(0).id, "application-0.desktop");
+
+        dragRootItemWithMouse(0, 2, 0.08, 0.5,
+            appGridStyle.dragReorderDelay + 40);
+        compare(controller.rootEntryAt(2).id, "application-0.desktop");
+        wait(appGridStyle.dragSettleDuration + 40);
+        dragRootItemWithMouse(2, 3, 0.5, 0.5,
+            appGridStyle.dragMergeDelay + 40);
+        const folder = controller.rootEntryAt(2);
+        compare(folder.type, "folder");
+        compare(folder.apps.join(","), "application-3.desktop,application-0.desktop");
+        compare(controller.launchHistoryData, history);
+        compare(applicationLaunchedSpy.count, 0);
     }
 
     function test_dropContinuesFromRenderedPositions() {

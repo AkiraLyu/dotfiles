@@ -36,6 +36,7 @@ PlasmoidItem {
         defaultFolderName: i18nc("Default app-folder name", "Unnamed Folder")
         includeDescriptionsInSearch: Plasmoid.configuration.showDescriptionsInSearch
         enableKRunnerSearch: Plasmoid.configuration.enableKRunnerSearch
+        rememberApplicationUsage: Plasmoid.configuration.rememberApplicationUsage
         // KWin only grants the private window-management protocol to the
         // trusted shell process. Standalone QML/plasmawindowed previews remain
         // useful launcher views, but cannot expose task state on Wayland.
@@ -44,6 +45,11 @@ PlasmoidItem {
         onPersistenceRequested: serialized => {
             if (Plasmoid.configuration.layoutData !== serialized) {
                 Plasmoid.configuration.layoutData = serialized;
+            }
+        }
+        onLaunchHistoryPersistenceRequested: serialized => {
+            if (Plasmoid.configuration.launchHistoryData !== serialized) {
+                Plasmoid.configuration.launchHistoryData = serialized;
             }
         }
         onHiddenApplicationsPersistRequested: ids => {
@@ -107,6 +113,10 @@ PlasmoidItem {
             }
         }
 
+        function onLaunchHistoryDataChanged(): void {
+            layoutController.launchHistoryData = Plasmoid.configuration.launchHistoryData;
+        }
+
         function onHiddenApplicationsChanged(): void {
             const values = Array.from(
                 Plasmoid.configuration.hiddenApplications ?? []);
@@ -144,6 +154,7 @@ PlasmoidItem {
 
     Component.onCompleted: {
         layoutController.serializedLayout = Plasmoid.configuration.layoutData;
+        layoutController.launchHistoryData = Plasmoid.configuration.launchHistoryData;
         layoutController.hiddenApplications = Array.from(
             Plasmoid.configuration.hiddenApplications ?? []);
         applicationRootModel.refresh();

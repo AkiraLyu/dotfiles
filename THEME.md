@@ -1,5 +1,7 @@
 # Unified color theme
 
+Qt/Plasma configuration, custom plugin sources and installation helpers are grouped in [qt-plasma/](qt-plasma/README.md).
+
 `theme` is the only writer for the color mode and widget preset. Their canonical state is:
 
 ```text

@@ -14,9 +14,7 @@ MOUNTPOINT = Path("/mnt/network/onedrive")
 CACHE_DIR = Path("/mnt/network/cache/onedrive")
 REMOTE = "onedrive:"
 SYSTEMD_MOUNT_UNIT = "onedrive-mount.service"
-ICON_PATH = Path(
-    "/home/akira/.local/share/icons/Microsoft_OneDrive_Icon_(2025_-_present).svg"
-)
+ICON_PATH = Path(os.environ.get("XDG_DATA_HOME", Path.home() / ".local/share")) / "icons/hicolor/scalable/apps/dotfiles-onedrive.svg"
 
 MOUNT_TIMEOUT = 10.0
 MOUNT_POLL_INTERVAL = 0.5
@@ -38,6 +36,8 @@ def mount_onedrive() -> bool:
     if is_mounted():
         return True
 
+    MOUNTPOINT.mkdir(parents=True, exist_ok=True)
+    CACHE_DIR.mkdir(parents=True, exist_ok=True)
     result = subprocess.run(
         [
             "rclone",
@@ -355,7 +355,7 @@ def main(argv=None) -> int:
     if not args.mount_only and not args.autostart:
         open_mountpoint()
 
-    if not args.no_tray:
+    if not args.no_tray and not args.mount_only:
         return run_tray()
     return 0
 

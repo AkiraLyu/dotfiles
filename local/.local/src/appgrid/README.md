@@ -38,6 +38,8 @@ This repository currently contains the third usable milestone:
 - independently configurable background color and opacity, including a KDE
   color-scheme fallback;
 - native indexed search with stable result objects and warmed page delegates;
+- local launch history that prioritizes frequent and recent apps within each
+  search match tier, with controls to disable learning or clear history;
 - input, drag, and rendered-frame performance regression tests for 5,000 apps;
 - page-scoped AT-SPI semantics with modal folder-tree isolation;
 - system-palette and high-contrast rendering when forced dark mode is off;
@@ -84,6 +86,30 @@ kpackagetool6 --type Plasma/Applet --install package
 ```
 
 Use `--upgrade package` after the first install.
+
+Search learns from application launches accepted by App Grid, including apps
+opened from folders, search results, new-window actions, and recent-file
+actions. Exact names and stronger text matches retain priority; among equally
+strong matches, recent and frequent choices come first. Empty search preserves
+your app order and folders. Learning takes effect on the next query edit or
+reopening, without reshuffling the active query.
+
+History is stored in this widget's local Plasma configuration as application
+IDs, a decaying usage weight, and the last launch time. It stores no search
+queries or document paths. Frequency has a seven-day half-life, its weight is
+capped at 32 launches, and a one-day recency bonus helps new habits emerge.
+At most 512 applications are remembered; records unused for 90 days are
+discarded when history is loaded or updated. Disable **Prioritize frequently
+and recently opened apps** to stop learning and use the original text ranking.
+**Clear app launch history** removes the saved history when settings are applied.
+
+To verify history saving, restoration, disabling, and clearing across real
+Plasma widget host restarts with temporary configuration and a fake launch
+backend:
+
+```sh
+python3 tests/manual/history_persistence_smoke.py
+```
 
 For manual visual checks without a Plasma panel, run the fixture-backed window:
 

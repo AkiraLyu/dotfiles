@@ -1,11 +1,12 @@
 #!/bin/bash
 
-# 自动找出 Firefox 的默认 profile 目录
-profile_dir=$(find ~/.config/mozilla/firefox -maxdepth 1 -type d -name "*.default-release" | head -n 1)
+set -euo pipefail
 
-if [ -z "$profile_dir" ]; then
-    echo "未找到 Firefox profile 目录"
-    exit 1
+# Keep this existing entry point, but use the installer's resolver and preflight.
+script_dir=$(dirname -- "$(readlink -f -- "${BASH_SOURCE[0]}")")
+repo_dir=${DOTFILES_DIR:-${script_dir%/local/.local/scripts/apps/desktop}}
+
+if (($# == 1)) && [[ $1 == --help || $1 == -h || $1 == --plan ]]; then
+    exec "$repo_dir/install.sh" "$1"
 fi
-
-stow -d ~/dotfiles -t "$profile_dir" firefox
+exec "$repo_dir/install.sh" "$@" firefox

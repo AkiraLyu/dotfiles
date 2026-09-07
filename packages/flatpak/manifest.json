@@ -1,0 +1,37 @@
+{
+  "remotes": [
+    {
+      "name": "flathub",
+      "url": "https://dl.flathub.org/repo/",
+      "scope": "system",
+      "key": "system-flathub.gpg"
+    }
+  ],
+  "apps": [
+    {
+      "ref": "com.tencent.WeChat/x86_64/stable",
+      "origin": "flathub",
+      "scope": "system"
+    },
+    {
+      "ref": "org.gnome.NetworkDisplays/x86_64/stable",
+      "origin": "flathub",
+      "scope": "system"
+    },
+    {
+      "ref": "org.libreoffice.LibreOffice/x86_64/stable",
+      "origin": "flathub",
+      "scope": "system"
+    }
+  ],
+  "user_overrides": {
+    "com.google.Chrome": "[Session Bus Policy]\norg.kde.plasma.browser.integration=talk\n",
+    "com.google.ChromeDev": "[Session Bus Policy]\norg.kde.plasma.browser.integration=talk\n",
+    "com.tencent.WeChat": "[Environment]\nQT_SCALE_FACTOR=1.25\n",
+    "io.github.ungoogled_software.ungoogled_chromium": "[Session Bus Policy]\norg.kde.plasma.browser.integration=talk\n",
+    "io.gitlab.librewolf-community": "[Session Bus Policy]\norg.kde.plasma.browser.integration=talk\n",
+    "net.waterfox.waterfox": "[Session Bus Policy]\norg.kde.plasma.browser.integration=talk\n",
+    "org.chromium.Chromium": "[Session Bus Policy]\norg.kde.plasma.browser.integration=talk\n",
+    "org.mozilla.firefox": "[Session Bus Policy]\norg.kde.plasma.browser.integration=talk\n"
+  }
+}

@@ -1,6 +1,5 @@
 // floating
 window-rule {
-    match app-id="pot"
     match app-id="wpsoffice"
     match app-id="wps"
     match app-id=r#".*\.exe$"#
@@ -82,4 +81,3 @@ window-rule {
     match app-id="org.mozilla.Thunderbird"
     default-column-width { fixed 1032; }
 }
-

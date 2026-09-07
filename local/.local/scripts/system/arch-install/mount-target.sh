@@ -1,8 +1,6 @@
 #!/bin/bash
+set -euo pipefail
 
-# swapon /dev/mapper/cryptswap
-mount -o noatime,compress=zstd,subvol=@ /dev/mapper/cryptroot /mnt/
-mount /dev/nvme0n1p1 /mnt/boot
-mount -o noatime,compress=zstd,subvol=@home /dev/mapper/cryptroot /mnt/home
-mount -o noatime,compress=zstd,subvol=@snapshots /dev/mapper/cryptroot /mnt/.snapshots
-mount -o noatime,compress=zstd,subvol=/ /dev/mapper/cryptroot /mnt/mnt/defvol
+# Compatibility entry point; keep partition and boot logic in the main flow.
+script_dir=$(dirname -- "$(readlink -f -- "${BASH_SOURCE[0]}")")
+exec "$script_dir/../../../../../install.sh" --arch-mount "$@"

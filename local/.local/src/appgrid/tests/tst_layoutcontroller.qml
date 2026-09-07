@@ -103,6 +103,12 @@ TestCase {
         signalName: "folderRemoved"
     }
 
+    SignalSpy {
+        id: historyPersistSpy
+        target: controller
+        signalName: "launchHistoryPersistenceRequested"
+    }
+
     function init() {
         launchSpy.clear();
         interactionSpy.clear();
@@ -117,6 +123,9 @@ TestCase {
         controller.sourceModel = null;
         controller.serializedLayout = "";
         controller.searchText = "";
+        controller.launchHistoryData = "";
+        controller.rememberApplicationUsage = true;
+        historyPersistSpy.clear();
         controller.hiddenApplications = [];
         controller.sourceModel = fakeModel;
         compare(controller.count, 4);
@@ -259,6 +268,64 @@ TestCase {
         controller.activate("root", 0, "");
         compare(fakeModel.lastTriggeredRow, 0);
         compare(launchSpy.count, 0);
+        compare(controller.launchHistoryData, "");
+    }
+
+    function test_launchHistoryCoversRootFolderAndSearchWithoutChangingLayout() {
+        const folder = createFirstFolder();
+        const layout = controller.serializedLayout;
+        const revision = controller.revision;
+        controller.launchApplication("gamma.desktop");
+        controller.activate("folder", 0, folder.id);
+        controller.searchText = "alpha";
+        tryCompare(controller, "searchCount", 1, 500);
+        controller.activate("search", 0, "");
+
+        const history = JSON.parse(controller.launchHistoryData).apps;
+        compare(history.map(app => app.id).sort().join(","), "alpha.desktop,beta.desktop,gamma.desktop");
+        verify(history.every(app => app.weight === 1));
+        compare(controller.serializedLayout, layout);
+        compare(controller.revision, revision);
+        compare(historyPersistSpy.count, 3);
+        compare(historyPersistSpy.signalArguments[2][0], controller.launchHistoryData);
+
+        controller.rememberApplicationUsage = false;
+        const saved = controller.launchHistoryData;
+        controller.launchApplication("delta.desktop");
+        compare(controller.launchHistoryData, saved);
+        controller.launchHistoryData = "";
+        compare(controller.searchController.historyCount, 0);
+    }
+
+    function test_onlyLaunchActionsContributeToHistory() {
+        for (const action of ["editApplication", "addToDesktop", "_kicker_appstream", "forgetRecentDocuments"]) {
+            controller.triggerAction("alpha.desktop", action, "private document path");
+        }
+        compare(controller.launchHistoryData, "");
+        controller.triggerAction("alpha.desktop", "_kicker_jumpListAction", "new-window");
+        controller.triggerAction("alpha.desktop", "_kicker_recentDocument", "private document path");
+        const saved = controller.launchHistoryData;
+        compare(JSON.parse(saved).apps[0].weight, 2);
+        verify(!saved.includes("private document path"));
+        fakeModel.triggerResult = false;
+        controller.triggerAction("alpha.desktop", "_kicker_jumpListAction", "new-window");
+        compare(controller.launchHistoryData, saved);
+    }
+
+    function test_rememberedOrderSurvivesReorderMergeAndModelRefresh() {
+        controller.launchApplication("gamma.desktop");
+        const saved = controller.launchHistoryData;
+        createFirstFolder();
+        controller.moveRootItem(1, 2);
+        fakeModel.records = baseApplications.slice().reverse();
+        fakeModel.modelReset();
+        controller.searchText = "a";
+        tryCompare(controller, "searchCount", 4, 500);
+        compare(controller.searchEntryAt(0).id, "alpha.desktop");
+        compare(controller.searchEntryAt(1).id, "gamma.desktop");
+        compare(controller.launchHistoryData, saved);
+        controller.activate("search", 1, "");
+        compare(fakeModel.lastTriggeredRow, 1);
     }
 
     function test_kdeActionsAreLoadedOnDemandAndTriggered() {

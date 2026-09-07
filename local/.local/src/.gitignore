@@ -1,0 +1,8 @@
+# Original workspaces, generated output and personal data remain in backup/.
+# Local compatibility links are not part of the source snapshot.
+/appgrid/build
+/appgrid/.agents
+/appgrid/.codex
+/wps/build
+/zhihu/exports
+/gamescope/subprojects/.wraplock

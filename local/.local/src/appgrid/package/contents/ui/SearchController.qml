@@ -14,6 +14,9 @@ QtObject {
     property string query: ""
     property bool includeDescriptions: true
     property bool runnerSearchEnabled: true
+    property bool historyEnabled: true
+    property string historyData: ""
+    readonly property int historyCount: localSearch.historyCount
     property int maximumRunnerResults: 48
     property var runners: [
         "krunner_services",
@@ -45,6 +48,7 @@ QtObject {
         ? runnerSource.modelForRow(0) : null
 
     signal queryReplacementRequested(string query)
+    signal historyPersistenceRequested(string serialized)
 
     readonly property int displayRole: 0
     readonly property int decorationRole: 1
@@ -61,7 +65,9 @@ QtObject {
         runners: root.runners
     }
 
-    property Core.SearchIndex localSearch: Core.SearchIndex {}
+    property Core.SearchIndex localSearch: Core.SearchIndex {
+        historyEnabled: root.historyEnabled
+    }
 
     property Timer queryTimer: Timer {
         interval: 55
@@ -131,8 +137,32 @@ QtObject {
     onIncludeDescriptionsChanged: rebuildTimer.restart()
     onRunnerSearchEnabledChanged: _handleQueryChange()
     onRunnerSourceChanged: _handleQueryChange()
+    onHistoryDataChanged: _loadHistory()
+    onHistoryEnabledChanged: rebuildTimer.restart()
 
-    Component.onCompleted: _rebuildApplicationSearchIndex()
+    Component.onCompleted: {
+        _loadHistory();
+        _rebuildApplicationSearchIndex();
+    }
+
+    function _loadHistory(): void {
+        if (localSearch.historyData !== historyData) {
+            localSearch.historyData = historyData;
+            rebuildTimer.restart();
+        }
+    }
+
+    function recordLaunch(appId): void {
+        if (localSearch.recordLaunch(String(appId))) {
+            // Publish the bounded serialized snapshot only after a launch.
+            // Matching and provider updates never write configuration, and
+            // the current query keeps its order until the next query.
+            historyData = localSearch.historyData;
+            // Hand off before the launcher can be destroyed. Plasma owns
+            // disk persistence; no timer can overwrite a subsequent clear.
+            historyPersistenceRequested(historyData);
+        }
+    }
 
     function _normalizedApplicationId(value) {
         let id = String(value ?? "").trim();
@@ -361,7 +391,8 @@ QtObject {
                 const app = applicationById[favoriteId];
                 if (app && !localSearch.contains(favoriteId) && !seenApplications[favoriteId]) {
                     seenApplications[favoriteId] = true;
-                    runnerAppResults.push(localSearch.application(favoriteId));
+                    runnerAppResults.push({entry: localSearch.application(favoriteId),
+                        historyScore: localSearch.historyScoreFor(favoriteId), ordinal: row});
                 }
                 continue;
             }
@@ -383,9 +414,10 @@ QtObject {
 
         // GNOME's search keeps applications ahead of secondary providers.
         // KRunner-discovered application keyword matches follow direct local
-        // matches, then settings/calculator/session results retain KRunner's
-        // relevance order.
-        _commitResults(runnerAppResults.concat(externalResults), localChanged);
+        // matches. Apply the same history snapshot within those app results;
+        // settings/calculator/session results retain KRunner's relevance order.
+        runnerAppResults.sort((a, b) => b.historyScore - a.historyScore || a.ordinal - b.ordinal);
+        _commitResults(runnerAppResults.map(result => result.entry).concat(externalResults), localChanged);
     }
 
     function entryAt(index) {

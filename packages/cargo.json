@@ -1,0 +1,20 @@
+{
+  "root": ".cargo",
+  "packages": [
+    {
+      "name": "mirador",
+      "version": "0.1.0",
+      "toolchain": "nightly-2026-06-28-x86_64-unknown-linux-gnu",
+      "bins": [
+        "mirador"
+      ],
+      "features": [],
+      "all_features": false,
+      "no_default_features": false,
+      "profile": "release",
+      "target": "x86_64-unknown-linux-gnu",
+      "git": "https://github.com/pimalaya/mirador.git",
+      "rev": "2b50652eb23f826d647b399d942df73c48691f2e"
+    }
+  ]
+}

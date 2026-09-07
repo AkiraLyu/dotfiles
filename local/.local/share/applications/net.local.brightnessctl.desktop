@@ -1,0 +1,7 @@
+[Desktop Entry]
+Exec=brightnessctl set 0%%
+Name=lock
+NoDisplay=true
+StartupNotify=false
+Type=Application
+X-KDE-GlobalAccel-CommandShortcut=true

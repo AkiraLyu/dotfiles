@@ -1,6 +1,7 @@
 #!/bin/bash
+set -euo pipefail
 
-wineprefix="$HOME/.wine/"
+export WINEPREFIX=${WINEPREFIX:-"$HOME/wine-pfx/default"}
 
-WINEPREFIX=$wineprefix setup_vkd3d_proton install
-WINEPREFIX=$wineprefix setup_dxvk install
+setup_vkd3d_proton install
+setup_dxvk install

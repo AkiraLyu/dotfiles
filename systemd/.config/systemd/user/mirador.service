@@ -7,6 +7,6 @@ StartLimitIntervalSec=0
 
 [Service]
 Type=simple
-ExecStart=/usr/local/bin/mirador watch Akira
+ExecStart=%h/.cargo/bin/mirador --account Akira watch
 Restart=on-failure
 RestartSec=10s

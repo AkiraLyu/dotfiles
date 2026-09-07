@@ -1,0 +1,20 @@
+# Preserve GNU Stow's default exclusions.
+RCS
+.+,v
+CVS
+\.\#.+
+\.cvsignore
+\.svn
+_darcs
+\.hg
+\.git
+\.gitignore
+\.gitmodules
+.+~
+\#.*\#
+^/README.*
+^/LICENSE.*
+^/COPYING
+
+# Compatibility links to archived workspaces are local state, not deployment input.
+^/\.local/src/(appgrid/(build|\.agents|\.codex)|wps/build|zhihu/exports|gamescope/subprojects/\.wraplock|wechat-glass-live/(build|build-[^/]+|__pycache__))(/|$)

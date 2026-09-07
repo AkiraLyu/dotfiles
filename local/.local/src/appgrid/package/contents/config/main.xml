@@ -33,6 +33,12 @@
         <entry name="enableKRunnerSearch" type="Bool">
             <default>true</default>
         </entry>
+        <entry name="rememberApplicationUsage" type="Bool">
+            <default>true</default>
+        </entry>
+        <entry name="launchHistoryData" type="String">
+            <default></default>
+        </entry>
         <entry name="reduceAnimations" type="Bool">
             <default>false</default>
         </entry>

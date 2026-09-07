@@ -78,6 +78,22 @@ TestCase {
         controller: controller
     }
 
+    SignalSpy {
+        id: historyPersistSpy
+        target: controller
+        signalName: "launchHistoryPersistenceRequested"
+    }
+
+    function seedHistory(): void {
+        const apps = [];
+        const now = Math.floor(Date.now() / 1000);
+        for (let row = 0; row < 512; ++row) {
+            apps.push({id: `application-${4999 - row}.desktop`,
+                weight: 1 + row % 32, lastUsed: now - row * 3600});
+        }
+        controller.launchHistoryData = JSON.stringify({version: 1, apps});
+    }
+
     function makeFixtures(total): var {
         const records = [];
         const categories = [
@@ -118,6 +134,8 @@ TestCase {
         console.info("perf: model cleared");
         controller.serializedLayout = "";
         controller.searchText = "";
+        controller.launchHistoryData = "";
+        historyPersistSpy.clear();
         controller.hiddenApplications = [];
         console.info("perf: state reset");
         view.reset();
@@ -146,6 +164,7 @@ TestCase {
         testCase.visible = true;
         fakeModel.records = makeFixtures(5000);
         controller.sourceModel = fakeModel;
+        seedHistory();
         view.reset();
         view.playEntrance();
         tryCompare(view, "transitionRunning", false, 800);
@@ -163,7 +182,8 @@ TestCase {
                 wait(48);
             }
         }
-        reportFrames("typingFrames(5000 apps)");
+        reportFrames("typingFrames(5000 apps, 512 remembered)");
+        compare(historyPersistSpy.count, 0);
     }
 
     function test_renderedDragReorderAndMergeFrames() {
@@ -199,7 +219,8 @@ TestCase {
         wait(appGridStyle.dragMergeDuration + 40);
         compare(controller.count, 4999);
         compare(controller.rootEntryAt(3).type, "folder");
-        reportFrames("dragFrames(5000 apps)");
+        reportFrames("dragFrames(5000 apps, 512 remembered)");
+        compare(historyPersistSpy.count, 0);
     }
 
     // Keep synchronization within the latency budget for each fixture count
@@ -306,10 +327,17 @@ TestCase {
             + `search(5000, 5000 hits) = ${broadMillis}ms`);
     }
 
-    function test_typingLatencyWithVisibleResults() {
+    function test_typingLatencyWithVisibleResults_data() {
+        return [{tag: "no-history", remembered: false}, {tag: "remembered", remembered: true}];
+    }
+
+    function test_typingLatencyWithVisibleResults(data) {
         testCase.visible = true;
         fakeModel.records = makeFixtures(5000);
         controller.sourceModel = fakeModel;
+        if (data.remembered) {
+            seedHistory();
+        }
         view.reset();
         view.playEntrance();
         tryCompare(view, "transitionRunning", false, 800);
@@ -328,13 +356,15 @@ TestCase {
         const median = samples[Math.floor(samples.length / 2)];
         const p95 = samples[Math.floor(samples.length * 0.95)];
         const worst = samples[samples.length - 1];
-        console.info(`typing(5000 apps): median=${median}ms, p95=${p95}ms, max=${worst}ms`);
+        console.info(`typing(5000 apps, history=${data.remembered}): median=${median}ms, p95=${p95}ms, max=${worst}ms`);
         verify(p95 < 16 && worst < 32, `typing blocked the GUI: p95=${p95}ms, max=${worst}ms`);
+        compare(historyPersistSpy.count, 0);
     }
 
     function test_largeLayoutMutationsStayWithinAFrame() {
         fakeModel.records = makeFixtures(5000);
         controller.sourceModel = fakeModel;
+        seedHistory();
         view.reset();
         wait(0);
         const source = controller.rootEntryAt(0);
@@ -355,6 +385,7 @@ TestCase {
     function test_firstPageSurvivesResultCountChangesAndEmptySearch() {
         fakeModel.records = makeFixtures(5000);
         controller.sourceModel = fakeModel;
+        seedHistory();
         view.reset();
         wait(0);
         const first = view.grid.liveSlots.find(slot => slot.globalIndex === 0);
@@ -369,5 +400,22 @@ TestCase {
             verify(view.grid.liveSlots.includes(neighbor), `warm neighbor recreated for ${query}`);
             verify(neighbor.tile === neighborTile, `warm neighbor icon recreated for ${query}`);
         }
+    }
+
+    function test_recordingHistoryStaysWithinAFrame() {
+        fakeModel.records = makeFixtures(5000);
+        controller.sourceModel = fakeModel;
+        seedHistory();
+        wait(0);
+        let worst = 0;
+        for (let row = 0; row < 32; ++row) {
+            const started = Date.now();
+            controller.launchApplication(`application-${row}.desktop`);
+            worst = Math.max(worst, Date.now() - started);
+        }
+        console.info(`recordLaunch(512 remembered): max=${worst}ms`);
+        verify(worst < 16, `recording history stalled a frame: ${worst}ms`);
+        compare(JSON.parse(controller.launchHistoryData).apps.length, 512);
+        compare(historyPersistSpy.count, 32);
     }
 }

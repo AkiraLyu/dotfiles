@@ -14,6 +14,8 @@ QtObject {
     property var hiddenApplications: []
     property var appletInterface: null
     property bool enableKRunnerSearch: true
+    property bool rememberApplicationUsage: true
+    property alias launchHistoryData: applicationSearch.historyData
     property bool runningTrackingEnabled: true
     property var searchRunners: [
         "krunner_services",
@@ -49,6 +51,7 @@ QtObject {
     signal persistenceRequested(string serialized)
     signal hiddenApplicationsPersistRequested(var ids)
     signal applicationLaunched(string appId)
+    signal launchHistoryPersistenceRequested(string serialized)
     signal interactionConcluded()
     signal folderOpenRequested(string folderId)
     signal folderRemoved(string folderId)
@@ -64,15 +67,18 @@ QtObject {
     readonly property int urlRole: 266
 
     property SearchController searchController: SearchController {
+        id: applicationSearch
         applications: root.applications
         applicationById: root.applicationById
         appletInterface: root.appletInterface
         query: root.searchText
         includeDescriptions: root.includeDescriptionsInSearch
         runnerSearchEnabled: root.enableKRunnerSearch
+        historyEnabled: root.rememberApplicationUsage
         runners: root.searchRunners
 
         onQueryReplacementRequested: query => root.searchText = query
+        onHistoryPersistenceRequested: serialized => root.launchHistoryPersistenceRequested(serialized)
     }
 
     property RunningApplications runningApplications: RunningApplications {
@@ -394,6 +400,7 @@ QtObject {
             return;
         }
         if (sourceModel.trigger(app.sourceRow, "", undefined)) {
+            searchController.recordLaunch(appId);
             applicationLaunched(appId);
         }
     }
@@ -454,6 +461,11 @@ QtObject {
         }
 
         if (sourceModel.trigger(app.sourceRow, actionId, argument)) {
+            // These Kicker actions launch this app. Editing its desktop file,
+            // pinning it or opening software details must not teach a habit.
+            if (actionId === "_kicker_jumpListAction" || actionId === "_kicker_recentDocument") {
+                searchController.recordLaunch(appId);
+            }
             interactionConcluded();
         }
     }

@@ -20,6 +20,8 @@ KCMUtils.SimpleKCM {
     property alias cfg_backgroundOpacity: backgroundOpacity.value
     property alias cfg_showDescriptionsInSearch: showDescriptions.checked
     property alias cfg_enableKRunnerSearch: enableKRunnerSearch.checked
+    property alias cfg_rememberApplicationUsage: rememberApplicationUsage.checked
+    property string cfg_launchHistoryData: Plasmoid.configuration.launchHistoryData
     property alias cfg_reduceAnimations: reduceAnimations.checked
     property string cfg_layoutData: Plasmoid.configuration.layoutData
 
@@ -138,6 +140,25 @@ KCMUtils.SimpleKCM {
             text: i18nc(
                 "@info",
                 "Additional results use your enabled KRunner plugins and their privacy settings.")
+        }
+
+        QQC2.CheckBox {
+            id: rememberApplicationUsage
+
+            text: i18nc("@option:check", "Prioritize frequently and recently opened apps")
+        }
+
+        QQC2.Label {
+            Layout.fillWidth: true
+            wrapMode: Text.Wrap
+            text: i18nc("@info", "Learns from apps opened through App Grid. History stays on this device.")
+        }
+
+        QQC2.Button {
+            text: i18nc("@action:button", "Clear app launch history")
+            icon.name: "edit-clear-history"
+            enabled: root.cfg_launchHistoryData.length > 0
+            onClicked: root.cfg_launchHistoryData = ""
         }
 
         Item {

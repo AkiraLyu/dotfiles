@@ -1,0 +1,87 @@
+{
+  "version": "0.4.0",
+  "corrections": [
+    "Include outermost client pixels in title/nav transparency",
+    "Treat the one-device-pixel neutral native outline as background",
+    "Dematte partially transparent pixels with premultiplied alpha"
+  ],
+  "isolated_kde_tests": {
+    "checks": {
+      "main_has_explicit_blur": true,
+      "live_content_updates": true,
+      "top_left_outside_corner_unmodified": true,
+      "bottom_left_outside_corner_unmodified": true,
+      "popup_has_no_blur_property": true,
+      "popup_transparent_margin_unchanged": true,
+      "blur_region_updates_on_resize": true,
+      "disable_removes_owned_blur_property": true,
+      "reload_reinstates_blur_property": true
+    },
+    "renderer": {
+      "active": true,
+      "blur_scope": "rounded title and navigation bars; no popup matching",
+      "enabled": true,
+      "painted_frames": 2,
+      "redirected_windows": 1,
+      "renderer": "OffscreenEffect (live window damage)",
+      "shader_valid": true,
+      "version": "0.4.0",
+      "windows_with_blur_region": 1
+    },
+    "window": {
+      "dpr": 1,
+      "frame": 11,
+      "height": 640,
+      "main": 4194318,
+      "popup": 4194327,
+      "popup_x": 140,
+      "popup_y": 330,
+      "width": 880,
+      "x": 160,
+      "y": 130
+    }
+  },
+  "edge_regression": {
+    "test": "Native 201-gray one-device-pixel outline over a uniform backdrop; five successive window moves per scale",
+    "prior_version_edge_excess_8bit": 77,
+    "updated": [
+      {
+        "scale": 1.0,
+        "maximum_edge_excess_8bit": 2,
+        "no_bright_rim_after_moves": true,
+        "moves": 5
+      },
+      {
+        "scale": 1.25,
+        "maximum_edge_excess_8bit": 2,
+        "no_bright_rim_after_moves": true,
+        "moves": 5
+      }
+    ]
+  },
+  "actual_wechat": {
+    "status": {
+      "loaded": true,
+      "load_at_login": true,
+      "legacy_loaded": false,
+      "background_opacity": 0.52,
+      "force_blur_for_wechat": false,
+      "renderer": {
+        "active": true,
+        "blur_scope": "rounded title and navigation bars; no popup matching",
+        "enabled": true,
+        "painted_frames": 4130,
+        "redirected_windows": 1,
+        "renderer": "OffscreenEffect (live window damage)",
+        "shader_valid": true,
+        "version": "0.4.0",
+        "windows_with_blur_region": 1
+      }
+    },
+    "display_scale": 1.25,
+    "user_visual_confirmation": "User confirmed the thin white edges have disappeared while dragging.",
+    "user_confirmed_white_edges_fixed": true
+  },
+  "installed_binary_matches_bundle": true,
+  "obsolete_native_binary_removed": true
+}

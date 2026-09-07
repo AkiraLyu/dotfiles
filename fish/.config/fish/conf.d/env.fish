@@ -7,6 +7,6 @@ export EDITOR=nvim
 export QT_XCB_GL_INTEGRATION=none
 export GTK_USE_PORTAL=1
 export LIBVIRT_DEFAULT_URI="qemu:///system"
-export WINEPREFIX=/home/akira/wine-pfx/default
+set -q WINEPREFIX; or set -gx WINEPREFIX "$HOME/wine-pfx/default"
 export WINEDLLOVERRIDES=winemenubuilder.exe=d
 export CALIBRE_USE_SYSTEM_THEME=true

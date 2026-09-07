@@ -103,6 +103,8 @@ TestCase {
     function init() {
         searchController.query = "";
         searchController.runnerSearchEnabled = true;
+        searchController.historyData = "";
+        searchController.historyEnabled = true;
         fakeRunner.query = "";
         fakeRunner.querying = false;
         fakeMatches.records = [];
@@ -155,6 +157,48 @@ TestCase {
         compare(searchController.entryAt(2).title, "Display Configuration");
         compare(searchController.entryAt(3).title, "42");
         compare(searchController.entryAt(2).type, "runner");
+    }
+
+    function test_historyRanksKeywordAppsAndPreservesProviderResults() {
+        searchController.recordLaunch("beta.desktop");
+        fakeMatches.records = [
+            {title: "Setting", category: "System Settings", url: "settings:display"},
+            {title: "Alpha keyword", favoriteId: "alpha.desktop"},
+            {title: "Beta keyword", favoriteId: "applications:beta.desktop"},
+            {title: "Calculator answer", category: "Calculator", url: "calculator:42"},
+        ];
+        searchController.query = "keyword";
+        wait(70);
+        fakeRunner.queryFinished();
+        tryCompare(searchController, "count", 4, 500);
+        compare(searchController.entryAt(0).id, "beta.desktop");
+        compare(searchController.entryAt(1).id, "alpha.desktop");
+        compare(searchController.entryAt(2).title, "Setting");
+        compare(searchController.entryAt(3).title, "Calculator answer");
+
+        // Late provider signals cannot shuffle a query as it is being used.
+        const first = searchController.entryAt(0);
+        for (let launch = 0; launch < 4; ++launch) {
+            searchController.recordLaunch("alpha.desktop");
+        }
+        const revision = searchController.revision;
+        fakeMatches.modelReset();
+        wait(0);
+        compare(searchController.revision, revision);
+        verify(searchController.entryAt(0) === first);
+
+        const saved = searchController.historyData;
+        verify(searchController.trigger(searchController.entryAt(2), "", null));
+        compare(searchController.historyData, saved);
+        searchController.query = "keyword updated";
+        wait(70);
+        fakeRunner.queryFinished();
+        tryCompare(searchController, "count", 4, 500);
+        compare(searchController.entryAt(0).id, "alpha.desktop");
+        searchController.historyData = "";
+        tryCompare(searchController, "historyCount", 0, 500);
+        wait(0);
+        compare(searchController.entryAt(0).id, "alpha.desktop");
     }
 
     function test_newQueryImmediatelyHidesPreviousRunnerResults() {

@@ -1,0 +1,140 @@
+{
+  "schema_version": 1,
+  "snapshot_hash_format": "SHA256 of sorted relative_path + NUL + file_SHA256 + LF rows; symlinks hash UTF-8 symlink + NUL + link target",
+  "projects": [
+    {
+      "name": "appgrid",
+      "origin": "/home/akira/Projects/appgrid",
+      "base_commit": "3e19d023ce24dc604175091a3ece425d9e04a56e",
+      "includes_uncommitted_changes": true,
+      "original_path": "/home/akira/Projects/appgrid",
+      "working_tree_status": "M README.md\n M docs/architecture.md\n M package/contents/ui/AppGridStyle.qml\n M package/contents/ui/AppTile.qml\n M package/contents/ui/GridSlot.qml\n M package/contents/ui/LayoutController.qml\n M package/contents/ui/PagedGrid.qml\n M tests/tst_perf.qml\n M tests/tst_style.qml\n M tests/tst_view.qml\n?? package/contents/ui/AppIcon.qml\n?? package/contents/ui/MergeAnimation.qml",
+      "excluded_from_source_snapshot": [
+        ".agents",
+        ".codex",
+        ".git",
+        "build"
+      ],
+      "source": "appgrid",
+      "files": 50,
+      "snapshot_sha256": "fd0d7acd21666f23f970ccaf2404850a0f0457d139edc1c12d579896040c426e",
+      "previous_qt_path": "qt-plasma/.local/src/appgrid"
+    },
+    {
+      "name": "diary",
+      "source": "diary",
+      "files": 5,
+      "snapshot_sha256": "b000c358151e66c4ea3462773395d3cd730ba3a664fa80cffa4e1436453ff380"
+    },
+    {
+      "original_path": "/home/akira/Projects/gamescope/src",
+      "base_commit": "86f3677414e336ebc3c5cf60c92ed7673825e7c2",
+      "working_tree_status": "?? subprojects/.wraplock\n?? subprojects/glm/\n?? subprojects/libliftoff.wrap",
+      "excluded_from_source_snapshot": [
+        ".git",
+        "subprojects/.wraplock"
+      ],
+      "origin": "git@github.com:AkiraLyu/gamescope.git",
+      "vendored_checkouts": {
+        "src/reshade": "696b14cd6006ae9ca174e6164450619ace043283",
+        "src/reshade/deps/d3d12": "de28d93dfa9ebf3e473127c1c657e1920a5345ee",
+        "src/reshade/deps/fpng": "6926f5a0a78f22d42b074a0ab8032e07736babd4",
+        "src/reshade/deps/gl3w": "3a33275633ce4be433332dc776e6a5b3bdea6506",
+        "src/reshade/deps/imgui": "c6aa051629753f0ef0d26bf775a8b6a92aa213b2",
+        "src/reshade/deps/minhook": "8fda4f5481fed5797dc2651cd91e238e9b3928c6",
+        "src/reshade/deps/openxr": "dc1e23937fe45eabcce80f6588cf47449edb29d1",
+        "src/reshade/deps/spirv": "c0df742ec0b8178ad58c68cff3437ad4b6a06e26",
+        "src/reshade/deps/stb": "ae721c50eaf761660b4f90cc590453cdb0c2acd0",
+        "src/reshade/deps/utfcpp": "6be08bbea14ffa0a5c594257fb6285a054395cd7",
+        "src/reshade/deps/utfcpp/extern/ftest": "c4ad4af0946b73ce1a40cbc72205d15d196c7e06",
+        "src/reshade/deps/vma": "a6bfc237255a6bac1513f7c1ebde6d8aed6b5191",
+        "src/reshade/deps/vulkan": "7b3466a1f47a9251ac1113efbe022ff016e2f95b",
+        "thirdparty/SPIRV-Headers": "d790ced752b5bfc06b6988baadef6eb2d16bdf96",
+        "subprojects/libdisplay-info": "47a5590e9c4eb35d67651b8c05a55f1a48259329",
+        "subprojects/libliftoff": "8b08dc1c14fd019cc90ddabe34ad16596b0691f4",
+        "subprojects/openvr": "ff87f683f41fe26cc9353dd9d9d7028357fd8e1a",
+        "subprojects/vkroots": "5106d8a0df95de66cc58dc1ea37e69c99afc9540",
+        "subprojects/wlroots": "88a869855742281c98c22cab9641b317b8d065ef",
+        "subprojects/glm": "0af55ccecd98d4e5a8d1fad7de25ba429d60e863",
+        "subprojects/stb": "5736b15f7ea0ffb08dd38af21067c314d6a3aae9"
+      },
+      "name": "gamescope",
+      "source": "gamescope",
+      "files": 6000,
+      "snapshot_sha256": "b62cdb28569b5b3d1cb11c0c4b6cadac20e1d1c52990ce5420244f7c50cbd066",
+      "original_snapshot_sha256": "81057e50c65e4c2b5f0c14fd251a4530911779219bfe66c65c48591a4cab0afa",
+      "snapshot_management_changes": [
+        "src/reshade/.gitignore",
+        "src/reshade/deps/gl3w/.gitignore",
+        "src/reshade/deps/imgui/.gitignore",
+        "src/reshade/deps/openxr/.gitignore",
+        "src/reshade/deps/stb/.gitignore",
+        "subprojects/.gitignore"
+      ]
+    },
+    {
+      "name": "kate-translucent-bars",
+      "source": "kate-translucent-bars",
+      "files": 3,
+      "snapshot_sha256": "0d7010ed528907fa0062633e22b4bc48d335b4039015f40166c89a2034f18dbb",
+      "previous_qt_path": "qt-plasma/.local/src/kate-translucent-bars"
+    },
+    {
+      "name": "kde_gesture",
+      "source": "kde_gesture",
+      "files": 2,
+      "snapshot_sha256": "fbc30c73cba91272c69ca554b12a64487e0f9e10586c1c8809d78393f7c2a90c"
+    },
+    {
+      "name": "niri-first-window",
+      "source": "niri-first-window",
+      "files": 8,
+      "snapshot_sha256": "5b927614f2837d7e13ba07d45abec160b7c3bf1df91e536a97bdf86e2c7a407d"
+    },
+    {
+      "name": "niri-scale",
+      "source": "niri-scale",
+      "files": 1,
+      "snapshot_sha256": "f9a73b9203bea355ab5f1095130c5dbdac3bd9b4ad241d128fa5f8b4ce953e44"
+    },
+    {
+      "name": "wechat-glass-live",
+      "source": "wechat-glass-live",
+      "files": 14,
+      "snapshot_sha256": "ee3f619cf28db4924b46b307e549b8ca3b052577a545335b39da29cd95aa2775",
+      "previous_qt_path": "qt-plasma/.local/src/wechat-glass-live",
+      "excluded_from_source_snapshot": [
+        "build",
+        "__pycache__"
+      ]
+    },
+    {
+      "original_path": "/home/akira/Projects/wps",
+      "base_commit": "9ab73341ce83828f76f867c740df369884aa15ca",
+      "working_tree_status": "?? build/",
+      "excluded_from_source_snapshot": [
+        ".git",
+        "build"
+      ],
+      "origin": "git@github.com:AkiraLyu/wps-fps-unlock.git",
+      "name": "wps",
+      "source": "wps",
+      "files": 8,
+      "snapshot_sha256": "99a7dbbb4663d5201688a169313e581359b6bfc3b9e18fe33d47cc9552c8fe4a"
+    },
+    {
+      "original_path": "/home/akira/Projects/zhihu",
+      "base_commit": "30fc5401c9bf858156262ad03a66d429b6e12c6d",
+      "working_tree_status": "",
+      "excluded_from_source_snapshot": [
+        ".git",
+        "exports"
+      ],
+      "origin": "git@github.com:AkiraLyu/zhihu-collection-export.git",
+      "name": "zhihu",
+      "source": "zhihu",
+      "files": 11,
+      "snapshot_sha256": "f9b5b1b0693875d6b88ea9fceec4c722ce1b3d5a67b96e4bd976ee080c2378a9"
+    }
+  ]
+}
