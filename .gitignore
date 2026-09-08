@@ -3,3 +3,7 @@ local/.local/share/fish/fish_history
 nvim/.config/nvim/lazy-lock.json
 .codex
 backup/
+
+# Local installer/test bytecode caches.
+__pycache__/
+/.diary-*/

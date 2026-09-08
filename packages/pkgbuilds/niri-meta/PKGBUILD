@@ -1,0 +1,14 @@
+pkgname=niri-meta
+pkgver=1.1
+pkgrel=1
+pkgdesc='Niri desktop with Noctalia v5 and the Akira Xwayland satellite fork'
+arch=('any')
+url='https://github.com/AkiraLyu/pkgbuilds'
+license=('custom:none')
+depends=(niri xwayland-satellite-akira network-manager-applet rofi
+         'noctalia>=5' 'noctalia<6' gpu-screen-recorder)
+
+package() {
+    install -dm755 "$pkgdir/usr/share/doc/$pkgname"
+    printf '%s\n' "$pkgdesc" > "$pkgdir/usr/share/doc/$pkgname/README"
+}

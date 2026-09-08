@@ -1,0 +1,16 @@
+#!/bin/sh
+
+blur_library=/usr/lib/shiguang-diary/libshiguang-wayland-blur.so
+if [ "${XDG_SESSION_TYPE:-}" = wayland ] \
+  && [ -n "${WAYLAND_DISPLAY:-}" ] \
+  && [ "${SHIGUANG_DISABLE_WAYLAND_BLUR:-0}" != 1 ] \
+  && [ -r "$blur_library" ]; then
+  if [ -n "${LD_PRELOAD:-}" ]; then
+    LD_PRELOAD="$blur_library:$LD_PRELOAD"
+  else
+    LD_PRELOAD=$blur_library
+  fi
+  export LD_PRELOAD
+fi
+
+exec /usr/bin/electron --class=dev.local.shiguang.diary /usr/lib/shiguang-diary "$@"

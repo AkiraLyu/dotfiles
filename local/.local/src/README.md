@@ -1,22 +1,17 @@
-# 本地程序源码
+# 本地源码
 
-本仓库管理的原生程序源码统一位于此目录，`local` Stow 包将其部署到 `~/.local/src/`。Qt/Plasma 配置、桌面组件和安装命令仍位于 `qt-plasma/`，安装器与 App Grid 的链接已经改用这里的源码。
+`local` Stow 包将源码部署到 `~/.local/src/`。来源与导入时的 Git commit 见 [sources.json](sources.json)；源码后续修改由本仓库 Git 跟踪。该索引只保留来源信息，不参与构建校验。
 
-| 目录 | 内容 / 原位置 |
-| --- | --- |
-| `appgrid/` | App Grid；原 `qt-plasma/.local/src/appgrid` 和 `~/Projects/appgrid` 的源码一致，合为一份 |
-| `diary/` | 原有日记工具源码 |
-| `gamescope/` | 原 `~/Projects/gamescope/src` 工作区，包含本地依赖 checkout 的完整文件快照 |
-| `kate-translucent-bars/` | 原 `qt-plasma/.local/src/kate-translucent-bars` |
-| `kde_gesture/` | 原有 kwin_gesture 源码 |
-| `niri-first-window/` | 原有窗口工具源码 |
-| `niri-scale/` | 原有缩放工具源码 |
-| `wechat-glass-live/` | 原 `qt-plasma/.local/src/wechat-glass-live` |
-| `wps/` | 原 `~/Projects/wps` 的 WPS 补丁和工具源码 |
-| `zhihu/` | 原 `~/Projects/zhihu` 的知乎收藏导出工具源码 |
+| 目录 | 内容 | 安装入口 |
+| --- | --- | --- |
+| `appgrid/` | App Grid | `--restore kde-plugins` |
+| `kate-translucent-bars/` | Kate 原生插件 | `--restore kde-plugins` |
+| `wechat-glass-live/` | KWin 微信插件 | `--restore kde-plugins` |
+| `diary/` | 拾光日记 Electron 应用 | `--restore diary` |
+| `gamescope/` | 旧源码快照及依赖 checkout | 当前构建使用 `packages/pkgbuilds/gamescope-anime4k/` 的固定远端来源 |
+| `wps/` | unlock-fps 补丁和工具 | 仅源码存档，不安装；WPS 本体由用户管理 |
+| `zhihu/` | 知乎收藏导出工具 | 已完成：源码与 `local/.local/bin/zhihu-collection-export` 均保存，由 Stow 部署二进制 |
 
-来源、Git revision、依赖 checkout revision 和文件快照摘要见 [sources.json](sources.json)。迁入时保留工作树内容和未提交修改；外部项目的 Git 元数据、构建目录、导出数据以及原工作区保存在 `backup/source-migration/20260906T052224Z/workspaces/`。gamescope 包含其依赖仓库自带的 SDK/示例文件；仅为依赖的 `.gitignore` 补充快照保存规则，避免主仓库忽略原仓库已经跟踪的源码。原始忽略文件仍在完整工作区归档中。
+表中入口均通过根目录 `./install.sh` 调用。KDE 配置与包模板在 `qt-plasma/`。构建器为实际构建输入生成摘要和软件包归档，无需手工维护全目录哈希。
 
-旧 Projects 路径和当前 `~/.local/src` 已指向这里。外部项目已有构建/数据目录通过本机兼容链接访问 backup 中的原内容；微信源码原有的构建目录保留原状。这些构建产物、数据和兼容链接均被 Git 和 Stow 忽略，不属于源码快照或新机器部署输入。
-
-本次仅集中源码和修正关联路径，没有构建、制包、升级这些程序，也没有调整它们的二进制安装位置。FoxVault、nsmanager 等尚未定位到源码的独立程序仍保留原状。
+迁入前的 Git 历史保存为 `backup/git-history/*.bundle`，知乎导出数据在 `backup/zhihu-exports/`。拾光日记的 `Diary/`、个人 Markdown、node_modules 和构建输出不随源码部署；日记库与应用设置单独迁移。

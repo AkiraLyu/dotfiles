@@ -1,1 +1,23 @@
-/target
+.DS_Store
+node_modules/
+.location-store-test-*/
+.location-migration-test-*/
+.diary-files-test-*/
+.analysis-location-test-*/
+dist/
+pkg/
+src/
+*.pkg.tar.*
+.electron-test/
+.diary-trash/
+.shiguang/
+build/visual-test*.png
+*.log
+build/native/
+native/linux-wayland-blur/build/
+.*-test-*/
+
+# 个人日记内容，不入库、不发布
+Diary/*
+!Diary/.gitkeep
+/01_*.md

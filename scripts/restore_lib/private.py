@@ -60,39 +60,22 @@ def copy_records(source, target, records):
 
 def export(ctx):
     root = ctx.backup / "private"
-    if any(root.resolve().is_relative_to(ctx.target / name) for name in ROOTS):
-        raise ValueError("私有备份目标不能位于正在备份的配置内部")
+    if any(root.resolve().is_relative_to(ctx.target / name)
+           or (ctx.target / name).is_relative_to(root.resolve()) for name in ROOTS):
+        raise ValueError("私有备份目标不能与正在备份的配置重叠")
     if root.is_symlink():
         raise ValueError("backup/private 必须是普通目录")
-    root.mkdir(parents=True, exist_ok=True, mode=0o700)
+    records = inventory(ctx.target)
+    if root.exists():
+        shutil.rmtree(root)
+    data = root / "home"
+    data.mkdir(parents=True, mode=0o700)
     root.chmod(0o700)
-    staging = Path(tempfile.mkdtemp(prefix=".incomplete-", dir=root))
-    try:
-        # Wallet files and refreshed OAuth tokens can change while being copied.
-        # Publish only when the entire selected file set was stable across copy.
-        for attempt in range(3):
-            data = staging / "home"
-            if data.exists():
-                shutil.rmtree(data)
-            data.mkdir(mode=0o700)
-            records = inventory(ctx.target)
-            copy_records(ctx.target, data, records)
-            if records == inventory(data) == inventory(ctx.target):
-                break
-        else:
-            raise ValueError("私有配置在复制期间持续变化；请退出相关程序后重新导出")
-        save_json(staging / "manifest.json", {"version": 1, "created_at": timestamp(),
-                                             "files": records}, 0o600)
-        snapshot = root / timestamp()
-        staging.rename(snapshot)
-        link = root / ".latest-next"
-        link.unlink(missing_ok=True)
-        link.symlink_to(snapshot.name)
-        os.replace(link, root / "latest")
-        print(f"私有备份完成：{sum(r['type'] == 'file' for r in records.values())} 个文件 → {snapshot}")
-    finally:
-        if staging.exists():
-            shutil.rmtree(staging)
+    copy_records(ctx.target, data, records)
+    records = inventory(data)
+    save_json(root / "manifest.json", {"version": 1, "created_at": timestamp(),
+                                       "files": records}, 0o600)
+    print(f"私有备份完成：{sum(r['type'] == 'file' for r in records.values())} 个文件 → {root}")
 
 
 def target_state(base, name, records):
@@ -131,12 +114,9 @@ def target_state(base, name, records):
 
 
 def preflight(ctx):
-    root = ctx.backup / "private"
-    if root.is_symlink():
-        raise ValueError("backup/private 必须是普通目录")
-    snapshot = (root / "latest").resolve(strict=True)
-    if snapshot.parent != root.resolve() or not snapshot.is_dir():
-        raise ValueError("私有备份 latest 必须指向 backup/private 内的快照")
+    snapshot = ctx.backup / "private"
+    if snapshot.is_symlink() or not snapshot.is_dir():
+        raise ValueError("私有备份必须是 backup/private 独立目录")
     manifest_path = snapshot / "manifest.json"
     if manifest_path.is_symlink():
         raise ValueError("私有备份清单不能是符号链接")

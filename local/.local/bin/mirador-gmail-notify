@@ -4,33 +4,32 @@ from __future__ import annotations
 
 import html
 import imaplib
+import os
+from pathlib import Path
 import re
 import subprocess
 import sys
+import tomllib
 from email import policy
 from email.message import Message
 from email.parser import BytesParser
 from html.parser import HTMLParser
 
 
-IMAP_HOST = "imap.gmail.com"
-IMAP_PORT = 993
-IMAP_LOGIN = "akira.uestc@gmail.com"
-IMAP_MAILBOX = "INBOX"
 IMAP_FETCH_LIMIT = 128 * 1024
 IMAP_TIMEOUT = 10
 PREVIEW_LIMIT = 240
 
-PASSWORD_COMMAND = [
-    "kwallet-query",
-    "-f",
-    "mail",
-    "-r",
-    "akira.uestc",
-    "kdewallet",
-]
 GMAIL_DESKTOP_ID = "chrome-fmgjjmmmlfnkbppncabfkddbjimcfncm-Default"
-GMAIL_ICON = GMAIL_DESKTOP_ID
+GMAIL_ICON = str(Path.home() / ".local/share/icons/hicolor/256x256/apps/dotfiles-gmail.png")
+
+
+def account_config() -> dict:
+    path = Path(os.environ.get("MIRADOR_CONFIG", str(Path.home() / ".config/mirador/config.toml"))).expanduser()
+    accounts = tomllib.loads(path.read_text())["accounts"]
+    if name := os.environ.get("MIRADOR_ACCOUNT"):
+        return accounts[name]
+    return next(account for account in accounts.values() if account.get("default"))
 
 
 class _HTMLTextExtractor(HTMLParser):
@@ -142,29 +141,35 @@ def extract_preview(raw_message: bytes) -> str:
     return ""
 
 
-def fetch_preview(uid: str) -> str:
+def fetch_message(uid: str) -> tuple[str, str, str]:
     if not uid.isascii() or not uid.isdigit():
-        return ""
+        raise ValueError("Expected a numeric IMAP UID")
 
+    account = account_config()
+    imap = account["backend"]
+    if imap["type"] != "imap" or imap["encryption"]["type"] != "tls":
+        raise ValueError("Gmail preview requires IMAP with TLS")
+    command = imap["auth"]["cmd"]
     password = subprocess.run(
-        PASSWORD_COMMAND,
+        ["/bin/sh", "-c", command] if isinstance(command, str) else command,
         check=True,
         stdout=subprocess.PIPE,
         stderr=subprocess.DEVNULL,
         text=True,
+        timeout=IMAP_TIMEOUT,
     ).stdout.rstrip("\r\n")
 
     client: imaplib.IMAP4_SSL | None = None
     try:
         client = imaplib.IMAP4_SSL(
-            IMAP_HOST,
-            IMAP_PORT,
+            imap["host"],
+            imap.get("port", 993),
             timeout=IMAP_TIMEOUT,
         )
-        client.login(IMAP_LOGIN, password)
-        status, _ = client.select(IMAP_MAILBOX, readonly=True)
+        client.login(imap["login"], password)
+        status, _ = client.select(account.get("folder", "INBOX"), readonly=True)
         if status != "OK":
-            return ""
+            raise RuntimeError("Cannot open the configured mailbox")
 
         status, response = client.uid(
             "fetch",
@@ -172,7 +177,7 @@ def fetch_preview(uid: str) -> str:
             f"(BODY.PEEK[]<0.{IMAP_FETCH_LIMIT}>)",
         )
         if status != "OK":
-            return ""
+            raise RuntimeError("Cannot fetch the new message")
 
         chunks = [
             item[1]
@@ -181,7 +186,9 @@ def fetch_preview(uid: str) -> str:
             and len(item) > 1
             and isinstance(item[1], bytes)
         ]
-        return extract_preview(b"".join(chunks)) if chunks else ""
+        raw_message = b"".join(chunks)
+        message = BytesParser(policy=policy.default).parsebytes(raw_message)
+        return str(message.get("From", "")), str(message.get("Subject", "")), extract_preview(raw_message)
     finally:
         if client is not None:
             try:
@@ -201,6 +208,7 @@ def show_notification(sender: str, subject: str, preview: str) -> None:
             "notify-send",
             "--app-name=Gmail",
             f"--icon={GMAIL_ICON}",
+            f"--app-icon={GMAIL_ICON}",
             f"--hint=string:desktop-entry:{GMAIL_DESKTOP_ID}",
             "--action=default=打开 Gmail",
             title,
@@ -223,18 +231,14 @@ def show_notification(sender: str, subject: str, preview: str) -> None:
 
 
 def main() -> int:
-    fields = sys.stdin.read().splitlines()
-    if len(fields) < 3:
+    # Only the numeric UID enters the shell hook; mail headers are fetched as data.
+    if len(sys.argv) != 2 or not sys.argv[1].isascii() or not sys.argv[1].isdigit():
         return 2
 
-    uid = fields[0].strip()
-    sender = fields[1].strip()
-    subject = " ".join(fields[2:]).strip()
-
     try:
-        preview = fetch_preview(uid)
+        sender, subject, preview = fetch_message(sys.argv[1])
     except Exception:
-        preview = ""
+        sender, subject, preview = "", "新邮件（预览暂不可用）", ""
 
     show_notification(sender, subject, preview)
     return 0

@@ -15,6 +15,11 @@ _darcs
 ^/README.*
 ^/LICENSE.*
 ^/COPYING
+__pycache__
 
-# Compatibility links to archived workspaces are local state, not deployment input.
-^/\.local/src/(appgrid/(build|\.agents|\.codex)|wps/build|zhihu/exports|gamescope/subprojects/\.wraplock|wechat-glass-live/(build|build-[^/]+|__pycache__))(/|$)
+# Native build outputs are not deployment input.
+^/\.local/src/(appgrid/build|wechat-glass-live/(build|build-[^/]+))(/|$)
+
+# Diary content, development dependencies and generated outputs stay local.
+^/\.local/src/diary/(node_modules|Diary|dist|pkg|src|\.electron-test|\.diary-trash|\.shiguang|build/native|native/linux-wayland-blur/build)(/|$)
+^/\.local/src/diary/(\.[^/]*-test-[^/]*|01_[^/]*\.md|[^/]*\.pkg\.tar\.[^/]+|[^/]*\.log)(/|$)

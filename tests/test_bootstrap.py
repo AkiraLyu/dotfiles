@@ -34,6 +34,9 @@ class BootstrapTests(unittest.TestCase):
         self.addCleanup(self.redirect.__exit__, None, None, None)
         self.root_uuid = '11111111-2222-3333-4444-555555555555'
         self.swap_uuid = 'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee'
+        firmware_input = patch('arch_install.firmware.payload', return_value=b'fixture AVS firmware')
+        firmware_input.start()
+        self.addCleanup(firmware_input.stop)
 
     def test_destructive_mode_requires_explicit_erase_before_any_commands(self):
         with patch.object(sys, 'argv', ['arch_install.py', 'arch-install', '--disk', '/dev/testdisk', '--apply']), \
@@ -62,12 +65,30 @@ class BootstrapTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, '不属于'):
                 arch.preflight(self.ctx, 'arch-install')
 
+    def test_missing_base_packages_stops_before_disk_writes(self):
+        def read(*args):
+            if args[:4] == ('lsblk', '-dn', '-o', 'TYPE'):
+                return 'disk' if args[-1] == self.ctx.disk else 'part'
+            return 'testdisk' if 'PKNAME' in args else ''
+        exists = Path.exists
+        with patch('arch_install.shutil.which', return_value='/fixture'), \
+                patch.object(Path, 'is_block_device', return_value=True), \
+                patch.object(Path, 'exists', lambda p: False if p.parent == Path('/dev/mapper') else exists(p)), \
+                patch('arch_install.mounted', return_value=''), \
+                patch('arch_install.read', side_effect=read), \
+                patch('arch_install.subprocess.run', return_value=subprocess.CompletedProcess([], 1)) as execute:
+            with self.assertRaisesRegex(ValueError, 'CachyOS.*未写入磁盘'):
+                arch.preflight(self.ctx, 'arch-install')
+        self.assertEqual(execute.call_count, 1)
+        self.assertEqual(execute.call_args.args[0], ['pacman', '-Si', *arch.BASE_PACKAGES])
+        self.assertEqual(list(self.target.iterdir()), [])
+
     def test_install_plan_uses_efi_and_three_selected_partitions_only(self):
         with patch('arch_install.mounted', return_value=''), patch('arch_install.subprocess.run') as execute:
             arch.install_system(self.ctx)
             execute.assert_not_called()
         output = self.stdout.getvalue()
-        self.assertIn(f'mount /dev/testdisk1 {self.target}/efi', output)
+        self.assertIn(f'mount -o fmask=0022,dmask=0022 /dev/testdisk1 {self.target}/efi', output)
         self.assertNotIn(str(self.target) + '/boot', output)
         self.assertNotIn('nvme0n1', output)
         self.assertEqual(list(self.target.iterdir()), [])
@@ -79,7 +100,7 @@ class BootstrapTests(unittest.TestCase):
                 arch.mount_system(self.ctx)
             run.assert_not_called()
 
-    def test_boot_inputs_use_new_uuids_and_no_active_edid(self):
+    def test_boot_inputs_use_new_uuids_and_preserve_template_edid(self):
         self.ctx.apply = True
         arch.render_boot(self.ctx, self.root_uuid, self.swap_uuid)
         cmdline = (self.target / 'etc/cmdline.d/root.conf').read_text()
@@ -87,7 +108,8 @@ class BootstrapTests(unittest.TestCase):
         self.assertIn(self.swap_uuid, cmdline)
         self.assertNotIn('06c08067', cmdline)
         active = '\n'.join(line for line in cmdline.splitlines() if not line.lstrip().startswith('#'))
-        self.assertNotIn('edid', active)
+        template_edid = [line for line in (REPO / 'etc/cmdline.d/root.conf').read_text().splitlines() if 'edid' in line]
+        self.assertEqual([line for line in cmdline.splitlines() if 'edid' in line], template_edid)
         self.assertIn('dsp_driver=4', (self.target / 'etc/modprobe.d/sound.conf').read_text())
         self.assertEqual((self.target / 'etc/initcpio/install/block').stat().st_mode & 0o777, 0o755)
         self.assertNotIn('luks,swap', (self.target / 'etc/crypttab').read_text())
@@ -109,9 +131,11 @@ class BootstrapTests(unittest.TestCase):
                 self.assertIn(self.root_uuid, (self.target / 'etc/cmdline.d/root.conf').read_text())
                 for relative in ('etc/crypttab', 'etc/initcpio/install/block', 'etc/mkinitcpio.conf.d/90-dotfiles.conf'):
                     self.assertTrue((self.target / relative).is_file())
-                uki = self.target / 'efi/EFI/Linux/arch-linux.efi'
-                uki.parent.mkdir(parents=True, exist_ok=True)
-                uki.write_bytes(b'fixture UKI')
+                self.assertEqual((self.target / arch.firmware.RELATIVE).read_bytes(), b'fixture AVS firmware')
+                for kernel in ('linux', 'linux-cachyos'):
+                    uki = self.target / f'efi/EFI/Linux/arch-{kernel}.efi'
+                    uki.parent.mkdir(parents=True, exist_ok=True)
+                    uki.write_bytes(b'fixture UKI')
             return subprocess.CompletedProcess(args, 0)
         with patch('arch_install.read', side_effect=[self.root_uuid, self.swap_uuid]), \
                 patch('arch_install.subprocess.run', side_effect=run):
@@ -121,6 +145,15 @@ class BootstrapTests(unittest.TestCase):
         self.assertLess(next(i for i,c in enumerate(calls) if 'mkinitcpio' in c),
                         next(i for i,c in enumerate(calls) if 'bootctl' in c))
         self.assertFalse(any('systemctl' in c for c in calls))
+        self.assertTrue(any('/usr/share/zoneinfo/Asia/Tokyo' in c for c in calls))
+        self.assertEqual((self.target / 'etc/locale.conf').read_text(), 'LANG=zh_CN.UTF-8\n')
+        self.assertEqual((self.target / 'efi/loader/loader.conf').read_text(),
+                         'timeout 5\nconsole-mode keep\ndefault @saved\n')
+        self.assertTrue(any('usermod' in c and '/usr/bin/fish' in c
+                            and 'libvirt,video,render,kvm,input,audio,wheel' in c for c in calls))
+        self.assertEqual((self.target / 'etc/security/limits.conf').read_bytes(),
+                         (REPO / 'etc/security/limits.conf').read_bytes())
+        self.assertEqual((self.target / 'etc/hosts').read_bytes(), (REPO / 'etc/hosts').read_bytes())
 
     def test_symlink_boot_config_is_not_overwritten(self):
         self.ctx.apply = True

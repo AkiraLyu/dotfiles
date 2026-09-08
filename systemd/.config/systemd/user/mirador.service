@@ -3,10 +3,15 @@ Description=Mirador mail watcher
 Requisite=graphical-session.target
 After=graphical-session.target
 PartOf=graphical-session.target personal-graphical.target
-StartLimitIntervalSec=0
+ConditionPathExists=%h/.config/mirador/config.toml
+ConditionFileIsExecutable=%h/.cargo/bin/mirador
 
 [Service]
 Type=simple
-ExecStart=%h/.cargo/bin/mirador --account Akira watch
+Environment=MIRADOR_CONFIG=%h/.config/mirador/config.toml
+Environment=MIRADOR_ACCOUNT=Akira
+Environment=RUST_LOG=mirador=info,email::email::envelope::watch::imap=info
+ExecStart=%h/.cargo/bin/mirador --config %h/.config/mirador/config.toml watch Akira INBOX
 Restart=on-failure
-RestartSec=10s
+RestartSec=30s
+TimeoutStopSec=15s

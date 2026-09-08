@@ -50,11 +50,11 @@ class Context:
     target: Path
     check: bool = False
 
-    def run(self, *args, env=None):
+    def run(self, *args, env=None, cwd=None):
         command = list(map(str, args))
         display = shlex.join(command if len(command) <= 24 else command[:12])
         if len(command) > 24:
             display += f" …（另有 {len(command) - 12} 项，完整内容见清单）"
         print("  " + display, flush=True)
         if not self.check:
-            subprocess.run(list(map(str, args)), env=env, check=True)
+            subprocess.run(list(map(str, args)), env=env, cwd=cwd, check=True)

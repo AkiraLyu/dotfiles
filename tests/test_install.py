@@ -16,7 +16,6 @@ import unittest
 REPO = Path(__file__).resolve().parents[1]
 REAL_STOW = shutil.which("stow")
 HOME_PACKAGES = ("fontconfig", "fish", "kitty", "chromium", "tools", "qt-plasma", "local", "nvim", "niri")
-HELPER = Path("local/.local/scripts/apps/desktop/firefox-profile.sh")
 
 
 def write(path, content):
@@ -50,7 +49,10 @@ class InstallerTests(unittest.TestCase):
         self.log = self.root / "calls.jsonl"
         for path in (self.repo, self.home, self.etc, self.bin):
             path.mkdir()
-        for relative in (Path("install.sh"), Path("RESTORE.md"), Path("scripts/firefox-profile.py"), HELPER):
+        for relative in map(Path, ("install.sh", "RESTORE.md", "scripts/firefox-profile.py",
+                                   "scripts/configure-paru.py", "scripts/system-config.py",
+                                   "scripts/restore_lib/__init__.py", "scripts/restore_lib/common.py",
+                                   "scripts/restore_lib/pkgbuilds.py", "packages/paru.conf")):
             destination = self.repo / relative
             destination.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(REPO / relative, destination)
@@ -73,15 +75,25 @@ class InstallerTests(unittest.TestCase):
 
         # Real Stow handles all filesystem operations. Only the system target and
         # elevation are substituted; a write to the host /etc is never possible.
-        wrapper = """#!/usr/bin/env python3
+        wrapper = """#!/usr/bin/python3
 import json, os, subprocess, sys
 from pathlib import Path
 args = sys.argv[1:]
 kind = Path(sys.argv[0]).name
+if kind == 'python3':
+    if any(arg.endswith('/scripts/system-config.py') for arg in args):
+        kind = 'system-config'
+        args += ['--target', os.environ['INSTALL_TEST_ETC']]
+    else:
+        sys.exit(subprocess.call([sys.executable, *args]))
 with open(os.environ['INSTALL_TEST_LOG'], 'a') as stream:
     stream.write(json.dumps([kind, args]) + '\\n')
 if kind == 'run0':
     sys.exit(subprocess.call(args))
+if kind == 'system-config':
+    if '--apply' in args and os.environ.get('INSTALL_TEST_FAIL') == 'etc':
+        sys.exit(42)
+    sys.exit(subprocess.call([sys.executable, *args]))
 for i in range(len(args) - 1):
     if args[i] == '--target' and args[i + 1] == '/etc':
         args[i + 1] = os.environ['INSTALL_TEST_ETC']
@@ -89,7 +101,7 @@ if '--simulate' not in args and args[-1] == os.environ.get('INSTALL_TEST_FAIL'):
     sys.exit(42)
 sys.exit(subprocess.call([os.environ['INSTALL_TEST_STOW'], *args]))
 """
-        for name in ("stow", "run0"):
+        for name in ("stow", "run0", "python3"):
             path = self.bin / name
             write(path, wrapper)
             path.chmod(0o755)
@@ -97,8 +109,8 @@ sys.exit(subprocess.call([os.environ['INSTALL_TEST_STOW'], *args]))
                         INSTALL_TEST_LOG=str(self.log), INSTALL_TEST_ETC=str(self.etc),
                         INSTALL_TEST_STOW=REAL_STOW)
 
-    def run_install(self, *args, success=True, helper=False):
-        script = self.repo / (HELPER if helper else "install.sh")
+    def run_install(self, *args, success=True):
+        script = self.repo / "install.sh"
         command = [str(script), "--target", str(self.home), *map(str, args)]
         result = subprocess.run(command, cwd=self.root, env=self.env, text=True,
                                 stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=20)
@@ -113,8 +125,11 @@ sys.exit(subprocess.call([os.environ['INSTALL_TEST_STOW'], *args]))
 
     def assert_only_checks(self):
         for name, args in self.calls():
-            self.assertEqual(name, "stow")
-            self.assertIn("--simulate", args)
+            if name == "system-config":
+                self.assertNotIn("--apply", args)
+            else:
+                self.assertEqual(name, "stow")
+                self.assertIn("--simulate", args)
 
     def test_all_dry_run_is_read_only(self):
         before = [snapshot(path) for path in (self.repo, self.home, self.etc)]
@@ -143,9 +158,10 @@ sys.exit(subprocess.call([os.environ['INSTALL_TEST_STOW'], *args]))
     def test_full_deployment_order_and_repeatability(self):
         self.run_install("systemd", "firefox", "etc", *reversed(HOME_PACKAGES))
         applied = [args[-1] for name, args in self.calls() if name == "stow" and "--simulate" not in args]
-        self.assertEqual(applied, ["niri", "etc", "firefox", "systemd"])
+        self.assertEqual(applied, ["niri", "firefox", "systemd"])
         self.assertEqual(sum(name == "run0" for name, _ in self.calls()), 1)
-        self.assertTrue((self.etc / "install-fixture.conf").is_symlink())
+        self.assertFalse((self.etc / "install-fixture.conf").is_symlink())
+        self.assertEqual((self.etc / "install-fixture.conf").read_text(), "system config\n")
         self.assertTrue((self.profile / "user.js").is_symlink())
         unit = self.home / ".config/systemd/user/default.target.wants/fixture.service"
         self.assertTrue(unit.is_file())
@@ -200,12 +216,11 @@ sys.exit(subprocess.call([os.environ['INSTALL_TEST_STOW'], *args]))
 
     def test_plan_and_help_from_another_working_directory(self):
         for option in ("--plan", "--help"):
-            for entry in (self.repo / "install.sh", self.repo / HELPER):
-                result = subprocess.run([str(entry), option], cwd=self.root, env=self.env,
-                                        text=True, capture_output=True, timeout=20)
-                self.assertEqual(result.returncode, 0, result.stderr)
-                if option == "--plan":
-                    self.assertEqual(result.stdout, (self.repo / "RESTORE.md").read_text())
+            result = subprocess.run([str(self.repo / "install.sh"), option], cwd=self.root, env=self.env,
+                                    text=True, capture_output=True, timeout=20)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            if option == "--plan":
+                self.assertEqual(result.stdout, (self.repo / "RESTORE.md").read_text())
         self.assertEqual(self.calls(), [])
 
     def test_install_default_wins_over_legacy_default(self):
@@ -224,9 +239,9 @@ sys.exit(subprocess.call([os.environ['INSTALL_TEST_STOW'], *args]))
         external.mkdir()
         write(self.home / ".mozilla/firefox/profiles.ini",
               f"[Profile0]\nPath={external}\nIsRelative=0\nDefault=1\n")
-        self.run_install("--check", helper=True)
+        self.run_install("firefox", "--check")
         self.assert_only_checks()
-        self.run_install(helper=True)
+        self.run_install("firefox")
         self.assertTrue((external / "user.js").is_symlink())
 
     def test_ambiguous_profiles_require_explicit_path(self):

@@ -1,0 +1,78 @@
+pkgname=gamescope-anime4k
+pkgver=3.16.24.r23.gaa77068
+pkgrel=1
+pkgdesc='Gamescope with AkiraLyu Anime4K shaders (pinned source)'
+arch=('x86_64')
+url='https://github.com/AkiraLyu/gamescope'
+license=('BSD-2-Clause' 'BSD-3-Clause' 'LicenseRef-Reshade')
+depends=(glibc libstdc++ libgcc lcms2 libavif libcap libdecor libdrm libei libinput
+         libpipewire libx11 libxcb libxcomposite libxcursor libxdamage libxext libxfixes
+         libxi libxkbcommon libxmu libxrender libxres libxtst libxxf86vm luajit pixman
+         sdl2 seatd systemd-libs vulkan-icd-loader wayland xcb-util-errors xcb-util-wm xorg-xwayland)
+makedepends=(meson ninja cmake glslang vulkan-headers wayland-protocols python-jinja hwdata catch2 xorg-xwayland)
+provides=("gamescope=${pkgver}")
+conflicts=(gamescope)
+options=('!lto' '!debug')
+_commit=aa770685d0ca86948af57f3d9008e56b0636301c
+source=(
+    "gamescope-${_commit}.tar.gz::https://github.com/AkiraLyu/gamescope/archive/${_commit}.tar.gz"
+    'wlroots-88a869855742281c98c22cab9641b317b8d065ef.tar.gz::https://gitlab.freedesktop.org/wlroots/wlroots/-/archive/88a869855742281c98c22cab9641b317b8d065ef/wlroots-88a869855742281c98c22cab9641b317b8d065ef.tar.gz'
+    'libliftoff-8b08dc1c14fd019cc90ddabe34ad16596b0691f4.tar.gz::https://gitlab.freedesktop.org/emersion/libliftoff/-/archive/8b08dc1c14fd019cc90ddabe34ad16596b0691f4/libliftoff-8b08dc1c14fd019cc90ddabe34ad16596b0691f4.tar.gz'
+    'libdisplay-info-47a5590e9c4eb35d67651b8c05a55f1a48259329.tar.gz::https://gitlab.freedesktop.org/emersion/libdisplay-info/-/archive/47a5590e9c4eb35d67651b8c05a55f1a48259329/libdisplay-info-47a5590e9c4eb35d67651b8c05a55f1a48259329.tar.gz'
+    'vkroots-5106d8a0df95de66cc58dc1ea37e69c99afc9540.tar.gz::https://codeload.github.com/Joshua-Ashton/vkroots/tar.gz/5106d8a0df95de66cc58dc1ea37e69c99afc9540'
+    'openvr-ff87f683f41fe26cc9353dd9d9d7028357fd8e1a.tar.gz::https://codeload.github.com/ValveSoftware/openvr/tar.gz/ff87f683f41fe26cc9353dd9d9d7028357fd8e1a'
+    'reshade-696b14cd6006ae9ca174e6164450619ace043283.tar.gz::https://codeload.github.com/Joshua-Ashton/reshade/tar.gz/696b14cd6006ae9ca174e6164450619ace043283'
+    'SPIRV-Headers-d790ced752b5bfc06b6988baadef6eb2d16bdf96.tar.gz::https://codeload.github.com/KhronosGroup/SPIRV-Headers/tar.gz/d790ced752b5bfc06b6988baadef6eb2d16bdf96'
+    'glm-0af55ccecd98d4e5a8d1fad7de25ba429d60e863.tar.gz::https://codeload.github.com/g-truc/glm/tar.gz/0af55ccecd98d4e5a8d1fad7de25ba429d60e863'
+    'stb-5736b15f7ea0ffb08dd38af21067c314d6a3aae9.tar.gz::https://codeload.github.com/nothings/stb/tar.gz/5736b15f7ea0ffb08dd38af21067c314d6a3aae9'
+)
+sha256sums=(
+    'd872c2dadd110d34b56c21e3e08ab6fbf7a16f71a6dd6beb3dca537f43e3196d'
+    '587256827f7e1bcbb7384d1c04c0e21682565169e7a906560f723820bcf78af2'
+    '8de28aee6f90f47b7fc7037dcd2360166197c0b5d2033f3afdbd34f2ea1bf216'
+    'e7c446673180b3f8f19890e2d5223fa1058d706368a2c5c69c0e6443f811b3e3'
+    '37b77586e91f7ebee70380dcddd73bf01ae4acef1053e6be41d0485ede022422'
+    '22ea84da76f0f37f15d3433aef5f202ad6f8df12c280da7caa47e0475eeb22fd'
+    '3aa6feda7773cc8ffa8fb012fe95e6207c776101e29198d0e0d34a0c5e339f6a'
+    '90141b3f6261dba643fe546d56b4539e61fe40e307c5c3b9985ea9fa0622ac3f'
+    'e7f187d83523f505eb38dd25d297ea6c0d4ed856d733e808f18253f5a8fa88a0'
+    'd00921d49b06af62aa6bfb97c1b136bec661dd11dd4eecbcb0da1f6da7cedb4c'
+)
+
+prepare() {
+    cd "gamescope-${_commit}"
+    cp -a "$srcdir/wlroots-88a869855742281c98c22cab9641b317b8d065ef/." "subprojects/wlroots/"
+    cp -a "$srcdir/libliftoff-8b08dc1c14fd019cc90ddabe34ad16596b0691f4/." "subprojects/libliftoff/"
+    cp -a "$srcdir/libdisplay-info-47a5590e9c4eb35d67651b8c05a55f1a48259329/." "subprojects/libdisplay-info/"
+    cp -a "$srcdir/vkroots-5106d8a0df95de66cc58dc1ea37e69c99afc9540/." "subprojects/vkroots/"
+    cp -a "$srcdir/openvr-ff87f683f41fe26cc9353dd9d9d7028357fd8e1a/." "subprojects/openvr/"
+    cp -a "$srcdir/reshade-696b14cd6006ae9ca174e6164450619ace043283/." "src/reshade/"
+    cp -a "$srcdir/SPIRV-Headers-d790ced752b5bfc06b6988baadef6eb2d16bdf96/." "thirdparty/SPIRV-Headers/"
+    cp -a "$srcdir/glm-0af55ccecd98d4e5a8d1fad7de25ba429d60e863/." "subprojects/glm/"
+    cp -a "$srcdir/stb-5736b15f7ea0ffb08dd38af21067c314d6a3aae9/." "subprojects/stb/"
+    sed -i -e "/^vcs_tag_cmd =/d" -e "s/^vcs_tag = .*/vcs_tag = '$pkgver'/" src/meson.build
+    # Git-free archives need the wrap overlays for the two header-only projects.
+    cp -a subprojects/packagefiles/glm/. subprojects/glm/
+    cp -a subprojects/packagefiles/stb/. subprojects/stb/
+}
+
+build() {
+    export CFLAGS='-O2 -pipe'
+    export CXXFLAGS='-O2 -pipe'
+    meson setup build "gamescope-${_commit}" --prefix=/usr --libdir=lib \
+        --buildtype=release --wrap-mode=nodownload -Db_lto=false \
+        -Dpipewire=enabled -Drt_cap=enabled -Ddrm_backend=enabled \
+        -Dsdl2_backend=enabled -Davif_screenshots=enabled -Dinput_emulation=enabled
+    meson compile -C build -j 2
+}
+
+check() {
+    meson test -C build --print-errorlogs
+    build/src/gamescope --help 2>&1 | grep -i 'anime4k'
+}
+
+package() {
+    DESTDIR="$pkgdir" meson install -C build --skip-subprojects
+    install -Dm644 "gamescope-${_commit}/LICENSE" "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+    install -Dm644 "gamescope-${_commit}/src/reshade/LICENSE.md" "$pkgdir/usr/share/licenses/$pkgname/LICENSE.reshade"
+}

@@ -1,0 +1,21 @@
+[0bd86803-dc0c-4ad1-bf96-ea784218c570]
+Description=Kitty
+ignoregeometry=true
+ignoregeometryrule=3
+sizerule=3
+wmclasscomplete=true
+wmclassmatch=1
+
+[389a9ead-e1d6-4fc6-9aca-3ff2226e8dc0]
+Description=Do Not Show License Info
+minimize=true
+minimizerule=2
+skippager=true
+skippagerrule=2
+skipswitcher=true
+skipswitcherrule=2
+skiptaskbar=true
+skiptaskbarrule=2
+
+[General]
+rules=

@@ -12,6 +12,20 @@ import subprocess
 import sys
 
 from restore_lib.common import atomic_write
+from restore_lib import firmware
+
+
+TIMEZONE = "Asia/Tokyo"
+LOCALE = "zh_CN.UTF-8"
+USER_SHELL = "/usr/bin/fish"
+USER_GROUPS = ("libvirt", "video", "render", "kvm", "input", "audio", "wheel")
+KERNELS = ("linux", "linux-cachyos")
+BASE_PACKAGES = (
+    "base", "base-devel", *KERNELS, "linux-firmware", "sof-firmware",
+    "cachyos-keyring", "cachyos-mirrorlist", "cachyos-v3-mirrorlist", "cachyos-v4-mirrorlist",
+    "networkmanager", "btrfs-progs", "cryptsetup", "dosfstools", "python", "git", "stow",
+    "polkit", "fish", "vim", "tmux",
+)
 
 
 @dataclass
@@ -25,6 +39,7 @@ class Installation:
     hostname: str = "Akira"
     username: str = "akira"
     apply: bool = False
+    backup: Path | None = None
 
     def run(self, *args):
         print("  " + shlex.join(map(str, args)), flush=True)
@@ -58,9 +73,12 @@ def mounted(path):
 
 
 def preflight(ctx, action):
+    if action != "arch-mount":
+        # A missing manually migrated blob must stop before formatting or pacstrap.
+        firmware.payload(ctx.repo, ctx.backup or ctx.repo / "backup")
     tools = {"lsblk", "findmnt", "blkid", "cryptsetup", "mount", "swapon"}
     if action == "arch-install":
-        tools |= {"mkfs.fat", "mkfs.btrfs", "mkswap", "btrfs", "umount", "pacstrap", "genfstab", "arch-chroot"}
+        tools |= {"mkfs.fat", "mkfs.btrfs", "mkswap", "btrfs", "umount", "pacstrap", "genfstab", "arch-chroot", "pacman"}
     if action == "arch-post-install":
         tools |= {"arch-chroot"}
     absent = sorted(name for name in tools if not shutil.which(name))
@@ -93,6 +111,9 @@ def preflight(ctx, action):
         for name in ("cryptroot", "cryptswap"):
             if Path("/dev/mapper", name).exists():
                 raise ValueError(f"加密映射已存在：{name}；不会覆盖现有映射")
+        if subprocess.run(["pacman", "-Si", *BASE_PACKAGES], stdout=subprocess.DEVNULL,
+                          stderr=subprocess.DEVNULL).returncode:
+            raise ValueError("请先在 ISO 配置当前机器使用的 CachyOS 源和 keyring，并刷新数据库；基础包清单不完整，未写入磁盘")
     else:
         for part in (ctx.root, ctx.swap):
             if read("blkid", "-s", "TYPE", "-o", "value", part) != "crypto_LUKS":
@@ -112,6 +133,7 @@ def preflight(ctx, action):
             raise ValueError("post-install 要求所选 root 的 @ 子卷和 EFI 已分别挂载到目标目录及其 /efi")
         if not (ctx.target / "etc/arch-release").is_file():
             raise ValueError("目标不是已 pacstrap 的 Arch 系统")
+        firmware.deploy(ctx.repo, ctx.backup or ctx.repo / "backup", ctx.target)
     if ctx.apply:
         if os.geteuid() != 0:
             raise ValueError("应用安装阶段需在 Arch ISO 以 root 运行，或显式用 run0 调用")
@@ -130,7 +152,9 @@ def ensure_mount(ctx, source, relative, fsroot=None):
     ctx.run("mkdir", "-p", destination)
     args = ["mount"]
     if fsroot:
-        args += ["-o", f"noatime,compress=zstd,subvol={fsroot}"]
+        args += ["-o", f"noatime,compress=zstd:3,subvol={fsroot}"]
+    elif relative == "efi":
+        args += ["-o", "fmask=0022,dmask=0022"]
     ctx.run(*args, source, destination)
 
 
@@ -160,6 +184,7 @@ def render_boot(ctx, root_uuid, swap_uuid):
         template, count = re.subn(r"rd\.luks\.name=[^\s=]+=" + name, f"rd.luks.name={uuid}={name}", template)
         if count != 1:
             raise ValueError(f"root.conf 缺少唯一的 {name} 定义")
+    firmware.deploy(ctx.repo, ctx.backup or ctx.repo / "backup", ctx.target, apply=ctx.apply)
     ctx.write("etc/cmdline.d/root.conf", template)
     ctx.write("etc/modprobe.d/sound.conf", (ctx.repo / "etc/modprobe.d/sound.conf").read_bytes())
     ctx.write("etc/initcpio/install/block", (ctx.repo / "etc/initcpio/install/block").read_bytes(), 0o755)
@@ -167,11 +192,13 @@ def render_boot(ctx, root_uuid, swap_uuid):
               f"cryptswap UUID={swap_uuid} /etc/luks.key luks\n", 0o600)
     ctx.write("etc/mkinitcpio.conf.d/90-dotfiles.conf", "# Touchpad workaround: /etc/initcpio/install/block\n"
               "HOOKS=(base systemd autodetect microcode modconf kms keyboard keymap sd-vconsole block sd-encrypt filesystems fsck)\n"
-              '[[ " ${FILES[*]} " == *" /etc/luks.key "* ]] || FILES+=(/etc/luks.key)\n')
-    ctx.write("etc/mkinitcpio.d/linux.preset", "ALL_kver='/boot/vmlinuz-linux'\nPRESETS=('default')\n"
-              "default_uki='/efi/EFI/Linux/arch-linux.efi'\n"
-              'default_options="--cmdline /etc/cmdline.d --splash /usr/share/systemd/bootctl/splash-arch.bmp"\n')
-    ctx.write("efi/loader/loader.conf", "timeout 3\nconsole-mode keep\neditor yes\ndefault @saved\n")
+              '[[ " ${FILES[*]} " == *" /etc/luks.key "* ]] || FILES+=(/etc/luks.key)\n'
+              f'[[ " ${{FILES[*]}} " == *" /{firmware.RELATIVE} "* ]] || FILES+=(/{firmware.RELATIVE})\n')
+    for kernel in KERNELS:
+        ctx.write(f"etc/mkinitcpio.d/{kernel}.preset", f"ALL_kver='/boot/vmlinuz-{kernel}'\nPRESETS=('default')\n"
+                  f"default_uki='/efi/EFI/Linux/arch-{kernel}.efi'\n"
+                  'default_options="--cmdline /etc/cmdline.d --splash /usr/share/systemd/bootctl/splash-arch.bmp"\n')
+    ctx.write("efi/loader/loader.conf", "timeout 5\nconsole-mode keep\ndefault @saved\n")
 
 
 def configure_system(ctx):
@@ -198,23 +225,31 @@ def configure_system(ctx):
         locale = ctx.target / "etc/locale.gen"
         content = re.sub(r"^#\s*((?:en_US|zh_CN)\.UTF-8\s+UTF-8)\s*$", r"\1", locale.read_text(), flags=re.M)
         ctx.write("etc/locale.gen", content)
-    ctx.chroot("ln", "-sf", "/usr/share/zoneinfo/Asia/Shanghai", "/etc/localtime")
+    ctx.chroot("ln", "-sf", f"/usr/share/zoneinfo/{TIMEZONE}", "/etc/localtime")
     ctx.chroot("hwclock", "--systohc")
     ctx.chroot("locale-gen")
-    ctx.write("etc/locale.conf", "LANG=en_US.UTF-8\n")
+    ctx.write("etc/locale.conf", f"LANG={LOCALE}\n")
     ctx.write("etc/hostname", ctx.hostname + "\n")
+    for relative in ("hosts", "pacman.conf", "makepkg.conf", "security/limits.conf"):
+        ctx.write("etc/" + relative, (ctx.repo / "etc" / relative).read_bytes())
+    for source in sorted((ctx.repo / "etc/pacman.d").glob("*mirrorlist")):
+        ctx.write("etc/pacman.d/" + source.name, source.read_bytes())
     # All boot inputs, the workaround and keyslots exist BEFORE image generation.
     ctx.run("mkdir", "-p", ctx.target / "efi/EFI/Linux")
     ctx.chroot("mkinitcpio", "-P")
-    if ctx.apply and not (ctx.target / "efi/EFI/Linux/arch-linux.efi").is_file():
+    if ctx.apply and not all((ctx.target / f"efi/EFI/Linux/arch-{kernel}.efi").is_file() for kernel in KERNELS):
         raise ValueError("mkinitcpio 未生成预期的 UKI；停止后续步骤")
     ctx.chroot("bootctl", "--esp-path=/efi", "install")
+    for group in USER_GROUPS:
+        ctx.chroot("groupadd", "--system", "--force", group)
     if ctx.apply:
         exists = subprocess.run(["arch-chroot", str(ctx.target), "id", "-u", ctx.username],
                                 stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode == 0
         if not exists:
-            ctx.chroot("useradd", "-m", "-G", "wheel", "-s", "/bin/bash", ctx.username)
+            ctx.chroot("useradd", "-m", "-U", "-u", "1000", "-G", ",".join(USER_GROUPS), "-s", USER_SHELL, ctx.username)
             ctx.chroot("passwd", ctx.username)
+        else:
+            ctx.chroot("usermod", "-aG", ",".join(USER_GROUPS), "-s", USER_SHELL, ctx.username)
         ctx.chroot("passwd", "root")
     print("基础启动阶段完成。系统服务按用户要求另行处理；重启后以普通用户继续 --bootstrap / --restore。")
 
@@ -234,8 +269,7 @@ def install_system(ctx):
     ctx.run("umount", ctx.target)
     mount_system(ctx)
     ctx.run("swapon", "/dev/mapper/cryptswap")
-    ctx.run("pacstrap", "-K", ctx.target, "base", "base-devel", "linux", "linux-firmware", "sof-firmware",
-            "networkmanager", "btrfs-progs", "cryptsetup", "dosfstools", "python", "git", "stow", "polkit", "vim", "tmux")
+    ctx.run("pacstrap", "-K", ctx.target, *BASE_PACKAGES)
     if ctx.apply:
         ctx.write("etc/fstab", read("genfstab", "-U", ctx.target) + "\n")
         configure_system(ctx)
@@ -251,6 +285,7 @@ def main():
     parser.add_argument("--swap-part", type=Path)
     parser.add_argument("--root-part", type=Path)
     parser.add_argument("--mount-root", type=Path, default=Path("/mnt"))
+    parser.add_argument("--backup-dir", type=Path, help="手动迁移的 backup 目录，包含 AVS 固件")
     parser.add_argument("--hostname", default="Akira")
     parser.add_argument("--user", default="akira")
     mode = parser.add_mutually_exclusive_group()
@@ -270,7 +305,8 @@ def main():
                        (args.efi_part or Path(prefix + "1")).resolve(),
                        (args.swap_part or Path(prefix + "2")).resolve(),
                        (args.root_part or Path(prefix + "3")).resolve(),
-                       args.mount_root.absolute(), args.hostname, args.user, args.apply)
+                       args.mount_root.absolute(), args.hostname, args.user, args.apply,
+                       args.backup_dir.resolve() if args.backup_dir else None)
     print(f"{args.action}: disk={ctx.disk}; EFI={ctx.efi} → /efi; swap={ctx.swap}; root={ctx.root}; target={ctx.target}")
     preflight(ctx, args.action)
     {"arch-install": install_system, "arch-mount": mount_system, "arch-post-install": configure_system}[args.action](ctx)

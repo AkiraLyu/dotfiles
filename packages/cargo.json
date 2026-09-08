@@ -3,18 +3,20 @@
   "packages": [
     {
       "name": "mirador",
-      "version": "0.1.0",
+      "version": "1.0.0",
       "toolchain": "nightly-2026-06-28-x86_64-unknown-linux-gnu",
       "bins": [
         "mirador"
       ],
-      "features": [],
+      "features": [
+        "imap"
+      ],
       "all_features": false,
-      "no_default_features": false,
+      "no_default_features": true,
       "profile": "release",
       "target": "x86_64-unknown-linux-gnu",
       "git": "https://github.com/pimalaya/mirador.git",
-      "rev": "2b50652eb23f826d647b399d942df73c48691f2e"
+      "rev": "979944376f851baf22e831eb2b05c2a856b73388"
     }
   ]
 }

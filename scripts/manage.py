@@ -8,12 +8,12 @@ import re
 import subprocess
 import sys
 
-from restore_lib import codex, flatpak, pacman, private, rust
+from restore_lib import codex, diary, firmware, flatpak, kde, kde_plugins, pacman, pkgbuilds, private, rust
 from restore_lib.common import Context, atomic_write, capture, load_json
 
 
-EXPORTS = ("pacman", "rust", "cargo", "flatpak", "codex", "private", "noctalia")
-RESTORES = ("pacman", "rust", "cargo", "npm", "flatpak", "codex", "private")
+EXPORTS = ("pacman", "rust", "cargo", "flatpak", "codex", "private", "noctalia", "kde")
+RESTORES = ("firmware", "pacman", "pkgbuilds", "rust", "cargo", "npm", "flatpak", "codex", "private", "kde", "kde-plugins", "diary")
 
 
 def export_noctalia(ctx):
@@ -54,7 +54,7 @@ def restore_npm(ctx):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("action", choices=("export", "restore"))
-    parser.add_argument("stages", nargs="+", help="pacman rust cargo npm flatpak codex private；export 另支持 noctalia；all 全选")
+    parser.add_argument("stages", nargs="+", help="pacman rust cargo flatpak codex private kde；restore 另支持 firmware/pkgbuilds/kde-plugins/diary/npm；export 另支持 noctalia；all 全选")
     parser.add_argument("--check", "--dry-run", action="store_true", dest="check")
     parser.add_argument("--target", type=Path, default=Path.home())
     parser.add_argument("--backup-dir", type=Path)
@@ -71,52 +71,51 @@ def main():
         parser.error("请以目标普通用户运行，只有系统包操作使用 run0")
     if args.action == "export" and (args.check or target != Path.home().resolve()):
         parser.error("导出读取当前用户状态；不支持 --check 或其他 --target")
-    if args.action == "restore" and selected - {"codex", "private"} and target != Path.home().resolve() and not args.check:
+    if args.action == "restore" and selected - {"codex", "private", "kde"} and target != Path.home().resolve() and not args.check:
         parser.error("软件安装必须以目标用户运行；另一个 --target 仅用于只读计划或私有数据恢复演练")
     ctx = Context(repo, (args.backup_dir or repo / "backup").resolve(), target, args.check)
     if args.action == "export":
         handlers = {"pacman": pacman.export, "rust": rust.export_rust, "cargo": rust.export_cargo,
                     "flatpak": flatpak.export, "codex": codex.export, "private": private.export,
-                    "noctalia": export_noctalia}
+                    "noctalia": export_noctalia, "kde": kde.export}
         for stage in EXPORTS:
             if stage in selected:
                 handlers[stage](ctx)
         return 0
 
-    # Validate every selected input before any package or configuration writes.
+    if "pacman" in selected:
+        selected.update(("rust", "pkgbuilds", "kde-plugins", "diary"))
+    if selected & {"pkgbuilds", "cargo"}:
+        selected.add("rust")
+
+    # One order for both preflight and execution; dependencies run only once.
+    steps = (
+        ("firmware", firmware.preflight, firmware.restore),
+        ("pacman", pacman.preflight, pacman.restore_repo),
+        ("rust", rust.preflight, rust.restore_rust),
+        ("pkgbuilds", pkgbuilds.preflight, pkgbuilds.restore),
+        ("kde-plugins", kde_plugins.preflight, kde_plugins.restore),
+        ("diary", diary.preflight, diary.restore),
+        ("pacman", None, pacman.restore_foreign),
+        ("cargo", rust.preflight_cargo, rust.restore_cargo),
+        ("npm", preflight_npm, restore_npm),
+        ("flatpak", flatpak.preflight, flatpak.restore),
+        ("codex", codex.preflight, codex.restore),
+        ("private", private.preflight, private.restore),
+        ("kde", kde.preflight, kde.restore),
+    )
     errors = []
-    for stage in RESTORES:
-        if stage not in selected:
+    for stage, preflight, _ in steps:
+        if stage not in selected or preflight is None:
             continue
         try:
-            if stage == "pacman":
-                pacman.preflight(ctx)
-                rust.preflight(ctx)
-            elif stage == "rust":
-                rust.preflight(ctx)
-            elif stage == "cargo":
-                rust.preflight_cargo(ctx)
-            elif stage == "npm":
-                preflight_npm(ctx)
-            elif stage == "flatpak":
-                flatpak.preflight(ctx)
-            elif stage == "codex":
-                codex.preflight(ctx)
-            elif stage == "private":
-                private.preflight(ctx)
+            preflight(ctx)
         except (OSError, ValueError, RuntimeError, KeyError, TypeError, subprocess.CalledProcessError) as error:
             errors.append(f"{stage}: {error}")
     if errors:
         raise ValueError("恢复预检未通过，未执行安装：\n" + "\n".join(errors))
 
-    if "pacman" in selected:
-        pacman.restore_repo(ctx)
-    if selected & {"pacman", "rust", "cargo"}:
-        rust.restore_rust(ctx)
-    if "pacman" in selected:
-        pacman.restore_foreign(ctx)
-    for stage, handler in (("cargo", rust.restore_cargo), ("npm", restore_npm),
-                           ("flatpak", flatpak.restore), ("codex", codex.restore), ("private", private.restore)):
+    for stage, _, handler in steps:
         if stage in selected:
             handler(ctx)
     print("恢复计划检查完成，未执行写入。" if args.check else "所选软件/数据阶段完成；配置部署与会话验收按 RESTORE.md 继续。")

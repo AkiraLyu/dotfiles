@@ -40,10 +40,11 @@ usage() {
   --arch-install         从 Arch ISO 安装系统；默认只读，详见 docs/ARCH_INSTALL.md
   --arch-mount           打开并挂载已有系统，统一使用 /efi
   --arch-post-install    对已挂载的新系统生成启动配置和 UKI
-  --user-targets         校验、部署用户 target/units 并 daemon-reload；可追加 --check
+  --user-targets         校验、部署用户 target/units 并 daemon-reload；先用 --restore npm 安装 ocx
+                         可追加 --check
   --bootstrap            用已配置的软件源安装基础工具（含完整系统升级）
-  --export STAGE ...      导出 pacman/rust/cargo/flatpak/codex/private/noctalia 或 all
-  --restore STAGE ...     恢复 pacman/rust/cargo/npm/flatpak/codex/private 或 all
+  --export STAGE ...      导出 pacman/rust/cargo/flatpak/codex/private/noctalia/kde 或 all
+  --restore STAGE ...     恢复 firmware/pacman/pkgbuilds/rust/cargo/npm/flatpak/codex/private/kde/kde-plugins/diary 或 all
                          可追加 --check；详见 RESTORE.md
   --check, --dry-run      只检查所选配置包，不部署、不提权
   --all                  选择全部配置包，包括 etc、firefox 和 systemd
@@ -161,6 +162,14 @@ stow_args=(--dir "$DOTFILES_DIR" --no-folding)
 cd -- "$DOTFILES_DIR"
 failed=false
 
+# Paru requires an absolute local-repository path. Keep its generated runtime
+# config independent of Stow, so moving the checkout can regenerate that path.
+if [[ -n ${selected[tools]:-} ]]; then
+    if ! python3 -B "$DOTFILES_DIR/scripts/configure-paru.py" --target "$target_home" --check; then
+        failed=true
+    fi
+fi
+
 printf '检查所选配置；用户目标：%s\n' "$target_home"
 if ((${#home_check_packages[@]})); then
     # Check systemd together with other HOME packages for cross-package conflicts.
@@ -172,7 +181,7 @@ if ((${#home_check_packages[@]})); then
 fi
 if [[ -n ${selected[etc]:-} ]]; then
     printf '检查系统配置：/etc（磁盘 UUID、驱动等仍需按目标机器确认）\n'
-    if ! "$stow_bin" "${stow_args[@]}" --simulate --target /etc etc; then
+    if ! python3 -B "$DOTFILES_DIR/scripts/system-config.py"; then
         failed=true
     fi
 fi
@@ -207,7 +216,7 @@ if $failed; then
     die '预检未通过，未执行部署。请处理上面的冲突或缺失项后重试；也可指定配置包分阶段部署。'
 fi
 if $check_only; then
-    printf '所选配置的路径与 Stow 冲突检查通过；未修改文件。软件、私有数据、主机参数及服务功能仍需按 --plan 验证。\n'
+    printf '所选配置的路径、独立副本与 Stow 检查通过；未修改文件。软件和服务功能仍需按 --plan 验证。\n'
     exit 0
 fi
 
@@ -218,11 +227,14 @@ if ((${#home_packages[@]})); then
     phase=用户配置部署
     printf '部署用户配置 → %s\n' "$target_home"
     "$stow_bin" "${stow_args[@]}" --target "$target_home" "${home_packages[@]}"
+    if [[ -n ${selected[tools]:-} ]]; then
+        python3 -B "$DOTFILES_DIR/scripts/configure-paru.py" --target "$target_home"
+    fi
 fi
 if [[ -n ${selected[etc]:-} ]]; then
     phase=系统配置部署
     printf '部署系统配置 → /etc\n'
-    run0 "$stow_bin" "${stow_args[@]}" --target /etc etc
+    run0 python3 -B "$DOTFILES_DIR/scripts/system-config.py" --apply
 fi
 if [[ -n ${selected[firefox]:-} ]]; then
     phase=Firefox配置部署

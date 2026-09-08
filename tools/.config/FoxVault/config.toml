@@ -1,0 +1,16 @@
+[source]
+database_file = "places.sqlite"
+# Optional: set this to bypass auto-detection.
+# profile_dir = "/home/you/.config/mozilla/firefox/xxxxxxxx.default-release"
+# Optional: override auto-detection roots. Checked in order.
+# profile_roots = ["/home/you/.config/mozilla/firefox", "/home/you/.mozilla/firefox"]
+
+[export]
+output_dir = "/home/akira/dotfiles/backup/FoxVault-exports/"
+raw_database_file = "places.sqlite"
+merged_database_file = "history.sqlite"
+history_text_file = "history.tsv"
+
+[backup]
+pages_per_step = 100
+pause_milliseconds = 250

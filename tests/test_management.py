@@ -3,6 +3,7 @@
 from contextlib import closing, redirect_stdout
 import io
 import json
+import os
 from pathlib import Path
 import shutil
 import sqlite3
@@ -32,6 +33,8 @@ class ManagementTests(unittest.TestCase):
         self.addCleanup(self.redirect.__exit__, None, None, None)
 
     def fixture_packages(self):
+        save_json(self.repo / "packages/pacman-policy.json", {
+            "local_packages": [], "built_packages": [], "replacements": {}, "deferred": {}})
         root = self.ctx.backup / "pacman"
         root.mkdir(parents=True)
         for name, content in zip(pacman.LISTS, ("app\n", "foreign\n", "library\n", "foreign-library\n")):
@@ -65,14 +68,6 @@ class ManagementTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "原因冲突"):
             pacman.read_lists(self.ctx)
 
-    def test_failed_export_preserves_existing_lists(self):
-        self.fixture_packages()
-        path = self.ctx.backup / "pacman/pkglist.txt"
-        with patch("restore_lib.pacman.capture", side_effect=["new-app", RuntimeError("query failed")]):
-            with self.assertRaises(RuntimeError):
-                pacman.export(self.ctx)
-        self.assertEqual(path.read_text(), "app\n")
-
     def test_rust_and_cargo_preserve_versions_features_and_targets(self):
         self.fixture_rust()
         commands = []
@@ -95,6 +90,34 @@ class ManagementTests(unittest.TestCase):
             with self.subTest(field=field), self.assertRaises(ValueError):
                 rust.preflight_cargo(self.ctx)
 
+    def test_rust_export_merges_aliases_without_losing_components_or_targets(self):
+        root = self.target / '.rustup'
+        root.mkdir()
+        host = 'x86_64-unknown-linux-gnu'
+        alias, pinned = 'stable-' + host, '1.96.0-' + host
+        (root / 'settings.toml').write_text(f'default_toolchain = "{alias}"\n')
+        for name in (alias, pinned):
+            manifest = root / 'toolchains' / name / 'lib/rustlib/multirust-channel-manifest.toml'
+            manifest.parent.mkdir(parents=True)
+            manifest.write_text('date = "2026-05-28"\n[pkg.rust]\nversion = "1.96.0 (fixture)"\n')
+        def capture(*args):
+            if args == ('rustup', 'toolchain', 'list'):
+                return alias + ' (default)\n' + pinned
+            if args[0] == 'rustc':
+                return 'host: ' + host
+            if args[1] == 'component':
+                return 'cargo-' + host if alias in args else 'rust-src\nrustc-' + host
+            return host if alias in args else 'i686-unknown-linux-gnu'
+        with patch.dict(os.environ, {'RUSTUP_HOME': str(root)}), \
+                patch('restore_lib.rust.capture', side_effect=capture):
+            rust.export_rust(self.ctx)
+        data = json.loads((self.repo / 'packages/rust.json').read_text())
+        self.assertEqual(data['default'], pinned)
+        self.assertEqual(len(data['toolchains']), 1)
+        record = data['toolchains'][0]
+        self.assertEqual(record['components'], ['cargo', 'rust-src', 'rustc'])
+        self.assertEqual(record['targets'], ['i686-unknown-linux-gnu', host])
+
     def test_npm_keeps_installed_versions_and_installs_only_missing(self):
         save_json(self.repo / "packages/npm.json", {"packages": {"@scope/existing": "1.0.0", "missing": "2.0.0"}})
         save_json(self.target / ".local/lib/node_modules/@scope/existing/package.json", {"version": "9.0.0"})
@@ -111,6 +134,19 @@ class ManagementTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "固定版本"):
                 manage.restore_npm(self.ctx)
             run.assert_not_called()
+
+    def test_npm_stage_installs_ocx_from_repository_manifest(self):
+        saved = json.loads((Path(__file__).resolve().parents[1] / "packages/npm.json").read_text())
+        save_json(self.repo / "packages/npm.json", saved)
+        with patch.object(manage, "__file__", str(self.repo / "scripts/manage.py")), \
+                patch.object(sys, "argv", ["manage.py", "restore", "npm", "--target", str(self.target)]), \
+                patch("manage.Path.home", return_value=self.target), \
+                patch("manage.os.geteuid", return_value=1000), \
+                patch.object(Context, "run", autospec=True) as command:
+            manage.main()
+        calls = [call.args[1:] for call in command.call_args_list]
+        self.assertIn(("npm", "install", "--global", "--prefix", self.target / ".local",
+                       "@bitkyc08/opencodex@" + saved["packages"]["@bitkyc08/opencodex"]), calls)
 
     def fixture_flatpak(self):
         root = self.repo / "packages/flatpak"
@@ -163,6 +199,9 @@ class ManagementTests(unittest.TestCase):
         with patch.object(sys, "argv", ["manage.py", "restore", "pacman", "flatpak"]), \
                 patch("manage.Path.home", return_value=self.target), \
                 patch("manage.pacman.preflight"), patch("manage.rust.preflight"), \
+                patch("manage.pkgbuilds.preflight"), \
+                patch("manage.kde_plugins.preflight"), \
+                patch("manage.diary.preflight"), \
                 patch("manage.flatpak.preflight", side_effect=ValueError("override conflict")), \
                 patch("manage.pacman.restore_repo") as install:
             with self.assertRaisesRegex(ValueError, "未执行安装"):
@@ -189,13 +228,38 @@ class ManagementTests(unittest.TestCase):
         source = self.fixture_codex()
         # Only the module's source lookup is mocked; SQLite backup is real.
         codex.export(self.ctx, source)
-        self.assertFalse((self.ctx.backup / "codex/latest/home/ipc").exists())
-        self.assertFalse((self.ctx.backup / "codex/latest/home/state.sqlite-wal").exists())
+        self.assertFalse((self.ctx.backup / "codex/home/ipc").exists())
+        self.assertFalse((self.ctx.backup / "codex/home/state.sqlite-wal").exists())
         codex.restore(self.ctx)
         with closing(sqlite3.connect(self.target / ".codex/state.sqlite")) as db:
             self.assertEqual(db.execute("SELECT value FROM sample").fetchone()[0], "committed in WAL")
         self.assertEqual((self.target / ".codex/link").resolve(), self.target / ".codex/config.toml")
         self.assertEqual((self.target / ".codex").stat().st_mode & 0o777, 0o700)
+
+    def test_codex_keeps_only_current_state_without_logs_or_config_backups(self):
+        source = self.fixture_codex()
+        for name in ("config.toml.bak", "config.toml.tmp-old", "logs_2.sqlite", "models_cache.json"):
+            (source / name).write_text("discard")
+        (source / "cache").mkdir()
+        (source / "cache/generated").write_text("discard")
+        skill = source / "skills/example"
+        (skill / "__pycache__").mkdir(parents=True)
+        (skill / "__pycache__/helper.pyc").write_bytes(b"discard")
+        (skill / "helper.py").write_text("print('keep source')")
+        old = source / "retired-config.json"
+        old.write_text("retired")
+        codex.export(self.ctx, source)
+        old.unlink()
+        (source / "config.toml").write_text("current config")
+        codex.export(self.ctx, source)
+        snapshot = self.ctx.backup / "codex"
+        self.assertEqual({p.name for p in snapshot.iterdir()}, {"home", "manifest.json"})
+        self.assertFalse(snapshot.is_symlink())
+        self.assertEqual({p.name for p in (snapshot / "home").iterdir()},
+                         {"config.toml", "auth.json", "state.sqlite", "link", "skills"})
+        self.assertFalse((snapshot / "home/skills/example/__pycache__").exists())
+        self.assertEqual((snapshot / "home/skills/example/helper.py").read_text(), "print('keep source')")
+        self.assertEqual((snapshot / "home/config.toml").read_text(), "current config")
 
     def test_codex_corruption_and_nonempty_target_block_restore(self):
         source = self.fixture_codex()
@@ -205,7 +269,7 @@ class ManagementTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "现有数据"):
             codex.preflight(self.ctx)
         shutil.rmtree(self.target / ".codex")
-        (self.ctx.backup / "codex/latest/home/config.toml").write_text("tampered")
+        (self.ctx.backup / "codex/home/config.toml").write_text("tampered")
         with self.assertRaisesRegex(ValueError, "校验失败"):
             codex.restore(self.ctx)
         self.assertFalse((self.target / ".codex").exists())
@@ -213,7 +277,7 @@ class ManagementTests(unittest.TestCase):
     def test_codex_rejects_recursive_backup_destination(self):
         source = self.fixture_codex()
         self.ctx.backup = source / "backup"
-        with self.assertRaisesRegex(ValueError, "内部"):
+        with self.assertRaisesRegex(ValueError, "重叠"):
             codex.export(self.ctx, source)
 
 

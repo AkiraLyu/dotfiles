@@ -6,7 +6,6 @@ from pathlib import Path
 import sys
 import tempfile
 import unittest
-from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 from restore_lib import private
@@ -34,7 +33,7 @@ class PrivateTests(unittest.TestCase):
     def snapshot(self):
         private.export(self.ctx)
         self.ctx.target = self.target
-        return self.ctx.backup / "private/latest"
+        return self.ctx.backup / "private"
 
     def test_round_trip_modes_empty_directories_and_idempotency(self):
         snapshot = self.snapshot()
@@ -84,31 +83,24 @@ class PrivateTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "不同数据"):
             private.restore(self.ctx)
 
-    def test_failed_export_preserves_latest(self):
+    def test_export_rewrites_directory_and_removes_retired_files(self):
+        old = self.source / ".config/mirador/old-config"
+        old.write_text("obsolete")
         private.export(self.ctx)
-        latest = (self.ctx.backup / "private/latest").readlink()
-        with patch("restore_lib.private.copy_records", side_effect=OSError("copy failed")):
-            with self.assertRaises(OSError):
-                private.export(self.ctx)
-        self.assertEqual((self.ctx.backup / "private/latest").readlink(), latest)
-        self.assertFalse(list((self.ctx.backup / "private").glob(".incomplete-*")))
+        old.unlink()
+        (self.source / ".config/mirador/config.toml").write_text("current")
+        private.export(self.ctx)
+        snapshot = self.ctx.backup / "private"
+        self.assertFalse(snapshot.is_symlink())
+        self.assertEqual(private.inventory(snapshot / "home"), private.inventory(self.source))
+        self.assertEqual({p.name for p in snapshot.iterdir()}, {"home", "manifest.json"})
 
-    def test_export_rejects_links_recursive_destination_and_unstable_copy(self):
+    def test_export_rejects_links_and_overlapping_destination(self):
         self.ctx.backup = self.source / ".config/mirador/backup"
-        with self.assertRaisesRegex(ValueError, "内部"):
+        with self.assertRaisesRegex(ValueError, "重叠"):
             private.export(self.ctx)
         self.ctx.backup = self.root / "backup"
         path = self.source / ".config/mirador/config.toml"
-        original = private.copy_records
-
-        def change_after_copy(*args):
-            original(*args)
-            path.write_bytes(path.read_bytes() + b"changed")
-
-        with patch("restore_lib.private.copy_records", side_effect=change_after_copy):
-            with self.assertRaisesRegex(ValueError, "持续变化"):
-                private.export(self.ctx)
-        self.assertFalse((self.ctx.backup / "private/latest").exists())
         path.unlink()
         path.symlink_to(self.source / ".config/rclone/rclone.conf")
         with self.assertRaisesRegex(ValueError, "符号链接"):

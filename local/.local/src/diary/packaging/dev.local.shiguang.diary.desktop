@@ -1,0 +1,16 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=拾光日记
+GenericName=Diary
+GenericName[zh_CN]=日记
+Comment=本地优先的 Markdown 日记
+Comment[zh_CN]=本地优先的 Markdown 日记
+Exec=shiguang-diary
+TryExec=shiguang-diary
+Icon=dev.local.shiguang.diary
+Terminal=false
+Categories=Office;
+Keywords=Diary;Journal;Markdown;日记;
+StartupNotify=true
+StartupWMClass=dev.local.shiguang.diary

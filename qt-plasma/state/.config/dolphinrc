@@ -1,0 +1,21 @@
+MenuBar=Disabled
+
+[General]
+Version=202
+ViewPropsTimestamp=2026,2,8,9,55,32.623
+
+[IconsMode]
+PreviewSize=48
+
+[KFileDialog Settings]
+Places Icons Auto-resize=false
+Places Icons Static Size=16
+
+[MainWindow]
+MenuBar=Disabled
+
+[PlacesPanel]
+IconSize=16
+
+[PreviewSettings]
+Plugins=appimagethumbnail,glycin-heif,comicbookthumbnail,djvuthumbnail,ebookthumbnail,exrthumbnail,glycin-image-rs,glycin-jxl,jpegthumbnail,kraorathumbnail,windowsimagethumbnail,windowsexethumbnail,opendocumentthumbnail,gsthumbnail,glycin-svg,svgthumbnail,cursorthumbnail,imagethumbnail,fontthumbnail,directorythumbnail,textthumbnail,ffmpegthumbs,audiothumbnail

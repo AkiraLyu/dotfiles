@@ -1,6 +1,6 @@
 # Unified color theme
 
-Qt/Plasma configuration, custom plugin sources and installation helpers are grouped in [qt-plasma/](qt-plasma/README.md).
+Qt/Plasma configuration and package templates are grouped in [qt-plasma/](qt-plasma/README.md); native plugin sources live in [local/.local/src/](local/.local/src/README.md).
 
 `theme` is the only writer for the color mode and widget preset. Their canonical state is:
 
@@ -10,6 +10,8 @@ Qt/Plasma configuration, custom plugin sources and installation helpers are grou
 ```
 
 `mode` contains `light` or `dark`; `preset` contains `breeze`, `darkly` or `kvantum`. Desktop settings and environment variables are derived outputs, never inputs after the first migration. Color mode and widget preset are independent, so any preset can be used in light or dark mode.
+
+`./install.sh --export kde` saves these two state files with the KDE settings. Restore them with `./install.sh --restore kde` before the first graphical login.
 
 ## Commands
 
@@ -50,10 +52,10 @@ The installer copies the installed Darkly Plasma theme into `~/.local/share/plas
 
 Kate's left tool selector and bottom/status bar can use the same opacity as
 Darkly's toolbar without changing the editor, line-number gutter, document tabs,
-or any other application. Install the user-local Kate plugin and restart Kate:
+or any other application. Restore the native plugin package and restart Kate:
 
 ```bash
-install-kate-translucent-bars
+./install.sh --restore kde-plugins
 ```
 
 The plugin is active only while the Qt application style is Darkly. It reads
@@ -62,14 +64,11 @@ The plugin is active only while the Qt application style is Darkly. It reads
 only supplies a near-opaque top-level palette hint, causing Darkly to request
 one stable full-window blur region while the plugin paints only the two selected
 bars translucently. This avoids competing `KWindowEffects` updates when Kate
-repaints the cursor or changes documents. It is discovered through a Kate-only
-wrapper rather than a global Qt environment override. The wrapper
-also enables it in Kate's per-session configuration, including the anonymous
-session. Remove it completely with:
-
-```bash
-remove-kate-translucent-bars
-```
+repaints the cursor or changes documents. Kate discovers the plugin in its
+standard system directory. The `kate` wrapper enables it in each existing
+session, including the anonymous session, before launching `/usr/bin/kate`.
+The `dotfiles-kde-plugins` package owns the plugin together with App Grid and
+the WeChat KWin effect; package removal removes all three extensions.
 
 To remove the generated theme completely, restore the packaged Darkly Plasma theme, and delete its cache:
 

@@ -1,0 +1,8 @@
+{
+  "path": "usr/lib/firmware/intel/avs/tgl/dsp_basefw.bin",
+  "backup_path": "firmware/intel/avs/tgl/dsp_basefw.bin",
+  "size": 546764,
+  "sha256": "c9d5e942c13e826ce0effeeb1e3c97963113c3c4823a4e23462d52862841111f",
+  "captured_at": "2026-09-07",
+  "provenance": "Captured from the working machine; original upstream revision is not known. Kept in manually migrated backup/."
+}

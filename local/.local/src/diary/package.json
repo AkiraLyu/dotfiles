@@ -1,0 +1,70 @@
+{
+  "name": "daylight-diary",
+  "productName": "拾光日记",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "main": "electron/main.mjs",
+  "author": "拾光日记",
+  "desktopName": "dev.local.shiguang.diary",
+  "description": "A fast, local-first Markdown diary viewer and editor.",
+  "scripts": {
+    "start": "node scripts/start-electron.mjs",
+    "start:web": "node server.mjs",
+    "dev": "node scripts/start-electron.mjs",
+    "build": "node scripts/build-platform.mjs",
+    "build:arch": "node scripts/generate-icon.mjs && makepkg --force --cleanbuild",
+    "build:win": "node scripts/generate-icon.mjs && electron-builder --win nsis portable",
+    "pack:win": "node scripts/generate-icon.mjs && electron-builder --win --dir",
+    "test": "node --test && node --check public/app.js && node --check electron/main.mjs && node --check electron/preload.cjs && node --check scripts/generate-icon.mjs && node --check scripts/build-platform.mjs && node --check scripts/start-electron.mjs"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "devDependencies": {
+    "@fontsource/noto-sans-sc": "^5.3.0",
+    "electron": "^43.4.0",
+    "electron-builder": "^26.15.3",
+    "katex": "^0.18.1"
+  },
+  "build": {
+    "appId": "dev.local.shiguang.diary",
+    "productName": "拾光日记",
+    "executableName": "shiguang-diary",
+    "asar": true,
+    "compression": "maximum",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "electron/**/*",
+      "public/**/*",
+      "package.json"
+    ],
+    "win": {
+      "icon": "build/icon.ico",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        },
+        {
+          "target": "portable",
+          "arch": ["x64"]
+        }
+      ]
+    },
+    "nsis": {
+      "artifactName": "${productName}-${version}-${arch}-setup.${ext}",
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": "always",
+      "createStartMenuShortcut": true,
+      "shortcutName": "拾光日记",
+      "deleteAppDataOnUninstall": false
+    },
+    "portable": {
+      "artifactName": "${productName}-${version}-${arch}-portable.${ext}"
+    }
+  }
+}

@@ -1,0 +1,7 @@
+[Greeter]
+WallpaperPlugin=org.waywallen.kde
+
+[Greeter][Wallpaper][org.kde.image][General]
+Image=file:///usr/share/wallpapers/OneStandsOut/
+PreviewImage=file:///usr/share/wallpapers/OneStandsOut/
+SlidePaths=/home/akira/.local/share/wallpapers/,/usr/share/wallpapers/

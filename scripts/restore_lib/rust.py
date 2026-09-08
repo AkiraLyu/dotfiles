@@ -11,7 +11,7 @@ from .common import capture, load_json, save_json
 def export_rust(ctx):
     root = Path(os.environ.get("RUSTUP_HOME", str(Path.home() / ".rustup")))
     settings = tomllib.loads((root / "settings.toml").read_text())
-    records = []
+    records = {}
     mapping = {}
     for name in capture("rustup", "toolchain", "list").splitlines():
         name = name.split()[0]
@@ -25,11 +25,13 @@ def export_rust(ctx):
         targets = capture("rustup", "target", "list", "--toolchain", name, "--installed").splitlines()
         # rust-std is selected by --target; other host suffixes are implied.
         components = [c.removesuffix("-" + host) for c in components if not c.startswith("rust-std-")]
-        records.append({"source_name": name, "install": install, "components": components, "targets": targets})
+        record = records.setdefault(install, {"source_name": name, "install": install, "components": [], "targets": []})
+        record["components"] = sorted(set(record["components"]) | set(components))
+        record["targets"] = sorted(set(record["targets"]) | set(targets))
     overrides = settings.get("overrides", {})
     if overrides:
         raise ValueError("存在项目路径专属 Rust override，请先在项目 rust-toolchain.toml 中声明后再导出")
-    save_json(ctx.repo / "packages/rust.json", {"default": mapping[settings["default_toolchain"]], "toolchains": records})
+    save_json(ctx.repo / "packages/rust.json", {"default": mapping[settings["default_toolchain"]], "toolchains": list(records.values())})
     print(f"已记录 {len(records)} 套 Rust 工具链的具体版本、components 和 targets")
 
 
