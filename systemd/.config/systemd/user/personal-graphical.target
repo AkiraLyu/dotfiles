@@ -10,6 +10,7 @@ Wants=onedrive-tray.service
 Wants=qq.service
 Wants=theme-sync.service
 Wants=waywallen.service
+# Wants=wl-clip-persist.service
 
 [Install]
 WantedBy=graphical-session.target

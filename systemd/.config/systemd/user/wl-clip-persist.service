@@ -1,0 +1,12 @@
+[Unit]
+Description=Persist Wayland clipboard contents
+Requisite=graphical-session.target
+After=graphical-session.target
+PartOf=graphical-session.target personal-graphical.target
+ConditionEnvironment=WAYLAND_DISPLAY
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/wl-clip-persist --clipboard regular --disable-timestamps
+Restart=on-failure
+RestartSec=2s

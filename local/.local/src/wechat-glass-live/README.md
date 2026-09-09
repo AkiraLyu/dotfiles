@@ -6,7 +6,7 @@ KWin 原生特效，当前版本 0.4.0。为 Flatpak 微信主窗口的顶栏和
 
 构建需要 C++20 编译器、CMake、Ninja、Extra CMake Modules、KWin 开发文件、Qt6、KF6 KConfig 和 libxcb。运行需要 KDE Wayland、Better Blur DX、Python 3、`qdbus6`、`qmake6`、`kreadconfig6`、`kwriteconfig6` 和 `run0`。
 
-当前验证环境：KWin 6.7.4、Qt 6.11.2、Better Blur DX 2.5.1、Flatpak 微信 4.1.13.9，显示缩放 125%。原生插件与 KWin ABI 绑定，升级 KWin 后如不能加载，应重新编译。
+当前验证环境：KWin 6.7.5、Qt 6.11.2、Better Blur DX 2.5.1、Flatpak 微信 4.1.13.9，显示缩放 125%。原生插件与 KWin 的完整版本绑定，即使只是补丁版本升级，也需要重新编译并安装。
 
 在 KDE 会话中执行：
 
@@ -14,10 +14,45 @@ KWin 原生特效，当前版本 0.4.0。为 Flatpak 微信主窗口的顶栏和
 cd ~/dotfiles/local/.local/src/wechat-glass-live
 cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=RelWithDebInfo
 cmake --build build
+flatpak override --user --nosocket=wayland --socket=x11 --env=QT_QPA_PLATFORM=xcb com.tencent.WeChat
 python3 control.py install
 ```
 
 安装脚本通过 `run0` 将构建产物复制到 `qmake6` 返回的 Qt 插件目录，移除本项目的旧版插件，然后启用特效及登录自动加载。请预先在 KDE 桌面特效中启用 Better Blur DX。自定义构建目录时使用 `python3 control.py install --build-dir <目录>`。
+
+Flatpak override 将微信固定为 XWayland 客户端，以便特效设置主窗口专属的模糊区域。微信已经运行时，需要从托盘选择“退出微信”后重新打开；关闭主窗口通常只会隐藏到托盘。桌面会话仍使用 Wayland。
+
+## 更新后失效的排查
+
+### KDE / KWin 更新
+
+2026-09-09，KWin 从 6.7.4 升至 6.7.5 后，旧插件的接口标识仍为 `org.kde.kwin.EffectPluginFactory6.7.4`。KWin 要求该标识与自身版本完全一致，因此拒绝加载；此时 `control.py status` 显示 `loaded: false`，但 `load_at_login: true`。微信的 XWayland override 仍然有效。
+
+重新配置、编译并安装即可恢复，无需修改透明区域或微信设置：
+
+```bash
+cd ~/dotfiles/local/.local/src/wechat-glass-live
+cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=RelWithDebInfo -DWECHAT_GLASS_BUILD_TESTS=ON
+cmake --build build
+ctest --test-dir build --output-on-failure
+python3 control.py install
+python3 control.py status
+```
+
+如果升级后尚未重新登录，正在运行的 KWin 可能还是旧版本，而开发文件已经更新；应在新版本 KDE 会话中安装和验证。上述修复是在 KWin 6.7.5 会话内直接加载重编译的插件，无需重启微信。
+
+### Flatpak 微信更新
+
+2026-09-07 的 Flatpak 构建将默认后端切换为原生 Wayland（[上游改动 #99](https://github.com/flathub/com.tencent.WeChat/pull/99)），应用版本号仍为 4.1.13.9。原生 Wayland 窗口不满足本特效的 X11 匹配条件，表现为 `loaded: true`、`shader_valid: true`，但 `painted_frames: 0`。上游随后[回退该改动 #101](https://github.com/flathub/com.tencent.WeChat/pull/101)，修复本机时当前软件源尚未提供回退后的构建。
+
+上面的 per-app override 在后续 Flatpak 更新后继续生效，并已记录在 dotfiles 的 `packages/flatpak/manifest.json` 中。可用以下命令检查配置和运行状态：
+
+```bash
+flatpak info --show-permissions com.tencent.WeChat
+python3 control.py status
+```
+
+配置应包含 `QT_QPA_PLATFORM=xcb`、`x11` socket，且无 `wayland` socket。主窗口可见、未最小化且位于当前桌面时，特效应显示 `active: true`、`redirected_windows: 1`。本特效目前不支持原生 Wayland 微信。
 
 ## 日常控制
 
@@ -49,6 +84,7 @@ python3 control.py uninstall
 - `CMakeLists.txt`、`control.py`：构建、安装和启停。
 - `tests/`：合成窗口与隔离 KWin 回归检查。
 - `docs/verification-0.4.0.json`：迁入前的验证记录。
+- `docs/verification-kwin-6.7.5.json`：KWin 6.7.5 重编译后的回归和实际窗口验证记录。
 
 构建文件、测试截图和运行日志均生成在 `build/`，由 Git 忽略。
 

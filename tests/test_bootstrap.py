@@ -108,6 +108,8 @@ class BootstrapTests(unittest.TestCase):
         self.assertIn(self.swap_uuid, cmdline)
         self.assertNotIn('06c08067', cmdline)
         active = '\n'.join(line for line in cmdline.splitlines() if not line.lstrip().startswith('#'))
+        for option in ('quiet', 'splash', 'vt.global_cursor_default=0'):
+            self.assertIn(option, active.split())
         template_edid = [line for line in (REPO / 'etc/cmdline.d/root.conf').read_text().splitlines() if 'edid' in line]
         self.assertEqual([line for line in cmdline.splitlines() if 'edid' in line], template_edid)
         self.assertIn('dsp_driver=4', (self.target / 'etc/modprobe.d/sound.conf').read_text())
@@ -116,6 +118,38 @@ class BootstrapTests(unittest.TestCase):
         before = (self.target / 'etc/cmdline.d/root.conf').read_bytes()
         arch.render_boot(self.ctx, self.root_uuid, self.swap_uuid)
         self.assertEqual(before, (self.target / 'etc/cmdline.d/root.conf').read_bytes())
+
+    def test_saved_boot_settings_keep_plymouth_without_a_uki_bitmap(self):
+        self.ctx.apply = True
+        dropin = self.target / 'etc/mkinitcpio.conf.d/90-dotfiles.conf'
+        dropin.parent.mkdir(parents=True)
+        dropin.write_text('HOOKS=(base systemd sd-encrypt)\n')
+        arch.render_boot(self.ctx, self.root_uuid, self.swap_uuid)
+        config = self.target / 'etc/mkinitcpio.conf'
+        self.assertEqual(config.read_bytes(), (REPO / 'etc/mkinitcpio.conf').read_bytes())
+        result = subprocess.run(['bash', '-c',
+                                 'source "$1"; source "$2"; printf "%s\\n" "${HOOKS[*]}" "${FILES[*]}"',
+                                 'fixture', str(config), str(dropin)],
+                                text=True, capture_output=True, check=True)
+        hooks, files = (line.split() for line in result.stdout.splitlines())
+        self.assertLess(hooks.index('plymouth'), hooks.index('sd-encrypt'))
+        self.assertIn('/etc/luks.key', files)
+        self.assertIn('/' + arch.firmware.RELATIVE, files)
+        self.assertIn('plymouth', arch.BASE_PACKAGES)
+        for kernel in arch.KERNELS:
+            relative = f'etc/mkinitcpio.d/{kernel}.preset'
+            preset = self.target / relative
+            self.assertEqual(preset.read_bytes(), (REPO / relative).read_bytes())
+            result = subprocess.run(['bash', '-c',
+                                     'source "$1"; printf "%s\\n" "$ALL_kver" "${PRESETS[*]}" '
+                                     '"$default_uki" "${default_options-}" "${ALL_splash-}" "${default_splash-}"',
+                                     'fixture', str(preset)], text=True, capture_output=True, check=True)
+            kver, presets, uki, options, all_splash, default_splash = result.stdout.splitlines()
+            self.assertEqual(kver, f'/boot/vmlinuz-{kernel}')
+            self.assertEqual(presets, 'default')
+            self.assertEqual(uki, f'/efi/EFI/Linux/arch-{kernel}.efi')
+            self.assertNotIn('--splash', options)
+            self.assertEqual((all_splash, default_splash), ('', ''))
 
     def test_post_install_writes_inputs_before_uki_and_keeps_existing_key(self):
         self.ctx.apply = True
@@ -129,7 +163,8 @@ class BootstrapTests(unittest.TestCase):
             calls.append(args)
             if 'mkinitcpio' in args:
                 self.assertIn(self.root_uuid, (self.target / 'etc/cmdline.d/root.conf').read_text())
-                for relative in ('etc/crypttab', 'etc/initcpio/install/block', 'etc/mkinitcpio.conf.d/90-dotfiles.conf'):
+                for relative in ('etc/crypttab', 'etc/initcpio/install/block', 'etc/mkinitcpio.conf',
+                                 'etc/mkinitcpio.conf.d/90-dotfiles.conf'):
                     self.assertTrue((self.target / relative).is_file())
                 self.assertEqual((self.target / arch.firmware.RELATIVE).read_bytes(), b'fixture AVS firmware')
                 for kernel in ('linux', 'linux-cachyos'):
@@ -142,6 +177,8 @@ class BootstrapTests(unittest.TestCase):
             arch.configure_system(self.ctx)
         self.assertEqual(key.read_bytes(), b'existing-key')
         self.assertFalse(any('luksAddKey' in c for c in calls))
+        self.assertLess(calls.index(['arch-chroot', str(self.target), 'pacman', '-S', '--needed', 'plymouth']),
+                        next(i for i,c in enumerate(calls) if 'mkinitcpio' in c))
         self.assertLess(next(i for i,c in enumerate(calls) if 'mkinitcpio' in c),
                         next(i for i,c in enumerate(calls) if 'bootctl' in c))
         self.assertFalse(any('systemctl' in c for c in calls))

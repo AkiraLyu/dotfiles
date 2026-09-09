@@ -24,7 +24,7 @@ BASE_PACKAGES = (
     "base", "base-devel", *KERNELS, "linux-firmware", "sof-firmware",
     "cachyos-keyring", "cachyos-mirrorlist", "cachyos-v3-mirrorlist", "cachyos-v4-mirrorlist",
     "networkmanager", "btrfs-progs", "cryptsetup", "dosfstools", "python", "git", "stow",
-    "polkit", "fish", "vim", "tmux",
+    "polkit", "fish", "vim", "tmux", "plymouth",
 )
 
 
@@ -190,20 +190,19 @@ def render_boot(ctx, root_uuid, swap_uuid):
     ctx.write("etc/initcpio/install/block", (ctx.repo / "etc/initcpio/install/block").read_bytes(), 0o755)
     ctx.write("etc/crypttab", f"cryptroot UUID={root_uuid} /etc/luks.key luks\n"
               f"cryptswap UUID={swap_uuid} /etc/luks.key luks\n", 0o600)
-    ctx.write("etc/mkinitcpio.conf.d/90-dotfiles.conf", "# Touchpad workaround: /etc/initcpio/install/block\n"
-              "HOOKS=(base systemd autodetect microcode modconf kms keyboard keymap sd-vconsole block sd-encrypt filesystems fsck)\n"
-              '[[ " ${FILES[*]} " == *" /etc/luks.key "* ]] || FILES+=(/etc/luks.key)\n'
+    ctx.write("etc/mkinitcpio.conf", (ctx.repo / "etc/mkinitcpio.conf").read_bytes())
+    ctx.write("etc/mkinitcpio.conf.d/90-dotfiles.conf", "# AVS firmware\n"
               f'[[ " ${{FILES[*]}} " == *" /{firmware.RELATIVE} "* ]] || FILES+=(/{firmware.RELATIVE})\n')
     for kernel in KERNELS:
-        ctx.write(f"etc/mkinitcpio.d/{kernel}.preset", f"ALL_kver='/boot/vmlinuz-{kernel}'\nPRESETS=('default')\n"
-                  f"default_uki='/efi/EFI/Linux/arch-{kernel}.efi'\n"
-                  'default_options="--cmdline /etc/cmdline.d --splash /usr/share/systemd/bootctl/splash-arch.bmp"\n')
+        relative = f"etc/mkinitcpio.d/{kernel}.preset"
+        ctx.write(relative, (ctx.repo / relative).read_bytes())
     ctx.write("efi/loader/loader.conf", "timeout 5\nconsole-mode keep\ndefault @saved\n")
 
 
 def configure_system(ctx):
     root_uuid = read("blkid", "-s", "UUID", "-o", "value", ctx.root)
     swap_uuid = read("blkid", "-s", "UUID", "-o", "value", ctx.swap)
+    ctx.chroot("pacman", "-S", "--needed", "plymouth")
     if not ctx.apply:
         render_boot(ctx, root_uuid, swap_uuid)
         print("  保留/新建目标 LUKS key；必要时交互添加 keyslot，创建用户并设置密码")

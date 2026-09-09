@@ -11,6 +11,10 @@ update-desktop-database "$HOME/.local/share/applications"
 kbuildsycoca6 --noincremental
 ```
 
+## Wayland 剪贴板
+
+`wl-clip-persist.service` 随 `personal-graphical.target` 启动，仅在 Wayland 会话中运行，使用 `--clipboard regular` 保存普通剪贴板，退出图形会话时停止。软件包由 `--restore pacman` 恢复，用户服务由 `./install.sh --user-targets` 部署。
+
 ## rclone 挂载
 
 先运行 `./install.sh --restore private` 恢复账户。挂载目录需要属于目标用户，新机器上准备一次：
