@@ -1,8 +1,0 @@
-{
-  "local_packages": ["xwayland-satellite-akira", "niri-meta", "gamescope-anime4k", "foxvault-git"],
-  "built_packages": ["dotfiles-kde-plugins", "shiguang-diary"],
-  "replacements": {"xwayland-satellite": "xwayland-satellite-akira", "gamescope": "gamescope-anime4k"},
-  "deferred": {
-    "fcitx5-pinyin-sougou-dict-git": "用户指定不处理；保留原始清单和现有安装"
-  }
-}

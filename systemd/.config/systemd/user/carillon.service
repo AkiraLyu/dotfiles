@@ -1,0 +1,19 @@
+[Unit]
+Description=Carillon mail watcher
+Requisite=graphical-session.target
+After=graphical-session.target
+PartOf=graphical-session.target personal-graphical.target
+ConditionPathExists=%h/.config/carillon/config.toml
+ConditionFileIsExecutable=%h/.cargo/bin/carillon
+
+[Service]
+Type=simple
+# 程序从 CARILLON_CONFIG 读配置；通知脚本复用相同的配置和账号。
+Environment=CARILLON_CONFIG=%h/.config/carillon/config.toml
+Environment=CARILLON_ACCOUNT=Akira
+Environment=RUST_LOG=carillon=info
+# 新版通过 --account 选账号，邮箱由配置中的 imap.mailbox 指定。
+ExecStart=%h/.cargo/bin/carillon --account ${CARILLON_ACCOUNT} watch
+Restart=on-failure
+RestartSec=30s
+TimeoutStopSec=15s

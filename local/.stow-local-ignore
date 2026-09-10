@@ -17,6 +17,9 @@ _darcs
 ^/COPYING
 __pycache__
 
+# 历史记录是运行数据，不随 local 配置部署。
+^/\.local/share/fish/fish_history$
+
 # Native build outputs are not deployment input.
 ^/\.local/src/(appgrid/build|wechat-glass-live/(build|build-[^/]+))(/|$)
 

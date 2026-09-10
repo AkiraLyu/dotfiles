@@ -1,9 +1,17 @@
-fish/.config/fish/conf.d/chromium.fish
-local/.local/share/fish/fish_history
-nvim/.config/nvim/lazy-lock.json
-.codex
-backup/
+# 旧仓库只作参考；其中包含私密备份，不进入新仓库。
+/dotfile/
+/backup/
 
-# Local installer/test bytecode caches.
+# Fish 会自行写入这些运行数据；凭据单独保存在 backup/private/。
+/fish/.config/fish/fish_variables
+/fish/.config/fish/fish_history
+/fish/.config/fish/conf.d/chromium.fish
+/local/.local/share/fish/fish_history
+
+# 本地 PKGBUILD 的构建产物可以重新生成。
+/packages/local/*/src/
+/packages/local/*/pkg/
+/packages/local/*/*.pkg.tar.*
 __pycache__/
-/.diary-*/
+
+/private/

@@ -99,3 +99,135 @@
     display: none !important;
   }
 }
+
+/* ============================================================
+ * Firefox Context Menu
+ * Match Firefox App Menu style
+ * ============================================================ */
+
+
+/* ---------- 整个右键菜单 ---------- */
+
+menupopup {
+    /* 面板 */
+    --panel-background-color: #ffffff !important;
+    --panel-text-color: #333333 !important;
+    --panel-border-color: #d4d4d4 !important;
+
+    /* 截图中的大圆角 */
+    --panel-border-radius: 22px !important;
+
+    /* 内容与边缘之间的距离 */
+    --panel-padding: 8px 0 !important;
+
+    /* 菜单项 */
+    --menuitem-border-radius: 18px !important;
+    --menuitem-margin: 2px 10px !important;
+    --menuitem-padding: 7px 10px !important;
+
+    /* 分隔线 */
+    --panel-separator-color: #cccccc !important;
+
+    color: #333333 !important;
+}
+
+
+/* ---------- 外部卡片 ---------- */
+
+menupopup::part(content) {
+    border-radius: 22px !important;
+
+    border: 1px solid #d4d4d4 !important;
+
+    background: #ffffff !important;
+
+    box-shadow:
+        0 3px 8px rgb(0 0 0 / 12%),
+        0 8px 24px rgb(0 0 0 / 10%) !important;
+}
+
+
+/* ---------- 普通菜单项 ---------- */
+menupopup > menu,
+menupopup > menuitem {
+    min-height: 26px !important;
+    margin: 0 10px !important;
+    padding: 2px 10px !important;
+}
+
+/* ---------- 鼠标悬停 ---------- */
+
+menupopup > menu[_moz-menuactive="true"]:not([disabled]),
+menupopup > menuitem[_moz-menuactive="true"]:not([disabled]) {
+    color: #333333 !important;
+
+    /* 截图中 hover 大约就是 #ddd */
+    background-color: #dddddd !important;
+}
+
+
+/* ---------- 点击时稍微深一点 ---------- */
+
+menupopup > menu[_moz-menuactive="true"]:active,
+menupopup > menuitem[_moz-menuactive="true"]:active {
+    background-color: #d3d3d3 !important;
+}
+
+
+/* ---------- 快捷键，例如 Ctrl+C ---------- */
+
+menupopup .menu-accel {
+    color: #707070 !important;
+
+    margin-inline-start: 22px !important;
+}
+
+
+/* ---------- 子菜单箭头 ---------- */
+
+menupopup > menu::after {
+    opacity: 0.55 !important;
+
+    margin-inline-start: 18px !important;
+}
+
+
+/* ---------- 分隔线 ---------- */
+
+menupopup > menuseparator {
+    padding-block: 5px !important;
+    margin-inline: 10px !important;
+}
+
+menupopup > menuseparator::before {
+    border-top: 1px solid #cccccc !important;
+}
+
+
+/* ---------- 禁用项目 ---------- */
+
+menupopup > menu[disabled],
+menupopup > menuitem[disabled] {
+    color: #a0a0a0 !important;
+}
+
+
+/* ---------- 防止菜单文字过于紧凑 ---------- */
+
+menupopup .menu-text {
+    margin-inline: 0 !important;
+}
+
+
+/* ---------- 图标与文字间距 ---------- */
+
+menupopup .menu-icon {
+    margin-inline-end: 8px !important;
+}
+
+
+/* ---------- checkbox / radio 等 ---------- */
+
+menupopup menuitem[checked="true"] {
+    border-radius: 18px !important;
+}

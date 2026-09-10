@@ -1,6 +1,8 @@
+# 暂时只保留 target 的会话关系，不自动启动旧服务。
+# 恢复对应程序后，再按需取消下面 Wants= 行的注释。
 [Unit]
 Description=Personal background services
-Wants=foxvault.service
+# Wants=foxvault.service
 After=basic.target
 
 [Install]

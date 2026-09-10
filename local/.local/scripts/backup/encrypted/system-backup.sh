@@ -6,7 +6,6 @@ SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 
 BACKUP_SOURCES=(
     "$HOME/Desktop"
-    "/data"
     "$HOME/Documents/AliceSoft"
     "$HOME/Documents/AliceInCradle"
     "$HOME/Documents/FAVORITE"

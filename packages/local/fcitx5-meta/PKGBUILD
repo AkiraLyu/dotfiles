@@ -1,0 +1,24 @@
+# 根据本机已安装元包的依赖和原始说明保存；不包含程序二进制。
+pkgname=fcitx5-meta
+pkgver=6.0
+pkgrel=1
+pkgdesc='Meta package for fcitx5 and related addons'
+arch=('any')
+license=('custom:none')
+# 元包只有说明文件，无需生成调试包。
+options=('!debug')
+
+# 修改软件组合时，直接增删下面的包名。
+depends=(
+    fcitx5
+    fcitx5-chinese-addons
+    fcitx5-configtool
+    fcitx5-gtk
+    fcitx5-material-color
+    fcitx5-qt
+    fcitx5-pinyin-zhwiki
+)
+
+package() {
+    install -Dm644 "$startdir/README" "$pkgdir/usr/share/doc/$pkgname/README"
+}

@@ -1,7 +1,0 @@
-[Desktop Entry]
-Exec=brightnessctl set 100%%
-Name=wake
-NoDisplay=true
-StartupNotify=false
-Type=Application
-X-KDE-GlobalAccel-CommandShortcut=true

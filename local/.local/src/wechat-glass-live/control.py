@@ -1,205 +1,84 @@
 #!/usr/bin/env python3
-"""Control the native, live WeChat Glass effect on this KDE installation."""
+"""以当前用户身份查看或调整 WeChat Glass；安装和卸载交给 pacman。"""
 import argparse
 import json
-from pathlib import Path
 import subprocess
 import sys
 
-PACKAGE = Path(__file__).resolve().parent
-STATE = Path.home() / '.local/state/wechat-glass-live/state.json'
-LEGACY_STATE = Path.home() / '.local/state/wechat-glass/state.json'
-EFFECT = 'wechat-glass-live-v4'
-OLD_EFFECTS = ['wechat-glass-live-v3', 'wechat-glass-live', 'wechat-glass']
-GROUP = 'Effect-wechat-glass-live'
-BLUR_GROUP = 'Effect-better-blur-dx'
-KEYS = ['Enabled', 'BackgroundOpacity', 'NavigationWidth', 'TitleHeight', 'MatchTolerance', 'CornerRadius']
-MISSING = '__WECHAT_GLASS_MISSING__'
+EFFECT = "wechat-glass-live-v4"
+GROUP = "Effect-wechat-glass-live"
 
 
-def run(*args):
-    result = subprocess.run(args, text=True, capture_output=True)
+def run(*command):
+    result = subprocess.run(command, text=True, capture_output=True)
     if result.returncode:
-        raise RuntimeError(result.stderr.strip() or result.stdout.strip() or str(args))
+        raise RuntimeError(result.stderr.strip() or result.stdout.strip())
     return result.stdout.strip()
 
 
-def dbus(*args):
-    return run('qdbus6', 'org.kde.KWin', '/Effects', *args)
-
-
-def refresh_config():
-    # KWin holds a shared kwinrc cache. Applying the configuration reloads it
-    # before the native effect reads its KConfigGroup.
-    run('qdbus6', 'org.kde.KWin', '/KWin', 'reconfigure')
-
-
-def read(group, key):
-    value = run('kreadconfig6', '--file', 'kwinrc', '--group', group, '--key', key, '--default', MISSING)
-    return None if value == MISSING else value
+def effects(method, *arguments):
+    return run("qdbus6", "org.kde.KWin", "/Effects", method, *arguments)
 
 
 def write(group, key, value):
-    args = ['kwriteconfig6', '--file', 'kwinrc', '--group', group, '--key', key]
-    args += ['--delete'] if value is None else [str(value)]
-    run(*args)
-
-
-def state():
-    if STATE.exists():
-        values = json.loads(STATE.read_text())
-    else:
-        values = {BLUR_GROUP+'/WindowClasses': read(BLUR_GROUP, 'WindowClasses')}
-        if LEGACY_STATE.exists():
-            old = json.loads(LEGACY_STATE.read_text())
-            values[BLUR_GROUP+'/WindowClasses'] = old.get(BLUR_GROUP+'/WindowClasses', values[BLUR_GROUP+'/WindowClasses'])
-    for key in KEYS:
-        if GROUP+'/'+key not in values:
-            values[GROUP+'/'+key] = read(GROUP, key)
-    if 'Plugins/'+EFFECT+'Enabled' not in values:
-        values['Plugins/'+EFFECT+'Enabled'] = read('Plugins', EFFECT+'Enabled')
-    STATE.parent.mkdir(parents=True, exist_ok=True)
-    STATE.write_text(json.dumps(values, ensure_ascii=False, indent=2)+'\n')
-    return values
-
-
-def clear_class_blur():
-    original = state().get(BLUR_GROUP+'/WindowClasses')
-    current = (read(BLUR_GROUP, 'WindowClasses') or '').splitlines()
-    # The plugin requests blur only for the main window. A class-wide force
-    # rule would override that region and blur popup shadows and square corners.
-    current = [value for value in current if value != 'wechat']
-    value = '\n'.join(current)
-    write(BLUR_GROUP, 'WindowClasses', value if value or original is not None else None)
-    if dbus('isEffectLoaded', 'better_blur_dx') == 'true':
-        dbus('reconfigureEffect', 'better_blur_dx')
-
-
-def disable_legacy():
-    for effect in OLD_EFFECTS:
-        if dbus('isEffectLoaded', effect) == 'true':
-            # The script prototype needs reconfiguration to undo its roles.
-            # Native revisions restore their state in the destructor.
-            if effect == 'wechat-glass':
-                write('Effect-'+effect, 'Enabled', 'false')
-                dbus('reconfigureEffect', effect)
-            dbus('unloadEffect', effect)
-        write('Plugins', effect+'Enabled', 'false')
-
-
-def disable():
-    state()
-    write(GROUP, 'Enabled', 'false')
-    if dbus('isEffectLoaded', EFFECT) == 'true':
-        dbus('reconfigureEffect', EFFECT)
-        dbus('unloadEffect', EFFECT)
-    write('Plugins', EFFECT+'Enabled', 'false')
-    clear_class_blur()
-
-
-def enable():
-    state()
-    disable_legacy()
-    if dbus('isEffectLoaded', 'better_blur_dx') != 'true':
-        raise RuntimeError('请先启用 Better Blur DX。')
-    if EFFECT not in dbus('listOfEffects').splitlines():
-        raise RuntimeError('原生插件尚未安装，请执行 control.py install。')
-    clear_class_blur()
-    write(GROUP, 'Enabled', 'true')
-    write('Plugins', EFFECT+'Enabled', 'true')
-    try:
-        refresh_config()
-        if dbus('isEffectLoaded', EFFECT) == 'true':
-            dbus('reconfigureEffect', EFFECT)
-        elif dbus('loadEffect', EFFECT) != 'true':
-            raise RuntimeError('KWin 无法加载插件。KWin 升级后可能需要重新编译。')
-        debug = json.loads(dbus('debug', EFFECT, ''))
-        if not debug.get('shader_valid') or not debug.get('enabled'):
-            raise RuntimeError('透明着色器或特效配置未能启用。')
-    except Exception:
-        disable()
-        raise
-
-
-def destination():
-    return Path(run('qmake6', '-query', 'QT_INSTALL_PLUGINS')) / 'kwin/effects/plugins' / (EFFECT+'.so')
-
-
-def admin(*args):
-    # Only the single compiled library is written with elevated privileges.
-    # Configuration, builds, and this Python script run as the desktop user.
-    result = subprocess.run(['run0', '--pipe', *map(str, args)])
-    if result.returncode:
-        raise RuntimeError('系统未授权写入 KWin 原生插件目录；特效保持关闭。')
+    run("kwriteconfig6", "--file", "kwinrc", "--group", group,
+        "--key", key, str(value))
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('action', choices=['install','enable','disable','status','opacity','uninstall'])
-    parser.add_argument('value', nargs='?', type=float)
-    parser.add_argument('--build-dir', type=Path, default=PACKAGE/'build',
-                        help='构建目录；默认为源码目录下的 build。')
+    parser.add_argument("action", choices=("status", "enable", "disable", "opacity"))
+    parser.add_argument("value", nargs="?", type=float)
     args = parser.parse_args()
-    if args.action == 'install':
-        source = args.build_dir.resolve() / 'plugins/kwin/effects/plugins' / (EFFECT+'.so')
-        if not source.is_file():
-            raise RuntimeError('缺少编译好的插件，请先按 README 执行 CMake 构建。')
-        state()
-        disable_legacy()
-        disable()
-        target = destination()
-        if not target.exists() or source.read_bytes() != target.read_bytes():
-            admin('/usr/bin/sh', '-c',
-                  'set -eu; /usr/bin/install -m 755 -- "$1" "$2"; '
-                  'shift 2; for old do if [ -f "$old" ]; then /usr/bin/rm -- "$old"; fi; done',
-                  'wechat-glass-install', source, target,
-                  *(target.with_name(old+'.so') for old in OLD_EFFECTS if old != 'wechat-glass'))
-        enable()
-        print('微信局部透明实时版本已安装并启用。')
-    elif args.action == 'enable':
-        enable()
-        print('微信局部透明实时版本已启用。')
-    elif args.action == 'disable':
-        disable()
-        print('微信局部透明已关闭。')
-    elif args.action == 'opacity':
-        if args.value is None or not 0.1 <= args.value <= 1:
-            parser.error('opacity 需要 0.1 到 1.0 之间的数值。')
-        state()
-        write(GROUP, 'BackgroundOpacity', args.value)
-        if dbus('isEffectLoaded', EFFECT) == 'true':
-            refresh_config()
-            dbus('reconfigureEffect', EFFECT)
-        print('栏背景不透明度：', args.value)
-    elif args.action == 'uninstall':
-        original = state()
-        disable()
-        target = destination()
-        if target.exists():
-            admin('/usr/bin/rm', '--', target)
-        for compound, value in original.items():
-            group, key = compound.split('/', 1)
-            if group != BLUR_GROUP:
-                write(group, key, value)
-        STATE.unlink(missing_ok=True)
-        print('实时特效已卸载，专属配置已恢复。')
-    else:
-        loaded = dbus('isEffectLoaded', EFFECT) == 'true'
-        result = {
-            'loaded': loaded,
-            'load_at_login': read('Plugins', EFFECT+'Enabled') == 'true',
-            'legacy_loaded': any(dbus('isEffectLoaded', effect) == 'true' for effect in OLD_EFFECTS),
-            'background_opacity': float(read(GROUP,'BackgroundOpacity') or '0.52'),
-            'force_blur_for_wechat': 'wechat' in (read(BLUR_GROUP,'WindowClasses') or '').splitlines(),
-        }
+    if args.action == "opacity":
+        if args.value is None or not 0.1 <= args.value <= 1.0:
+            parser.error("opacity 需要 0.1 到 1.0 之间的数值。")
+    elif args.value is not None:
+        parser.error("只有 opacity 接受数值参数。")
+
+    if args.action == "status":
+        loaded = effects("isEffectLoaded", EFFECT) == "true"
+        state = {"loaded": loaded}
         if loaded:
-            result['renderer'] = json.loads(dbus('debug', EFFECT, ''))
-        print(json.dumps(result, ensure_ascii=False, indent=2))
+            state["renderer"] = json.loads(effects("debug", EFFECT, ""))
+        print(json.dumps(state, ensure_ascii=False, indent=2))
+        return
+
+    if args.action == "enable":
+        # 配置前确认二进制和模糊后端可用，避免写出无法生效的启用状态。
+        if effects("isEffectSupported", EFFECT) != "true":
+            raise RuntimeError("请先运行 ./install.sh kde-plugins；KWin 更新后需要重编译并重新登录。")
+        if effects("isEffectLoaded", "better_blur_dx") != "true":
+            raise RuntimeError("请先运行 ./install.sh kde，启用 Better Blur DX。")
+        write(GROUP, "Enabled", "true")
+        write("Plugins", EFFECT + "Enabled", "true")
+    elif args.action == "disable":
+        write(GROUP, "Enabled", "false")
+        write("Plugins", EFFECT + "Enabled", "false")
+    else:
+        write(GROUP, "BackgroundOpacity", args.value)
+
+    # KWin 先重读共享配置，再让已经加载的特效更新参数。
+    run("qdbus6", "org.kde.KWin", "/KWin", "reconfigure")
+    if args.action == "disable":
+        effects("unloadEffect", EFFECT)
+    else:
+        if args.action == "enable" and effects("loadEffect", EFFECT) != "true":
+            # loadEffect 对已加载的插件可能返回 false，再检查实际状态。
+            if effects("isEffectLoaded", EFFECT) != "true":
+                raise RuntimeError("KWin 未能加载插件，请检查用户会话日志。")
+        if effects("isEffectLoaded", EFFECT) == "true":
+            effects("reconfigureEffect", EFFECT)
+            if args.action == "enable":
+                state = json.loads(effects("debug", EFFECT, ""))
+                if not state.get("shader_valid") or not state.get("enabled"):
+                    raise RuntimeError("插件已加载，但着色器或启用状态异常。")
+    print(f"已执行：{args.action}")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     try:
         main()
     except (OSError, RuntimeError, ValueError) as error:
-        print(str(error), file=sys.stderr)
+        print(error, file=sys.stderr)
         sys.exit(1)

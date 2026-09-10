@@ -13,9 +13,6 @@ begin
         if contains -- "$saved_theme" light dark
             set theme "$saved_theme"
         end
-    else if contains -- "$TERTHEME" light dark
-        # 兼容尚未执行首次迁移的会话。
-        set theme "$TERTHEME"
     end
 
     set -gx TERTHEME "$theme"

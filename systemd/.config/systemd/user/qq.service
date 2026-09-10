@@ -6,4 +6,4 @@ PartOf=graphical-session.target personal-graphical.target
 
 [Service]
 Type=simple
-ExecStart=%h/.config/niri/scripts/linuxqq-fix.sh
+ExecStart=linuxqq

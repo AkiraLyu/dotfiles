@@ -3,7 +3,8 @@
 export LIBVA_DRIVER_NAME=iHD
 export QT_SCALE_FACTOR_ROUNDING_POLICY=Round
 export EDITOR=nvim
-# export PATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/home/akira/.cargo/bin:/home/akira/.local/bin
+# Cargo 安装的用户命令（如 carillon）；只修改当前 shell 的 PATH。
+fish_add_path --path --append "$HOME/.cargo/bin"
 export QT_XCB_GL_INTEGRATION=none
 export GTK_USE_PORTAL=1
 export LIBVIRT_DEFAULT_URI="qemu:///system"

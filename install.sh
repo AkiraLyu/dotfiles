@@ -1,251 +1,160 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# 新系统装好 Arch、软件源和基础工具后，再运行本脚本。
+# 每次明确选择一个步骤；默认显示用法。--check 只检查或显示命令。
+set -euo pipefail
 
-set -Eeuo pipefail
+# 整个脚本以目标用户运行；需要系统权限的命令会单独调用 run0。
+((EUID != 0)) || { echo '请以普通用户运行本脚本。' >&2; exit 1; }
 
-DOTFILES_DIR=$(dirname -- "$(readlink -f -- "${BASH_SOURCE[0]}")")
-
-# Software/data management stays separate from Stow and its host-specific stages.
-case ${1:-} in
-    --arch-install|--arch-mount|--arch-post-install|--user-targets)
-        action=${1#--}
-        shift
-        command -v python3 >/dev/null || { printf '此阶段需要 python（Arch ISO 上先准备 python）。\n' >&2; exit 1; }
-        if [[ $action == user-targets ]]; then
-            exec python3 -B "$DOTFILES_DIR/scripts/user-targets.py" "$@"
-        fi
-        exec python3 -B "$DOTFILES_DIR/scripts/arch_install.py" "$action" "$@"
-        ;;
-    --export|--restore)
-        action=${1#--}
-        shift
-        command -v python3 >/dev/null || { printf '请先安装 python，或运行 --bootstrap。\n' >&2; exit 1; }
-        exec python3 -B "$DOTFILES_DIR/scripts/manage.py" "$action" "$@"
-        ;;
-    --bootstrap)
-        (($# == 1)) || { printf '%s\n' '--bootstrap 必须单独使用。' >&2; exit 1; }
-        ((EUID != 0)) || { printf '请以目标普通用户运行。\n' >&2; exit 1; }
-        exec run0 pacman -Syu --needed base-devel git stow python rustup npm flatpak
-        ;;
-esac
-
-# backup and new top-level directories are never implicitly deployed.
-HOME_STOW_PACKAGES=(fontconfig fish kitty chromium tools qt-plasma local nvim niri)
-ALL_PACKAGES=("${HOME_STOW_PACKAGES[@]}" etc firefox systemd)
-
-usage() {
-    cat <<'EOF'
-用法: ./install.sh [选项] [配置包 ...]
-
-  --plan                 显示完整复现顺序，不修改文件
-  --arch-install         从 Arch ISO 安装系统；默认只读，详见 docs/ARCH_INSTALL.md
-  --arch-mount           打开并挂载已有系统，统一使用 /efi
-  --arch-post-install    对已挂载的新系统生成启动配置和 UKI
-  --user-targets         校验、部署用户 target/units 并 daemon-reload；先用 --restore npm 安装 ocx
-                         可追加 --check
-  --bootstrap            用已配置的软件源安装基础工具（含完整系统升级）
-  --export STAGE ...      导出 pacman/rust/cargo/flatpak/codex/private/noctalia/kde 或 all
-  --restore STAGE ...     恢复 firmware/pacman/pkgbuilds/rust/cargo/npm/flatpak/codex/private/kde/kde-plugins/diary 或 all
-                         可追加 --check；详见 RESTORE.md
-  --check, --dry-run      只检查所选配置包，不部署、不提权
-  --all                  选择全部配置包，包括 etc、firefox 和 systemd
-  --target DIR           用户配置目标，默认为当前 HOME；目录必须已存在
-  --firefox-profile DIR   显式选择已存在的 Firefox profile
-  --help, -h             显示帮助
-
-默认包: fontconfig fish kitty chromium tools qt-plasma local nvim niri
-其他包: etc firefox systemd（含服务启用链接，需显式选择）
-
-示例:
-  ./install.sh --check
-  ./install.sh fish kitty
-  ./install.sh --check firefox
-  ./install.sh firefox --firefox-profile /path/to/profile
-  ./install.sh --check --all
-
-所有所选目标通过冲突检查后才开始部署。包的执行顺序固定为：
-用户配置 → etc → Firefox → systemd，与参数排列顺序无关。
-软件和私有数据使用 --restore 阶段；本配置操作不验证服务运行条件。
-EOF
-}
-
-die() {
-    printf '错误：%s\n' "$*" >&2
-    exit 1
-}
-
+repo_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 check_only=false
-select_all=false
-target_home=${HOME:?HOME 未设置}
-firefox_profile=
-requested=()
-argument_count=$#
-
-while (($#)); do
-    case $1 in
-        --plan|--help|-h)
-            ((argument_count == 1)) || die '--plan 和 --help 必须单独使用。'
-            if [[ $1 == --plan ]]; then
-                cat -- "$DOTFILES_DIR/RESTORE.md"
-            else
-                usage
-            fi
-            exit 0
-            ;;
-        --check|--dry-run) check_only=true ;;
-        --all) select_all=true ;;
-        --target|--firefox-profile)
-            (($# >= 2)) && [[ -n $2 && $2 != --* ]] || die "$1 需要目录参数。"
-            if [[ $1 == --target ]]; then
-                target_home=$2
-            else
-                firefox_profile=$2
-            fi
-            shift
-            ;;
-        -*) die "未知选项：$1；用 --help 查看用法。" ;;
-        *) requested+=("$1") ;;
-    esac
+if [[ ${1:-} == --check ]]; then
+    check_only=true
     shift
-done
-
-if $select_all; then
-    ((${#requested[@]} == 0)) || die '--all 不能与配置包名一起使用。'
-    requested=("${ALL_PACKAGES[@]}")
-elif ((${#requested[@]} == 0)); then
-    requested=("${HOME_STOW_PACKAGES[@]}")
 fi
+step=${1:-help}
+if (($#)); then shift; fi
 
-declare -A selected=()
-for package in "${requested[@]}"; do
-    case $package in
-        fontconfig|fish|kitty|chromium|tools|qt-plasma|local|nvim|niri|etc|firefox|systemd)
-            selected[$package]=1
-            ;;
-        *) die "不在部署白名单中的配置包：$package" ;;
-    esac
-done
-[[ -z $firefox_profile || -n ${selected[firefox]:-} ]] \
-    || die '--firefox-profile 需要同时选择 firefox 包或 --all。'
-if [[ -n $firefox_profile ]]; then
-    # Interpret explicit relative paths in the caller's directory, before cd.
-    firefox_profile=$(realpath -m -- "$firefox_profile")
-fi
+# 已经整理好的 HOME 配置。以后增加同样的目录，只需修改这一行。
+home_packages=(fish fontconfig chromium kde local)
 
-# A different caller working directory must not affect Stow or profile discovery.
-target_home=$(realpath -e -- "$target_home") || die '用户配置目标不存在。'
-[[ -d $target_home && -w $target_home ]] || die "用户配置目标不是可写目录：$target_home"
-case $target_home in
-    /|/etc|"$DOTFILES_DIR"|"$DOTFILES_DIR"/*)
-        die "不能将用户配置部署到此目录：$target_home" ;;
-esac
-if ! $check_only && ((EUID == 0)); then
-    die '请以目标普通用户运行；只有 etc 阶段通过 run0 提权。'
-fi
+# /etc 只部署已经手动核对的三个文件，不扫描目录、不接入旧启动脚本。
+system_files=(environment tlp.conf udev/hwdb.d/90-swap-caps-esc.hwdb)
 
-stow_bin=$(type -P stow) || die '缺少 stow；请先安装 GNU Stow。'
-[[ -z ${selected[etc]:-} ]] || command -v run0 >/dev/null \
-    || die '选择 etc 需要 run0。'
-for package in "${!selected[@]}"; do
-    [[ -d $DOTFILES_DIR/$package ]] || die "缺少配置包目录：$package"
-done
+# 需要写入的普通命令会先显示；检查模式不会执行它们。
+run() {
+    printf '+ '
+    printf '%q ' "$@"
+    printf '\n'
+    if ! $check_only; then "$@"; fi
+}
 
-home_packages=()
-for package in "${HOME_STOW_PACKAGES[@]}"; do
-    [[ -z ${selected[$package]:-} ]] || home_packages+=("$package")
-done
-home_check_packages=("${home_packages[@]}")
-[[ -z ${selected[systemd]:-} ]] || home_check_packages+=(systemd)
+# Stow 负责建立相对链接。--no-folding 保持真实目录，防止应用运行数据
+# 顺着整个目录的链接写进仓库。已有不同文件会报冲突，不使用 --adopt。
+stow_configs() {
+    local target=$1
+    shift
+    local options=(--dir "$repo_dir" --target "$target" --no-folding --restow)
+    if $check_only; then options+=(--simulate); fi
+    stow "${options[@]}" "$@"
+}
 
-# Keep existing directories as directories, so runtime files are not created in
-# the checkout through newly folded directory links. No adopt/override is used.
-stow_args=(--dir "$DOTFILES_DIR" --no-folding)
-cd -- "$DOTFILES_DIR"
-failed=false
-
-# Paru requires an absolute local-repository path. Keep its generated runtime
-# config independent of Stow, so moving the checkout can regenerate that path.
-if [[ -n ${selected[tools]:-} ]]; then
-    if ! python3 -B "$DOTFILES_DIR/scripts/configure-paru.py" --target "$target_home" --check; then
-        failed=true
-    fi
-fi
-
-printf '检查所选配置；用户目标：%s\n' "$target_home"
-if ((${#home_check_packages[@]})); then
-    # Check systemd together with other HOME packages for cross-package conflicts.
-    printf '检查用户配置包：%s\n' "${home_check_packages[*]}"
-    if ! "$stow_bin" "${stow_args[@]}" --simulate \
-        --target "$target_home" "${home_check_packages[@]}"; then
-        failed=true
-    fi
-fi
-if [[ -n ${selected[etc]:-} ]]; then
-    printf '检查系统配置：/etc（磁盘 UUID、驱动等仍需按目标机器确认）\n'
-    if ! python3 -B "$DOTFILES_DIR/scripts/system-config.py"; then
-        failed=true
-    fi
-fi
-if [[ -n ${selected[firefox]:-} ]]; then
-    if ! command -v python3 >/dev/null; then
-        printf '错误：解析 Firefox profile 需要 python3（Arch 的 python 包）。\n' >&2
-        failed=true
-    else
-        profile_args=(--home "$target_home")
-        [[ -z $firefox_profile ]] || profile_args+=(--profile "$firefox_profile")
-        if firefox_profile=$(python3 "$DOTFILES_DIR/scripts/firefox-profile.py" "${profile_args[@]}"); then
-            case $firefox_profile in
-                "$DOTFILES_DIR"|"$DOTFILES_DIR"/*)
-                    printf '错误：Firefox profile 不能位于配置仓库中。\n' >&2
-                    failed=true
-                    ;;
-                *)
-                    printf '检查 Firefox profile：%s\n' "$firefox_profile"
-                    if ! "$stow_bin" "${stow_args[@]}" --simulate \
-                        --target "$firefox_profile" firefox; then
-                        failed=true
-                    fi
-                    ;;
-            esac
-        else
-            failed=true
+case "$step" in
+    home)
+        (($# == 0)) || { echo '用法：./install.sh [--check] home' >&2; exit 1; }
+        stow_configs "$HOME" "${home_packages[@]}"
+        ;;
+    kde)
+        (($# == 0)) || { echo '用法：./install.sh [--check] kde' >&2; exit 1; }
+        stow_configs "$HOME" kde local
+        # Kate 会在自己的 desktop 文件中添加会话 Actions，保留它的运行文件。
+        # 仅首次复制模板；后续只更新主入口，让它经过启用插件的用户包装脚本。
+        kate_desktop="$HOME/.local/share/applications/org.kde.kate.desktop"
+        if [[ ! -e $kate_desktop ]]; then
+            run install -D -m 0644 "$repo_dir/kde/org.kde.kate.desktop" "$kate_desktop"
         fi
-    fi
-fi
+        run desktop-file-edit --set-key=Exec \
+            --set-value="\"$HOME/.local/bin/kate\" -b %U" "$kate_desktop"
+        # KDE 会自行改写配置，因此 kwinrc、darklyrc 不建立链接。
+        # 这两份文件只是选定设置的片段：逐个写入键，保留新系统的其他设置。
+        # 格式限于单层 [分组]、键=值和整行注释；无需完整 INI 解析器。
+        for file in kwinrc darklyrc; do
+            group=
+            while IFS= read -r line || [[ -n $line ]]; do
+                case "$line" in
+                    ''|\#*) continue ;;
+                    \[*\]) group=${line:1:${#line}-2} ;;
+                    *=*)
+                        run kwriteconfig6 --file "$file" --group "$group" \
+                            --key "${line%%=*}" --notify "${line#*=}"
+                        ;;
+                    *) printf '无法读取 %s 中的行：%s\n' "$file" "$line" >&2; exit 1 ;;
+                esac
+            done < "$repo_dir/kde/$file"
+        done
+        # 在 Plasma 会话中应用外观并通知 KWin 重读插件配置。
+        run "$repo_dir/kde/.local/bin/theme" apply
+        ;;
+    kde-plugins)
+        (($# == 0)) || { echo '用法：./install.sh [--check] kde-plugins' >&2; exit 1; }
+        # 直接从 local/.local/src/ 构建两个插件，用 pacman 管理安装文件。
+        # 不使用旧仓库的源码打包、摘要清单和 App Grid 构建调度。
+        cd -- "$repo_dir/packages/local/dotfiles-kde-plugins"
+        run makepkg --force --clean
+        mapfile -t built_packages < <(makepkg --packagelist)
+        # KWin 更新后的重编译可能仍用相同包版本，也必须装入新产物。
+        run run0 pacman -U -- "${built_packages[@]}"
+        # 此特效匹配 XWayland 微信；只设置当前用户的应用权限与 Qt 后端。
+        run flatpak override --user --nosocket=wayland --socket=x11 \
+            --env=QT_QPA_PLATFORM=xcb com.tencent.WeChat
+        run "$repo_dir/install.sh" kde
+        run python3 "$repo_dir/local/.local/src/wechat-glass-live/control.py" enable
+        ;;
+    systemd)
+        (($# == 0)) || { echo '用法：./install.sh [--check] systemd' >&2; exit 1; }
+        # 各 target 的 Wants 决定下次会话启动哪些服务；此处只重读文件。
+        stow_configs "$HOME" systemd
+        run systemctl --user daemon-reload
+        ;;
+    firefox)
+        # Profile 名每台机器不同，直接使用 about:profiles 中的根目录。
+        # 不猜默认 profile，也不启动浏览器或接管账户、历史和扩展数据库。
+        (($# == 1)) || { echo '用法：./install.sh [--check] firefox PROFILE目录' >&2; exit 1; }
+        profile=$(realpath -e -- "$1")
+        [[ -f $profile/prefs.js ]] || { echo '请选择已有 Firefox profile 的根目录。' >&2; exit 1; }
+        stow_configs "$profile" firefox
+        ;;
+    etc)
+        (($# == 0)) || { echo '用法：./install.sh [--check] etc' >&2; exit 1; }
+        # /etc 使用独立文件，供无法访问 HOME 的系统服务读取。
+        # install -D 会创建缺少的父目录，并把旧链接替换成独立文件。
+        for file in "${system_files[@]}"; do
+            run run0 install -D -m 0644 "$repo_dir/etc/$file" "/etc/$file"
+        done
+        run run0 systemd-hwdb update
+        ;;
+    firmware)
+        (($# == 0)) || { echo '用法：./install.sh [--check] firmware' >&2; exit 1; }
+        # 将手动迁入 private/ 的 AVS 固件直接复制到内核读取的位置。
+        run run0 install -D -m 0644 \
+            "$repo_dir/private/firmware/intel/avs/tgl/dsp_basefw.bin" \
+            /usr/lib/firmware/intel/avs/tgl/dsp_basefw.bin
+        ;;
+    private)
+        (($# == 0)) || { echo '用法：./install.sh [--check] private' >&2; exit 1; }
+        # 此文件含 Chromium/API 凭据，随 backup/ 手动迁移，不进入 Git。
+        source_file="$repo_dir/backup/private/chromium.fish"
+        [[ -f $source_file ]] || { echo '请先迁入 backup/private/chromium.fish。' >&2; exit 1; }
+        run install -D -m 0600 "$source_file" "$HOME/.config/fish/conf.d/chromium.fish"
+        ;;
+    packages)
+        (($# == 0)) || { echo '用法：./install.sh [--check] packages' >&2; exit 1; }
+        if $check_only; then
+            "$repo_dir/scripts/packages.sh" check
+        else
+            "$repo_dir/scripts/packages.sh" install
+        fi
+        ;;
+    help|--help|-h)
+        cat <<'USAGE'
+用法：./install.sh [--check] 步骤 [参数]
 
-if $failed; then
-    die '预检未通过，未执行部署。请处理上面的冲突或缺失项后重试；也可指定配置包分阶段部署。'
-fi
-if $check_only; then
-    printf '所选配置的路径、独立副本与 Stow 检查通过；未修改文件。软件和服务功能仍需按 --plan 验证。\n'
-    exit 0
-fi
+  packages          按 packages/ 的当前包清单安装软件
+  home              链接 fish、fontconfig、chromium、kde 和 local 到 HOME
+  kde               合并 KWin 与 Darkly 设置，部署 Kate 入口并应用明暗模式
+  kde-plugins       构建 Kate / WeChat 插件，经 run0 pacman 安装后应用 KDE 设置
+  systemd           链接用户 unit 并重读配置，不启动服务
+  firefox PROFILE   链接 Firefox 配置到明确指定的已有 profile
+  etc               用 run0 复制三个已整理的 /etc 文件并更新 hwdb
+  firmware          用 run0 将 private/ 中的 AVS 固件复制到 /usr/lib/firmware
+  private           从手动迁移的 backup/ 复制私密 Fish 配置
 
-phase=部署
-trap 'printf "错误：%s 失败（第 %s 行），已停止后续步骤；此前完成的链接未自动回滚。\n" "$phase" "$LINENO" >&2' ERR
-
-if ((${#home_packages[@]})); then
-    phase=用户配置部署
-    printf '部署用户配置 → %s\n' "$target_home"
-    "$stow_bin" "${stow_args[@]}" --target "$target_home" "${home_packages[@]}"
-    if [[ -n ${selected[tools]:-} ]]; then
-        python3 -B "$DOTFILES_DIR/scripts/configure-paru.py" --target "$target_home"
-    fi
-fi
-if [[ -n ${selected[etc]:-} ]]; then
-    phase=系统配置部署
-    printf '部署系统配置 → /etc\n'
-    run0 python3 -B "$DOTFILES_DIR/scripts/system-config.py" --apply
-fi
-if [[ -n ${selected[firefox]:-} ]]; then
-    phase=Firefox配置部署
-    printf '部署 Firefox 配置 → %s\n' "$firefox_profile"
-    "$stow_bin" "${stow_args[@]}" --target "$firefox_profile" firefox
-fi
-if [[ -n ${selected[systemd]:-} ]]; then
-    phase=用户服务链接部署
-    printf '部署用户服务定义和启用链接 → %s\n' "$target_home"
-    "$stow_bin" "${stow_args[@]}" --target "$target_home" systemd
-    printf '已部署服务链接；未启动或重启服务，仍需验证依赖并在目标用户会话中重新加载。\n'
-fi
-
-printf '所选配置链接部署完成；完整复现的其他阶段见 ./install.sh --plan。\n'
+导出当前包清单：./scripts/packages.sh export
+先用 --check 查看；每个步骤独立运行。详细顺序见 README.md。
+USAGE
+        ;;
+    *)
+        printf '未知步骤：%s；用 ./install.sh --help 查看用法。\n' "$step" >&2
+        exit 1
+        ;;
+esac

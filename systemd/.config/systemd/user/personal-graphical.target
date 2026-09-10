@@ -1,10 +1,12 @@
+# 已取消注释的 Wants 随图形会话启动；按需保留或注释相应服务。
+# 新增启用项后重读配置，首次启动可单独执行 systemctl --user start 服务名。
 [Unit]
 Description=Personal graphical session services
 Requisite=graphical-session.target
 After=graphical-session.target
 PartOf=graphical-session.target
 Wants=ocx.service
-Wants=mirador.service
+Wants=carillon.service
 Wants=onedrive-mount.service
 Wants=onedrive-tray.service
 Wants=qq.service

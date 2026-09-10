@@ -1,7 +1,0 @@
-[Libinput][10182][480][GXTP7863:00 27C6:01E0 Touchpad]
-ClickMethod=2
-DisableWhileTyping=false
-NaturalScroll=true
-
-[Mouse]
-cursorSize=18
