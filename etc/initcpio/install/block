@@ -1,30 +1,54 @@
 #!/usr/bin/env bash
-# Akira: loading drivers/mfd in the initramfs makes this device's touchpad fail.
-# Keep the workaround outside pacman-owned files, while using the current block
-# hook for every other driver. See docs/ARCH_INSTALL.md before removing it.
-
-source /usr/lib/initcpio/install/block || return
-eval "$(declare -f build | sed '1s/^build /_dotfiles_block_build /')"
+# SPDX-License-Identifier: GPL-2.0-only
+# 基于本机 mkinitcpio 41.1 的 block hook，只省略下面的 drivers/mfd。
+# 部署到 /etc/initcpio/install/block；mkinitcpio 更新后对照 /usr/lib 中的原版。
 
 build() {
-    local original_checked_modules result=0
-    original_checked_modules=$(declare -f add_checked_modules) || return
-    eval "${original_checked_modules/#add_checked_modules /_dotfiles_checked_modules }"
+    map add_module 'ahci?' 'sd_mod?' 'usb_storage?' 'uas?' 'mmc_block?' 'nvme?' 'virtio_scsi?' 'virtio_blk?'
 
-    add_checked_modules() {
-        local argument
-        for argument in "$@"; do
-            # The stock hook makes this a separate invocation. Do not skip any
-            # of its other calls or blacklist these drivers in the running OS.
-            if [[ $argument == /drivers/mfd/ ]]; then
-                return 0
-            fi
-        done
-        _dotfiles_checked_modules "$@"
-    }
+    # pata, sata, scsi, nvme
+    add_checked_modules '/(block|ata|scsi|fusion|nvme)/'
 
-    _dotfiles_block_build "$@" || result=$?
-    eval "$original_checked_modules"
-    unset -f _dotfiles_checked_modules
-    return "$result"
+    # usb
+    add_checked_modules -f '(_cs|sl811_hcd|isp116x_hcd)' '/usb/host'
+    add_checked_modules '/drivers/usb/storage/'
+
+    # firewire
+    add_checked_modules '/drivers/firewire/'
+
+    # mmc
+    add_checked_modules '/(drivers/mmc|tifm_)'
+
+    # spi (mmc in spi mode)
+    add_checked_modules '/drivers/spi/'
+
+    # regulator (for mmc)
+    add_checked_modules '/drivers/regulator/'
+
+    # virtio
+    add_checked_modules 'virtio'
+
+    # nvdimm
+    add_checked_modules '/drivers/nvdimm/'
+
+    # pci controller
+    add_checked_modules '/drivers/pci/controller/'
+
+    # 本机把 drivers/mfd 打入 initramfs 后触控板会失效，必须保留此处注释。
+    # add_checked_modules '/drivers/mfd/'
+    add_checked_modules '/drivers/clk/'
+    add_checked_modules '/drivers/phy/'
+
+    # ufs
+    add_checked_modules '/drivers/ufs/'
 }
+
+help() {
+    cat <<HELPEOF
+This hook loads the necessary modules for most block devices using pata, sata,
+scsi, firewire, usb, or mmc. Detection will take place at runtime. To minimize
+the modules in the image, add the autodetect hook too.
+HELPEOF
+}
+
+# vim: set ft=sh ts=4 sw=4 et:

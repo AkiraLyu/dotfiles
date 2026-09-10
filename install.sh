@@ -18,8 +18,21 @@ if (($#)); then shift; fi
 # 已经整理好的 HOME 配置。以后增加同样的目录，只需修改这一行。
 home_packages=(fish fontconfig chromium kde local)
 
-# /etc 只部署已经手动核对的三个文件，不扫描目录、不接入旧启动脚本。
-system_files=(environment tlp.conf udev/hwdb.d/90-swap-caps-esc.hwdb)
+# 按 /etc 下的相对路径登记文件；部署、比较和导出共用这份清单。
+# 新增系统配置时在这里登记，文件权限直接取自源文件。
+system_files=(
+    environment
+    pacman.conf
+    makepkg.conf.d/90-local.conf
+    tlp.conf
+    security/limits.d/90-memlock.conf
+    modprobe.d/sound.conf
+    cmdline.d/root.conf
+    mkinitcpio.conf
+    mkinitcpio.d/linux.preset
+    initcpio/install/block
+    udev/hwdb.d/90-swap-caps-esc.hwdb
+)
 
 # 需要写入的普通命令会先显示；检查模式不会执行它们。
 run() {
@@ -105,13 +118,70 @@ case "$step" in
         stow_configs "$profile" firefox
         ;;
     etc)
-        (($# == 0)) || { echo '用法：./install.sh [--check] etc' >&2; exit 1; }
-        # /etc 使用独立文件，供无法访问 HOME 的系统服务读取。
-        # install -D 会创建缺少的父目录，并把旧链接替换成独立文件。
-        for file in "${system_files[@]}"; do
-            run run0 install -D -m 0644 "$repo_dir/etc/$file" "/etc/$file"
+        action=${1:-install}
+        if (($#)); then shift; fi
+        case "$action" in
+            install|diff|export) ;;
+            *) echo '用法：./install.sh [--check] etc [install|diff|export] [相对文件路径…]' >&2; exit 1 ;;
+        esac
+
+        # 可以只处理指定文件，例如 etc export pacman.conf；省略时处理全部。
+        # 先核对所有参数，避免拼错路径后只执行了半批操作。
+        for file in "$@"; do
+            known=false
+            for managed in "${system_files[@]}"; do
+                if [[ $file == "$managed" ]]; then known=true; break; fi
+            done
+            $known || { printf '未纳入管理的 /etc 文件：%s\n' "$file" >&2; exit 1; }
         done
-        run run0 systemd-hwdb update
+        if (($#)); then system_files=("$@"); fi
+
+        refresh_hwdb=false
+        for file in "${system_files[@]}"; do
+            repo_file="$repo_dir/etc/$file"
+            system_file="/etc/$file"
+            if [[ $action == install ]]; then
+                case "$file" in
+                    environment|makepkg.conf.d/90-local.conf)
+                        # 保留现有的环境变量链接；编译参数也在 HOME 挂载后读取。
+                        # 只链接文件，父目录仍由系统维护。
+                        run run0 mkdir -p -- "$(dirname -- "$system_file")"
+                        run run0 ln -sfnrT -- "$repo_file" "$system_file"
+                        ;;
+                    *)
+                        # 引导、包管理、PAM 限制和 udev 使用独立文件。
+                        # TLP 设置了 ProtectHome=yes，也不能读取 HOME 内的链接。
+                        run run0 install -D -m "$(stat -Lc '%a' "$repo_file")" "$repo_file" "$system_file"
+                        ;;
+                esac
+                if [[ $file == udev/hwdb.d/90-swap-caps-esc.hwdb ]]; then refresh_hwdb=true; fi
+                continue
+            fi
+
+            # 尚未部署的配置留在仓库；已链接的文件本来就是同一份，无需导出。
+            if [[ ! -e $system_file ]]; then
+                printf '尚未部署，保留仓库文件：%s\n' "$file"
+                continue
+            fi
+            if [[ $repo_file -ef $system_file ]]; then
+                printf '已链接到仓库：%s\n' "$file"
+                continue
+            fi
+            if [[ $action == diff ]]; then
+                # diff 返回 1 仅表示内容不同；读取错误仍应使脚本失败。
+                diff -u --label "仓库/etc/$file" --label "/etc/$file" \
+                    "$repo_file" "$system_file" || test $? -eq 1
+                repo_mode=$(stat -Lc '%a' "$repo_file")
+                system_mode=$(stat -Lc '%a' "$system_file")
+                if [[ $repo_mode != "$system_mode" ]]; then
+                    printf '%s 权限不同：仓库 %s，实机 %s\n' "$file" "$repo_mode" "$system_mode"
+                fi
+            else
+                # 导出只写仓库，以当前用户身份复制，避免产生 root 所有的文件。
+                run install -D -m "$(stat -Lc '%a' "$system_file")" "$system_file" "$repo_file"
+            fi
+        done
+        if $refresh_hwdb; then run run0 systemd-hwdb update; fi
         ;;
     firmware)
         (($# == 0)) || { echo '用法：./install.sh [--check] firmware' >&2; exit 1; }
@@ -145,7 +215,7 @@ case "$step" in
   kde-plugins       构建 Kate / WeChat 插件，经 run0 pacman 安装后应用 KDE 设置
   systemd           链接用户 unit 并重读配置，不启动服务
   firefox PROFILE   链接 Firefox 配置到明确指定的已有 profile
-  etc               用 run0 复制三个已整理的 /etc 文件并更新 hwdb
+  etc [操作] [文件…]  install：部署（默认）；diff：比较；export：实机同步回仓库
   firmware          用 run0 将 private/ 中的 AVS 固件复制到 /usr/lib/firmware
   private           从手动迁移的 backup/ 复制私密 Fish 配置
 
