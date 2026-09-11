@@ -5,7 +5,8 @@ import json
 import subprocess
 import sys
 
-EFFECT = "wechat-glass-live-v4"
+EFFECT = "wechat-glass-live-v5"
+PREVIOUS_EFFECTS = ("wechat-glass-live-v4",)
 GROUP = "Effect-wechat-glass-live"
 
 
@@ -50,6 +51,12 @@ def main():
             raise RuntimeError("请先运行 ./install.sh kde-plugins；KWin 更新后需要重编译并重新登录。")
         if effects("isEffectLoaded", "better_blur_dx") != "true":
             raise RuntimeError("请先运行 ./install.sh kde，启用 Better Blur DX。")
+        # A new library name bypasses Qt's cache in the current session. Retire
+        # the previous effect before the new one takes ownership of X properties.
+        for previous in PREVIOUS_EFFECTS:
+            write("Plugins", previous + "Enabled", "false")
+            if effects("isEffectLoaded", previous) == "true":
+                effects("unloadEffect", previous)
         write(GROUP, "Enabled", "true")
         write("Plugins", EFFECT + "Enabled", "true")
     elif args.action == "disable":

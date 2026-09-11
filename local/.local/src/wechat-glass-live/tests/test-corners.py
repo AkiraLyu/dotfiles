@@ -3,7 +3,7 @@ import os,json,pathlib,subprocess,time,sys
 from PIL import Image
 ROOT=pathlib.Path(__file__).resolve().parent
 BUILD=pathlib.Path(os.environ.get('WECHAT_GLASS_BUILD_DIR',ROOT.parent/'build')).resolve()
-EFFECT=os.environ.get('WECHAT_GLASS_TEST_EFFECT','wechat-glass-live-v4')
+EFFECT=os.environ.get('WECHAT_GLASS_TEST_EFFECT','wechat-glass-live-v5')
 RUN=BUILD/'test-results'/('corner-run-'+EFFECT); RUN.mkdir(parents=True,exist_ok=True)
 def call(*args,check=True):return subprocess.run(args,check=check,capture_output=True,text=True,timeout=20).stdout.strip()
 def dbus(*args):return call('qdbus6','org.kde.KWin',*args)

@@ -27,14 +27,13 @@ public:
     {
         effects->makeOpenGLContextCurrent();
         m_shader = ShaderManager::instance()->generateShaderFromFile(
-            ShaderTrait::MapTexture, {}, QStringLiteral(":/wechat-glass-live-v4/glass.frag"));
-        connect(effects, &EffectsHandler::windowClosed, this, [this](EffectWindow *w) {
-            detach(w);
-        });
+            ShaderTrait::MapTexture, {}, QStringLiteral(":/wechat-glass-live-v5/glass.frag"));
         connect(effects, &EffectsHandler::windowDeleted, this, [this](EffectWindow *w) {
+            // windowClosed starts the close animation. Keep the redirection
+            // until KWin releases the window; do not extend its lifetime here.
+            restoreBlur(w);
             // OffscreenEffect handles destruction of its own texture.
             m_windows.remove(w);
-            m_blur.remove(w);
         });
         reconfigure(ReconfigureAll);
     }
@@ -77,7 +76,11 @@ public:
     void prePaintWindow(RenderView *view, EffectWindow *w, WindowPrePaintData &data) override
     {
         if (matches(w)) {
-            updateBlur(w);
+            // A closing X11Window has already released its X client handle.
+            // Better Blur DX retains the last region until windowDeleted.
+            if (!w->isDeleted()) {
+                updateBlur(w);
+            }
             if (!m_windows.contains(w)) {
                 // OffscreenEffect captures during painting, and invalidates its
                 // texture on actual surface damage. AnimationEffect's Shader
@@ -115,7 +118,7 @@ public:
     {
         return QString::fromUtf8(QJsonDocument(QJsonObject{
             {"renderer", "OffscreenEffect (live window damage)"},
-            {"version", "0.4.0"},
+            {"version", "0.5.0"},
             {"enabled", m_enabled},
             {"shader_valid", bool(m_shader)},
             {"redirected_windows", int(m_windows.size())},
@@ -129,13 +132,18 @@ public:
 private:
     bool matches(EffectWindow *w) const
     {
+        // Only retain windows we already processed while they were live.
+        // Closing windows no longer satisfy the ordinary matching conditions.
+        if (w->isDeleted()) {
+            return m_windows.contains(w);
+        }
         const auto classes = w->windowClass().split(QLatin1Char(' '));
         static const QRegularExpression caption(QStringLiteral("^(微信|WeChat|Weixin)(?:\\s*\\(\\d+\\))?$"),
                                                  QRegularExpression::CaseInsensitiveOption);
         return (classes.contains(QStringLiteral("wechat")) || classes.contains(QStringLiteral("com.tencent.wechat"), Qt::CaseInsensitive))
             && w->isX11Client() && w->isNormalWindow() && !w->isDialog() && !w->isPopupWindow()
             && !w->window()->isTransient()
-            && !w->isDeleted() && w->isVisible() && !w->isMinimized()
+            && w->isVisible() && !w->isMinimized()
             && w->isOnCurrentDesktop() && w->isOnCurrentActivity()
             && w->width() >= 640 && w->height() >= 450
             && caption.match(w->caption()).hasMatch();
@@ -184,6 +192,20 @@ private:
         auto *client = qobject_cast<X11Window *>(w->window());
         auto *connection = effects->xcbConnection();
         if (!client || !connection) return;
+        if (!m_blur.contains(w)) {
+            // Hiding to the tray leaves the X window alive. Reopening it can
+            // create a new EffectWindow before the old close animation ends.
+            // Transfer ownership so the old window cannot restore our property
+            // over the reopened window, or mistake our region for the original.
+            for (auto it = m_blur.begin(); it != m_blur.end(); ++it) {
+                if (it.key()->isDeleted() && it->window == client->window()) {
+                    const auto state = it.value();
+                    m_blur.erase(it);
+                    m_blur.insert(w, state);
+                    break;
+                }
+            }
+        }
         if (!m_blur.contains(w)) {
             const QByteArray name("_KDE_NET_WM_BLUR_BEHIND_REGION");
             auto *atom = xcb_intern_atom_reply(connection, xcb_intern_atom(connection, false, name.size(), name.constData()), nullptr);
@@ -244,7 +266,10 @@ private:
         const auto state = it.value();
         m_blur.erase(it);
         auto *connection = effects->xcbConnection();
-        if (!connection || w->isDeleted()) return;
+        if (!connection) return;
+        // isDeleted() describes the KWin wrapper, not necessarily the X window:
+        // a hidden tray window still exists. A destroyed X window simply makes
+        // the checked property query below fail without a restore operation.
         // Preserve a newer blur request written by the application itself.
         auto *current = xcb_get_property_reply(connection, xcb_get_property(connection, false, state.window, state.atom, XCB_ATOM_CARDINAL, 0, 32768), nullptr);
         if (!current) return;

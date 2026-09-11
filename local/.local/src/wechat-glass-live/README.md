@@ -1,6 +1,6 @@
 # 微信局部透明
 
-KWin 原生特效，为 XWayland 微信主窗口的顶栏和最左侧图标栏添加透明模糊，保留聊天正文、图标以及弹窗。当前原生代码为 0.4.0，插件标识 `wechat-glass-live-v4`，配置组为 `Effect-wechat-glass-live`。
+KWin 原生特效，为 XWayland 微信主窗口的顶栏和最左侧图标栏添加透明模糊，保留聊天正文、图标以及弹窗。当前原生代码为 0.5.0，插件标识 `wechat-glass-live-v5`，配置组为 `Effect-wechat-glass-live`。
 
 ## 构建与安装
 
@@ -44,9 +44,13 @@ python3 local/.local/src/wechat-glass-live/control.py opacity 0.52
 
 KWin 插件接口与 KWin 版本绑定，更新后执行 `./install.sh kde-plugins` 重编译并重新登录。Qt 会缓存已经加载的库，同一会话中覆盖文件不等于换用了新代码。安装包可通过 `run0 pacman -R dotfiles-kde-plugins` 卸载，同时移除 Kate 插件。
 
+0.5.0 修复了关闭窗口时先恢复灰色背景的问题。KDE 的 `windowClosed` 通知表示关闭动画开始，透明处理与模糊区域需保留到 `windowDeleted`，由 KDE 的动画决定窗口何时释放；插件不额外延长窗口寿命。隐藏到托盘后快速重新打开时，新窗口接管同一 X 窗口的模糊属性，避免旧动画结束时清掉新窗口的效果。
+
+此版本改用 `wechat-glass-live-v5` 库名，启用时停用 v4，因此可以在当前会话切换到新代码。后续覆盖同名库仍需重新登录。
+
 ## 原生代码检查
 
-原有隔离回归工具继续保存在 `tests/`；它们启动独立 D-Bus / 虚拟 KWin，使用合成窗口检查圆角、模糊属性和缩放边缘。
+隔离回归工具保存在 `tests/`，启动独立 D-Bus / 虚拟 KWin，检查实时刷新、圆角、弹窗和缩放边缘。`test-closing.py` 使用 KDE 的 Scale 动画逐帧比较顶栏和图标栏的透明度，并检查关闭、隐藏、销毁、快速重开和停用后的属性清理。
 
 ```bash
 cd local/.local/src/wechat-glass-live
@@ -55,6 +59,6 @@ cmake --build build --parallel 2
 ctest --test-dir build --output-on-failure
 ```
 
-测试额外需要 Spectacle、XWayland、xprop 和 Python Pillow；结果位于 `build/test-results/`。`docs/verification-*.json` 是旧环境留下的记录，不代表当前已完成运行验证。原生源码、着色器和测试在这次迁移中保持原样。
+测试额外需要 Spectacle、XWayland、xprop 和 Python Pillow；结果位于 `build/test-results/`。`docs/verification-*.json` 记录各自标注版本和环境下的验证结果。
 
 许可证：GPL-2.0-or-later，见 `LICENSE`。

@@ -1,7 +1,7 @@
 # 在当前仓库内构建；源码直接取自 local/.local/src/，不生成中间源码归档。
 pkgname=dotfiles-kde-plugins
 pkgver=1.0
-pkgrel=1
+pkgrel=2
 pkgdesc='Darkly translucent bars for Kate and the WeChat Glass KWin effect'
 arch=('x86_64')
 license=('GPL-2.0-or-later')

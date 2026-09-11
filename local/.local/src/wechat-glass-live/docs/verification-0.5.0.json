@@ -1,0 +1,140 @@
+{
+  "date": "2026-09-11",
+  "version": "0.5.0",
+  "effect": "wechat-glass-live-v5",
+  "environment": {
+    "kwin": "6.7.5-1",
+    "qt6-base": "6.11.2-3",
+    "better_blur_dx": "2.5.1-5"
+  },
+  "installed_package": "dotfiles-kde-plugins 1.0-2",
+  "installed_library_sha256": "4f1e8180f688777638d1e6c97fcac731e3421cee36ef2f0729553860a522cc92",
+  "regression_tests": {
+    "closing-run-wechat-glass-live-v5": {
+      "checks": {
+        "visible_bars_are_transparent": true,
+        "close_animation_was_sampled": true,
+        "close_keeps_bar_transparency": true,
+        "close_releases_effect_resources": true,
+        "hide_animation_was_sampled": true,
+        "hide_keeps_bar_transparency": true,
+        "hide_releases_effect_resources": true,
+        "hide_restores_hidden_window_property": true,
+        "destroy_animation_was_sampled": true,
+        "destroy_keeps_bar_transparency": true,
+        "destroy_releases_effect_resources": true,
+        "rapid_reopen_reuses_x_window": true,
+        "rapid_reopen_keeps_new_blur_region": true,
+        "rapid_reopen_has_one_redirected_window": true,
+        "disable_after_reopen_restores_original_property": true,
+        "close_without_animation_releases_resources": true
+      }
+    },
+    "corner-run-wechat-glass-live-v5": {
+      "checks": {
+        "main_has_explicit_blur": true,
+        "live_content_updates": true,
+        "top_left_outside_corner_unmodified": true,
+        "bottom_left_outside_corner_unmodified": true,
+        "popup_has_no_blur_property": true,
+        "popup_transparent_margin_unchanged": true,
+        "blur_region_updates_on_resize": true,
+        "disable_removes_owned_blur_property": true,
+        "reload_reinstates_blur_property": true
+      }
+    },
+    "edge-run-wechat-glass-live-v5-1.0": {
+      "maximum_edge_excess": 2,
+      "no_bright_rim_after_moves": true
+    },
+    "edge-run-wechat-glass-live-v5-1.25": {
+      "maximum_edge_excess": 2,
+      "no_bright_rim_after_moves": true
+    }
+  },
+  "close_animation": {
+    "duration_ms": 2000,
+    "out_scale": 0.8,
+    "samples": {
+      "close": [
+        {
+          "opacity": 1.0,
+          "bar_brightness_excess": 0.0
+        },
+        {
+          "opacity": 0.9682551267625622,
+          "bar_brightness_excess": 0.92
+        },
+        {
+          "opacity": 0.8444502369874143,
+          "bar_brightness_excess": 1.37
+        },
+        {
+          "opacity": 0.5714633266863903,
+          "bar_brightness_excess": 3.24
+        }
+      ],
+      "hide": [
+        {
+          "opacity": 1.0,
+          "bar_brightness_excess": 0.0
+        },
+        {
+          "opacity": 0.9682551267625622,
+          "bar_brightness_excess": 0.92
+        },
+        {
+          "opacity": 0.8522929057278112,
+          "bar_brightness_excess": 2.08
+        },
+        {
+          "opacity": 0.5714633266863903,
+          "bar_brightness_excess": 1.49
+        }
+      ],
+      "destroy": [
+        {
+          "opacity": 1.0,
+          "bar_brightness_excess": 0.0
+        },
+        {
+          "opacity": 0.9682551267625622,
+          "bar_brightness_excess": 0.92
+        },
+        {
+          "opacity": 0.8618537875266276,
+          "bar_brightness_excess": 3.27
+        },
+        {
+          "opacity": 0.6396211387270597,
+          "bar_brightness_excess": 0.06
+        }
+      ]
+    }
+  },
+  "baseline_v4": {
+    "out_scale": 1.0,
+    "failed_checks": [
+      "close_keeps_bar_transparency",
+      "hide_keeps_bar_transparency",
+      "hide_restores_hidden_window_property",
+      "destroy_keeps_bar_transparency",
+      "disable_after_reopen_restores_original_property"
+    ],
+    "maximum_normalized_bar_brightness_excess": 100.0
+  },
+  "runtime_after_install": {
+    "loaded": true,
+    "renderer": {
+      "active": false,
+      "blur_scope": "rounded title and navigation bars; no popup matching",
+      "enabled": true,
+      "painted_frames": 1997,
+      "redirected_windows": 0,
+      "renderer": "OffscreenEffect (live window damage)",
+      "shader_valid": true,
+      "version": "0.5.0",
+      "windows_with_blur_region": 0
+    }
+  }
+}

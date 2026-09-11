@@ -36,6 +36,7 @@ class Main : public QWidget {
 public:
     int frame=0; Popup popup{this};
     Main() { setWindowFlags(Qt::Window|Qt::FramelessWindowHint); setWindowTitle("WeChat"); resize(880,640); }
+    void destroySurface() { destroy(); }
     void paintEvent(QPaintEvent *) override {
         QPainter p(this); p.fillRect(rect(),QColor(224,224,224));
         if(!frame) return;
@@ -52,16 +53,25 @@ public:
 };
 int main(int argc,char **argv) {
     QApplication app(argc,argv); app.setApplicationName("wechat");
+    app.setQuitOnLastWindowClosed(false);
     Backdrop b; b.show(); b.move(0,0);
     Main w; w.show(); w.move(160,130);
     const QString root=qEnvironmentVariable("WECHAT_GLASS_TEST_DIR");
     QTimer::singleShot(2000,&w,[&]{ w.frame=1; w.update(); });
     QTimer timer;
+    QByteArray lastAction;
     QObject::connect(&timer,&QTimer::timeout,&w,[&]{
         b.move(0,0);
         QFile command(root+"/command");
         if (!command.open(QIODevice::ReadOnly)) return;
         const auto action=command.readAll().trimmed();
+        if (action != lastAction) {
+            if (action == "hide") w.hide();
+            if (action == "close") w.close();
+            if (action == "destroy") w.destroySurface();
+            if (action == "show") { w.show(); w.raise(); }
+            lastAction = action;
+        }
         const auto parts=action.split(' ');
         if(parts.size()==3 && parts[0]=="move") w.move(parts[1].toInt(),parts[2].toInt());
         if(action=="popup") { w.popup.move(w.pos()+QPoint(-20,200)); w.popup.show(); }
@@ -70,11 +80,12 @@ int main(int argc,char **argv) {
         if(w.frame) { ++w.frame; w.update(); }
         QSaveFile state(root+"/client.json");
         if (!state.open(QIODevice::WriteOnly)) return;
-        state.write(QJsonDocument(QJsonObject{{"main",double(w.winId())},{"popup",double(w.popup.winId())},
+        state.write(QJsonDocument(QJsonObject{{"main",double(w.internalWinId())},{"popup",double(w.popup.winId())},
+            {"action",QString::fromUtf8(action)},{"visible",w.isVisible()},
             {"frame",w.frame},{"x",w.x()},{"y",w.y()},{"width",w.width()},{"height",w.height()},
             {"dpr",w.devicePixelRatioF()},
             {"popup_x",w.popup.x()},{"popup_y",w.popup.y()}}).toJson()); state.commit();
     });
-    timer.start(500);
+    timer.start(qEnvironmentVariableIsSet("WECHAT_GLASS_TEST_FAST_COMMANDS") ? 50 : 500);
     return app.exec();
 }
