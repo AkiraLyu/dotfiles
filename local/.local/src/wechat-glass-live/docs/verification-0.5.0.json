@@ -112,17 +112,6 @@
       ]
     }
   },
-  "baseline_v4": {
-    "out_scale": 1.0,
-    "failed_checks": [
-      "close_keeps_bar_transparency",
-      "hide_keeps_bar_transparency",
-      "hide_restores_hidden_window_property",
-      "destroy_keeps_bar_transparency",
-      "disable_after_reopen_restores_original_property"
-    ],
-    "maximum_normalized_bar_brightness_excess": 100.0
-  },
   "runtime_after_install": {
     "loaded": true,
     "renderer": {

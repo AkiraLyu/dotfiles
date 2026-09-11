@@ -11,7 +11,7 @@ KWin 原生特效，为 XWayland 微信主窗口的顶栏和最左侧图标栏�
 ./install.sh kde-plugins
 ```
 
-入口通过 `packages/local/dotfiles-kde-plugins/PKGBUILD` 构建 Kate 和本插件，使用 run0 pacman 安装，再应用 `kde/` 设置。`control.py` 只管理当前用户的启停和参数，不再直接安装、删除系统文件或维护旧方案的备份状态。
+入口通过 `packages/local/dotfiles-kde-plugins/PKGBUILD` 构建 Kate 和本插件，使用 run0 pacman 安装，再应用 `kde/` 设置。`control.py` 管理当前用户的启停和参数。
 
 本机的 Flatpak 微信为 `com.tencent.WeChat`。新机器需先安装微信；安装入口会执行以下用户级 override，保证窗口使用本插件支持的 XWayland 后端：
 
@@ -44,9 +44,7 @@ python3 local/.local/src/wechat-glass-live/control.py opacity 0.52
 
 KWin 插件接口与 KWin 版本绑定，更新后执行 `./install.sh kde-plugins` 重编译并重新登录。Qt 会缓存已经加载的库，同一会话中覆盖文件不等于换用了新代码。安装包可通过 `run0 pacman -R dotfiles-kde-plugins` 卸载，同时移除 Kate 插件。
 
-0.5.0 修复了关闭窗口时先恢复灰色背景的问题。KDE 的 `windowClosed` 通知表示关闭动画开始，透明处理与模糊区域需保留到 `windowDeleted`，由 KDE 的动画决定窗口何时释放；插件不额外延长窗口寿命。隐藏到托盘后快速重新打开时，新窗口接管同一 X 窗口的模糊属性，避免旧动画结束时清掉新窗口的效果。
-
-此版本改用 `wechat-glass-live-v5` 库名，启用时停用 v4，因此可以在当前会话切换到新代码。后续覆盖同名库仍需重新登录。
+关闭动画期间，透明处理与模糊区域保留到 `windowDeleted`，由 KDE 的动画决定窗口何时释放。隐藏到托盘后快速重新打开时，新窗口接管同一 X 窗口的模糊属性，避免旧动画结束时清掉新窗口的效果。
 
 ## 原生代码检查
 

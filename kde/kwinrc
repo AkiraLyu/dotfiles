@@ -4,7 +4,7 @@
 better_blur_dxEnabled=true
 blurEnabled=false
 kwin4_effect_shapecornersEnabled=true
-wechat-glass-live-v4Enabled=true
+wechat-glass-live-v5Enabled=true
 
 # WeChat 插件只处理 XWayland 微信主窗口的两条栏；不强制模糊整个窗口。
 [Effect-wechat-glass-live]

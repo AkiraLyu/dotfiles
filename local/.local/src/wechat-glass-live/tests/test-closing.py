@@ -11,7 +11,7 @@ from PIL import Image
 
 ROOT = Path(__file__).resolve().parent
 BUILD = Path(os.environ.get('WECHAT_GLASS_BUILD_DIR', ROOT.parent / 'build')).resolve()
-EFFECT = os.environ.get('WECHAT_GLASS_TEST_EFFECT', 'wechat-glass-live-v5')
+EFFECT = 'wechat-glass-live-v5'
 RUN = BUILD / 'test-results' / ('closing-run-' + EFFECT)
 RUN.mkdir(parents=True, exist_ok=True)
 
@@ -76,8 +76,7 @@ os.environ.update(XDG_CONFIG_HOME=str(RUN / 'config'), XDG_CACHE_HOME=str(RUN / 
 # Use KDE's actual scale effect, slowing it down for frame measurements.
 # Closing keeps its default 0.8 scale; opening uses 1 to simplify readiness.
 (RUN / 'config' / 'kwinrc').write_text(
-    '[Plugins]\nwechat-glass-live-v4Enabled=false\nwechat-glass-live-v5Enabled=false\n'
-    f'{EFFECT}Enabled=true\nkwin4_effect_shapecornersEnabled=false\n'
+    f'[Plugins]\n{EFFECT}Enabled=true\nkwin4_effect_shapecornersEnabled=false\n'
     'better_blur_dxEnabled=true\nblurEnabled=false\nscaleEnabled=true\n'
     '[Effect-scale]\nDuration=2000\nInScale=1\nOutScale=0.8\n'
     '[Effect-better-blur-dx]\nBlurStrength=2\nWindowClasses=\n'

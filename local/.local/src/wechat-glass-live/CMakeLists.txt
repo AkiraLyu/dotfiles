@@ -12,8 +12,6 @@ find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets Quick DBus)
 find_package(KWin REQUIRED)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(XCB REQUIRED IMPORTED_TARGET xcb)
-# A new filename lets the running compositor load this revision without a
-# Wayland session restart; Qt keeps previously loaded plugin libraries mapped.
 set(EFFECT_ID wechat-glass-live-v5)
 add_library(${EFFECT_ID} MODULE glass.cpp shaders.qrc)
 set_target_properties(${EFFECT_ID} PROPERTIES

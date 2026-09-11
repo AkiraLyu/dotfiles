@@ -3,7 +3,7 @@ import os,json,pathlib,subprocess,time,sys
 from PIL import Image
 ROOT=pathlib.Path(__file__).resolve().parent
 BUILD=pathlib.Path(os.environ.get('WECHAT_GLASS_BUILD_DIR',ROOT.parent/'build')).resolve()
-EFFECT=os.environ.get('WECHAT_GLASS_TEST_EFFECT','wechat-glass-live-v5')
+EFFECT='wechat-glass-live-v5'
 RUN=BUILD/'test-results'/('corner-run-'+EFFECT); RUN.mkdir(parents=True,exist_ok=True)
 def call(*args,check=True):return subprocess.run(args,check=check,capture_output=True,text=True,timeout=20).stdout.strip()
 def dbus(*args):return call('qdbus6','org.kde.KWin',*args)
@@ -24,7 +24,7 @@ if len(sys.argv)==1:
 os.environ.update({'XDG_CONFIG_HOME':str(RUN/'config'),'XDG_CACHE_HOME':str(RUN/'cache'),
  'QT_PLUGIN_PATH':str(BUILD/'plugins'),'WECHAT_GLASS_TEST_DIR':str(RUN),'XDG_SESSION_TYPE':'wayland'})
 (RUN/'config').mkdir(exist_ok=True)
-(RUN/'config'/'kwinrc').write_text('[Plugins]\nwechat-glassEnabled=false\nwechat-glass-liveEnabled=false\nwechat-glass-live-v3Enabled=false\n'+EFFECT+'Enabled=true\nkwin4_effect_shapecornersEnabled=false\nbetter_blur_dxEnabled=true\nblurEnabled=false\n[Effect-better-blur-dx]\nBlurStrength=2\nWindowClasses=\n[Effect-wechat-glass-live]\nEnabled=true\n')
+(RUN/'config'/'kwinrc').write_text('[Plugins]\n'+EFFECT+'Enabled=true\nkwin4_effect_shapecornersEnabled=false\nbetter_blur_dxEnabled=true\nblurEnabled=false\n[Effect-better-blur-dx]\nBlurStrength=2\nWindowClasses=\n[Effect-wechat-glass-live]\nEnabled=true\n')
 (RUN/'command').write_text('')
 for name in ['client.json','x11-env.json']:(RUN/name).unlink(missing_ok=True)
 sock='wechat-corner-test-'+str(os.getpid())

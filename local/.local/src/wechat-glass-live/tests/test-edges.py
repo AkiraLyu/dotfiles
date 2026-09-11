@@ -5,7 +5,7 @@ from PIL import Image
 
 ROOT = pathlib.Path(__file__).resolve().parent
 BUILD = pathlib.Path(os.environ.get('WECHAT_GLASS_BUILD_DIR', ROOT.parent/'build')).resolve()
-EFFECT = os.environ.get('WECHAT_GLASS_TEST_EFFECT', 'wechat-glass-live-v5')
+EFFECT = 'wechat-glass-live-v5'
 SCALE = float(os.environ.get('WECHAT_GLASS_TEST_SCALE', '1.25'))
 RUN = BUILD / 'test-results' / f'edge-run-{EFFECT}-{SCALE}'
 RUN.mkdir(parents=True, exist_ok=True)
