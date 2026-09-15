@@ -1,26 +1,26 @@
 [opener]
 play = [
-    { run = 'mpv "$@"', orphan = true, for = "unix" },
+    { run = 'mpv %s', orphan = true, for = "unix" },
 ]
 
 edit = [
-    { run = '$EDITOR "$@"', block = true, for = "unix" },
+    { run = '$EDITOR %s', block = true, for = "unix" },
 ]
 
 pic = [
-    { run = 'gwenview "$@"', block = true, for = "unix" },
+    { run = 'gwenview %s', block = true, for = "unix" },
 ]
 
 epub = [
-    { run = 'foliate "$@"', block = true, for = "unix" },
+    { run = 'foliate %s', block = true, for = "unix" },
 ]
 
 open = [
-    { run = 'xdg-open "$@"', desc = "Open" },
+    { run = 'xdg-open %s1', desc = "Open", for = "linux" },
 ]
 
 pdf = [
-    { run = 'zathura "$@"', block = true, for = "unix" },
+    { run = 'zathura %s', block = true, for = "unix" },
 ]
 
 [open]
