@@ -14,4 +14,7 @@
 /packages/local/*/*.pkg.tar.*
 __pycache__/
 
+# lazy.nvim 的锁文件由插件管理器自行生成和更新。
+/nvim/.config/nvim/lazy-lock.json
+
 /private/
