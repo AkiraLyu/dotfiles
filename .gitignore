@@ -8,10 +8,6 @@
 /fish/.config/fish/conf.d/chromium.fish
 /local/.local/share/fish/fish_history
 
-# 本地 PKGBUILD 的构建产物可以重新生成。
-/packages/local/*/src/
-/packages/local/*/pkg/
-/packages/local/*/*.pkg.tar.*
 __pycache__/
 
 # lazy.nvim 的锁文件由插件管理器自行生成和更新。

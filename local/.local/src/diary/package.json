@@ -13,7 +13,7 @@
     "start:web": "node server.mjs",
     "dev": "node scripts/start-electron.mjs",
     "build": "node scripts/build-platform.mjs",
-    "build:arch": "node scripts/generate-icon.mjs && makepkg --force --cleanbuild",
+    "build:arch": "paru --sudo run0 -S --rebuild shiguang-diary",
     "build:win": "node scripts/generate-icon.mjs && electron-builder --win nsis portable",
     "pack:win": "node scripts/generate-icon.mjs && electron-builder --win --dir",
     "test": "node --test && node --check public/app.js && node --check electron/main.mjs && node --check electron/preload.cjs && node --check scripts/generate-icon.mjs && node --check scripts/build-platform.mjs && node --check scripts/start-electron.mjs"

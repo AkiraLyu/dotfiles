@@ -11,12 +11,11 @@
 | `fish/` | Shell、提示符、配色和环境变量 | HOME 内的逐文件相对链接 |
 | `fontconfig/` | 字体替换、回退与渲染规则 | HOME 内的逐文件相对链接 |
 | `chromium/` | Chromium、Chrome、Electron、Code、QQ 启动参数 | HOME 内的逐文件相对链接 |
-| `kde/` | Darkly、KWin 插件设置、Kate 入口及明暗切换脚本 | 静态文件用 Stow；KDE 配置按键合并 |
 | `local/` | 已手动迁入的用户脚本、启动器和源码 | HOME 内的逐文件相对链接 |
 | `systemd/` | 用户 service；通过 target 的 Wants 选择启动项 | 单独选择 systemd 步骤部署 |
 | `firefox/` | user.js、CSS、首页及已保存的过滤规则 | 链接到明确指定的 Firefox profile |
 | `etc/` | 软件源、构建参数、引导、硬件及登录配置 | 按用途链接或复制；支持比较、部署和导出 |
-| `packages/` | 当前包清单、本地元包和 KDE 插件的 PKGBUILD | pacman / makepkg / Paru |
+| `packages/` | 当前包清单 | pacman / Paru；自有配方在远端 pkgbuilds |
 | `backup/private/` | Chromium/API 凭据 | 手动迁移后复制，权限 0600，不进入 Git |
 | `private/` | Carillon 等手动迁入的私密配置 | 不进入 Git；随重装手动迁移 |
 | `private/firmware/` | Intel AVS 固件 | 手动迁入后直接复制到 `/usr/lib/firmware/` |
@@ -53,14 +52,14 @@
    ./install.sh home
    ```
 
-5. 登录 Plasma 后，构建并安装 Kate / WeChat 插件，再应用 KDE 设置：
+5. 登录 Plasma 后，从 GitHub 安装 KDE 插件、主题及设置：
 
    ```bash
-   ./install.sh --check kde-plugins
-   ./install.sh kde-plugins
+   ./install.sh --check kde
+   ./install.sh kde
    ```
 
-   `kde-plugins` 用 run0 pacman 安装本地包，设置微信的用户级 XWayland override，然后执行 `kde` 步骤。只改配置时重跑 `./install.sh kde` 即可：`kde/kwinrc` 保存 Better Blur DX、Rounded Corners 和 WeChat Glass 设置；`kde/darklyrc` 保存透明度、描边和阴影。脚本只覆盖列出的键，保留新系统的显示器、桌面和快捷键。原版 Blur 会关闭。已打开的 Qt 应用若仍显示旧控件样式，重开应用即可。
+   自有源码和配置位于 [kde-plugins](https://github.com/AkiraLyu/kde-plugins)，配方位于 [pkgbuilds](https://github.com/AkiraLyu/pkgbuilds)。Paru 从远端构建后由 pacman 安装。`kde-config` 包安装 App Grid、可调任务管理器、Kate / WeChat 插件及 Darkly Translucent，配置命令设置微信 XWayland override 并应用当前用户的外观。只重新应用设置时运行 `kde-config`。
 
 6. 启动 Firefox 一次，在 `about:profiles` 找到正在使用的根目录。下面是本机当前路径，换机器时替换它：
 
@@ -135,19 +134,30 @@ theme apply    # 重新应用保存的模式；首次默认 light
 theme status   # 查看保存模式及当前 KDE 配色
 ```
 
-入口是 `kde/.local/bin/theme`。Qt 控件和窗口装饰固定为 Darkly；GTK 只同步明暗偏好，Fish 同步当前终端的提示符和 ls 配色。模式保存在 `~/.local/state/theme/mode`；启动器中也有“Darkly 明暗切换”。系统的 `discount` 包另有同名程序，因此 Fish 函数明确调用 `~/.local/bin/theme`。
+命令由远端 `kde-config` 包提供：`darkly-theme`。Fish 的 `theme` 函数调用它并同步当前终端配色。Qt 控件和窗口装饰固定为 Darkly，GTK 同步明暗偏好，模式保存在 `~/.local/state/theme/mode`。启动器提供“Darkly 明暗切换”。
 
-旧 Darkly 的 60% Plasma 背景作为静态主题保存在 `kde/.local/share/plasma/desktoptheme/darkly-translucent/`，基于 Darkly 0.5.39；其中 `dialogs/background.svg`、`widgets/background.svg` 是修改过的背景。更新 Darkly 不会自动重做这份定制，若要跟随上游外观变化，直接更新静态文件。Layan 配色和 Darkly 程序本体由包管理器提供。
+`darkly-translucent` 包将基于 Darkly 0.5.39 的静态主题安装到 `/usr/share/plasma/desktoptheme/`。Layan、Darkly 本体、Better Blur DX、Rounded Corners 等第三方包继续使用现有软件源或 AUR 配方。
 
-新主题入口已去掉 Breeze／Kvantum 预设、自动回退、Niri／Noctalia 等旧应用联动及主题生成、卸载脚本。`--quiet` 用于 `theme-sync.service`，是否随会话启动由 target 选择。Karousel 和 Panel Colorizer 仅随当前包清单记录，未迁入旧设置。
+## KDE 插件和补丁
 
-## Kate / WeChat 插件
+`kde-plugins` 仓库是源码和 KDE 配置的唯一维护位置，dotfiles 不保存副本或本地 PKGBUILD。安装入口为 `./install.sh kde`；已有包需要重编译时：
 
-`packages/local/dotfiles-kde-plugins/PKGBUILD` 直接构建 `local/.local/src/kate-translucent-bars/` 和 `wechat-glass-live/`，安装文件由 pacman 管理，不包含 App Grid。首次安装或 Qt／KWin 更新后执行 `./install.sh kde-plugins`；KWin 原生插件需要按当前版本重编译，更新后的库应在重新登录后使用。安装完成后运行 `./scripts/packages.sh export`，后续整机复现也会通过包清单找到这份本地配方。
+```bash
+paru --sudo run0 --rebuild -S appgrid adjustable-task-manager kate-translucent-bars wechat-glass-live
+kde-config
+```
 
-Kate 启动前由 `kde/.local/bin/kate` 启用匿名和已有命名会话的透明边栏插件，再原样转交参数。运行中的会话和文档不进入仓库；Kate 的 desktop 文件复制为独立文件，保留它自行添加的会话 Actions。
+Kate 启动器 `kate-translucent` 启用会话的透明边栏插件，用户 desktop 入口由 `kde-config` 设置。WeChat Glass 支持 XWayland 微信，本机应用为 Flatpak `com.tencent.WeChat`，默认栏背景不透明度 0.52。状态和参数通过以下命令管理：
 
-WeChat Glass 仅支持 XWayland 微信，默认栏背景不透明度 0.52；本机使用 Flatpak `com.tencent.WeChat`。新机器先从 Flathub 安装微信，再运行插件安装步骤。后端 override 生效需要从托盘完全退出微信再打开。日常可运行 `python3 local/.local/src/wechat-glass-live/control.py status`、`enable`、`disable` 或 `opacity 0.52`；这个工具仅修改用户配置，不写入系统插件目录。
+```bash
+wechat-glass-control status
+wechat-glass-control opacity 0.52
+```
+
+微信后端 override 需要完全退出微信再打开才能生效。KWin ABI 更新后重编译 `wechat-glass-live` 并重新登录。原生模块更新后重新打开对应应用。
+
+`chatgpt-desktop` 从 AUR 安装。独立的 `chatgpt-translucent-bars` 包通过 pacman 钩子，在应用或补丁包更新后重新应用透明栏补丁。升级后重新打开 ChatGPT；无需手动运行补丁或保留旧 ASAR 备份。该补丁会修改应用的 ASAR，完整性检查会报告这个预期改动。
+
 
 ## Carillon 邮件提醒
 
@@ -177,16 +187,8 @@ systemctl --user status carillon.service
 
 - `repo.txt` / `repo-deps.txt`：当前软件源中的显式安装包 / 依赖包。
 - `foreign.txt` / `foreign-deps.txt`：当前软件源中没有的显式安装包 / 依赖包。
-- `local/`：四个元包和 `dotfiles-kde-plugins` 的配方。调整元包组合时修改 `depends` 并递增 `pkgrel`；先安装新增依赖，再构建和导出清单。
+- 自有 PKGBUILD：统一在 [pkgbuilds](https://github.com/AkiraLyu/pkgbuilds)，包括四个元包、KDE 组件、ChatGPT 透明栏补丁、Gamescope、WPS、知乎导出器和拾光日记。`chatgpt-desktop` 本体继续由 AUR 维护。修改配方后重新生成 `.SRCINFO`。
 
-恢复时先安装软件源包，再构建本地包，其余 foreign 包交给 Paru，最后恢复安装原因。`--check packages` 仅检查本机是否已安装记录的包名；它不验证远端包是否仍可获得。这是滚动更新的包清单，不承诺重装出完全相同的旧版本。
+恢复时先安装软件源包，再用 Paru 从 pkgbuilds / AUR 安装 foreign 包，最后恢复安装原因。`--check packages` 仅检查本机是否已安装记录的包名；它不验证远端包是否仍可获得。这是滚动更新的包清单，不承诺重装出完全相同的旧版本。
 
-## 本次检查的系统状态（2026-09-10）
-
-- 主机 Akira，Arch Linux，当前内核 `7.2.4-arch1-2`，KDE Wayland，Fish，中文区域和 Asia/Tokyo 时区。
-- 使用未加密的 Btrfs 分区 `/dev/nvme0n1p3`：`@`、`@home`、`@data`、`@snapshots` 分别挂载到 `/`、`/home`、`/data`、`/.snapshots`；顶层挂到 `/mnt/defvol`，EFI 分区挂到 `/efi`。
-- 包清单记录 188 个软件源显式包、1,418 个软件源依赖包、37 个 foreign 显式包、1 个 foreign 依赖包，共 1,644 个包；尚未安装的新本地插件包在安装后导出。
-- 系统和用户 systemd 均没有失败 unit。系统已启用 NetworkManager、Bluetooth、daed、plasmalogin 和 TLP 等服务；用户侧是 PipeWire、WirePlumber 等基础服务。
-- 当前 Fish、Fontconfig、Chromium、Firefox 配置已与根目录内容对应；`/etc` 的链接与复制方式见上面的维护说明。
-
-后续仍需逐项整理系统服务、其他 KDE 设置、应用数据及旧工具的安装；磁盘分区、挂载和 EFI 启动项仍由新系统安装流程准备。`local/` 中新手动迁入的其他脚本和源码保留当前内容，本次只接入 Kate / WeChat 插件的构建。
+磁盘分区、挂载和 EFI 启动项由新系统安装流程准备；软件组合以 `packages/` 的四份清单为准。KDE 配置和已有独立 GitHub 来源的源码由各自仓库维护；拾光日记源码仍在本仓库，远端配方从 GitHub 拉取。

@@ -1,6 +1,0 @@
-*.o
-*.obj
-*.exe
-
-# dotfiles: preserve the complete imported dependency/source snapshot.
-!*

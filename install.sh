@@ -16,7 +16,7 @@ step=${1:-help}
 if (($#)); then shift; fi
 
 # 已经整理好的 HOME 配置。以后增加同样的目录，只需修改这一行。
-home_packages=(fish fontconfig chromium kde local)
+home_packages=(fish fontconfig chromium local)
 
 # 按 /etc 下的相对路径登记文件；部署、比较和导出共用这份清单。
 # 新增系统配置时在这里登记，文件权限直接取自源文件。
@@ -59,49 +59,10 @@ case "$step" in
         ;;
     kde)
         (($# == 0)) || { echo '用法：./install.sh [--check] kde' >&2; exit 1; }
-        stow_configs "$HOME" kde local
-        # Kate 会在自己的 desktop 文件中添加会话 Actions，保留它的运行文件。
-        # 仅首次复制模板；后续只更新主入口，让它经过启用插件的用户包装脚本。
-        kate_desktop="$HOME/.local/share/applications/org.kde.kate.desktop"
-        if [[ ! -e $kate_desktop ]]; then
-            run install -D -m 0644 "$repo_dir/kde/org.kde.kate.desktop" "$kate_desktop"
-        fi
-        run desktop-file-edit --set-key=Exec \
-            --set-value="\"$HOME/.local/bin/kate\" -b %U" "$kate_desktop"
-        # KDE 会自行改写配置，因此 kwinrc、darklyrc 不建立链接。
-        # 这两份文件只是选定设置的片段：逐个写入键，保留新系统的其他设置。
-        # 格式限于单层 [分组]、键=值和整行注释；无需完整 INI 解析器。
-        for file in kwinrc darklyrc; do
-            group=
-            while IFS= read -r line || [[ -n $line ]]; do
-                case "$line" in
-                    ''|\#*) continue ;;
-                    \[*\]) group=${line:1:${#line}-2} ;;
-                    *=*)
-                        run kwriteconfig6 --file "$file" --group "$group" \
-                            --key "${line%%=*}" --notify "${line#*=}"
-                        ;;
-                    *) printf '无法读取 %s 中的行：%s\n' "$file" "$line" >&2; exit 1 ;;
-                esac
-            done < "$repo_dir/kde/$file"
-        done
-        # 在 Plasma 会话中应用外观并通知 KWin 重读插件配置。
-        run "$repo_dir/kde/.local/bin/theme" apply
-        ;;
-    kde-plugins)
-        (($# == 0)) || { echo '用法：./install.sh [--check] kde-plugins' >&2; exit 1; }
-        # 直接从 local/.local/src/ 构建两个插件，用 pacman 管理安装文件。
-        # 不使用旧仓库的源码打包、摘要清单和 App Grid 构建调度。
-        cd -- "$repo_dir/packages/local/dotfiles-kde-plugins"
-        run makepkg --force --clean
-        mapfile -t built_packages < <(makepkg --packagelist)
-        # KWin 更新后的重编译可能仍用相同包版本，也必须装入新产物。
-        run run0 pacman -U -- "${built_packages[@]}"
-        # 此特效匹配 XWayland 微信；只设置当前用户的应用权限与 Qt 后端。
-        run flatpak override --user --nosocket=wayland --socket=x11 \
-            --env=QT_QPA_PLATFORM=xcb com.tencent.WeChat
-        run "$repo_dir/install.sh" kde
-        run python3 "$repo_dir/local/.local/src/wechat-glass-live/control.py" enable
+        run paru --config "$repo_dir/local/.config/paru/paru.conf" --sudo run0 -Sy --pkgbuilds
+        run paru --config "$repo_dir/local/.config/paru/paru.conf" --sudo run0 \
+            -S --needed kde-config chatgpt-translucent-bars
+        run kde-config
         ;;
     systemd)
         (($# == 0)) || { echo '用法：./install.sh [--check] systemd' >&2; exit 1; }
@@ -210,9 +171,8 @@ case "$step" in
 用法：./install.sh [--check] 步骤 [参数]
 
   packages          按 packages/ 的当前包清单安装软件
-  home              链接 fish、fontconfig、chromium、kde 和 local 到 HOME
-  kde               合并 KWin 与 Darkly 设置，部署 Kate 入口并应用明暗模式
-  kde-plugins       构建 Kate / WeChat 插件，经 run0 pacman 安装后应用 KDE 设置
+  home              链接 fish、fontconfig、chromium 和 local 到 HOME
+  kde               从远端安装 KDE 插件、主题与 ChatGPT 补丁，再应用设置
   systemd           链接用户 unit 并重读配置，不启动服务
   firefox PROFILE   链接 Firefox 配置到明确指定的已有 profile
   etc [操作] [文件…]  install：部署（默认）；diff：比较；export：实机同步回仓库

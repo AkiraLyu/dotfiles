@@ -1,2 +1,0 @@
-# 配置片段逐键合并，Kate 入口复制为独立文件；其余 .local/ 文件交给 Stow。
-^/(kwinrc|darklyrc|org.kde.kate.desktop)$

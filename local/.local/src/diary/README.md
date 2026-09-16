@@ -153,28 +153,14 @@ Windows 包仅包含应用代码和静态资源，不包含仓库中的 `Diary`�
 
 ## Arch Linux 打包
 
-项目通过 `PKGBUILD` 生成原生 Arch Linux 包。包内安装应用代码、静态资源和仅用于 Wayland 的小型背景模糊桥接库，运行时仍直接调用系统的 `/usr/bin/electron`，不会捆绑 Electron：
+Arch 配方维护在 [AkiraLyu/pkgbuilds](https://github.com/AkiraLyu/pkgbuilds/tree/main/shiguang-diary)，从 GitHub 拉取本项目源码。配置好 Paru 后安装：
 
 ```bash
-makepkg --force --cleanbuild
-```
-
-也可以使用等价的 npm 脚本（会自动选择 Arch Linux 构建流程并重新生成应用图标）：
-
-```bash
-npm run build
-```
-
-显式脚本为 `npm run build:arch`。
-
-产物为项目根目录下的 `shiguang-diary-1.0.0-2-x86_64.pkg.tar.zst`。安装并启动：
-
-```bash
-run0 pacman -U ./shiguang-diary-1.0.0-2-x86_64.pkg.tar.zst
+paru --sudo run0 -S shiguang-diary
 shiguang-diary
 ```
 
-运行依赖由 `PKGBUILD` 声明为 `electron>=43`、`xdg-desktop-portal` 和 `glibc`。构建需要 Wayland 工具、Node.js 24+ 和 npm，`makepkg` 会自动运行以下测试；Arch 构建使用已保存的资源，不需要下载 npm 开发依赖。卸载应用不会触碰用户选择的日记目录及其中的 SQLite 分析索引和地点数据。
+`npm run build:arch` 会通过 Paru 重新构建并安装远端版本。包内安装应用代码、静态资源和 Wayland 背景模糊桥接库，运行时调用系统 Electron，不包含日记数据。构建自动运行项目测试。
 
 运行测试：
 

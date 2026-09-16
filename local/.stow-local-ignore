@@ -20,9 +20,6 @@ __pycache__
 # 历史记录是运行数据，不随 local 配置部署。
 ^/\.local/share/fish/fish_history$
 
-# Native build outputs are not deployment input.
-^/\.local/src/(appgrid/build|wechat-glass-live/(build|build-[^/]+))(/|$)
-
 # Diary content, development dependencies and generated outputs stay local.
 ^/\.local/src/diary/(node_modules|Diary|dist|pkg|src|\.electron-test|\.diary-trash|\.shiguang|build/native|native/linux-wayland-blur/build)(/|$)
 ^/\.local/src/diary/(\.[^/]*-test-[^/]*|01_[^/]*\.md|[^/]*\.pkg\.tar\.[^/]+|[^/]*\.log)(/|$)

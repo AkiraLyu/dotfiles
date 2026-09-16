@@ -1,9 +1,0 @@
-glm-*
-packagecache
-stb
-
-# dotfiles: preserve the complete imported dependency/source snapshot.
-!*
-
-# Runtime lock is not part of the imported source snapshot.
-/.wraplock

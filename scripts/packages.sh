@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # 只管理 pacman 包名和安装原因，不做版本锁定、源码下载缓存或通用插件调度。
-# local/ 保存元包和 KDE 插件的可读 PKGBUILD；其他 foreign 包交给 Paru 查询。
+# 自有配方统一由远端 pkgbuilds 管理，其他 foreign 包交给 AUR。
 set -euo pipefail
 ((EUID != 0)) || { echo '请以普通用户运行；安装阶段会单独调用 run0。' >&2; exit 1; }
 repo_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
@@ -51,24 +51,12 @@ case ${1:-} in
             run0 pacman -S --needed --asdeps -- "${repo_dependencies[@]}"
         fi
 
-        # 第二步：本地元包直接构建并交给 pacman 安装，其余包用 Paru。
-        # makepkg 只以普通用户构建；安装权限统一通过 run0 获取。
-        aur_packages=()
-        for package in "${foreign_packages[@]}" "${foreign_dependencies[@]}"; do
-            if [[ -f $list_dir/local/$package/PKGBUILD ]]; then
-                (
-                    cd -- "$list_dir/local/$package"
-                    makepkg --force --clean
-                    mapfile -t built_packages < <(makepkg --packagelist)
-                    # 本地包刚重新构建，即使版本号未变也安装新的产物。
-                    run0 pacman -U -- "${built_packages[@]}"
-                )
-            else
-                aur_packages+=("$package")
-            fi
-        done
-        if ((${#aur_packages[@]})); then
-            paru --sudo run0 -S --needed -- "${aur_packages[@]}"
+        # 第二步：刷新自有配方，再通过 Paru 安装 GitHub/AUR 包。
+        paru_config="$repo_dir/local/.config/paru/paru.conf"
+        paru --config "$paru_config" --sudo run0 -Sy --pkgbuilds
+        if ((${#foreign_packages[@]} + ${#foreign_dependencies[@]})); then
+            paru --config "$paru_config" --sudo run0 -S --needed -- \
+                "${foreign_packages[@]}" "${foreign_dependencies[@]}"
         fi
 
         # --needed 跳过已有包时可能保留旧的安装原因，最后明确恢复清单记录。

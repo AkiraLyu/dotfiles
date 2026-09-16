@@ -1,3 +1,4 @@
+aarch64-linux-gnu-gcc
 alsa-utils
 android-tools
 archlinuxcn-keyring
@@ -16,6 +17,9 @@ bind
 brightnessctl
 btop
 btrfs-progs
+cachyos-keyring
+cachyos-mirrorlist
+cachyos-v4-mirrorlist
 calibre
 cava
 chntpw
@@ -35,6 +39,7 @@ dnsmasq
 dolphin
 dosbox
 downgrade
+dpkg
 drawio-desktop
 dwproton-bin
 easyeffects
@@ -43,6 +48,7 @@ exfatprogs
 fastfetch
 fcitx5-mozc
 fcitx5-pinyin-moegirl
+fcitx5-rime
 fd
 ffmpegthumbs
 firefox
@@ -57,8 +63,8 @@ gameconqueror
 gimp
 git
 git-filter-repo
-github-cli
 git-lfs
+github-cli
 gtkwave
 gvfs-mtp
 gwenview
@@ -90,6 +96,8 @@ libfaketime
 libinput-tools
 libvirt
 linux
+linux-cachyos
+linux-cachyos-headers
 linux-firmware
 lld
 man-db
@@ -110,8 +118,8 @@ newsflash
 nmap
 noto-fonts-cjk
 npm
-obsidian
 obs-studio
+obsidian
 okular
 ollama
 openai-codex
@@ -145,20 +153,24 @@ qt5-wayland
 quickshell
 rclone
 resvg
+rime-ice-git
 riscv64-elf-gcc
 rpi-imager
 rsync
 rust-analyzer
+rust-bindgen
 rustup
 sassc
 sbctl
 scrcpy
+scx-manager
 sof-firmware
 sqlitebrowser
 steam
 stow
 strace
 syncthing
+tcpdump
 telegram-desktop
 texstudio
 thunderbird
@@ -179,12 +191,10 @@ vulkan-intel
 wget
 wireshark-qt
 wl-clipboard
-wl-clip-persist
 xclip
 xorg-xhost
 yazi
 yt-dlp
 zathura
 zathura-pdf-mupdf
-zed
 zotero-bin
