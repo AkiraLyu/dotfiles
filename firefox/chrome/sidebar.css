@@ -41,7 +41,8 @@
 /* 把 Nova 的视觉留白纳入 #sidebar-box 的真实命中区域，避免伪元素命中不稳定。 */
 @media -moz-pref("browser.nova.enabled") {
   #sidebar-box {
-    --uc-sidebar-edge-gap: var(--chrome-window-gap);
+    /* Firefox 156 移除了此变量；缺少回退值会使侧栏的宽度约束全部失效。 */
+    --uc-sidebar-edge-gap: var(--chrome-window-gap, 0px);
   }
 
   #sidebar {

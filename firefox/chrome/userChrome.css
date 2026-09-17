@@ -60,15 +60,16 @@
   #PersonalToolbar:not([collapsed], [moz-collapsed], [hidden]) {
     min-height: var(--uc-bookmarks-toolbar-height) !important;
     height: var(--uc-bookmarks-toolbar-height) !important;
-    margin-block-start: var(--chrome-window-gap) !important;
+    /* Firefox 156 不再提供 --chrome-window-gap，旧版仍沿用原生留白。 */
+    margin-block-start: var(--chrome-window-gap, 0px) !important;
     margin-inline-start: calc(
-      var(--uc-sidebar-collapsed-width) + var(--chrome-window-gap)
+      var(--uc-sidebar-collapsed-width) + var(--chrome-window-gap, 0px)
     ) !important;
     width: calc(
-      100% - var(--uc-sidebar-collapsed-width) - var(--chrome-window-gap)
+      100% - var(--uc-sidebar-collapsed-width) - var(--chrome-window-gap, 0px)
     ) !important;
     max-width: calc(
-      100% - var(--uc-sidebar-collapsed-width) - var(--chrome-window-gap)
+      100% - var(--uc-sidebar-collapsed-width) - var(--chrome-window-gap, 0px)
     ) !important;
     overflow: clip !important;
     background-color: var(--uc-panel-background) !important;
@@ -80,10 +81,10 @@
     )
     #sidebar-box:not([positionend], [sidebar-positionend]) {
     margin-block-start: calc(
-      -1 * var(--uc-bookmarks-toolbar-height) - var(--chrome-window-gap)
+      -1 * var(--uc-bookmarks-toolbar-height) - var(--chrome-window-gap, 0px)
     ) !important;
     height: calc(
-      100% + var(--uc-bookmarks-toolbar-height) + var(--chrome-window-gap)
+      100% + var(--uc-bookmarks-toolbar-height) + var(--chrome-window-gap, 0px)
     ) !important;
   }
 }
