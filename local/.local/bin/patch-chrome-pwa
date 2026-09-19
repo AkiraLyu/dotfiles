@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+dir="${XDG_DATA_HOME:-$HOME/.local/share}/applications"
+
+# 优先使用 XDG 配置确定桌面目录。
+# 如果 xdg-user-dir 不存在，则回退到 ~/Desktop。
+if command -v xdg-user-dir >/dev/null 2>&1; then
+    desktop_dir="$(xdg-user-dir DESKTOP)"
+else
+    desktop_dir="$HOME/Desktop"
+fi
+
+mkdir -p "$desktop_dir"
+
+shopt -s nullglob
+
+for file in "$dir"/chrome-*.desktop; do
+    # 只处理真正的 Chrome PWA：
+    # Exec= 中必须存在 --app-id=
+    grep -qE '^Exec=.*--app-id=' "$file" || continue
+
+    # 已经设置过则不重复添加。
+    # 同时处理 Desktop Actions 中可能存在的额外 Exec=。
+    sed -i \
+        '/^Exec=.*--app-id=/ {
+            /--password-store=/! s/ --app-id=/ --password-store=kwallet6 --app-id=/
+        }' \
+        "$file"
+
+    target="$desktop_dir/$(basename "$file")"
+
+    # 如果桌面上的文件已经与源文件是同一个 inode，
+    # 说明硬链接仍然有效，无需处理。
+    if [[ -e "$target" ]] && [[ "$file" -ef "$target" ]]; then
+        continue
+    fi
+
+    # sed -i 可能通过 rename 替换源文件，从而使原硬链接
+    # 继续指向旧 inode。因此删除旧目标后重新创建硬链接。
+    if [[ -e "$target" || -L "$target" ]]; then
+        rm -- "$target"
+    fi
+
+    ln -- "$file" "$target"
+done
