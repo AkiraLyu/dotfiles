@@ -22,7 +22,7 @@
 | [系统配置](docs/system.md) | `/etc` 比较、部署、导出，以及 UKI 和固件维护 |
 | [桌面与应用](docs/desktop.md) | KDE 主题、应用补丁、Firefox 和 Carillon |
 | [软件包与源码](docs/packages.md) | 包清单、安装原因和源码维护边界 |
-| [拾光日记](docs/diary.md) | 日记应用的使用、存储、开发和打包 |
+| [拾光日记](docs/diary.md) | 软件包安装、更新和独立项目文档 |
 
 ## 目录
 
@@ -31,7 +31,7 @@
 | `fish/` | Shell、提示符、配色和环境变量 | `home` |
 | `fontconfig/` | 字体替换、回退和渲染规则 | `home` |
 | `chromium/` | Chromium、Chrome、Electron、Code、QQ 等启动参数 | `home` |
-| `local/` | 用户脚本、启动器、Paru 配置和拾光日记源码 | `home` |
+| `local/` | 用户脚本、启动器和 Paru 配置 | `home` |
 | `nvim/`、`kitty/`、`tools/` | Neovim、Kitty 和其他工具配置 | [手动选择 Stow 包](docs/install.md#可选配置) |
 | `systemd/` | 用户服务及会话 target | `systemd` |
 | `firefox/` | 偏好设置、界面样式、首页和扩展规则文件 | `firefox PROFILE` |

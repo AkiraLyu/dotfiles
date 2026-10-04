@@ -8,6 +8,9 @@
 /fish/.config/fish/conf.d/chromium.fish
 /local/.local/share/fish/fish_history
 
+# 独立项目的本地源码、构建文件和数据不进入配置仓库。
+/local/.local/src/
+
 __pycache__/
 
 # lazy.nvim 的锁文件由插件管理器自行生成和更新。

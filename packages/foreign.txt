@@ -28,6 +28,7 @@ okular-session-git
 papirus-folders-git
 plasma6-applets-panel-colorizer
 plasma6-themes-layan-git
+shiguang-diary
 splayer-appimage
 sunshine-bin
 texlive-meta-full

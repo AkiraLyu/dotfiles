@@ -53,9 +53,9 @@ case ${1:-} in
 
         # 第二步：刷新自有配方，再通过 Paru 安装 GitHub/AUR 包。
         paru_config="$repo_dir/local/.config/paru/paru.conf"
-        paru --config "$paru_config" --sudo run0 -Sy --pkgbuilds
+        env PARU_CONF="$paru_config" paru --sudo run0 -Sy --pkgbuilds
         if ((${#foreign_packages[@]} + ${#foreign_dependencies[@]})); then
-            paru --config "$paru_config" --sudo run0 -S --needed -- \
+            env PARU_CONF="$paru_config" paru --sudo run0 -S --needed -- \
                 "${foreign_packages[@]}" "${foreign_dependencies[@]}"
         fi
 

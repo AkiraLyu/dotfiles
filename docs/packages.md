@@ -60,11 +60,12 @@ Flatpak 微信和 Cargo 安装的 Carillon 见[桌面与应用](desktop.md)，�
 
 | 内容 | 维护位置 |
 | --- | --- |
-| 配置、用户脚本和拾光日记源码 | 本仓库；日记源码位于 [local/.local/src/diary](../local/.local/src/diary/) |
+| 配置和用户脚本 | 本仓库 |
+| 拾光日记源码和应用文档 | [AkiraLyu/shiguang-diary](https://github.com/AkiraLyu/shiguang-diary) |
 | KDE 插件、主题、应用补丁和 KDE 设置 | [AkiraLyu/kde-plugins](https://github.com/AkiraLyu/kde-plugins) |
 | 自有元包及应用 PKGBUILD | [AkiraLyu/pkgbuilds](https://github.com/AkiraLyu/pkgbuilds) |
 | Gamescope、WPS FPS Unlock 和知乎导出器源码 | 对应配方声明的上游仓库 |
 
-本仓库不维护外部项目的源码副本或本地 PKGBUILD。修改远端配方时同步生成 `.SRCINFO`，供 Paru 读取包信息。拾光日记的开发和打包限制见[应用文档](diary.md#构建与验证)。
+本仓库不维护外部项目的源码副本或本地 PKGBUILD。修改远端配方时同步生成 `.SRCINFO`，供 Paru 读取包信息。拾光日记通过 `pkgbuilds` 中的配方安装，操作见[拾光日记](diary.md)。
 
 应用数据、日记库和导出文件需要单独备份，不属于源码或软件包清单。
