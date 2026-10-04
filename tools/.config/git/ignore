@@ -1,0 +1,8 @@
+*~
+*.swp
+*.swo
+*.swn
+.#*
+
+.agents
+AGENTS.md

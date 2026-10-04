@@ -23,6 +23,7 @@ home_packages=(fish fontconfig chromium local)
 system_files=(
     environment
     pacman.conf
+    opt/chrome/policies/managed/webrtc.json
     makepkg.conf.d/90-local.conf
     tlp.conf
     security/limits.d/90-memlock.conf
@@ -59,8 +60,8 @@ case "$step" in
         ;;
     kde)
         (($# == 0)) || { echo '用法：./install.sh [--check] kde' >&2; exit 1; }
-        run paru --config "$repo_dir/local/.config/paru/paru.conf" --sudo run0 -Sy --pkgbuilds
-        run paru --config "$repo_dir/local/.config/paru/paru.conf" --sudo run0 \
+        run env PARU_CONF="$repo_dir/local/.config/paru/paru.conf" paru --sudo run0 -Sy --pkgbuilds
+        run env PARU_CONF="$repo_dir/local/.config/paru/paru.conf" paru --sudo run0 \
             -S --needed kde-config chatgpt-translucent-bars
         run kde-config
         ;;
