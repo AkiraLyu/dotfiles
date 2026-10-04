@@ -1,6 +1,6 @@
 /*
  * Firefox UI color configuration.
- * Change only these two values to update the bookmarks toolbar and Sidebery.
+ * Shared panel and context-menu colors for Firefox and Sidebery.
  */
 :root {
   --uc-panel-background-light: #f9f9fb;
@@ -10,4 +10,19 @@
     var(--uc-panel-background-light),
     var(--uc-panel-background-dark)
   );
+
+  /* Both context menus keep the same light appearance, including in dark mode. */
+  --uc-menu-background: #ffffff;
+  --uc-menu-text: #333333;
+  --uc-menu-border: #d4d4d4;
+  --uc-menu-hover: #dddddd;
+  --uc-menu-active: #d3d3d3;
+  --uc-menu-muted: #707070;
+  --uc-menu-disabled: #a0a0a0;
+  --uc-menu-separator: #cccccc;
+  --uc-menu-radius: 22px;
+  --uc-menu-item-radius: 18px;
+  --uc-menu-shadow:
+    0 3px 8px rgb(0 0 0 / 12%),
+    0 8px 24px rgb(0 0 0 / 10%);
 }
