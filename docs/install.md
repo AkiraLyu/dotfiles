@@ -33,7 +33,7 @@ git clone https://github.com/AkiraLyu/dotfiles.git "$HOME/dotfiles"
 cd "$HOME/dotfiles"
 ```
 
-已有仓库时直接进入其根目录。默认路径为 `~/dotfiles`；换用其他路径前，检查 Firefox 首页、启动器和脚本中的绝对路径。
+已有仓库时直接进入其根目录。默认路径为 `~/dotfiles`；换用其他路径前，检查应用备份目录、启动器和脚本中的绝对路径。
 
 ## 部署步骤
 
@@ -51,11 +51,42 @@ cd "$HOME/dotfiles"
 ### 用户配置
 
 ```bash
-./install.sh --check home
-./install.sh home
+./install.sh --check user
+./install.sh user
 ```
 
-此步骤只部署 `fish`、`fontconfig`、`chromium` 和 `local`，不会更改登录 Shell。检查模式会报告 Stow 冲突；比较冲突文件，备份并移开需要替换的版本后再运行部署。
+此步骤部署 `user/` 中以下配置包：
+
+| 包 | 内容 |
+| --- | --- |
+| `fish`、`kitty`、`fontconfig` | Shell、终端和字体 |
+| `chromium` | Chrome、Chromium、Electron、ChatGPT 和 QQ 启动参数 |
+| `foxvault`、`mpv`、`yazi`、`yt-dlp`、`zathura` | 日常应用配置 |
+| `wireplumber` | 音频设备切换规则 |
+| `paru` | Paru 选项和远端 PKGBUILD 源 |
+| `local` | 用户脚本、启动器和图标 |
+
+此步骤不会更改登录 Shell。检查模式会报告 Stow 冲突；比较冲突文件，备份并移开需要替换的版本后再运行部署。Firefox 和用户服务使用下文的独立步骤。
+
+### 开发配置
+
+```bash
+./install.sh --check dev
+./install.sh dev
+```
+
+此步骤部署 `dev/` 中的 `clang-format`、`code`、`git`、`nvim` 和 `scripts`。Code 包提供启动参数，`scripts` 提供开发辅助脚本；Git 配置包含提交身份，使用前按账户调整。
+
+`user` 和 `dev` 均可在步骤名后指定包名，只部署选中的配置：
+
+```bash
+./install.sh --check user fish kitty
+./install.sh user fish kitty
+./install.sh --check dev git nvim
+./install.sh dev git nvim
+```
+
+部署方式和运行数据的处理见[链接规则](#链接规则)。
 
 ### KDE
 
@@ -66,7 +97,16 @@ cd "$HOME/dotfiles"
 ./install.sh kde
 ```
 
-此步骤刷新远端 PKGBUILD，安装 `kde-config`、`chatgpt-translucent-bars` 及其依赖，再运行 `kde-config` 应用当前用户设置。主题、应用补丁和 Flatpak 微信的配置见[桌面与应用](desktop.md)。
+此步骤先部署 `de-wm/kde/` 中的 Portal、D-Bus 服务和会话脚本，再刷新远端 PKGBUILD，安装 `kde-config`、`chatgpt-translucent-bars` 及其依赖，最后运行 `kde-config` 应用当前用户设置。主题、应用补丁和 Flatpak 微信的配置见[桌面与应用](desktop.md)。
+
+只部署仓库内的 KDE 文件时执行：
+
+```bash
+./install.sh --check de-wm kde
+./install.sh de-wm kde
+```
+
+`de-wm/niri/` 保存 Niri 配置、Noctalia 插件和专用服务。所有安装步骤均排除此目录，不向家目录建立 Niri 链接，详见 [Niri](desktop.md#niri)。
 
 ### Firefox
 
@@ -77,7 +117,7 @@ cd "$HOME/dotfiles"
 ./install.sh firefox "/实际的/Firefox/配置根目录"
 ```
 
-目标目录必须已存在且包含 `prefs.js`。首页路径、扩展规则和同步范围见 [Firefox 配置](desktop.md#firefox)。
+目标目录必须已存在且包含 `prefs.js`。首页设置、扩展规则和同步范围见 [Firefox 配置](desktop.md#firefox)。
 
 ### 系统配置
 
@@ -104,7 +144,7 @@ cd "$HOME/dotfiles"
 
 ### 用户服务
 
-先恢复服务需要的程序、账户配置和目录，再审阅 `systemd/.config/systemd/user/` 中的 target 与 `Wants=`：
+先恢复服务需要的程序、账户配置和目录，再审阅 `user/systemd/.config/systemd/user/` 中的 target 与 `Wants=`：
 
 ```bash
 ./install.sh --check systemd
@@ -117,9 +157,8 @@ cd "$HOME/dotfiles"
 | --- | --- |
 | `personal-background.target` | 用户管理器的 `default.target` 启动时 |
 | `personal-graphical.target` | 图形会话启动时 |
-| `personal-niri.target` | Niri 服务启动时 |
 
-target 引用的服务可能由外部软件包提供，例如 `foxvault.service` 和 `theme-sync.service`。OneDrive 还需要恢复 rclone 的 `onedrive` 远端，并保证当前用户能写入 `/mnt/network/onedrive` 和 `/mnt/network/cache/onedrive`。
+target 引用的服务可能由外部软件包提供，例如 `foxvault.service` 和 `theme-sync.service`。OneDrive 还需要恢复 rclone 的 `onedrive` 远端，并保证当前用户能写入 `/mnt/network/onedrive` 和 `/mnt/network/cache/onedrive`。`personal-niri.target` 及其服务保存在 `de-wm/niri/`，不由此步骤部署。
 
 修改 target 后重新运行 `./install.sh systemd`。如需在当前图形会话启动已配置的 Carillon，可执行：
 
@@ -128,23 +167,26 @@ systemctl --user start carillon.service
 systemctl --user status carillon.service
 ```
 
-## 可选配置
+## 链接规则
 
-`nvim`、`kitty` 和 `tools` 未列入 `home` 步骤。审阅配置后，保留命令末尾需要的包名，再模拟和部署：
+所有 Stow 部署统一使用 `--no-folding --restow`。目标目录保留为真实目录，只为具体配置文件建立相对符号链接；已有的 Stow 目录链接会在重新部署时展开。Stow 无法识别的链接或不同的独立文件按冲突处理。
 
-```bash
-stow --dir="$PWD" --target="$HOME" --no-folding --restow --simulate nvim kitty tools
-stow --dir="$PWD" --target="$HOME" --no-folding --restow nvim kitty tools
-```
+`.local/share/` 及其子目录不得整体链接到仓库。例如 `~/.local/share/applications/` 保留为真实目录，只链接其中受管理的 `.desktop` 文件。系统新增的启动器、图标缓存和应用数据保存在家目录中。已链接文件的内容修改仍会写回仓库，需要独立变化的运行数据不应纳入配置包。
+
+源包中的 `.local/`、`.local/share/` 必须是真实目录，`.local/share/` 内的符号链接只能指向普通文件。安装脚本在部署任何选中包之前检查这些条件，并拒绝目录链接和无效链接，避免源包中的链接绕过 `--no-folding`。检查模式执行同样的校验。
+
+Fish 历史、变量、私密配置和 Neovim 的 `lazy-lock.json` 由安装入口排除，保留在家目录中独立维护。
 
 ## 检查模式
 
 | 步骤 | `--check` 的行为 |
 | --- | --- |
-| `home`、`systemd` | 模拟 Stow 部署；`systemd` 额外显示重读配置命令 |
+| `user`、`dev`、`de-wm kde` | 检查包名、部署源目录和符号链接，再模拟对应分组的 Stow 部署 |
+| `systemd` | 模拟用户服务部署，并显示重读配置命令 |
 | `firefox` | 检查目标目录及 `prefs.js`，再模拟 Stow 部署 |
 | `packages` | 查询本机已安装包，列出清单中缺少的包名 |
-| `kde`、`etc install`、`firmware` | 显示待执行命令 |
+| `kde` | 模拟本地 KDE 配置部署，再显示安装组件和应用设置的命令 |
+| `etc install`、`firmware` | 显示待执行命令 |
 | `private` | 检查凭据源文件存在，再显示复制命令 |
 | `etc export` | 按实机文件状态显示待执行的复制命令 |
 

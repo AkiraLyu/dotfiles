@@ -3,17 +3,17 @@
 /backup/
 
 # Fish 会自行写入这些运行数据；凭据单独保存在 backup/private/。
-/fish/.config/fish/fish_variables
-/fish/.config/fish/fish_history
-/fish/.config/fish/conf.d/chromium.fish
-/local/.local/share/fish/fish_history
+/user/fish/.config/fish/fish_variables
+/user/fish/.config/fish/fish_history
+/user/fish/.config/fish/conf.d/chromium.fish
+/user/local/.local/share/fish/fish_history
 
 # 独立项目的本地源码、构建文件和数据不进入配置仓库。
-/local/.local/src/
+/user/local/.local/src/
 
 __pycache__/
 
 # lazy.nvim 的锁文件由插件管理器自行生成和更新。
-/nvim/.config/nvim/lazy-lock.json
+/dev/nvim/.config/nvim/lazy-lock.json
 
 /private/

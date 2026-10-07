@@ -6,7 +6,7 @@
 
 ## KDE
 
-`./install.sh kde` 安装 KDE 配置和应用补丁，再运行 `kde-config`。插件源码和设置由 [kde-plugins](https://github.com/AkiraLyu/kde-plugins) 维护，Arch 配方由 [pkgbuilds](https://github.com/AkiraLyu/pkgbuilds) 维护。
+`./install.sh kde` 部署 [de-wm/kde/](../de-wm/kde/) 中的本地配置，安装 KDE 组件和应用补丁，再运行 `kde-config`。只部署本地文件时使用 `./install.sh de-wm kde`。插件源码和设置由 [kde-plugins](https://github.com/AkiraLyu/kde-plugins) 维护，Arch 配方由 [pkgbuilds](https://github.com/AkiraLyu/pkgbuilds) 维护。
 
 `kde-config` 应用 Darkly、KWin 和 KDE 设置，配置 Kate 启动器，并为已安装的 Flatpak 微信设置 XWayland 启动参数。只重新应用设置时运行：
 
@@ -56,11 +56,19 @@ wechat-glass-control opacity 0.52
 
 `chatgpt-desktop` 本体来自 AUR。补丁会修改其 ASAR 文件，因此完整性检查可能报告这一改动。更新后重新打开应用，无需手动运行补丁。
 
+## Niri
+
+[de-wm/niri/](../de-wm/niri/) 保存 Niri 和 Noctalia 配置、录屏插件、Niri Portal 选择及专用 systemd 用户服务。它作为可维护的配置存档保留在 Git 中，不参与 Stow 部署，也不建立家目录中的会话依赖链接。
+
+`config.kdl` 通过相对路径包含 `configs/` 中的输入、快捷键、窗口规则和显示设置。`personal-niri.target` 及其服务与这些配置放在同一包中，与 `user/systemd/` 的通用服务分开维护。
+
+配置包含个人显示器名称、头像、壁纸和应用命令。用于其他环境前，应先核对这些路径和依赖，并用目标版本的 Niri 验证配置。Noctalia 录屏插件的设置和命令见[录屏插件](niri-screen-recorder.md)。
+
 ## Firefox
 
-`firefox` 步骤将 [firefox/](../firefox/) 的文件链接到指定配置目录，包括 `user.js`、`chrome/` 样式、首页和扩展规则文件。脚本不恢复账户、书签或扩展数据库，这些内容通过 Firefox Sync 或单独备份恢复。
+`firefox` 步骤将 [user/firefox/](../user/firefox/) 的文件链接到指定配置目录，包括 `user.js`、`chrome/` 样式和扩展规则文件。脚本不恢复账户、书签或扩展数据库，这些内容通过 Firefox Sync 或单独备份恢复。
 
-[user.js](../firefox/user.js) 的 `browser.startup.homepage` 使用绝对 `file://` 地址。用户名或仓库路径变化时，先修改首页地址，再重启 Firefox。
+[user.js](../user/firefox/user.js) 将首页设置为 Firefox 内置的 `about:home`，不依赖仓库中的本地网页。修改偏好后重启 Firefox 生效。
 
 `sidebery.css` 和 `uBlacklist.txt` 是扩展的规则文件；部署链接不会安装扩展或自动导入这些规则，需要在对应扩展中手动设置。
 
@@ -85,9 +93,9 @@ ln -s "$PWD/private/.config/carillon" "$HOME/.config/carillon"
 
 目标目录已存在时先比较并处理原配置。`./install.sh private` 只复制 Chromium 凭据，不负责此链接。
 
-配置中的 `accounts.Akira.imap` 需要包含服务器、SASL 认证、`mailbox` 和通知 `hook`。钩子将 `$id` 传给 [carillon-gmail-notify](../local/.local/bin/carillon-gmail-notify)。通知脚本使用 TLS IMAP、`sasl.plain` 及其密码命令读取邮件预览，点击通知时通过 `gtk-launch` 打开 Gmail PWA。
+配置中的 `accounts.Akira.imap` 需要包含服务器、SASL 认证、`mailbox` 和通知 `hook`。钩子将 `$id` 传给 [carillon-gmail-notify](../user/local/.local/bin/carillon-gmail-notify)。通知脚本使用 TLS IMAP、`sasl.plain` 及其密码命令读取邮件预览，点击通知时通过 `gtk-launch` 打开 Gmail PWA。
 
-服务的 `CARILLON_CONFIG` 和 `CARILLON_ACCOUNT` 与通知脚本共享配置。更换账户名时，同时修改配置中的账户和 [carillon.service](../systemd/.config/systemd/user/carillon.service) 的 `CARILLON_ACCOUNT`。Gmail PWA 的 desktop ID 定义在通知脚本中，恢复 PWA 后确认它与实际安装项一致。
+服务的 `CARILLON_CONFIG` 和 `CARILLON_ACCOUNT` 与通知脚本共享配置。更换账户名时，同时修改配置中的账户和 [carillon.service](../user/systemd/.config/systemd/user/carillon.service) 的 `CARILLON_ACCOUNT`。Gmail PWA 的 desktop ID 定义在通知脚本中，恢复 PWA 后确认它与实际安装项一致。
 
 ### 服务
 

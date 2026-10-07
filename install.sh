@@ -15,8 +15,10 @@ fi
 step=${1:-help}
 if (($#)); then shift; fi
 
-# 已经整理好的 HOME 配置。以后增加同样的目录，只需修改这一行。
-home_packages=(fish fontconfig chromium local)
+# 明确列出默认部署包；Firefox、用户服务和桌面配置由独立步骤管理。
+# 不遍历目录，避免把保留的 Niri 配置自动部署到 HOME。
+user_packages=(chromium fish fontconfig foxvault kitty local mpv paru wireplumber yazi yt-dlp zathura)
+dev_packages=(clang-format code git nvim scripts)
 
 # 按 /etc 下的相对路径登记文件；部署、比较和导出共用这份清单。
 # 新增系统配置时在这里登记，文件权限直接取自源文件。
@@ -43,32 +45,80 @@ run() {
     if ! $check_only; then "$@"; fi
 }
 
-# Stow 负责建立相对链接。--no-folding 保持真实目录，防止应用运行数据
-# 顺着整个目录的链接写进仓库。已有不同文件会报冲突，不使用 --adopt。
-stow_configs() {
-    local target=$1
+# --no-folding 不会展开源包中的目录符号链接，部署前必须单独排除。
+# .local/share 及其子目录只使用真实目录，符号链接只能指向普通文件。
+check_share_sources() {
+    local group=$1 package directory share invalid_link
     shift
-    local options=(--dir "$repo_dir" --target "$target" --no-folding --restow)
+    for package in "$@"; do
+        share="$repo_dir/$group/$package/.local/share"
+        for directory in "${share%/share}" "$share"; do
+            if [[ -L $directory || ( -e $directory && ! -d $directory ) ]]; then
+                printf '部署源必须是真实目录：%s\n' "$directory" >&2
+                return 1
+            fi
+        done
+        [[ -d $share ]] || continue
+        invalid_link=$(find "$share" -type l ! -xtype f -print -quit) || return 1
+        if [[ -n $invalid_link ]]; then
+            printf '.local/share 下的源符号链接必须指向普通文件：%s\n' "$invalid_link" >&2
+            return 1
+        fi
+    done
+}
+
+# Stow 逐文件建立相对链接；--restow 配合 --no-folding 将已有的
+# Stow 目录链接展开成真实目录。已有不同文件会报冲突，不使用 --adopt。
+stow_configs() {
+    local group=$1 target=$2
+    shift 2
+    check_share_sources "$group" "$@"
+    local options=(
+        --dir "$repo_dir/$group" --target "$target" --no-folding --restow
+        '--ignore=(^|/)(fish_history|fish_variables|lazy-lock\.json|__pycache__)(/.*)?'
+        '--ignore=(^|/)\.config/fish/conf\.d/chromium\.fish'
+    )
     if $check_only; then options+=(--simulate); fi
     stow "${options[@]}" "$@"
 }
 
 case "$step" in
-    home)
-        (($# == 0)) || { echo '用法：./install.sh [--check] home' >&2; exit 1; }
-        stow_configs "$HOME" "${home_packages[@]}"
+    user|dev)
+        if [[ $step == user ]]; then
+            selected_packages=("${user_packages[@]}")
+        else
+            selected_packages=("${dev_packages[@]}")
+        fi
+        # 可按包名选择子集；先检查全部参数，再执行任何链接操作。
+        for package in "$@"; do
+            known=false
+            for managed in "${selected_packages[@]}"; do
+                if [[ $package == "$managed" ]]; then known=true; break; fi
+            done
+            $known || { printf '不支持的 %s 配置包：%s\n' "$step" "$package" >&2; exit 1; }
+        done
+        if (($#)); then selected_packages=("$@"); fi
+        stow_configs "$step" "$HOME" "${selected_packages[@]}"
+        ;;
+    de-wm)
+        [[ $# == 1 && $1 == kde ]] || {
+            echo '用法：./install.sh [--check] de-wm kde；Niri 配置仅保留，不部署。' >&2
+            exit 1
+        }
+        stow_configs de-wm "$HOME" kde
         ;;
     kde)
         (($# == 0)) || { echo '用法：./install.sh [--check] kde' >&2; exit 1; }
-        run env PARU_CONF="$repo_dir/local/.config/paru/paru.conf" paru --sudo run0 -Sy --pkgbuilds
-        run env PARU_CONF="$repo_dir/local/.config/paru/paru.conf" paru --sudo run0 \
+        stow_configs de-wm "$HOME" kde
+        run env PARU_CONF="$repo_dir/user/paru/.config/paru/paru.conf" paru --sudo run0 -Sy --pkgbuilds
+        run env PARU_CONF="$repo_dir/user/paru/.config/paru/paru.conf" paru --sudo run0 \
             -S --needed kde-config chatgpt-translucent-bars
         run kde-config
         ;;
     systemd)
         (($# == 0)) || { echo '用法：./install.sh [--check] systemd' >&2; exit 1; }
         # 各 target 的 Wants 决定下次会话启动哪些服务；此处只重读文件。
-        stow_configs "$HOME" systemd
+        stow_configs user "$HOME" systemd
         run systemctl --user daemon-reload
         ;;
     firefox)
@@ -77,7 +127,7 @@ case "$step" in
         (($# == 1)) || { echo '用法：./install.sh [--check] firefox PROFILE目录' >&2; exit 1; }
         profile=$(realpath -e -- "$1")
         [[ -f $profile/prefs.js ]] || { echo '请选择已有 Firefox profile 的根目录。' >&2; exit 1; }
-        stow_configs "$profile" firefox
+        stow_configs user "$profile" firefox
         ;;
     etc)
         action=${1:-install}
@@ -172,15 +222,18 @@ case "$step" in
 用法：./install.sh [--check] 步骤 [参数]
 
   packages          按 packages/ 的当前包清单安装软件
-  home              链接 fish、fontconfig、chromium 和 local 到 HOME
-  kde               从远端安装 KDE 插件、主题与 ChatGPT 补丁，再应用设置
-  systemd           链接用户 unit 并重读配置，不启动服务
+  user [包…]        链接 user/ 的日常配置；省略包名时部署默认清单
+  dev [包…]         链接 dev/ 的开发配置；省略包名时部署默认清单
+  de-wm kde         只链接 de-wm/kde/ 的本地桌面配置
+  kde               链接本地 KDE 配置，安装远端组件，再应用设置
+  systemd           链接 user/systemd/ 的用户 unit 并重读配置，不启动服务
   firefox PROFILE   链接 Firefox 配置到明确指定的已有 profile
   etc [操作] [文件…]  install：部署（默认）；diff：比较；export：实机同步回仓库
   firmware          用 run0 将 private/ 中的 AVS 固件复制到 /usr/lib/firmware
   private           从手动迁移的 backup/ 复制私密 Fish 配置
 
 导出当前包清单：./scripts/packages.sh export
+Niri 配置保留在 de-wm/niri/，不参与任何安装步骤。
 先用 --check 查看；每个步骤独立运行。详细顺序见 README.md。
 USAGE
         ;;

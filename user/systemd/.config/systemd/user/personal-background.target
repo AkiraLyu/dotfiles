@@ -1,0 +1,8 @@
+# 已启用的 Wants 随用户管理器启动；部署前先恢复服务需要的程序和配置。
+[Unit]
+Description=Personal background services
+Wants=foxvault.service
+After=basic.target
+
+[Install]
+WantedBy=default.target

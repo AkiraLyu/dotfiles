@@ -52,7 +52,7 @@ case ${1:-} in
         fi
 
         # 第二步：刷新自有配方，再通过 Paru 安装 GitHub/AUR 包。
-        paru_config="$repo_dir/local/.config/paru/paru.conf"
+        paru_config="$repo_dir/user/paru/.config/paru/paru.conf"
         env PARU_CONF="$paru_config" paru --sudo run0 -Sy --pkgbuilds
         if ((${#foreign_packages[@]} + ${#foreign_dependencies[@]})); then
             env PARU_CONF="$paru_config" paru --sudo run0 -S --needed -- \

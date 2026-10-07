@@ -2,15 +2,15 @@
 
 [返回 README](../README.md)
 
-拾光日记的源码和应用文档由 [AkiraLyu/shiguang-diary](https://github.com/AkiraLyu/shiguang-diary) 独立维护。本仓库记录软件包安装和环境恢复方式，`home` 步骤不部署应用源码。
+拾光日记的源码和应用文档由 [AkiraLyu/shiguang-diary](https://github.com/AkiraLyu/shiguang-diary) 独立维护。本仓库记录软件包安装和环境恢复方式，`user` 步骤不部署应用源码。
 
 ## 安装
 
 按[安装指南](install.md#准备环境)准备基础工具和软件源后，从 dotfiles 仓库根目录执行：
 
 ```bash
-PARU_CONF="$PWD/local/.config/paru/paru.conf" paru --sudo run0 -Sy --pkgbuilds
-PARU_CONF="$PWD/local/.config/paru/paru.conf" paru --sudo run0 -S --needed shiguang-diary
+PARU_CONF="$PWD/user/paru/.config/paru/paru.conf" paru --sudo run0 -Sy --pkgbuilds
+PARU_CONF="$PWD/user/paru/.config/paru/paru.conf" paru --sudo run0 -S --needed shiguang-diary
 shiguang-diary
 ```
 
@@ -23,7 +23,7 @@ shiguang-diary
 配方更新后，重新执行安装命令前先刷新 `pkgbuilds`。需要重新构建已安装版本时，使用：
 
 ```bash
-PARU_CONF="$PWD/local/.config/paru/paru.conf" paru --sudo run0 --rebuild -S shiguang-diary
+PARU_CONF="$PWD/user/paru/.config/paru/paru.conf" paru --sudo run0 --rebuild -S shiguang-diary
 ```
 
 重新构建使用配方固定的源码提交，不会自动选择上游最新提交。发布新的包版本时，在 `pkgbuilds` 中更新源码提交及版本信息，并重新生成 `.SRCINFO`。

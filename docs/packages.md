@@ -39,7 +39,7 @@ git diff -- packages/
 `./install.sh packages` 调用包管理脚本，依次执行：
 
 1. 通过 `pacman -Syu --needed` 升级并安装软件源中的显式包，再补齐依赖包。
-2. 使用仓库的 [Paru 配置](../local/.config/paru/paru.conf)刷新远端 PKGBUILD，再安装 `foreign` 包。
+2. 使用仓库的 [Paru 配置](../user/paru/.config/paru/paru.conf)刷新远端 PKGBUILD，再安装 `foreign` 包。
 3. 使用 `pacman -D` 恢复显式安装和依赖安装的标记，包括被 `--needed` 跳过的已有包。
 
 Paru 从 [AkiraLyu/pkgbuilds](https://github.com/AkiraLyu/pkgbuilds) 和 AUR 查找配方。清单中的包改名、删除或尚未发布时，需要先调整清单或恢复配方，再继续安装。
@@ -66,6 +66,6 @@ Flatpak 微信和 Cargo 安装的 Carillon 见[桌面与应用](desktop.md)，�
 | 自有元包及应用 PKGBUILD | [AkiraLyu/pkgbuilds](https://github.com/AkiraLyu/pkgbuilds) |
 | Gamescope、WPS FPS Unlock 和知乎导出器源码 | 对应配方声明的上游仓库 |
 
-本仓库不维护外部项目的源码副本或本地 PKGBUILD。修改远端配方时同步生成 `.SRCINFO`，供 Paru 读取包信息。拾光日记通过 `pkgbuilds` 中的配方安装，操作见[拾光日记](diary.md)。
+应用源码和软件包配方由对应项目维护，本仓库不保存本地 PKGBUILD。`de-wm/niri/` 保留的 Noctalia 录屏插件是 Niri 配置存档的一部分，不参与当前环境的安装。修改远端配方时同步生成 `.SRCINFO`，供 Paru 读取包信息。拾光日记通过 `pkgbuilds` 中的配方安装，操作见[拾光日记](diary.md)。
 
 应用数据、日记库和导出文件需要单独备份，不属于源码或软件包清单。

@@ -28,21 +28,22 @@
 
 | 路径 | 内容 | 部署入口 |
 | --- | --- | --- |
-| `fish/` | Shell、提示符、配色和环境变量 | `home` |
-| `fontconfig/` | 字体替换、回退和渲染规则 | `home` |
-| `chromium/` | Chromium、Chrome、Electron、Code、QQ 等启动参数 | `home` |
-| `local/` | 用户脚本、启动器和 Paru 配置 | `home` |
-| `nvim/`、`kitty/`、`tools/` | Neovim、Kitty 和其他工具配置 | [手动选择 Stow 包](docs/install.md#可选配置) |
-| `systemd/` | 用户服务及会话 target | `systemd` |
-| `firefox/` | 偏好设置、界面样式、首页和扩展规则文件 | `firefox PROFILE` |
+| `dev/` | Git、ClangFormat、Neovim、Code 启动参数和开发脚本 | `dev [包…]` |
+| `user/` | Shell、终端、字体、日常应用、Paru 和通用用户脚本 | `user [包…]` |
+| `user/systemd/` | 后台服务和通用图形会话 target | `systemd` |
+| `user/firefox/` | Firefox 偏好设置、界面样式和扩展规则文件 | `firefox PROFILE` |
+| `de-wm/kde/` | KDE Portal、D-Bus 服务和会话脚本 | `de-wm kde`；完整安装用 `kde` |
+| `de-wm/niri/` | Niri、Noctalia、Portal 和 Niri 专用用户服务 | 仅保留，不链接到家目录 |
 | `etc/` | 软件源、Chrome 策略、构建参数、引导和硬件配置 | `etc` |
 | `packages/` | 按来源和安装原因分类的包清单 | `packages` |
 | `scripts/packages.sh` | 包清单的导出、检查和安装 | 见[软件包与源码](docs/packages.md) |
 
 ## 部署约定
 
-Stow 使用逐文件相对链接，保留目标目录。目标已有不同的独立文件时会报告冲突；比较内容并处理冲突后再部署，安装入口不使用 `--adopt` 接管文件。部署后保留仓库路径，修改已链接的配置会影响对应应用。
+`dev/`、`user/` 和 `de-wm/` 是 Stow 包的分组目录，下一层按应用或用途分包。每个包内的路径对应家目录；Firefox 包内的路径对应指定的浏览器配置目录。新增配置时归入对应分组，并在安装脚本中明确登记部署范围。
+
+Stow 使用逐文件相对链接，保留目标目录。`.local/share/` 的目录不得整体链接到仓库，具体限制见[链接规则](docs/install.md#链接规则)。目标已有不同的独立文件时会报告冲突；比较内容并处理冲突后再部署，安装入口不使用 `--adopt` 接管文件。部署后保留仓库路径，修改已链接的配置会影响对应应用。安装脚本不自动遍历分组目录，`de-wm/niri/` 不参与部署。
 
 `/etc` 文件按[系统配置](docs/system.md)中的规则链接或复制。软件包仅记录包名和安装原因，恢复时使用当前软件源版本。
 
-`backup/` 和 `private/` 不进入 Git，需要单独备份和迁移。Fish 历史、运行状态和凭据也不由普通配置部署管理。`dotfile/` 是被排除的旧仓库存档，不参与安装。
+`backup/` 和 `private/` 不进入 Git，需要单独备份和迁移。Fish 历史、运行状态、凭据和 Neovim 插件锁文件保存在家目录，不由普通配置部署管理。`dotfile/` 是被排除的旧仓库存档，不参与安装。

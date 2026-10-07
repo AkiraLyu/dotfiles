@@ -1,0 +1,314 @@
+[bar.default]
+background_opacity = 0.19999999552965164
+center = [ "workspaces", "recorder" ]
+font_family = "Noto Sans CJK SC"
+margin_ends = 0
+padding = 6
+radius_top_left = 0
+radius_top_right = 0
+scale = 0.90000000596046448
+shadow = false
+start = [
+    "launcher",
+    "wallpaper",
+    "theme_mode",
+    "caffeine",
+    "clock",
+    "spacer-m",
+    "cpu",
+    "temp",
+    "ram",
+    "sysmon",
+    "spacer_t",
+    "active_window"
+]
+thickness = 22
+
+[desktop_widgets]
+schema_version = 2
+widget_order = []
+
+    [desktop_widgets.grid]
+    cell_size = 16
+    major_interval = 4
+    visible = true
+
+    [desktop_widgets.widget]
+
+[dock]
+concave_edge_corners = false
+cross_axis_padding = 0
+enabled = true
+icon_size = 36
+item_spacing = 0
+launcher_position = "start"
+main_axis_padding = 0
+pinned = [ "firefox", "kitty", "org.kde.dolphin" ]
+radius = 32
+reserve_space = false
+show_dots = true
+smart_auto_hide = true
+
+[location]
+address = "ChengDu, China"
+
+[lockscreen_widgets]
+enabled = true
+schema_version = 2
+widget_order = [
+    "lockscreen-login-box@eDP-1",
+    "lockscreen-widget-0000000000000001",
+    "lockscreen-widget-0000000000000002",
+    "lockscreen-widget-0000000000000003"
+]
+
+    [lockscreen_widgets.grid]
+    cell_size = 16
+    major_interval = 4
+    visible = true
+
+    [lockscreen_widgets.widget."lockscreen-login-box@eDP-1"]
+    box_height = 196.0
+    box_width = 720.0
+    cx = 768.0
+    cy = 745.0
+    output = "eDP-1"
+    placement_height = 864.0
+    placement_width = 1536.0
+    rotation = 0.0
+    type = "login_box"
+
+        [lockscreen_widgets.widget."lockscreen-login-box@eDP-1".settings]
+        background_color = "surface_variant"
+        background_opacity = 0.88
+        background_radius = 12.0
+        center_password_text = false
+        input_opacity = 1.0
+        input_radius = 6.0
+        layout = "regular"
+        show_caps_lock = true
+        show_keyboard_layout = true
+        show_login_button = true
+        show_media = true
+        show_session_buttons = true
+        show_unlock_hint = true
+        show_weather = true
+
+    [lockscreen_widgets.widget.lockscreen-widget-0000000000000001]
+    box_height = 192.0
+    box_width = 336.0
+    cx = 920.0
+    cy = 464.0
+    output = "eDP-1"
+    placement_height = 864.0
+    placement_width = 1536.0
+    rotation = 0.0
+    type = "media_player"
+
+    [lockscreen_widgets.widget.lockscreen-widget-0000000000000002]
+    box_height = 80.0
+    box_width = 192.0
+    cx = 544.0
+    cy = 512.0
+    output = "eDP-1"
+    placement_height = 864.0
+    placement_width = 1536.0
+    rotation = 0.0
+    type = "weather"
+
+    [lockscreen_widgets.widget.lockscreen-widget-0000000000000003]
+    box_height = 80.0
+    box_width = 192.0
+    cx = 544.0
+    cy = 408.0
+    output = "eDP-1"
+    placement_height = 864.0
+    placement_width = 1536.0
+    rotation = 0.0
+    type = "clock"
+
+        [lockscreen_widgets.widget.lockscreen-widget-0000000000000003.settings]
+        clock_style = "digital"
+
+[plugin_settings."noctalia/notes"]
+panel_placement = "attached"
+
+[plugin_settings."noctalia/screen_recorder"]
+video_source = "focused"
+
+[plugins]
+enabled = [ "noctalia/screen_recorder" ]
+
+[shell]
+avatar_path = "/home/akira/Pictures/akiras/akira.jpg"
+niri_overview_type_to_launch_enabled = true
+screen_time_enabled = true
+
+    [shell.launcher]
+    app_grid = true
+
+    [shell.panel]
+    launcher_placement = "attached"
+
+    [[shell.session.actions]]
+    action = "lock"
+    countdown_seconds = 0.0
+    enabled = true
+    shortcut = "1"
+    variant = "default"
+
+    [[shell.session.actions]]
+    action = "logout"
+    countdown_seconds = 0.0
+    enabled = true
+    shortcut = "2"
+    variant = "default"
+
+    [[shell.session.actions]]
+    action = "lock_and_suspend"
+    countdown_seconds = 0.0
+    enabled = true
+    shortcut = "3"
+    variant = "default"
+
+    [[shell.session.actions]]
+    action = "reboot"
+    countdown_seconds = 0.0
+    enabled = true
+    shortcut = "4"
+    variant = "default"
+
+    [[shell.session.actions]]
+    action = "shutdown"
+    countdown_seconds = 0.0
+    enabled = true
+    shortcut = "5"
+    variant = "destructive"
+
+    [[shell.session.actions]]
+    action = "command"
+    command = "systemctl hibernate"
+    countdown_seconds = 0.0
+    enabled = true
+    glyph = "hibernate"
+    label = "休眠"
+    shortcut = "6"
+    variant = "default"
+
+[theme]
+mode = "light"
+
+[wallpaper]
+enabled = false
+
+    [wallpaper.default]
+    path = "/home/akira/Pictures/Wallpapers/143650895_p0.png"
+
+    [wallpaper.last]
+    path = "/home/akira/Pictures/Wallpapers/143650895_p0.png"
+
+    [wallpaper.monitors.eDP-1]
+    path = "/home/akira/Pictures/Wallpapers/143650895_p0.png"
+
+[widget.active_window]
+capsule = true
+max_length = 120
+title_scroll = "on_hover"
+
+[widget.battery]
+capsule = true
+
+[widget.brightness]
+show_label = false
+
+[widget.caffeine]
+capsule = true
+
+[widget.cat]
+type = "noctalia/bongocat:cat"
+
+[widget.clipboard]
+capsule = true
+
+[widget.clock]
+capsule = true
+enabled = true
+format = "{:L%H:%M 周%a %-m月%d}"
+
+[widget.control-center]
+capsule = true
+glyph = "navigation-filled"
+
+[widget.cpu]
+show_label = false
+
+[widget.launcher]
+capsule = true
+glyph = "rocket"
+
+[widget.media]
+hide_when_no_media = true
+max_length = 180
+scroll_repeat = "gesture"
+title_scroll = "on_hover"
+
+    [widget.media.actions]
+    back = "media next"
+    forward = "media previous"
+    scroll_down = "media next"
+    scroll_up = "media previous"
+
+[widget.network]
+show_label = false
+
+[widget.notes]
+type = "noctalia/notes:notes"
+
+[widget.notifications]
+capsule = true
+
+[widget.ram]
+show_label = false
+
+[widget.recorder]
+type = "noctalia/screen_recorder:recorder"
+
+[widget.session]
+capsule = true
+
+[widget.spacer-m]
+length = 10
+type = "spacer"
+
+[widget.spacer_t]
+length = 10
+type = "spacer"
+
+[widget.sysmon]
+stat = "swap_pct"
+
+[widget.temp]
+show_label = false
+
+[widget.theme_mode]
+capsule = true
+
+[widget.tray]
+capsule = true
+enabled = true
+
+[widget.volume]
+show_label = false
+
+    [widget.volume.actions]
+    scroll_down = "volume-up"
+    scroll_up = "volume-down"
+
+[widget.wallhaven]
+type = "noctalia/wallhaven:wallhaven"
+
+[widget.wallpaper]
+capsule = true
+
+[widget.workspaces]
+capsule = true
