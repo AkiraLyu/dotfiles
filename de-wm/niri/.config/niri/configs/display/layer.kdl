@@ -1,5 +1,7 @@
+// Sink the Noctalia wallpaper into the backdrop so waywallen's wallpaper draws
+// above it in the regular background layer.
 layer-rule {
-  match namespace="waywallen-wallpaper"
+  match namespace="^noctalia-wallpaper$"
   place-within-backdrop true
 }
 
@@ -15,10 +17,10 @@ overview {
 }
 
 blur {
-  passes 2        // more passes = stronger blur (default: 3)
+  passes 1        // more passes = stronger blur (default: 3)
   offset 3.0      // sample distance per pass (default: 3.0)
   noise 0.03      // grain overlay (default: 0.02)
-  saturation 1.0  // color saturation boost (default: 1.5)
+  saturation 2.0  // color saturation boost (default: 1.5)
 }
 
 window-rule {
@@ -33,6 +35,8 @@ layer-rule {
   match namespace="^noctalia-(background|launcher-overlay)-.*$"
   match namespace="^noctalia-bar-default$"
   match namespace="^noctalia-attached-panel$"
+  match namespace="noctalia-notification"
+  match namespace="noctalia-osd"
   background-effect {
     blur true
     xray false

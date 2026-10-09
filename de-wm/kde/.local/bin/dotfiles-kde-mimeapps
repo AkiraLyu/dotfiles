@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Stow 链接和直接从仓库运行时都使用同一份源码。
+script_path=$(readlink -f -- "$0")
+source_dir=$(dirname -- "$script_path")/../scripts/apps/desktop/kde-mimeapps
+source_dir=$(realpath -- "$source_dir")
+source_id=$(printf '%s' "$source_dir" | sha256sum | cut -c 1-16)
+build_dir=${XDG_CACHE_HOME:-$HOME/.cache}/dotfiles/kde-mimeapps/$source_id
+
+# CMake 负责依赖和增量构建；生成的文件全部保存在缓存目录。
+if ! build_log=$(cmake -S "$source_dir" -B "$build_dir" \
+    -DCMAKE_BUILD_TYPE=Release 2>&1); then
+    printf '%s\n' "$build_log" >&2
+    exit 1
+fi
+if ! build_log=$(cmake --build "$build_dir" 2>&1); then
+    printf '%s\n' "$build_log" >&2
+    exit 1
+fi
+
+exec "$build_dir/kde-mimeapps-export" "$@"

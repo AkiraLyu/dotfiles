@@ -30,8 +30,8 @@ window-rule {
 window-rule {
     match app-id="org.kde.dolphin"
     open-floating true
-    // default-column-width { fixed 990; }
-    // default-window-height { fixed 620; }
+    default-column-width { fixed 885; }
+    default-window-height { fixed 620; }
 }
 
 window-rule {
@@ -81,3 +81,11 @@ window-rule {
     match app-id="org.mozilla.Thunderbird"
     default-column-width { fixed 1032; }
 }
+
+window-rule {
+    match app-id="org.waywallen.waywallen"
+    open-floating true
+    default-column-width { fixed 940; }
+    default-window-height { fixed 710; }
+}
+
