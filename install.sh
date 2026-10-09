@@ -112,7 +112,7 @@ case "$step" in
         stow_configs de-wm "$HOME" kde
         run env PARU_CONF="$repo_dir/user/paru/.config/paru/paru.conf" paru --sudo run0 -Sy --pkgbuilds
         run env PARU_CONF="$repo_dir/user/paru/.config/paru/paru.conf" paru --sudo run0 \
-            -S --needed kde-config chatgpt-translucent-bars
+            -S --needed kde-config chatgpt-translucent-bars kde-mimeapps-export
         run kde-config
         ;;
     systemd)

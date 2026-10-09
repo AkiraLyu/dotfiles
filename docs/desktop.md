@@ -23,6 +23,23 @@ kde-config
 
 安装新原生模块后重新打开对应应用；KWin ABI 更新后重新编译相关效果插件并重新登录。
 
+### 文件关联
+
+[kde-mimeapps-export](https://github.com/AkiraLyu/kde-mimeapps-export) 使用 KDE 的 KService 接口读取实际生效的默认应用和候选顺序，包含用户设置、MIME 继承和 URL 协议，可以在 Niri 会话中运行。源码由独立项目维护，Arch 配方由 [pkgbuilds](https://github.com/AkiraLyu/pkgbuilds/tree/main/kde-mimeapps-export) 维护。
+
+`./install.sh kde` 会安装该命令。单独安装并同步关联时执行：
+
+```bash
+paru --sudo run0 -Sy --pkgbuilds
+paru --sudo run0 -S kde-mimeapps-export
+kde-mimeapps-export --dry-run
+kde-mimeapps-export
+```
+
+默认更新 `$XDG_CONFIG_HOME/mimeapps.list`，未设置该变量时为 `~/.config/mimeapps.list`。使用 `--output 路径` 可以指定其他输出文件。写入使用原子替换，保留已有文件链接和有效的移除关联；内容相同时不重写文件。
+
+生成结果成为 KDE 的用户级关联，包含原先通过继承或回退得到的选择。在 KDE 中修改默认应用后，重新运行命令即可同步。
+
 ### 明暗主题
 
 在 Fish 中使用 `theme`：

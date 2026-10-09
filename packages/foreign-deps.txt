@@ -1,1 +1,6 @@
 gtkmm
+lib32-libvdpau
+lib32-libwebp
+lib32-orc
+wechat-bin
+xcb-imdkit-git
