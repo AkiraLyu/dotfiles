@@ -1,5 +1,4 @@
-# 暂时只保留 target 的会话关系，不自动启动旧服务。
-# 恢复对应程序后，再按需取消下面 Wants= 行的注释。
+# 已启用的 Wants 随 Niri 会话启动；部署前先恢复服务需要的程序和配置。
 [Unit]
 Description=Personal Niri session services
 Requisite=niri.service

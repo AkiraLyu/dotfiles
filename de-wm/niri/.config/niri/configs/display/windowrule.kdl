@@ -31,21 +31,16 @@ window-rule {
 window-rule {
     match app-id="dolphin"
 
-//     popups {
-//         // Matches the default libadwaita pop-up corner radius.
-//         geometry-corner-radius 15
-//
-//         // Note: it'll look better to set background opacity
-//         // through your GTK theme CSS and not here.
-//         // This is just an example that makes it look obvious.
-//         opacity 0.8
-//
-//         background-effect {
-//             blur true
-//             // Unlike normal windows, popups default to "xray false"
-//             xray false
-//         }
-//     }
+    popups {
+        geometry-corner-radius 12
+        shadow {
+            on
+            softness 10
+             spread 2
+            offset x=0 y=5
+            color "#0007"
+        }
+    }
 }
 
 window-rule {
@@ -56,4 +51,14 @@ window-rule {
     shadow {
         off
     }
+}
+
+window-rule {
+    match app-id="netease-cloud-music-web-player"
+    default-column-width { fixed 1100; }
+}
+
+window-rule {
+    match app-id="md.obsidian.Obsidian"
+    opacity 0.999
 }
