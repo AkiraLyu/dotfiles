@@ -77,7 +77,8 @@
     background-image: none !important;
   }
 
-  #main-window:has(
+  /* 全屏时书签栏被原生样式隐藏，侧栏无需向上延伸。 */
+  #main-window:not([inFullscreen]):has(
       #PersonalToolbar:not([collapsed], [moz-collapsed], [hidden])
     )
     #sidebar-box:not([positionend], [sidebar-positionend]) {

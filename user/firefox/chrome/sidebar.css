@@ -7,10 +7,6 @@
   --uc-sidebar-hover-width: 300px;
 }
 
-#main-window[sizemode="fullscreen"] #browser {
-  --uc-sidebar-width: 1px;
-}
-
 #sidebar-box {
   --uc-autohide-sidebar-delay: 150ms;
   --uc-autohide-transition-duration: 115ms;
