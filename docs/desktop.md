@@ -62,7 +62,6 @@ Qt 控件和窗口装饰使用 Darkly，GTK 同步明暗偏好，Plasma 样式�
 | --- | --- | --- |
 | Kate | `kate-translucent-bars` | `kate-translucent` 启动器启用透明边栏插件；桌面入口由 `kde-config` 设置 |
 | 微信 | `wechat-glass-live` | 为 XWayland 微信提供透明效果，通过 `wechat-glass-control` 管理 |
-| ChatGPT Desktop | `chatgpt-translucent-bars` | 应用或补丁包更新后，由 pacman 钩子重新应用 ASAR 补丁 |
 
 微信使用 Flatpak 应用 `com.tencent.WeChat`，需要单独安装。安装后运行 `kde-config` 设置 XWayland 参数，再完全退出并重新打开微信。效果状态和背景不透明度通过以下命令管理：
 
@@ -71,15 +70,20 @@ wechat-glass-control status
 wechat-glass-control opacity 0.52
 ```
 
-`chatgpt-desktop` 本体来自 AUR。补丁会修改其 ASAR 文件，因此完整性检查可能报告这一改动。更新后重新打开应用，无需手动运行补丁。
-
 ## Niri
 
-[de-wm/niri/](../de-wm/niri/) 保存 Niri 和 Noctalia 配置、录屏插件、Niri Portal 选择及专用 systemd 用户服务。它作为可维护的配置存档保留在 Git 中，不参与 Stow 部署，也不建立家目录中的会话依赖链接。
+[de-wm/niri/](../de-wm/niri/) 保存 Niri 配置、Portal 选择及专用 systemd 用户服务。通过 `./install.sh de-wm niri` 部署，并重读用户 unit；命令不会启动或重启服务，完整步骤见[安装指南](install.md#niri)。
 
-`config.kdl` 通过相对路径包含 `configs/` 中的输入、快捷键、窗口规则和显示设置。`personal-niri.target` 及其服务与这些配置放在同一包中，与 `user/systemd/` 的通用服务分开维护。
+`config.kdl` 通过相对路径包含 `configs/` 中的输入、快捷键、窗口规则和显示设置。`personal-niri.target` 通过 `niri.service.wants/` 随 Niri 服务启动，并管理 Noctalia、剪贴板监听和认证代理。这些专用服务与 `user/systemd/` 的通用服务分开部署。
 
-配置包含个人显示器名称、头像、壁纸和应用命令。用于其他环境前，应先核对这些路径和依赖，并用目标版本的 Niri 验证配置。Noctalia 录屏插件的设置和命令见[录屏插件](niri-screen-recorder.md)。
+Noctalia 的设置和插件由应用在家目录中管理，不包含在此配置包中。`config.kdl` 引用的 `~/.config/niri/noctalia.kdl` 也需独立恢复或由 Noctalia 生成。部署会保留这些未由仓库管理的文件。
+
+用于其他环境前，先核对显示器名称、个人路径和应用依赖。恢复 Noctalia 生成文件后，检查已部署的配置及会话服务：
+
+```bash
+niri validate -c "$HOME/.config/niri/config.kdl"
+systemctl --user status personal-niri.target niri-noctalia.service
+```
 
 ## Firefox
 

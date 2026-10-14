@@ -16,7 +16,7 @@ step=${1:-help}
 if (($#)); then shift; fi
 
 # 明确列出默认部署包；Firefox、用户服务和桌面配置由独立步骤管理。
-# 不遍历目录，避免把保留的 Niri 配置自动部署到 HOME。
+# 桌面配置只部署明确选择的会话，不自动遍历 de-wm/。
 user_packages=(chromium fish fontconfig foxvault kitty local mpv paru wireplumber yazi yt-dlp zathura)
 dev_packages=(clang-format code git nvim scripts)
 
@@ -101,18 +101,20 @@ case "$step" in
         stow_configs "$step" "$HOME" "${selected_packages[@]}"
         ;;
     de-wm)
-        [[ $# == 1 && $1 == kde ]] || {
-            echo '用法：./install.sh [--check] de-wm kde；Niri 配置仅保留，不部署。' >&2
+        [[ $# == 1 && ( $1 == kde || $1 == niri ) ]] || {
+            echo '用法：./install.sh [--check] de-wm {kde|niri}' >&2
             exit 1
         }
-        stow_configs de-wm "$HOME" kde
+        stow_configs de-wm "$HOME" "$1"
+        # Niri 包包含专用用户 unit；重读配置，启动仍由会话管理。
+        if [[ $1 == niri ]]; then run systemctl --user daemon-reload; fi
         ;;
     kde)
         (($# == 0)) || { echo '用法：./install.sh [--check] kde' >&2; exit 1; }
         stow_configs de-wm "$HOME" kde
         run env PARU_CONF="$repo_dir/user/paru/.config/paru/paru.conf" paru --sudo run0 -Sy --pkgbuilds
         run env PARU_CONF="$repo_dir/user/paru/.config/paru/paru.conf" paru --sudo run0 \
-            -S --needed kde-config chatgpt-translucent-bars kde-mimeapps-export
+            -S --needed kde-config kde-mimeapps-export
         run kde-config
         ;;
     systemd)
@@ -224,7 +226,7 @@ case "$step" in
   packages          按 packages/ 的当前包清单安装软件
   user [包…]        链接 user/ 的日常配置；省略包名时部署默认清单
   dev [包…]         链接 dev/ 的开发配置；省略包名时部署默认清单
-  de-wm kde         只链接 de-wm/kde/ 的本地桌面配置
+  de-wm {kde|niri}   链接指定会话的本地配置；Niri 额外重读用户 unit
   kde               链接本地 KDE 配置，安装远端组件，再应用设置
   systemd           链接 user/systemd/ 的用户 unit 并重读配置，不启动服务
   firefox PROFILE   链接 Firefox 配置到明确指定的已有 profile
@@ -233,7 +235,7 @@ case "$step" in
   private           从手动迁移的 backup/ 复制私密 Fish 配置
 
 导出当前包清单：./scripts/packages.sh export
-Niri 配置保留在 de-wm/niri/，不参与任何安装步骤。
+桌面配置按会话选择：./install.sh de-wm kde 或 ./install.sh de-wm niri。
 先用 --check 查看；每个步骤独立运行。详细顺序见 README.md。
 USAGE
         ;;

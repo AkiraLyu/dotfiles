@@ -97,7 +97,7 @@ cd "$HOME/dotfiles"
 ./install.sh kde
 ```
 
-此步骤先部署 `de-wm/kde/` 中的 Portal、D-Bus 服务和会话脚本，再刷新远端 PKGBUILD，安装 `kde-config`、`chatgpt-translucent-bars` 及其依赖，最后运行 `kde-config` 应用当前用户设置。主题、应用补丁和 Flatpak 微信的配置见[桌面与应用](desktop.md)。
+此步骤先部署 `de-wm/kde/` 中的 Portal、D-Bus 服务和会话脚本，再刷新远端 PKGBUILD，安装 `kde-config`、`kde-mimeapps-export` 及其依赖，最后运行 `kde-config` 应用当前用户设置。主题、应用补丁和 Flatpak 微信的配置见[桌面与应用](desktop.md)。
 
 只部署仓库内的 KDE 文件时执行：
 
@@ -106,7 +106,18 @@ cd "$HOME/dotfiles"
 ./install.sh de-wm kde
 ```
 
-`de-wm/niri/` 保存 Niri 配置、Noctalia 插件和专用服务。所有安装步骤均排除此目录，不向家目录建立 Niri 链接，详见 [Niri](desktop.md#niri)。
+### Niri
+
+先恢复 Niri、Noctalia、剪贴板和认证代理等依赖，再执行：
+
+```bash
+./install.sh --check de-wm niri
+./install.sh de-wm niri
+```
+
+此步骤将 `de-wm/niri/` 中的 Niri 配置、Portal 选择、专用用户服务和会话依赖链接部署到家目录，再运行 `systemctl --user daemon-reload`。部署采用[逐文件链接](#链接规则)，不会启动或重启当前会话及服务。
+
+`personal-niri.target` 通过 `niri.service.wants/` 随 Niri 服务启动，其 `Wants=` 管理 Noctalia、剪贴板监听和认证代理。通用后台与图形服务仍由下文的 `systemd` 步骤部署。Noctalia 用户设置和生成文件需独立恢复，配置检查方法见 [Niri](desktop.md#niri)。
 
 ### Firefox
 
@@ -158,7 +169,7 @@ cd "$HOME/dotfiles"
 | `personal-background.target` | 用户管理器的 `default.target` 启动时 |
 | `personal-graphical.target` | 图形会话启动时 |
 
-target 引用的服务可能由外部软件包提供，例如 `foxvault.service` 和 `theme-sync.service`。OneDrive 还需要恢复 rclone 的 `onedrive` 远端，并保证当前用户能写入 `/mnt/network/onedrive` 和 `/mnt/network/cache/onedrive`。`personal-niri.target` 及其服务保存在 `de-wm/niri/`，不由此步骤部署。
+target 引用的服务可能由外部软件包提供，例如 `foxvault.service` 和 `theme-sync.service`。OneDrive 还需要恢复 rclone 的 `onedrive` 远端，并保证当前用户能写入 `/mnt/network/onedrive` 和 `/mnt/network/cache/onedrive`。`personal-niri.target` 及其服务保存在 `de-wm/niri/`，由 `./install.sh de-wm niri` 部署。
 
 修改 target 后重新运行 `./install.sh systemd`。如需在当前图形会话启动已配置的 Carillon，可执行：
 
@@ -182,6 +193,7 @@ Fish 历史、变量、私密配置和 Neovim 的 `lazy-lock.json` 由安装入�
 | 步骤 | `--check` 的行为 |
 | --- | --- |
 | `user`、`dev`、`de-wm kde` | 检查包名、部署源目录和符号链接，再模拟对应分组的 Stow 部署 |
+| `de-wm niri` | 检查部署源并模拟 Niri 配置部署，再显示重读用户 unit 的命令 |
 | `systemd` | 模拟用户服务部署，并显示重读配置命令 |
 | `firefox` | 检查目标目录及 `prefs.js`，再模拟 Stow 部署 |
 | `packages` | 查询本机已安装包，列出清单中缺少的包名 |

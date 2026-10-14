@@ -6,7 +6,6 @@ archive-tools-meta
 baidunetdisk-bin
 binaryninja-free
 chatgpt-desktop
-chatgpt-translucent-bars
 clash-verge-rev-bin
 darkly-bin
 darkly-translucent

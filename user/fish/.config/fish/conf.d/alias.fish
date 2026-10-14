@@ -5,6 +5,10 @@ alias vi=/bin/vim
 alias cat=bat
 alias rm='trash-put'
 alias cls="printf '\e[H\e[3J'"
+if status is-interactive
+    abbr --add --command cd -- ... ../..
+    abbr --add --command cd -- .... ../../..
+end
 
 # scripts
 alias snap="~/.local/scripts/backup/btrfs/snapshots.fish create"

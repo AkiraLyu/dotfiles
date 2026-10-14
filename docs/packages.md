@@ -66,6 +66,6 @@ Flatpak 微信和 Cargo 安装的 Carillon 见[桌面与应用](desktop.md)，�
 | 自有元包及应用 PKGBUILD | [AkiraLyu/pkgbuilds](https://github.com/AkiraLyu/pkgbuilds) |
 | Gamescope、WPS FPS Unlock 和知乎导出器源码 | 对应配方声明的上游仓库 |
 
-应用源码和软件包配方由对应项目维护，本仓库不保存本地 PKGBUILD。`de-wm/niri/` 保留的 Noctalia 录屏插件是 Niri 配置存档的一部分，不参与当前环境的安装。修改远端配方时同步生成 `.SRCINFO`，供 Paru 读取包信息。拾光日记通过 `pkgbuilds` 中的配方安装，操作见[拾光日记](diary.md)。
+应用源码和软件包配方由对应项目维护，本仓库不保存本地 PKGBUILD。Niri 的会话配置和服务通过 `de-wm niri` 部署；Noctalia 的用户设置和插件由应用管理。修改远端配方时同步生成 `.SRCINFO`，供 Paru 读取包信息。拾光日记通过 `pkgbuilds` 中的配方安装，操作见[拾光日记](diary.md)。
 
 应用数据、日记库和导出文件需要单独备份，不属于源码或软件包清单。
