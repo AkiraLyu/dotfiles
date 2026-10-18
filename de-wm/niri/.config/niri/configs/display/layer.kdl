@@ -1,7 +1,8 @@
 // Sink the Noctalia wallpaper into the backdrop so waywallen's wallpaper draws
 // above it in the regular background layer.
 layer-rule {
-  match namespace="^noctalia-wallpaper$"
+  // match namespace="^noctalia-wallpaper$"
+  match namespace="waywallen-wallpaper"
   place-within-backdrop true
 }
 

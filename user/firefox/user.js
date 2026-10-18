@@ -17,5 +17,3 @@ user_pref("full-screen-api.transition-duration.leave", "0 0");
 user_pref("ui.scrollToClick", 1);
 user_pref("browser.nova.enabled", true);
 user_pref("browser.fullscreen.autohide", false);
-// user_pref("font.name.system-ui.x-western", "sans-serif");
-// user_pref("font.name.system-ui.zh-CN", "sans-serif");
