@@ -1,0 +1,379 @@
+#!/usr/bin/env bash
+#
+# git-bot — 临时把全局 Git 身份切换为 bot 身份，并可恢复原身份。
+#
+# 使用 on 时把当前全局 user.name / user.email 备份到状态目录，再写入 bot 身份；
+# 使用 off 时按备份恢复。备份会持久保存，即使切换后关闭终端也可以恢复。
+#
+set -euo pipefail
+
+PROGRAM=${0##*/}
+
+: "${HOME:?环境变量 HOME 未设置}"
+
+XDG_STATE_HOME=${XDG_STATE_HOME:-"$HOME/.local/state"}
+STATE_DIR=$XDG_STATE_HOME/git-bot
+BACKUP_DIR=$STATE_DIR/backup
+
+SCRIPT_PATH=$(readlink -f -- "${BASH_SOURCE[0]}")
+SCRIPT_DIR=${SCRIPT_PATH%/*}
+REPO_ROOT=$(cd -- "$SCRIPT_DIR/../../../.." 2>/dev/null && pwd || true)
+DEFAULT_IDENTITY_FILE=${REPO_ROOT:+$REPO_ROOT/private/bot}
+
+COMMAND=''
+EXPLICIT_IDENTITY_FILE=''
+IDENTITY_NAME=''
+IDENTITY_EMAIL=''
+TMP_DIR=''
+
+cleanup() {
+    if [[ -n $TMP_DIR && -d $TMP_DIR ]]; then
+        rm -rf -- "$TMP_DIR"
+    fi
+}
+trap cleanup EXIT
+
+die() {
+    printf '%s：%s\n' "$PROGRAM" "$*" >&2
+    exit 1
+}
+
+info() {
+    printf '%s\n' "$*"
+}
+
+require_git() {
+    command -v git >/dev/null 2>&1 || die "找不到 git"
+}
+
+usage() {
+    cat <<EOF
+用法：
+  $PROGRAM on        备份当前全局身份，并切换为 bot 身份
+  $PROGRAM off       恢复临时切换前的全局身份
+  $PROGRAM status    查看当前身份和临时模式状态
+
+选项：
+  -f, --file PATH    指定 bot 身份文件
+  -h, --help         显示本帮助
+
+身份文件按 name、email 两项书写，值可以写在同一行，也可以写在冒号的下一行：
+
+  name:
+  akiralyu-agent[bot]
+
+  email:
+  345336109+akiralyu-agent[bot]@users.noreply.github.com
+
+未指定 --file 时，使用仓库 private 目录下的身份文件：
+  ${DEFAULT_IDENTITY_FILE:-无法定位，请用 --file 指定}
+
+原身份的备份保存在：
+  $BACKUP_DIR
+EOF
+}
+
+trim() {
+    local value=$1
+    value=${value#"${value%%[![:space:]]*}"}
+    value=${value%"${value##*[![:space:]]}"}
+    printf '%s' "$value"
+}
+
+assign_identity() {
+    case $1 in
+        name) IDENTITY_NAME=$2 ;;
+        email) IDENTITY_EMAIL=$2 ;;
+    esac
+}
+
+parse_identity_file() {
+    local file=$1 line key='' value=''
+
+    IDENTITY_NAME=''
+    IDENTITY_EMAIL=''
+
+    while IFS= read -r line || [[ -n $line ]]; do
+        line=$(trim "${line%$'\r'}")
+        [[ -z $line || $line == \#* ]] && continue
+
+        if [[ $line =~ ^(name|email):[[:space:]]*(.*)$ ]]; then
+            [[ -z $key ]] || die "身份文件 $file 中的 $key 缺少值"
+            key=${BASH_REMATCH[1]}
+            value=$(trim "${BASH_REMATCH[2]}")
+            if [[ -n $value ]]; then
+                assign_identity "$key" "$value"
+                key=''
+            fi
+            continue
+        fi
+
+        if [[ -n $key ]]; then
+            assign_identity "$key" "$line"
+            key=''
+            continue
+        fi
+
+        die "无法解析身份文件 $file 的以下内容：$line"
+    done <"$file"
+
+    [[ -z $key ]] || die "身份文件 $file 中的 $key 缺少值"
+    [[ -n $IDENTITY_NAME ]] || die "身份文件 $file 缺少 name"
+    [[ -n $IDENTITY_EMAIL ]] || die "身份文件 $file 缺少 email"
+    [[ $IDENTITY_EMAIL =~ ^[^[:space:]@]+@[^[:space:]@]+$ ]] ||
+        die "身份文件 $file 中的 email 无效：$IDENTITY_EMAIL"
+}
+
+find_identity_file() {
+    if [[ -n $EXPLICIT_IDENTITY_FILE ]]; then
+        [[ -f $EXPLICIT_IDENTITY_FILE ]] ||
+            die "身份文件不存在：$EXPLICIT_IDENTITY_FILE"
+        printf '%s\n' "$EXPLICIT_IDENTITY_FILE"
+        return
+    fi
+
+    [[ -n $DEFAULT_IDENTITY_FILE ]] ||
+        die "无法从脚本位置定位默认身份文件，请用 --file 指定"
+
+    [[ -f $DEFAULT_IDENTITY_FILE ]] ||
+        die "找不到身份文件：$DEFAULT_IDENTITY_FILE（用 --file 指定其他文件）"
+
+    printf '%s\n' "$DEFAULT_IDENTITY_FILE"
+}
+
+backup_key() {
+    local key=$1 file=$2 status=0
+    git config --global --get-all "$key" >"$file" 2>/dev/null || status=$?
+    case $status in
+        0) : >"$file.present" ;;
+        1) : ;;
+        *) die "读取全局 $key 失败（git 退出码 $status）" ;;
+    esac
+}
+
+backup_identity() {
+    local source=$1
+    mkdir -p -- "$STATE_DIR"
+    [[ ! -e $BACKUP_DIR ]] || die "备份已存在：$BACKUP_DIR"
+
+    TMP_DIR=$(mktemp -d -- "$STATE_DIR/.backup.XXXXXX")
+
+    backup_key user.name "$TMP_DIR/name"
+    backup_key user.email "$TMP_DIR/email"
+
+    printf '%s\n' "$source" >"$TMP_DIR/source"
+    printf '%s\n' "$IDENTITY_NAME" >"$TMP_DIR/bot-name"
+    printf '%s\n' "$IDENTITY_EMAIL" >"$TMP_DIR/bot-email"
+    date '+%Y-%m-%d %H:%M:%S %z' >"$TMP_DIR/backed-up-at"
+
+    mv -- "$TMP_DIR" "$BACKUP_DIR"
+    TMP_DIR=''
+}
+
+apply_bot_identity() {
+    git config --global --replace-all user.name "$IDENTITY_NAME"
+    git config --global --replace-all user.email "$IDENTITY_EMAIL"
+}
+
+restore_key() {
+    local key=$1 file=$2 value status=0
+    git config --global --unset-all "$key" >/dev/null 2>&1 || status=$?
+    case $status in
+        0|5) : ;;
+        *) die "清除全局 $key 失败（git 退出码 $status）" ;;
+    esac
+
+    [[ -f $file.present ]] || return 0
+
+    while IFS= read -r value || [[ -n $value ]]; do
+        git config --global --add "$key" "$value"
+    done <"$file"
+}
+
+require_backup() {
+    [[ -d $BACKUP_DIR ]] ||
+        die "当前未处于临时 bot 模式（找不到备份 $BACKUP_DIR）"
+
+    local file
+    for file in name email source bot-name bot-email backed-up-at; do
+        [[ -f $BACKUP_DIR/$file ]] || die "备份不完整：缺少 $BACKUP_DIR/$file"
+    done
+}
+
+remove_backup() {
+    case $BACKUP_DIR in
+        "$STATE_DIR"/backup) rm -rf -- "$BACKUP_DIR" ;;
+        *) die "拒绝删除异常路径：$BACKUP_DIR" ;;
+    esac
+}
+
+read_file_or_placeholder() {
+    local file=$1
+    if [[ -f $file ]]; then
+        local value
+        value=$(<"$file")
+        printf '%s' "$value"
+    else
+        printf '（缺失）'
+    fi
+}
+
+show_global_key() {
+    local key=$1 value
+    if git config --global --get-all "$key" >/dev/null 2>&1; then
+        while IFS= read -r value || [[ -n $value ]]; do
+            printf '  %-11s %s\n' "$key" "$value"
+        done < <(git config --global --get-all "$key")
+    else
+        printf '  %-11s %s\n' "$key" "（未设置）"
+    fi
+}
+
+show_effective_key() {
+    local key=$1 value
+    if value=$(git config --get "$key" 2>/dev/null); then
+        printf '  %-11s %s\n' "$key" "$value"
+    else
+        printf '  %-11s %s\n' "$key" "（未设置）"
+    fi
+}
+
+show_backup_key() {
+    local key=$1 file=$2 value
+    if [[ -f $file.present ]]; then
+        if [[ ! -f $file ]]; then
+            printf '  %-11s %s\n' "$key" "（备份缺失）"
+            return
+        fi
+        while IFS= read -r value || [[ -n $value ]]; do
+            printf '  %-11s %s\n' "$key" "$value"
+        done <"$file"
+    else
+        printf '  %-11s %s\n' "$key" "（未设置）"
+    fi
+}
+
+cmd_on() {
+    local file
+    file=$(find_identity_file)
+    parse_identity_file "$file"
+
+    if [[ -d $BACKUP_DIR ]]; then
+        apply_bot_identity
+        printf '%s\n' "$IDENTITY_NAME" >"$BACKUP_DIR/bot-name"
+        printf '%s\n' "$IDENTITY_EMAIL" >"$BACKUP_DIR/bot-email"
+        printf '%s\n' "$file" >"$BACKUP_DIR/source"
+
+        info "临时 bot 身份已处于启用状态，已将身份更新为："
+        printf '  %-11s %s\n' "user.name" "$IDENTITY_NAME"
+        printf '  %-11s %s\n' "user.email" "$IDENTITY_EMAIL"
+        info "原全局身份的备份保持不变。"
+        return
+    fi
+
+    backup_identity "$file"
+    apply_bot_identity
+
+    info "已启用临时 bot 身份："
+    printf '  %-11s %s\n' "user.name" "$IDENTITY_NAME"
+    printf '  %-11s %s\n' "user.email" "$IDENTITY_EMAIL"
+    info "原全局身份已备份，运行 “$PROGRAM off” 可恢复。"
+}
+
+cmd_off() {
+    require_backup
+
+    local current_name current_email bot_name bot_email
+    current_name=$(git config --global --get user.name 2>/dev/null || true)
+    current_email=$(git config --global --get user.email 2>/dev/null || true)
+    bot_name=$(<"$BACKUP_DIR/bot-name")
+    bot_email=$(<"$BACKUP_DIR/bot-email")
+
+    if [[ $current_name != "$bot_name" || $current_email != "$bot_email" ]]; then
+        info "注意：当前全局身份与备份记录的 bot 身份不一致，仍将恢复原身份。"
+    fi
+
+    restore_key user.name "$BACKUP_DIR/name"
+    restore_key user.email "$BACKUP_DIR/email"
+    remove_backup
+
+    info "已恢复原全局身份："
+    show_global_key user.name
+    show_global_key user.email
+}
+
+cmd_status() {
+    info "== 全局 Git 身份 =="
+    show_global_key user.name
+    show_global_key user.email
+    printf '\n'
+
+    info "== 临时 bot 模式 =="
+    if [[ -d $BACKUP_DIR ]]; then
+        info "状态：已启用"
+        printf '  %-11s %s\n' "身份文件" "$(read_file_or_placeholder "$BACKUP_DIR/source")"
+        printf '  %-11s %s\n' "备份时间" "$(read_file_or_placeholder "$BACKUP_DIR/backed-up-at")"
+        printf '  %-11s %s\n' "bot name" "$(read_file_or_placeholder "$BACKUP_DIR/bot-name")"
+        printf '  %-11s %s\n' "bot email" "$(read_file_or_placeholder "$BACKUP_DIR/bot-email")"
+        info "备份的原身份："
+        show_backup_key user.name "$BACKUP_DIR/name"
+        show_backup_key user.email "$BACKUP_DIR/email"
+    else
+        info "状态：未启用"
+    fi
+
+    if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+        printf '\n'
+        info "== 当前仓库生效身份 =="
+        show_effective_key user.name
+        show_effective_key user.email
+    fi
+}
+
+parse_args() {
+    while (($# > 0)); do
+        case $1 in
+            on|off|status)
+                if [[ -n $COMMAND && $COMMAND != "$1" ]]; then
+                    die "只能指定一个命令：$COMMAND / $1"
+                fi
+                COMMAND=$1
+                ;;
+            -f|--file)
+                (($# >= 2)) || die "$1 需要一个参数"
+                EXPLICIT_IDENTITY_FILE=$2
+                shift
+                ;;
+            --file=*)
+                EXPLICIT_IDENTITY_FILE=${1#--file=}
+                ;;
+            -h|--help)
+                usage
+                exit 0
+                ;;
+            *)
+                die "未知参数：$1（使用 --help 查看用法）"
+                ;;
+        esac
+        shift
+    done
+}
+
+main() {
+    parse_args "$@"
+
+    if [[ -z $COMMAND ]]; then
+        usage >&2
+        exit 1
+    fi
+
+    require_git
+
+    case $COMMAND in
+        on) cmd_on ;;
+        off) cmd_off ;;
+        status) cmd_status ;;
+    esac
+}
+
+main "$@"
