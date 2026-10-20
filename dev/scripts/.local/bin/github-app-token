@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# 按实际信息修改
+CLIENT_ID="Iv23liX1vBdZY0wD0lJQ"
+INSTALLATION_ID="173388432"
+KEY="$HOME/.config/github-app/private-key.pem"
+
+b64url() {
+    openssl base64 -A | tr '+/' '-_' | tr -d '='
+}
+
+now=$(date +%s)
+
+header=$(printf '%s' \
+    '{"alg":"RS256","typ":"JWT"}' | b64url)
+
+payload=$(printf \
+    '{"iat":%d,"exp":%d,"iss":"%s"}' \
+    "$((now - 60))" "$((now + 540))" "$CLIENT_ID" \
+    | b64url)
+
+message="$header.$payload"
+
+signature=$(
+    printf '%s' "$message" |
+    openssl dgst -sha256 -sign "$KEY" -binary |
+    b64url
+)
+
+jwt="$message.$signature"
+
+curl --fail-with-body -sS -X POST \
+    -H "Authorization: Bearer $jwt" \
+    -H "Accept: application/vnd.github+json" \
+    -H "X-GitHub-Api-Version: 2026-03-10" \
+    -H "Content-Type: application/json" \
+    -d '{}' \
+    "https://api.github.com/app/installations/$INSTALLATION_ID/access_tokens" \
+    | jq -er '.token'
