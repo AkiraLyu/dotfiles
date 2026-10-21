@@ -25,6 +25,7 @@ binds {
     Alt+Print { screenshot-window; }
 
     // apps
+    Mod+Period hotkey-overlay-title="Open Emoji Picker: plasma-emojier" { spawn "plasma-emojier"; }
     Mod+Q hotkey-overlay-title="Open a Terminal: kitty" { spawn "kitty"; }
     Mod+E { spawn "dolphin"; }
     Mod+R { spawn-sh "noctalia msg panel-toggle launcher"; }
@@ -128,7 +129,6 @@ binds {
     Mod+BracketLeft  { consume-or-expel-window-left; }
     Mod+BracketRight { consume-or-expel-window-right; }
     Mod+Comma  { consume-window-into-column; }
-    Mod+Period { expel-window-from-column; }
 
     Mod+W { toggle-column-tabbed-display; }
 
