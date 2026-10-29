@@ -1,8 +1,5 @@
 7zip
 aalib
-aarch64-linux-gnu-binutils
-aarch64-linux-gnu-glibc
-aarch64-linux-gnu-linux-api-headers
 aardvark-dns
 abseil-cpp
 accountsservice
@@ -81,6 +78,7 @@ cdparanoia
 cfitsio
 chmlib
 cifs-utils
+clang-libs
 clinfo
 cmark-gfm
 coin
@@ -99,6 +97,7 @@ criu
 crun
 cryptsetup
 curl
+cxx-rust-cssparser
 dav1d
 db5.3
 dbus
@@ -116,8 +115,6 @@ device-mapper
 diffutils
 discount
 discover
-distro-info
-distro-info-data
 djvulibre
 dmidecode
 dnssec-anchors
@@ -138,7 +135,6 @@ edk2-riscv64
 efivar
 eigen
 electron
-electron42
 electron43
 electron44
 elfutils
@@ -378,6 +374,7 @@ ksystemstats
 ktexteditor
 ktextwidgets
 kunitconversion
+kup
 kuserfeedback
 kwallet
 kwallet-pam
@@ -550,7 +547,6 @@ libcolord
 libcue
 libcups
 libdaemon
-libdatachannel
 libdatrie
 libdbusmenu-glib
 libdbusmenu-gtk3
@@ -621,7 +617,6 @@ libisoburn
 libisofs
 libjaylink
 libjpeg-turbo
-libjuice
 libjxl
 libkdcraw
 libkexiv2
@@ -772,6 +767,7 @@ libutempter
 libutf8proc
 libuv
 libva
+libva-utils
 libvdpau
 libverto
 libvips
@@ -853,6 +849,7 @@ llhttp
 llvm
 llvm22-libs
 llvm-libs
+llvm-lit
 lmdb
 lm_sensors
 lrzip
@@ -871,7 +868,6 @@ m4
 mailcap
 make
 marisa
-mbedtls3
 md4c
 mdadm
 med
@@ -1091,6 +1087,8 @@ python-jaconv
 python-jeepney
 python-jinja
 python-joblib
+python-jsonschema
+python-jsonschema-specifications
 python-kiwisolver
 python-legacy-cgi
 python-libevdev
@@ -1114,7 +1112,6 @@ python-packaging
 python-pandas
 python-pathspec
 python-patiencediff
-python-pdftotext
 python-pikepdf
 python-pillow
 python-pip
@@ -1141,8 +1138,10 @@ python-pyqt6-webengine
 python-pyserial
 python-pytz
 python-pyudev
+python-referencing
 python-regex
 python-requests
+python-rpds-py
 python-scikit-build-core
 python-sentry_sdk
 python-six
@@ -1170,7 +1169,6 @@ python-zeroconf
 python-zstandard
 qca-qt6
 qcoro
-qcustomplot
 qemu-audio-alsa
 qemu-audio-dbus
 qemu-audio-jack
@@ -1250,17 +1248,13 @@ qemu-ui-spice-core
 qemu-user
 qemu-vhost-user-gpu
 qemu-vmsr-helper
-qhexedit2
 qhull
 qpdf
 qqc2-breeze-style
 qqc2-desktop-style
-qrcodegencpp-cmake
 qrencode
-qscintilla-qt5
 qt5-base
 qt5-declarative
-qt5-svg
 qt5-translations
 qt5-x11extras
 qt6-5compat
@@ -1361,7 +1355,6 @@ spice
 spice-gtk
 spice-protocol
 spirv-tools
-sqlcipher
 sqlite
 sratom
 srt
@@ -1433,6 +1426,7 @@ tzdata
 uchardet
 udisks2
 unibilium
+union
 unixodbc
 unrar
 unzip
