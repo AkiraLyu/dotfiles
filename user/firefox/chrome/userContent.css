@@ -63,6 +63,19 @@
     --frame-el-shadow: none !important;
   }
 
+  /* 用 3px 容器色边框环绕标签，保留标签背景和原有点击区域。 */
+  .Tab .ctx {
+    inset: 0 !important;
+    width: auto !important;
+    height: auto !important;
+    box-sizing: border-box !important;
+    border: 2.3px solid var(--color) !important;
+    border-radius: inherit !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+    pointer-events: none !important;
+  }
+
   /* Sidebery 可能仍保留亮色属性；暗色时显式修正其文字和浮层配色。 */
   @media (prefers-color-scheme: dark) {
     :root,
