@@ -91,15 +91,11 @@
   }
 }
 
-/* Firefox 153 会在新版 WebExtension 侧栏内部再注入一套标题和关闭按钮。 */
+/* 扩展侧栏的嵌入窗口使用透明背景，沿用外层面板底色。 */
 @-moz-document url("chrome://browser/content/webext-panels.xhtml") {
   #webextpanels-window,
   #webext-panels-stack {
     background-color: transparent !important;
-  }
-
-  #sidebar-panel-header {
-    display: none !important;
   }
 }
 
