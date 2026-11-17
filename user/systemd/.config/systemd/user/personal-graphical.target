@@ -8,6 +8,7 @@ PartOf=graphical-session.target
 Wants=carillon.service
 Wants=onedrive-mount.service
 Wants=onedrive-tray.service
+Wants=polkit-agent.service
 Wants=qq.service
 Wants=theme-sync.service
 Wants=waywallen.service

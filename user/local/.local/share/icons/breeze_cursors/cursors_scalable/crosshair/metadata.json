@@ -1,0 +1,58 @@
+[
+    {
+        "filename": "crosshair-00.svg",
+        "hotspot_x": 4.75,
+        "hotspot_y": 4.75,
+        "nominal_size": 9.6,
+        "delay": 150
+    },
+    {
+        "filename": "crosshair-01.svg",
+        "hotspot_x": 4.75,
+        "hotspot_y": 4.75,
+        "nominal_size": 9.6,
+        "delay": 150
+    },
+    {
+        "filename": "crosshair-02.svg",
+        "hotspot_x": 4.75,
+        "hotspot_y": 4.75,
+        "nominal_size": 9.6,
+        "delay": 150
+    },
+    {
+        "filename": "crosshair-03.svg",
+        "hotspot_x": 4.75,
+        "hotspot_y": 4.75,
+        "nominal_size": 9.6,
+        "delay": 150
+    },
+    {
+        "filename": "crosshair-04.svg",
+        "hotspot_x": 4.75,
+        "hotspot_y": 4.75,
+        "nominal_size": 9.6,
+        "delay": 150
+    },
+    {
+        "filename": "crosshair-05.svg",
+        "hotspot_x": 4.75,
+        "hotspot_y": 4.75,
+        "nominal_size": 9.6,
+        "delay": 150
+    },
+    {
+        "filename": "crosshair-06.svg",
+        "hotspot_x": 4.75,
+        "hotspot_y": 4.75,
+        "nominal_size": 9.6,
+        "delay": 150
+    },
+    {
+        "filename": "crosshair-07.svg",
+        "hotspot_x": 4.75,
+        "hotspot_y": 4.75,
+        "nominal_size": 9.6,
+        "delay": 150
+    }
+]

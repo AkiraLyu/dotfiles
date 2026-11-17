@@ -1,0 +1,14 @@
+[Unit]
+Description=KDE PolicyKit authentication agent (Niri / Umbriel)
+Requisite=graphical-session.target
+After=graphical-session.target
+PartOf=graphical-session.target personal-graphical.target
+ConditionEnvironment=|XDG_CURRENT_DESKTOP=niri
+ConditionEnvironment=|XDG_CURRENT_DESKTOP=umbriel
+ConditionEnvironment=|XDG_CURRENT_DESKTOP=Umbriel
+
+[Service]
+Type=simple
+ExecStart=/usr/lib/polkit-kde-authentication-agent-1
+Restart=on-failure
+RestartSec=2s
