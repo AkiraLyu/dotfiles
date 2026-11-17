@@ -2,32 +2,30 @@
 
 [返回 README](../README.md)
 
-[install.sh](../install.sh) 中的 `system_files` 是 `/etc` 文件的管理清单，部署、比较和导出共用它。新增系统配置时，同时添加仓库文件和清单条目。
+`/etc` 下的系统配置文件统一登记在 [install.sh](../install.sh) 的 `system_files` 数组中，`etc` 步骤的部署、差异比较和实机导出均共用这份清单。新增受管系统配置时，将文件按 `/etc` 下的相对路径放入仓库 `etc/` 目录，并在 `system_files` 数组中添加对应条目，脚本在复制文件时会直接沿用仓库源文件的权限位。
 
 ## 部署方式
 
 | `/etc` 下的相对路径 | 部署方式 | 用途 |
 | --- | --- | --- |
-| `environment` | 相对链接 | 登录环境变量 |
-| `makepkg.conf.d/90-local.conf` | 相对链接 | 本机构建参数 |
-| `pacman.conf` | 独立副本 | 软件源和包管理设置 |
-| `opt/chrome/policies/managed/webrtc.json` | 独立副本 | Chrome WebRTC 策略 |
-| `tlp.conf` | 独立副本 | 电源管理 |
-| `security/limits.d/90-memlock.conf` | 独立副本 | PAM 内存锁定限制 |
-| `modprobe.d/sound.conf` | 独立副本 | Intel 声卡和无线网卡参数 |
-| `cmdline.d/root.conf` | 独立副本 | 根分区、休眠和显示参数 |
-| `mkinitcpio.conf` | 独立副本 | initramfs 构建设置 |
-| `mkinitcpio.d/linux.preset` | 独立副本 | 内核和 UKI 输出路径 |
-| `initcpio/install/block` | 独立副本 | 定制的 mkinitcpio block hook |
-| `udev/hwdb.d/90-swap-caps-esc.hwdb` | 独立副本 | 指定键盘的 Caps Lock 与 Esc 交换 |
+| `environment` | 相对链接 | 全局登录环境变量与输入法参数 |
+| `makepkg.conf.d/90-local.conf` | 相对链接 | 本机指令集架构与构建并行参数 |
+| `pacman.conf` | 独立副本 | 软件源、并行下载与忽略包设置 |
+| `opt/chrome/policies/managed/webrtc.json` | 独立副本 | Chrome WebRTC UDP 泄露防护策略 |
+| `tlp.conf` | 独立副本 | TLP 电源管理参数 |
+| `security/limits.d/90-memlock.conf` | 独立副本 | PAM 内存锁定上限配置 |
+| `modprobe.d/sound.conf` | 独立副本 | Intel 声卡与无线网卡内核模块参数 |
+| `cmdline.d/root.conf` | 独立副本 | 内核命令行根分区、休眠与启动参数 |
+| `mkinitcpio.conf` | 独立副本 | initramfs 模块与钩子构建配置 |
+| `mkinitcpio.d/linux.preset` | 独立副本 | `linux` 内核与 UKI 镜像输出路径 |
+| `initcpio/install/block` | 独立副本 | 定制的 mkinitcpio `block` 构建钩子 |
+| `udev/hwdb.d/90-swap-caps-esc.hwdb` | 独立副本 | 内置键盘与指定外接键盘的 Caps Lock 与 Esc 互换规则 |
 
-链接文件随仓库内容变化；复制文件需要重新部署。引导、包管理、PAM 和早期 udev 配置使用独立副本，避免依赖用户目录。TLP 服务设置了 `ProtectHome=yes`，也使用独立副本。
-
-Chrome 策略将 `WebRtcIPHandling` 设为 `disable_non_proxied_udp`，部署到 `/etc/opt/chrome/policies/managed/webrtc.json`。修改后可在 Chrome 的 `chrome://policy` 中重新加载并检查策略。
+各配置文件的部署方式由其读取时机和服务隔离要求决定。`environment` 与 `makepkg.conf.d/90-local.conf` 在用户会话登录或执行软件包构建时读取，此时用户家目录已经挂载，采用相对符号链接可使仓库内的修改即时生效。内核引导、包管理器、PAM 认证、内核模块和早期 udev 规则需要在系统启动早期或脱离用户家目录的环境中稳定读取，而 TLP 电源服务开启了 `ProtectHome=yes` 沙箱隔离无法访问 `/home`，因此这些文件均通过 `install -D` 复制为 `/etc` 下的独立文件，修改仓库文件后重新运行 `etc install` 即可更新。其中 Chrome 策略文件将 `WebRtcIPHandling` 设为 `disable_non_proxied_udp`，部署后可在 Chrome 的 `chrome://policy` 页面点击重新加载以验证生效状态；部署 `90-swap-caps-esc.hwdb` 时，脚本会自动追加执行 `systemd-hwdb update` 更新硬件数据库。
 
 ## 比较与同步
 
-以下命令在仓库根目录执行。文件参数使用 `/etc` 下的相对路径，且必须已登记在 `system_files` 中；省略文件参数时处理整个清单。
+在仓库根目录下运行 `./install.sh etc` 可执行比较、部署与反向导出操作。命令末尾可省略文件参数以处理 `system_files` 中的全部条目，也可指定一个或多个 `/etc` 下的相对路径仅处理选中文件：
 
 ```bash
 ./install.sh etc diff
@@ -39,59 +37,51 @@ Chrome 策略将 `WebRtcIPHandling` 设为 `disable_non_proxied_udp`，部署到
 
 | 操作 | 方向 | 行为 |
 | --- | --- | --- |
-| `diff` | 比较仓库与实机 | 显示内容及权限差异，不写入文件 |
-| `install` | 仓库 → `/etc` | 链接或复制文件；复制时沿用仓库文件的权限 |
-| `export` | `/etc` → 仓库 | 以实机内容和权限覆盖仓库文件 |
+| `diff` | 比较仓库与实机 | 输出内容与文件权限差异，已链接到仓库或实机未部署的文件会给出状态提示 |
+| `install` | 仓库 → `/etc` | 按预设方式建立相对链接或以源文件权限复制为独立文件 |
+| `export` | `/etc` → 仓库 | 以当前普通用户身份将实机独立文件的内容和权限拷回仓库 |
 
-`install` 和 `export` 不自动备份，执行前先查看 `diff`。`export` 跳过已链接到同一仓库文件的项目；实机路径不存在时保留仓库版本。导出以当前用户执行，确保文件可读。
-
-部署键位文件时，脚本会运行 `systemd-hwdb update`。登录环境和 PAM 限制在新会话中验证，键位、TLP 和硬件参数在相应设备或服务重新加载后验证；需要时重启系统。
+由于 `install` 与 `export` 会直接覆盖目标文件，执行同步前应先运行 `etc diff` 检查差异。执行 `export` 时，脚本会自动跳过已链接到仓库同一文件的条目以及实机尚未部署的路径，并以普通用户身份写入仓库文件，从而确保导回仓库的文件具有正确的用户归属。
 
 ## 机器配置
 
-换机器或调整硬件时，先核对以下配置：
+将仓库迁移到新设备或更换硬件前，需先核对并调整以下与机器强相关的配置项：
 
 | 文件 | 核对项 |
 | --- | --- |
 | `pacman.conf` | 软件源、密钥环、镜像列表和 `IgnorePkg`，详见[安装指南](install.md#准备环境) |
-| `makepkg.conf.d/90-local.conf` | `x86-64-v4` 支持、`MAKEFLAGS`、构建目录和打包者信息 |
-| `cmdline.d/root.conf` | 根分区及休眠 UUID、Btrfs 子卷、EDID 固件路径和显示输出 |
-| `mkinitcpio.d/linux.preset` | `/boot/vmlinuz-linux` 是否对应目标内核，`/efi` 是否为实际 EFI 挂载点 |
-| `mkinitcpio.conf`、`initcpio/install/block` | 所需 hook、模块和设备支持 |
-| `modprobe.d/sound.conf`、`tlp.conf` | 声卡、无线网卡和电源参数 |
-| `udev/hwdb.d/90-swap-caps-esc.hwdb` | 笔记本型号和外接键盘标识 |
-| `environment` | 已生成的区域设置、输入法和桌面环境 |
+| `makepkg.conf.d/90-local.conf` | CPU 对 `-march=x86-64-v4` 的支持情况、`MAKEFLAGS` 并发数、构建目录与打包者信息 |
+| `cmdline.d/root.conf` | 根分区与休眠交换分区的 UUID、Btrfs 子卷名称及外接显示器 EDID 参数 |
+| `mkinitcpio.d/linux.preset` | `/boot/vmlinuz-linux` 对应的目标内核名称，以及 `/efi` 是否为实机 EFI 分区挂载点 |
+| `mkinitcpio.conf`、`initcpio/install/block` | 实机所需的 initramfs 钩子、内核模块与块设备驱动 |
+| `modprobe.d/sound.conf`、`tlp.conf` | 声卡 DSP 驱动选择、无线网卡参数与电池充放电阈值 |
+| `udev/hwdb.d/90-swap-caps-esc.hwdb` | DMI 主板型号标识与外接键盘的 `evdev:input` 设备号 |
+| `environment` | 系统已生成的 `locale` 区域设置与输入法环境变量 |
 
-构建参数和 PAM 限制分别保存在配置片段中，其他默认值由软件包维护。仓库的 `linux.preset` 面向 `linux` 内核；包清单也包含 `linux-cachyos`，其预设应单独检查。
+仓库中的 `mkinitcpio.d/linux.preset` 仅针对官方 `linux` 内核编写，而软件包清单中同时包含 `linux-cachyos` 内核；在多内核环境下调整引导配置时，需同步检查 `/etc/mkinitcpio.d/` 下其余内核的 preset 文件。
 
 ## AVS 固件
 
-需要 Intel AVS 固件的机器，先将固件迁入仓库中的 `private/firmware/intel/avs/tgl/dsp_basefw.bin`，再执行：
+搭载 Intel Tiger Lake 处理器并启用 `snd_soc_avs` 声卡驱动的机器需要加载专用的 DSP 基础固件。先将备份的固件文件放入仓库的 `private/firmware/intel/avs/tgl/dsp_basefw.bin`，再执行：
 
 ```bash
 ./install.sh --check firmware
 ./install.sh firmware
 ```
 
-脚本仅将该文件以 `0644` 权限复制到 `/usr/lib/firmware/intel/avs/tgl/dsp_basefw.bin`，不会下载固件或自动重建启动镜像。
+脚本会调用 `run0` 将该固件以 `0644` 权限安装到 `/usr/lib/firmware/intel/avs/tgl/dsp_basefw.bin`。
 
 ## 启动镜像
 
-仓库的 `mkinitcpio.conf` 使用 systemd 和 Plymouth hook，`linux.preset` 将统一内核镜像（UKI）写入 `/efi/EFI/Linux/arch-linux.efi`。修改引导配置、模块参数或固件后，确认 EFI 分区已挂载，再重建：
+仓库的 `mkinitcpio.conf` 使用 `systemd` 与 `plymouth` 钩子，配合 `linux.preset` 将生成的统一内核镜像（UKI）输出到 `/efi/EFI/Linux/arch-linux.efi`。每次更新 `cmdline.d/root.conf`、`modprobe.d/sound.conf`、`mkinitcpio.conf` 或声卡固件后，先确认 EFI 分区已挂载在 `/efi`，再运行 `mkinitcpio -P` 为系统中所有内核预设重新构建启动镜像：
 
 ```bash
 findmnt /efi
 run0 mkinitcpio -P
 ```
 
-`mkinitcpio -P` 处理系统中的全部预设，不只处理仓库提供的 `linux.preset`。
-
-定制的 `initcpio/install/block` 基于 mkinitcpio 41.1，省略 `drivers/mfd` 模块目录，用于原配置机器的触控板问题。`/etc/initcpio/install/` 的 hook 优先于软件包提供的版本，具体搜索顺序见 [mkinitcpio 手册](https://man.archlinux.org/man/mkinitcpio.8.en)。
-
-mkinitcpio 更新后，比较新旧 hook，合入适用的上游变化；保留这项硬件调整前确认目标机器仍需要它：
+仓库提供的 `etc/initcpio/install/block` 基于 mkinitcpio 41.1 定制，移除了 `drivers/mfd` 模块目录以规避原机器在早期引导阶段的触控板异常。由于 `/etc/initcpio/install/` 下的同名钩子会覆盖 `/usr/lib/initcpio/install/` 中的软件包版本，在系统升级 `mkinitcpio` 后，可通过以下命令比对上游改动并合入仓库副本，在新设备上若无需该硬件规避项则可从 `etc/` 与 `system_files` 中移除：
 
 ```bash
 diff -u /usr/lib/initcpio/install/block etc/initcpio/install/block
 ```
-
-维护副本位于仓库的 `etc/initcpio/install/block`，通过 `etc install` 部署后重建 UKI。`/usr/lib/initcpio/install/block` 由软件包维护。
