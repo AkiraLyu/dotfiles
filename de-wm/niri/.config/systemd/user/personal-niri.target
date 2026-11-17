@@ -7,7 +7,8 @@ PartOf=niri.service
 Wants=niri-noctalia.service
 Wants=niri-clipboard-text.service
 Wants=niri-clipboard-image.service
-Wants=niri-polkit-agent.service
+# 已改由 personal-graphical.target 中的 polkit-agent.service 统一拉起。
+# Wants=niri-polkit-agent.service
 
 [Install]
 WantedBy=niri.service

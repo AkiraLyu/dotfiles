@@ -38,8 +38,10 @@ layer-rule {
   match namespace="^noctalia-attached-panel$"
   match namespace="noctalia-notification"
   match namespace="noctalia-osd"
+  match namespace="noctalia-dock"
+  match namespace="noctalia-panel"
   background-effect {
-    blur true
+    // blur true
     xray false
   }
 }
