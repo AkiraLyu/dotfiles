@@ -117,7 +117,18 @@ cd "$HOME/dotfiles"
 
 此步骤将 `de-wm/niri/` 中的 Niri 配置、Portal 选择、专用用户服务和会话依赖链接部署到家目录，再运行 `systemctl --user daemon-reload`。部署采用[逐文件链接](#链接规则)，不会启动或重启当前会话及服务。
 
-`personal-niri.target` 通过 `niri.service.wants/` 随 Niri 服务启动，其 `Wants=` 管理 Noctalia、剪贴板监听和认证代理。通用后台与图形服务仍由下文的 `systemd` 步骤部署。Noctalia 用户设置和生成文件需独立恢复，配置检查方法见 [Niri](desktop.md#niri)。
+`personal-niri.target` 通过 `niri.service.wants/` 随 Niri 服务启动，其 `Wants=` 管理 Noctalia 和剪贴板监听；认证代理由下文 `systemd` 步骤中的 `polkit-agent.service` 统一管理。通用后台与图形服务由 `systemd` 步骤部署。Noctalia 用户设置和生成文件需独立恢复，配置检查方法见 [Niri](desktop.md#niri)。
+
+### Umbriel
+
+先恢复 Umbriel、Portal 后端、Noctalia 和认证代理等依赖，再执行：
+
+```bash
+./install.sh --check de-wm umbriel
+./install.sh de-wm umbriel
+```
+
+此步骤将 `de-wm/umbriel/` 中的 Umbriel 主配置、Portal 选择和 XWayland 资源脚本通过[逐文件链接](#链接规则)部署到家目录，不会启动或重启会话。认证代理由下文 `systemd` 步骤中的 `polkit-agent.service` 统一拉起，Noctalia 的用户设置与可选生成文件 `noctalia.toml` 需独立恢复，验证与服务检查方法见 [Umbriel](desktop.md#umbriel)。
 
 ### Firefox
 
@@ -144,14 +155,14 @@ cd "$HOME/dotfiles"
 
 ### 私密配置
 
-将 Chromium/API 凭据手动迁入 `backup/private/chromium.fish` 后执行：
+将私密配置手动迁入仓库根目录下的 `private/` 后执行：
 
 ```bash
 ./install.sh --check private
 ./install.sh private
 ```
 
-脚本将文件复制到 `~/.config/fish/conf.d/chromium.fish`，权限为 `0600`，并替换已有目标文件。Carillon 等其他私密配置需单独恢复，`private` 步骤不会遍历或部署整个 `private/` 目录。
+脚本使用 GNU Stow 将 `private/` 中的 Fish 凭据（`.config/fish/conf.d/chromium.fish`）、Carillon 配置、rclone 配置和 KWallet 密钥库逐文件链接到家目录，同时忽略 `firmware/`、`bot` 以及 `.pem` 文件。`private/bot` 由 `git-bot` 直接从仓库目录读取；GitHub App 私钥需手动放置在 `~/.config/github-app/private-key.pem` 并设置 `0600` 权限，供 `github-app-token` 读取。Intel AVS 固件仍通过 `firmware` 步骤复制到系统目录。
 
 ### 用户服务
 
@@ -169,7 +180,7 @@ cd "$HOME/dotfiles"
 | `personal-background.target` | 用户管理器的 `default.target` 启动时 |
 | `personal-graphical.target` | 图形会话启动时 |
 
-target 引用的服务可能由外部软件包提供，例如 `foxvault.service` 和 `theme-sync.service`。OneDrive 还需要恢复 rclone 的 `onedrive` 远端，并保证当前用户能写入 `/mnt/network/onedrive` 和 `/mnt/network/cache/onedrive`。`personal-niri.target` 及其服务保存在 `de-wm/niri/`，由 `./install.sh de-wm niri` 部署。
+target 引用的服务可能由外部软件包提供，例如 `foxvault.service` 和 `theme-sync.service`。`polkit-agent.service` 由 `personal-graphical.target` 管理，依据 `XDG_CURRENT_DESKTOP` 条件在 Niri 与 Umbriel 会话中启动 KDE 认证代理。OneDrive 还需要恢复 rclone 的 `onedrive` 远端，并保证当前用户能写入 `/mnt/network/onedrive` 和 `/mnt/network/cache/onedrive`。`personal-niri.target` 及其服务保存在 `de-wm/niri/`，由 `./install.sh de-wm niri` 部署。
 
 修改 target 后重新运行 `./install.sh systemd`。如需在当前图形会话启动已配置的 Carillon，可执行：
 
@@ -192,14 +203,14 @@ Fish 历史、变量、私密配置和 Neovim 的 `lazy-lock.json` 由安装入�
 
 | 步骤 | `--check` 的行为 |
 | --- | --- |
-| `user`、`dev`、`de-wm kde` | 检查包名、部署源目录和符号链接，再模拟对应分组的 Stow 部署 |
+| `user`、`dev`、`de-wm kde`、`de-wm umbriel` | 检查包名、部署源目录和符号链接，再模拟对应分组的 Stow 部署 |
 | `de-wm niri` | 检查部署源并模拟 Niri 配置部署，再显示重读用户 unit 的命令 |
 | `systemd` | 模拟用户服务部署，并显示重读配置命令 |
 | `firefox` | 检查目标目录及 `prefs.js`，再模拟 Stow 部署 |
 | `packages` | 查询本机已安装包，列出清单中缺少的包名 |
 | `kde` | 模拟本地 KDE 配置部署，再显示安装组件和应用设置的命令 |
 | `etc install`、`firmware` | 显示待执行命令 |
-| `private` | 检查凭据源文件存在，再显示复制命令 |
+| `private` | 检查私密配置源目录及文件，再模拟 Stow 部署 |
 | `etc export` | 按实机文件状态显示待执行的复制命令 |
 
 `etc diff` 本身只读，直接显示内容和权限差异。检查模式不会安装软件、验证远端包是否可获得、测试权限认证或确认硬件适用性；`firmware` 的检查模式也不验证源固件是否存在。

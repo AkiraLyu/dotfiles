@@ -1,5 +1,6 @@
 alsa-utils
 android-tools
+anki
 archlinuxcn-keyring
 ardour
 aria2
@@ -85,6 +86,7 @@ kcolorchooser
 kdeconnect
 kdegraphics-thumbnailers
 kdenlive
+keepassxc
 kicad
 kicad-library
 kitty
@@ -103,10 +105,13 @@ linux-cachyos
 linux-cachyos-headers
 linux-firmware
 lld
+lsp-plugins
 man-db
 man-pages
 marksman
+meld
 meson
+mihomo
 minecraft-launcher
 mission-center
 modprobed-db
@@ -119,7 +124,6 @@ neovim
 networkmanager
 newsflash
 nmap
-noctalia-git
 noto-fonts-cjk
 npm
 obsidian
@@ -136,6 +140,7 @@ patchelf
 pavucontrol
 pdfarranger
 pdftricks
+plasma6-applets-panel-colorizer
 plasma-meta
 plymouth
 pngquant
@@ -144,6 +149,7 @@ podman
 podman-compose
 powertop
 python-matplotlib
+python-mido
 python-numpy
 python-openai-whisper
 python-opencv
@@ -194,6 +200,7 @@ vim-nerdtree
 virt-manager
 vnstat
 vulkan-intel
+waydroid
 wget
 wireshark-qt
 wl-clipboard

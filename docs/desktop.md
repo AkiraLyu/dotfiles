@@ -25,7 +25,7 @@ kde-config
 
 ### 文件关联
 
-[kde-mimeapps-export](https://github.com/AkiraLyu/kde-mimeapps-export) 使用 KDE 的 KService 接口读取实际生效的默认应用和候选顺序，包含用户设置、MIME 继承和 URL 协议，可以在 Niri 会话中运行。源码由独立项目维护，Arch 配方由 [pkgbuilds](https://github.com/AkiraLyu/pkgbuilds/tree/main/kde-mimeapps-export) 维护。
+[kde-mimeapps-export](https://github.com/AkiraLyu/kde-mimeapps-export) 使用 KDE 的 KService 接口读取实际生效的默认应用和候选顺序，包含用户设置、MIME 继承和 URL 协议，可以在 Niri 和 Umbriel 会话中运行。源码由独立项目维护，Arch 配方由 [pkgbuilds](https://github.com/AkiraLyu/pkgbuilds/tree/main/kde-mimeapps-export) 维护。
 
 `./install.sh kde` 会安装该命令。单独安装并同步关联时执行：
 
@@ -74,7 +74,7 @@ wechat-glass-control opacity 0.52
 
 [de-wm/niri/](../de-wm/niri/) 保存 Niri 配置、Portal 选择及专用 systemd 用户服务。通过 `./install.sh de-wm niri` 部署，并重读用户 unit；命令不会启动或重启服务，完整步骤见[安装指南](install.md#niri)。
 
-`config.kdl` 通过相对路径包含 `configs/` 中的输入、快捷键、窗口规则和显示设置。`personal-niri.target` 通过 `niri.service.wants/` 随 Niri 服务启动，并管理 Noctalia、剪贴板监听和认证代理。这些专用服务与 `user/systemd/` 的通用服务分开部署。
+`config.kdl` 通过相对路径包含 `configs/` 中的输入、快捷键、窗口规则和显示设置。`personal-niri.target` 通过 `niri.service.wants/` 随 Niri 服务启动，并管理 Noctalia 和剪贴板监听；认证代理由 `user/systemd/` 中的 `polkit-agent.service` 统一管理。这些专用服务与 `user/systemd/` 的通用服务分开部署。
 
 Noctalia 的设置和插件由应用在家目录中管理，不包含在此配置包中。`config.kdl` 引用的 `~/.config/niri/noctalia.kdl` 也需独立恢复或由 Noctalia 生成。部署会保留这些未由仓库管理的文件。
 
@@ -83,6 +83,19 @@ Noctalia 的设置和插件由应用在家目录中管理，不包含在此配�
 ```bash
 niri validate -c "$HOME/.config/niri/config.kdl"
 systemctl --user status personal-niri.target niri-noctalia.service
+```
+
+## Umbriel
+
+[de-wm/umbriel/](../de-wm/umbriel/) 保存 Umbriel 配置、Portal 选择及 XWayland 资源脚本。通过 `./install.sh de-wm umbriel` 部署，完整步骤见[安装指南](install.md#umbriel)。
+
+[config.toml](../de-wm/umbriel/.config/umbriel/config.toml) 将 `noctalia.toml` 列在 `[include.optional]` 下，并在文件中提供了默认色值；即使新设备尚未生成 `noctalia.toml`，配置仍可直接加载。会话启动时通过 `[general] autostart` 拉起 `noctalia`、`kwalletd6`、`/usr/lib/pam_kwallet_init` 和 `$HOME/.config/umbriel/scripts/xconfig.sh` 以加载 XWayland 资源参数。认证代理由 `user/systemd/` 中的 `polkit-agent.service` 随图形会话启动。
+
+用于其他环境前，先核对显示器名称与缩放参数，并使用以下命令检查配置与会话服务：
+
+```bash
+umbriel config validate
+systemctl --user status umbriel.service polkit-agent.service
 ```
 
 ## Firefox
@@ -105,14 +118,7 @@ systemctl --user status personal-niri.target niri-noctalia.service
 cargo install --locked --git https://github.com/pimalaya/carillon.git --rev b431f9f793eecdb6e65cc5437318152a7def02c0 carillon
 ```
 
-Fish 配置已将 `~/.cargo/bin` 加入 PATH。将私密配置迁入 `private/.config/carillon/config.toml`；在目标目录不存在时，从仓库根目录建立链接：
-
-```bash
-mkdir -p "$HOME/.config"
-ln -s "$PWD/private/.config/carillon" "$HOME/.config/carillon"
-```
-
-目标目录已存在时先比较并处理原配置。`./install.sh private` 只复制 Chromium 凭据，不负责此链接。
+Fish 配置已将 `~/.cargo/bin` 加入 PATH。将私密配置迁入 `private/.config/carillon/config.toml` 后，运行 `./install.sh private` 即可通过 Stow 将配置文件逐文件链接到 `~/.config/carillon/config.toml`。若家目录中已有未受管的原配置，先比较并移开冲突文件再运行部署。
 
 配置中的 `accounts.Akira.imap` 需要包含服务器、SASL 认证、`mailbox` 和通知 `hook`。钩子将 `$id` 传给 [carillon-gmail-notify](../user/local/.local/bin/carillon-gmail-notify)。通知脚本使用 TLS IMAP、`sasl.plain` 及其密码命令读取邮件预览，点击通知时通过 `gtk-launch` 打开 Gmail PWA。
 

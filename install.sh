@@ -101,8 +101,8 @@ case "$step" in
         stow_configs "$step" "$HOME" "${selected_packages[@]}"
         ;;
     de-wm)
-        [[ $# == 1 && ( $1 == kde || $1 == niri ) ]] || {
-            echo '用法：./install.sh [--check] de-wm {kde|niri}' >&2
+        [[ $# == 1 && ( $1 == kde || $1 == niri || $1 == umbriel ) ]] || {
+            echo '用法：./install.sh [--check] de-wm {kde|niri|umbriel}' >&2
             exit 1
         }
         stow_configs de-wm "$HOME" "$1"
@@ -206,10 +206,19 @@ case "$step" in
         ;;
     private)
         (($# == 0)) || { echo '用法：./install.sh [--check] private' >&2; exit 1; }
-        # 此文件含 Chromium/API 凭据，随 backup/ 手动迁移，不进入 Git。
-        source_file="$repo_dir/backup/private/chromium.fish"
-        [[ -f $source_file ]] || { echo '请先迁入 backup/private/chromium.fish。' >&2; exit 1; }
-        run install -D -m 0600 "$source_file" "$HOME/.config/fish/conf.d/chromium.fish"
+        # 私密配置随 private/ 手动迁移，不进入 Git；固件和独立密钥文件不参与家目录链接。
+        [[ -f $repo_dir/private/.config/fish/conf.d/chromium.fish ]] || {
+            echo '请先迁入 private/ 中的私密配置。' >&2
+            exit 1
+        }
+        check_share_sources . private
+        private_options=(
+            --dir "$repo_dir" --target "$HOME" --no-folding --restow
+            '--ignore=^/(firmware|bot)(/.*)?$'
+            '--ignore=\.pem$'
+        )
+        if $check_only; then private_options+=(--simulate); fi
+        stow "${private_options[@]}" private
         ;;
     packages)
         (($# == 0)) || { echo '用法：./install.sh [--check] packages' >&2; exit 1; }
@@ -226,16 +235,16 @@ case "$step" in
   packages          按 packages/ 的当前包清单安装软件
   user [包…]        链接 user/ 的日常配置；省略包名时部署默认清单
   dev [包…]         链接 dev/ 的开发配置；省略包名时部署默认清单
-  de-wm {kde|niri}   链接指定会话的本地配置；Niri 额外重读用户 unit
+  de-wm {kde|niri|umbriel}  链接指定会话的本地配置；Niri 额外重读用户 unit
   kde               链接本地 KDE 配置，安装远端组件，再应用设置
   systemd           链接 user/systemd/ 的用户 unit 并重读配置，不启动服务
   firefox PROFILE   链接 Firefox 配置到明确指定的已有 profile
   etc [操作] [文件…]  install：部署（默认）；diff：比较；export：实机同步回仓库
   firmware          用 run0 将 private/ 中的 AVS 固件复制到 /usr/lib/firmware
-  private           从手动迁移的 backup/ 复制私密 Fish 配置
+  private           链接手动迁入 private/ 的私密配置到家目录
 
 导出当前包清单：./scripts/packages.sh export
-桌面配置按会话选择：./install.sh de-wm kde 或 ./install.sh de-wm niri。
+桌面配置按会话选择：./install.sh de-wm kde、./install.sh de-wm niri 或 ./install.sh de-wm umbriel。
 先用 --check 查看；每个步骤独立运行。详细顺序见 README.md。
 USAGE
         ;;

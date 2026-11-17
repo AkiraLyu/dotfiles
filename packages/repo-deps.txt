@@ -79,6 +79,7 @@ cfitsio
 chmlib
 cifs-utils
 clang-libs
+clash-geoip
 clinfo
 cmark-gfm
 coin
@@ -153,7 +154,6 @@ fcitx5-pinyin-zhwiki
 fcitx5-qt
 ffcall
 ffmpeg
-ffmpeg4.4
 fftw
 file
 filesystem
@@ -393,7 +393,6 @@ leancrypto
 lensfun
 leptonica
 leveldb
-level-zero-loader
 lib2geom
 lib32-alsa-lib
 lib32-alsa-plugins
@@ -461,7 +460,6 @@ lib32-libxext
 lib32-libxfixes
 lib32-libxft
 lib32-libxinerama
-lib32-libxkbcommon
 lib32-libxml2
 lib32-libxrender
 lib32-libxshmfence
@@ -583,6 +581,7 @@ libfreeaptx
 libftdi
 libftdi-compat
 libfyaml
+libgbinder
 libgcc
 libgcrypt
 libgee
@@ -590,6 +589,7 @@ libgexiv2
 libgfortran
 libgirepository
 libgit2
+libglibutil
 libglvnd
 libgomp
 libgpg-error
@@ -620,12 +620,14 @@ libjpeg-turbo
 libjxl
 libkdcraw
 libkexiv2
+libkeybinder3
 libksba
 libkscreen
 libksysguard
 liblc3
 libldac
 libldap
+libliftoff
 liblo
 liblouis
 liblqr
@@ -856,11 +858,19 @@ lrzip
 lsb-release
 l-smash
 lsof
+lsp-plugins-clap
+lsp-plugins-gst
+lsp-plugins-ladspa
+lsp-plugins-lv2
+lsp-plugins-standalone
+lsp-plugins-vst
+lsp-plugins-vst3
 lua
 lua51-lpeg
 lua54
 luajit
 lv2
+lxc
 lz4
 lzip
 lzo
@@ -938,6 +948,7 @@ openmpi
 openpmix
 openslide
 openssl
+openssl-3
 opentimelineio
 openucx
 openxr
@@ -1042,6 +1053,7 @@ python-apsw
 python-attrs
 python-beautifulsoup4
 python-binaryornot
+python-blinker
 python-boolean.py
 python-brotli
 python-brotlicffi
@@ -1063,8 +1075,10 @@ python-cycler
 python-dateutil
 python-dbus
 python-debian
+python-decorator
 python-defusedxml
 python-deprecated
+python-distro
 python-dnspython
 python-dotenv
 python-dulwich
@@ -1073,8 +1087,11 @@ python-faust-cchardet
 python-feedparser
 python-feedparser-sgmllib
 python-filelock
+python-flask
+python-flask-cors
 python-fonttools
 python-fsspec
+python-gbinder
 python-gmpy2
 python-gobject
 python-html2text
@@ -1082,7 +1099,9 @@ python-html5lib
 python-html5-parser
 python-idna
 python-ifaddr
+python-importlib-metadata
 python-inflate64
+python-itsdangerous
 python-jaconv
 python-jeepney
 python-jinja
@@ -1090,6 +1109,7 @@ python-joblib
 python-jsonschema
 python-jsonschema-specifications
 python-kiwisolver
+python-lazy-importer
 python-legacy-cgi
 python-libevdev
 python-license-expression
@@ -1108,6 +1128,7 @@ python-narwhals
 python-netifaces
 python-networkx
 python-numba
+python-orjson
 python-packaging
 python-pandas
 python-pathspec
@@ -1136,14 +1157,18 @@ python-pyqt6
 python-pyqt6-sip
 python-pyqt6-webengine
 python-pyserial
+python-pysocks
 python-pytz
 python-pyudev
 python-referencing
 python-regex
 python-requests
 python-rpds-py
+python-rtmidi
 python-scikit-build-core
+python-send2trash
 python-sentry_sdk
+python-shtab
 python-six
 python-soupsieve
 python-sympy
@@ -1159,13 +1184,16 @@ python-tzlocal
 python-unrardll
 python-urllib3
 python-vcsgraph
+python-waitress
 python-webencodings
+python-werkzeug
 python-wheel
 python-wrapt
 python-wxpython
 python-xxhash
 python-yaml
 python-zeroconf
+python-zipp
 python-zstandard
 qca-qt6
 qcoro
@@ -1283,6 +1311,7 @@ qt6-webengine
 qt6-websockets
 qt6-webview
 qtkeychain-qt6
+qtractor
 quazip-qt6
 raptor
 rav1e
@@ -1302,6 +1331,7 @@ ripgrep
 ripgrep-all
 riscv64-elf-binutils
 rnnoise
+rtkit
 rubberband
 rutabaga-ffi
 sane
@@ -1331,7 +1361,6 @@ signond
 signon-kwallet-extension
 signon-plugin-oauth2
 signon-ui
-simde
 simdjson
 slang
 smartmontools
@@ -1409,6 +1438,7 @@ threadweaver
 tinysparql
 tk
 tlottie
+tlp-pd
 tomlplusplus
 tpm2-tss
 tree-sitter
@@ -1433,7 +1463,6 @@ unzip
 upower
 usbredir
 usbutils
-uthash
 util-linux
 util-linux-libs
 v4l-utils
@@ -1456,6 +1485,7 @@ vulkan-mesa-implicit-layers
 vulkan-tools
 wavpack
 wayland
+wayland-protocols
 wayland-utils
 webkit2gtk-4.1
 webkitgtk-6.0
@@ -1468,6 +1498,7 @@ wine-mono
 winetricks
 wireplumber
 wireshark-cli
+wlroots0.20
 woff2
 wolfssl
 wpa_supplicant
@@ -1478,6 +1509,7 @@ x265
 xcb-proto
 xcb-util
 xcb-util-cursor
+xcb-util-errors
 xcb-util-image
 xcb-util-keysyms
 xcb-util-renderutil

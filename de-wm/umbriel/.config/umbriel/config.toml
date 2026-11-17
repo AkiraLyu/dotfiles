@@ -22,7 +22,7 @@ autostart = [
     "noctalia",
     "kwalletd6",
     "/usr/lib/pam_kwallet_init",
-    "/home/akira/.config/niri/scripts/xconfig.sh",
+    "$HOME/.config/umbriel/scripts/xconfig.sh",
 ]
 xwayland = true
 xwayland_native_resolution = true
