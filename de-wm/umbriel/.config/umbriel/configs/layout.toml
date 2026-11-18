@@ -1,0 +1,18 @@
+# Layout (from niri layout.kdl)
+
+[layout]
+mode = "scrolling"
+gap = 6
+extent_presets = [0.33333, 0.5, 0.66667]
+
+[layout.scrolling]
+center_focused = "never"
+default_extent_fraction = 0.5
+
+# ==============================================================================
+# Hot corners
+
+[hot_corners.top_left]
+enabled = true
+delay_ms = 100
+action = "overview-open"

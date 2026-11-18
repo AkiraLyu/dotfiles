@@ -1,0 +1,41 @@
+# Animation & custom shaders
+
+[effects.preset.window_open]
+kind = "animation"
+shader = "../shaders/window_open.glsl"
+
+[effects.preset.window_close]
+kind = "animation"
+shader = "../shaders/window_close.glsl"
+
+[animation]
+enabled = true
+
+[animation.windows_in]
+enabled = true
+duration_ms = 165
+curve = "0.0,0.0,0.58,1.0"
+effect = "window_open"
+
+[animation.windows_out]
+enabled = true
+duration_ms = 150
+curve = "0.25,0.1,0.25,1.0"
+effect = "window_close"
+
+[animation.windows_move]
+enabled = true
+curve = "spring:0.9,1000"
+
+[animation.windows_resize]
+enabled = true
+curve = "spring:0.9,1000"
+
+[animation.workspaces]
+enabled = true
+curve = "spring:0.9,1000"
+
+[animation.overview]
+enabled = true
+curve = "spring:0.9,1000"
+workspace_curve = "spring:0.9,1000"

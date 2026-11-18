@@ -1,0 +1,14 @@
+# Input (from niri input.kdl & env.kdl)
+
+[input.keyboard]
+numlock_toggle = true
+
+[input.cursor]
+theme = "breeze_cursors"
+size = 18
+hide_when_typing = true
+hide_timeout_ms = 1000
+
+[input.touchpad]
+tap = true
+natural_scroll = true

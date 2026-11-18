@@ -1,0 +1,13 @@
+# Outputs (from niri screen.kdl)
+
+[output.eDP-1]
+mode = "1920x1080@60.000"
+position = [0, 0]
+scale = 1.25
+transform = "normal"
+
+[output.stream]
+scale = 2.0
+
+[output.HDMI-A-1]
+enabled = false

@@ -1,0 +1,84 @@
+# Appearance (from niri layout.kdl, layer.kdl, windowrule.kdl, noctalia.kdl)
+
+[appearance]
+prefer_no_csd = true
+border_width = 2
+corner_radius = 12
+
+[appearance.blur]
+enabled = true
+optimized = false
+passes = 1
+radius = 3
+noise = 0.03
+brightness = 1.0
+contrast = 1.0
+saturation = 2.0
+
+[appearance.shadow]
+enabled = true
+softness = 30
+offset_x = 0
+offset_y = 5
+
+# Niri does not draw server-side title bars; kept off to match Niri.
+# Switch mode to "on" if you want macOS-style title bars in Umbriel.
+[appearance.title_bar]
+mode = "off"
+height = 28
+font = "sans 10"
+title_align = "right"
+button_position = "left"
+buttons = ["minimize", "maximize", "close"]
+button_size = -1
+button_gap = 8
+button_padding = -1
+button_corner_radius = -1
+button_glyph = "hover"
+button_glyph_size = -1
+button_glyph_stroke = -1
+button_background = true
+
+# ==============================================================================
+# Overview & Colors (fallback when noctalia.toml template is not active)
+
+[overview]
+zoom = 0.6
+background_blur = false
+workspace_wallpaper = false
+
+[colors]
+accent_primary = "#5058b1ff"
+error = "#a53c59ff"
+insert_hint = "#5058b180"
+shadow = "#00000077"
+
+[colors.border]
+focused = "#5058b1ff"
+unfocused = "#dcddeaff"
+
+[colors.tab_bar]
+active = "#5058b1ff"
+active_unfocused = "#b2b5d8ff"
+urgent = "#a53c59ff"
+
+[colors.overview]
+workspace_background = "#00000000"
+badge = "#5058b1ff"
+background_tint = "#77777700"
+
+[colors.title_bar]
+# background = "#F4F5FA4D"
+background = "#F8F8F8CC"
+background_unfocused = "#E4E5EF4D"
+text = "#1E1F2BFF"
+text_unfocused = "#6B6D80FF"
+close = "#F25C66FF"
+close_glyph = "#2A0B0EFF"
+close_glyph_hover = "#2A0B0EFF"
+maximize = "#5B8AF5FF"
+maximize_glyph = "#0E1C3BFF"
+maximize_glyph_hover = "#0E1C3BFF"
+minimize = "#F5B82EFF"
+minimize_glyph = "#332200FF"
+minimize_glyph_hover = "#332200FF"

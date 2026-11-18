@@ -1,0 +1,157 @@
+# Keybinds (aligned with niri keys.kdl & recent.kdl, using Noctalia IPC)
+
+[keybinds]
+# System, overview & session
+"Mod+Shift+Slash" = { action = "cheatsheet-toggle", repeat = false }
+"Mod+C" = { action = "window-close", repeat = false }
+"Mod+M" = "session-quit"
+"Mod+O" = { action = "overview-toggle", repeat = false }
+"Mod+Shift+P" = { action = "spawn noctalia msg dpms-off", repeat = false }
+"Mod+Escape" = { action = "shortcuts-inhibit-toggle", allow_when_inhibited = true, repeat = false }
+
+# Screenshots (Noctalia IPC)
+"Print" = { action = "spawn noctalia msg screenshot-region", repeat = false }
+"Mod+Print" = { action = "spawn noctalia msg screenshot-fullscreen", repeat = false }
+"Alt+Print" = { action = "spawn noctalia msg screenshot-window", repeat = false }
+
+# Applications & Noctalia UI (Noctalia IPC)
+"Mod+Period" = { action = "spawn noctalia msg panel-toggle launcher /emo", repeat = false }
+"Mod+Q" = { action = "spawn kitty", repeat = false }
+"Mod+E" = { action = "spawn dolphin ~", repeat = false }
+"Mod+R" = { action = "spawn noctalia msg panel-toggle launcher", repeat = false }
+"Mod+Shift+T" = { action = "spawn noctalia msg theme-mode-toggle", repeat = false }
+"Mod+Shift+V" = { action = "spawn noctalia msg panel-toggle clipboard", repeat = false }
+"Alt+L" = { action = "spawn noctalia msg brightness-set 0", repeat = false }
+"Alt+W" = { action = "spawn noctalia msg brightness-set 50%", repeat = false }
+"Mod+P" = { action = "spawn sh -c 'c=$(hyprpicker -a); [ -n \"$c\" ] && noctalia msg notification-show \"Color Picked\" \"$c\"'", repeat = false }
+"Mod+Space" = { action = "spawn noctalia msg panel-toggle session", repeat = false }
+"Mod+Shift+Space" = { action = "spawn noctalia msg panel-toggle launcher", repeat = false }
+"Mod+D" = { action = "spawn noctalia msg dock-toggle", repeat = false }
+"Mod+S" = { action = "spawn noctalia msg panel-toggle control-center", repeat = false }
+
+# Recent windows switcher (Noctalia IPC)
+"Alt+Tab" = "spawn noctalia msg window-switcher hold"
+"Alt+Shift+Tab" = "spawn noctalia msg window-switcher hold reverse"
+"Mod+Tab" = "spawn noctalia msg window-switcher hold"
+"Mod+Shift+Tab" = "spawn noctalia msg window-switcher hold reverse"
+
+# Scratchpad
+"Mod+A" = { action = "scratchpad-toggle", repeat = false }
+"Mod+Shift+A" = { action = "window-move-to-scratchpad", repeat = false }
+"Mod+Ctrl+A" = { action = "window-restore-from-scratchpad", repeat = false }
+
+# Media, volume & brightness (Noctalia IPC)
+"XF86AudioRaiseVolume" = { action = "spawn noctalia msg volume-up 10", allow_when_locked = true }
+"XF86AudioLowerVolume" = { action = "spawn noctalia msg volume-down 10", allow_when_locked = true }
+"XF86AudioMute" = { action = "spawn noctalia msg volume-mute", allow_when_locked = true, repeat = false }
+"XF86AudioMicMute" = { action = "spawn noctalia msg mic-mute", allow_when_locked = true, repeat = false }
+"XF86AudioPlay" = { action = "spawn noctalia msg media toggle", allow_when_locked = true, repeat = false }
+"XF86AudioNext" = { action = "spawn noctalia msg media next", allow_when_locked = true }
+"XF86AudioPrev" = { action = "spawn noctalia msg media previous", allow_when_locked = true }
+"XF86MonBrightnessDown" = { action = "spawn noctalia msg brightness-down current 5%", allow_when_locked = true }
+"XF86MonBrightnessUp" = { action = "spawn noctalia msg brightness-up current 5%", allow_when_locked = true }
+
+# Window state & sizing
+"Mod+V" = { action = "window-toggle-floating", repeat = false }
+"Mod+F" = { action = "window-toggle-maximize", repeat = false }
+"Mod+Ctrl+V" = { action = "window-focus-switch-floating", repeat = false }
+"Mod+Shift+R" = "window-cycle-secondary-extent"
+"Mod+Ctrl+R" = "window-set-secondary-extent 1.0"
+"Mod+Shift+F" = { action = "window-toggle-maximize-to-edges", repeat = false }
+"Alt+Shift+F" = { action = "window-toggle-fullscreen", repeat = false }
+"Mod+Ctrl+F" = { action = "window-set-primary-extent 1.0", repeat = false }
+"Mod+Alt+R" = "window-cycle-primary-extent"
+"Mod+Alt+C" = "column-center"
+"Mod+Ctrl+C" = "column-center"
+"Mod+Minus" = "window-modify-primary-extent -0.10"
+"Mod+Equal" = "window-modify-primary-extent +0.10"
+"Mod+Shift+Minus" = "window-modify-secondary-extent -0.10"
+"Mod+Shift+Equal" = "window-modify-secondary-extent +0.10"
+"Mod+BracketLeft" = "window-consume-or-expel-left"
+"Mod+BracketRight" = "window-consume-or-expel-right"
+"Mod+Comma" = "window-consume-from-right"
+"Mod+W" = { action = "column-toggle-tabbed", repeat = false }
+
+# Window focus
+"Mod+Left" = "window-focus-left"
+"Mod+Down" = "window-focus-down"
+"Mod+Up" = "window-focus-up"
+"Mod+Right" = "window-focus-right"
+"Mod+H" = "window-focus-left"
+"Mod+J" = "window-focus-down"
+"Mod+K" = "window-focus-up"
+"Mod+L" = "window-focus-right"
+"Mod+Home" = "column-focus-first"
+"Mod+End" = "column-focus-last"
+"Mod+WheelRight" = "window-focus-right"
+"Mod+WheelLeft" = "window-focus-left"
+
+# Window movement
+"Mod+Shift+Left" = "column-move-left"
+"Mod+Shift+Down" = "window-move-down"
+"Mod+Shift+Up" = "window-move-up"
+"Mod+Shift+Right" = "column-move-right"
+"Mod+Shift+H" = "column-move-left"
+"Mod+Shift+J" = "window-move-down"
+"Mod+Shift+K" = "window-move-up"
+"Mod+Shift+L" = "column-move-right"
+"Mod+Shift+WheelDown" = "column-move-right"
+"Mod+Shift+WheelUp" = "column-move-left"
+
+# Monitor (output) focus
+"Mod+Ctrl+Left" = "output-focus-left"
+"Mod+Ctrl+Down" = "output-focus-down"
+"Mod+Ctrl+Up" = "output-focus-up"
+"Mod+Ctrl+Right" = "output-focus-right"
+"Mod+Ctrl+H" = "output-focus-left"
+"Mod+Ctrl+J" = "output-focus-down"
+"Mod+Ctrl+K" = "output-focus-up"
+"Mod+Ctrl+L" = "output-focus-right"
+"Mod+Ctrl+Page_Down" = "output-focus-down"
+"Mod+Ctrl+Page_Up" = "output-focus-up"
+"Mod+Ctrl+U" = "output-focus-down"
+"Mod+Ctrl+I" = "output-focus-up"
+"Mod+Ctrl+WheelDown" = { action = "output-focus-down", cooldown_ms = 150 }
+"Mod+Ctrl+WheelUp" = { action = "output-focus-up", cooldown_ms = 150 }
+
+# Monitor (output) movement
+"Mod+Shift+Ctrl+Left" = "column-move-to-output-left"
+"Mod+Shift+Ctrl+Down" = "column-move-to-output-down"
+"Mod+Shift+Ctrl+Up" = "column-move-to-output-up"
+"Mod+Shift+Ctrl+Right" = "column-move-to-output-right"
+"Mod+Shift+Ctrl+H" = "column-move-to-output-left"
+"Mod+Shift+Ctrl+J" = "column-move-to-output-down"
+"Mod+Shift+Ctrl+K" = "column-move-to-output-up"
+"Mod+Shift+Ctrl+L" = "column-move-to-output-right"
+
+# Workspace focus
+"Mod+Page_Down" = "workspace-next"
+"Mod+Page_Up" = "workspace-previous"
+"Mod+U" = "workspace-next"
+"Mod+I" = "workspace-previous"
+"Mod+WheelDown" = { action = "workspace-next", cooldown_ms = 150 }
+"Mod+WheelUp" = { action = "workspace-previous", cooldown_ms = 150 }
+"Mod+1" = "workspace-switch 1"
+"Mod+2" = "workspace-switch 2"
+"Mod+3" = "workspace-switch 3"
+"Mod+4" = "workspace-switch 4"
+"Mod+5" = "workspace-switch 5"
+"Mod+6" = "workspace-switch 6"
+"Mod+7" = "workspace-switch 7"
+"Mod+8" = "workspace-switch 8"
+"Mod+9" = "workspace-switch 9"
+
+# Workspace movement
+"Mod+Alt+Down" = "workspace-move-down"
+"Mod+Alt+Up" = "workspace-move-up"
+"Mod+Shift+1" = "column-move-to-workspace 1"
+"Mod+Shift+2" = "column-move-to-workspace 2"
+"Mod+Shift+3" = "column-move-to-workspace 3"
+"Mod+Shift+4" = "column-move-to-workspace 4"
+"Mod+Shift+5" = "column-move-to-workspace 5"
+"Mod+Shift+6" = "column-move-to-workspace 6"
+"Mod+Shift+7" = "column-move-to-workspace 7"
+"Mod+Shift+8" = "column-move-to-workspace 8"
+"Mod+Shift+9" = "column-move-to-workspace 9"
+"Mod+Shift+U" = "column-move-to-workspace-next"
+"Mod+Shift+I" = "column-move-to-workspace-previous"

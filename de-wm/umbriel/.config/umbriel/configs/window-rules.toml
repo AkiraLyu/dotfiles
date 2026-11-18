@@ -1,0 +1,145 @@
+# Window rules (from niri float.kdl, layer.kdl, windowrule.kdl + Noctalia)
+
+# Global blur without xray (blur overlapping windows behind)
+[[window_rule]]
+blur = true
+blur_optimized = false
+
+[[window_rule]]
+match.app_id = "^org\\.waywallen\\.waywallen$"
+title_bar = "on"
+
+# Noctalia built-in rules
+[[window_rule]]
+match.app_id = "^dev\\.noctalia\\.Noctalia$"
+default_floating = true
+default_floating_size_px = { width = 1020, height = 900 }
+
+[[window_rule]]
+match.app_id = "^dev\\.noctalia\\.UmbrielSharePicker$"
+default_floating = true
+default_floating_size_px = { width = 800, height = 600 }
+
+[[window_rule]]
+match.title = "^notificationtoasts_.+_desktop"
+default_position = { x = 0, y = 0, anchor = "bottom_right" }
+default_focused = false
+default_pinned = true
+
+# Floating apps (from float.kdl)
+[[window_rule]]
+match.app_id = [
+    '^wpsoffice$',
+    '^wps$',
+    '^wpspdf$',
+    '^et$',
+    '^wpp$',
+    '.*\.exe$',
+    "steam_proton",
+    "Display",
+    'org\.kde\.kdenlive',
+    'org\.kde\.gwenview',
+]
+default_floating = true
+
+[[window_rule]]
+match.title = "plasmashell"
+default_floating = true
+
+# WeChat fix
+[[window_rule]]
+match.app_id = 'wechat$'
+default_floating = true
+default_focused = false
+
+# Floating with fixed sizes (from float.kdl)
+[[window_rule]]
+match.app_id = 'org\.gnome\.Calendar'
+default_floating = true
+default_floating_size_px = { width = 1200, height = 700 }
+
+[[window_rule]]
+match.app_id = 'org\.kde\.dolphin'
+blur_popups = true
+default_floating = true
+default_floating_size_px = { width = 885, height = 620 }
+
+[[window_rule]]
+match.app_id = 'org\.freedesktop\.impl\.portal\.desktop\.kde'
+default_floating = true
+default_floating_size_px = { width = 950, height = 580 }
+
+[[window_rule]]
+match.title = "QQ"
+default_floating = true
+default_floating_size_px = { width = 940, height = 660 }
+
+[[window_rule]]
+match.app_id = "Typora"
+match.title = "License Info"
+default_floating = true
+
+[[window_rule]]
+match.app_id = "kitty"
+title_bar = "on"
+default_floating = true
+default_floating_size_px = { width = 973, height = 627 }
+blur = true
+blur_optimized = false
+
+[[window_rule]]
+match.app_id = 'org\.telegram\.desktop'
+default_floating = true
+default_floating_size_px = { width = 788, height = 610 }
+
+[[window_rule]]
+match.app_id = "SPlayer"
+opacity = 0.8
+default_floating = true
+default_floating_size_px = { width = 1055, height = 655 }
+
+[[window_rule]]
+match.app_id = 'org\.mozilla\.Thunderbird'
+default_scrolling_extent_px = 1032
+
+[[window_rule]]
+match.app_id = 'org\.waywallen\.waywallen'
+default_floating = true
+default_floating_size_px = { width = 940, height = 710 }
+
+# Display & maximization rules (from windowrule.kdl)
+[[window_rule]]
+match.app_id = "firefox"
+default_maximize_to_edges = true
+
+[[window_rule]]
+match.app_id = "code"
+default_maximize = true
+
+# Keep Firefox sub-windows floating instead of maximized-to-edges
+[[window_rule]]
+match.app_id = "firefox"
+match.title = "^(我的足迹|Library)$"
+default_floating = true
+default_maximize = false
+default_maximize_to_edges = false
+
+[[window_rule]]
+match.title = "^(Picture-in-Picture|Picture in picture)$"
+default_floating = true
+default_maximize = false
+default_maximize_to_edges = false
+default_position = { x = 20, y = 20, anchor = "bottom_right" }
+
+[[window_rule]]
+match.app_id = "Codex"
+blur = false
+shadow = false
+
+[[window_rule]]
+match.app_id = "netease-cloud-music-web-player"
+default_scrolling_extent_px = 1100
+
+[[window_rule]]
+match.app_id = 'md\.obsidian\.Obsidian'
+opacity = 0.999
