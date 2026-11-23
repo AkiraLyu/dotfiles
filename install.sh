@@ -214,7 +214,7 @@ case "$step" in
         check_share_sources . private
         private_options=(
             --dir "$repo_dir" --target "$HOME" --no-folding --restow
-            '--ignore=^/(firmware|bot)(/.*)?$'
+            '--ignore=^(firmware|bot)(/.*)?$'
             '--ignore=\.pem$'
         )
         if $check_only; then private_options+=(--simulate); fi

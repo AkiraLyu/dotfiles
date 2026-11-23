@@ -139,7 +139,12 @@ shadow = false
 [[window_rule]]
 match.app_id = "netease-cloud-music-web-player"
 default_scrolling_extent_px = 1100
+title_bar = "on"
 
 [[window_rule]]
 match.app_id = 'md\.obsidian\.Obsidian'
 opacity = 0.999
+
+[[window_rule]]
+match.app_id = 'deepseek-harness-desktop'
+title_bar = "on"
