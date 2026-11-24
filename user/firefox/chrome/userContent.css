@@ -45,22 +45,132 @@
   }
 }
 
-/* Sidebery 内部与 Firefox 外层使用同一面板底色，避免悬浮控件透出内容。 */
+@-moz-document url(about:home), url(about:newtab) {
+  /* 仅覆盖变量，不在 :root/html 上设 background-color，避免阻断 body 背景提升并遮住 body::before 背景图。 */
+  :root {
+    --newtab-background-color: var(--uc-ntp-background) !important;
+    --newtab-background-color-secondary: var(--uc-surface-container) !important;
+    --newtab-text-primary-color: var(--uc-text-primary) !important;
+    --newtab-text-secondary-color: var(--uc-text-subtle) !important;
+    --newtab-primary-action-background: var(--uc-accent) !important;
+    --newtab-primary-element-text-color: var(--uc-on-accent) !important;
+  }
+}
+
+/* Sidebery 内部与 Firefox 外层使用同一侧栏底色，避免悬浮控件透出内容。 */
 @-moz-document regexp("^moz-extension://.*/sidebar/sidebar[.]html.*$") {
   :root,
   body,
   #root_container,
   #root {
-    background: var(--uc-panel-background) !important;
+    background: var(--uc-sidebar-background) !important;
+    color: var(--uc-text-secondary) !important;
   }
 
   #root {
-    /* Sidebery 5 使用这些变量绘制标签区、工具栏与底部新建标签区。 */
-    --bg: var(--uc-panel-background) !important;
-    --frame-bg: var(--uc-panel-background) !important;
-    --toolbar-bg: var(--uc-panel-background) !important;
-    --frame-el-bg: var(--uc-panel-background) !important;
+    /* 覆盖 Firefox 轻量主题向 Sidebery 注入的 --s-* 变量。 */
+    --s-frame-bg: var(--uc-sidebar-background) !important;
+    --s-frame-fg: var(--uc-text-secondary) !important;
+    --s-toolbar-bg: var(--uc-sidebar-background) !important;
+    --s-toolbar-fg: var(--uc-text-secondary) !important;
+    --s-toolbar-border: var(--uc-header-divider) !important;
+    --s-act-el-bg: var(--uc-panel-background) !important;
+    --s-act-el-fg: var(--uc-text-primary) !important;
+    --s-act-el-border: transparent !important;
+    --s-popup-bg: var(--uc-popup-background) !important;
+    --s-popup-fg: var(--uc-text-primary) !important;
+    --s-popup-border: var(--uc-border-color) !important;
+    --s-accent: var(--uc-accent) !important;
+
+    /* Sidebery 5 使用这些变量绘制标签区、工具栏、浮层与底部新建标签区。 */
+    --bg: var(--uc-sidebar-background) !important;
+    --frame-bg: var(--uc-sidebar-background) !important;
+    --frame-fg: var(--uc-text-secondary) !important;
+    --toolbar-bg: var(--uc-sidebar-background) !important;
+    --toolbar-fg: var(--uc-text-secondary) !important;
+    --frame-el-bg: var(--uc-sidebar-background) !important;
+    --frame-el-fg: var(--uc-text-secondary) !important;
     --frame-el-shadow: none !important;
+    --frame-el-overlay-hover-bg: var(--uc-sidebar-hover-bg) !important;
+    --frame-el-overlay-clicked-bg: var(--uc-sidebar-active-bg) !important;
+    --frame-el-overlay-selected-bg: var(--uc-sidebar-tab-selected-bg) !important;
+    --frame-el-overlay-selected-border: var(--uc-accent) !important;
+    --toolbar-el-overlay-hover-bg: var(--uc-header-hover) !important;
+    --toolbar-el-overlay-clicked-bg: var(--uc-header-active) !important;
+    --toolbar-el-overlay-active-bg: var(--uc-header-container) !important;
+    --toolbar-el-overlay-selected-bg: var(--uc-header-container) !important;
+    --toolbar-el-overlay-selected-border: var(--uc-accent) !important;
+    --nav-btn-active-shadow: none !important;
+    --frame-scrollbar-color: var(--uc-scrollbar-color) !important;
+    --toolbar-scrollbar-color: var(--uc-scrollbar-color) !important;
+    --popup-scrollbar-color: var(--uc-scrollbar-color) !important;
+    --accent: var(--uc-accent) !important;
+    --status-active: var(--uc-accent) !important;
+    --border: var(--uc-header-divider) !important;
+    --badge-bg: var(--uc-accent) !important;
+    --badge-fg: var(--uc-on-accent) !important;
+    --active-el-bg: var(--uc-panel-background) !important;
+    --active-el-fg: var(--uc-text-primary) !important;
+    --active-el-shadow: none !important;
+    --active-el-overlay-hover-bg: var(--uc-hover-bg) !important;
+    --active-el-overlay-clicked-bg: var(--uc-active-bg) !important;
+    --popup-bg: var(--uc-popup-background) !important;
+    --popup-fg: var(--uc-text-primary) !important;
+    --notification-bg: var(--uc-popup-background) !important;
+    --notification-fg: var(--uc-text-primary) !important;
+    --tabs-normal-fg: var(--uc-text-secondary) !important;
+    --tabs-bg-hover: var(--uc-sidebar-hover-bg) !important;
+    --tabs-bg-active: var(--uc-sidebar-active-bg) !important;
+    --tabs-activated-bg: var(--uc-panel-background) !important;
+    --tabs-activated-fg: var(--uc-text-primary) !important;
+    --tabs-activated-shadow: none !important;
+    --tabs-selected-bg: var(--uc-sidebar-tab-selected-bg) !important;
+    --tabs-selected-fg: var(--uc-text-primary) !important;
+    --tabs-progress-bg: var(--uc-accent) !important;
+  }
+
+  /* 顶栏仅保留底部细分隔线，对齐 Chrome 垂直侧栏的 kColorTabDividerFrameActive。 */
+  .NavigationBar {
+    box-shadow: 0 1px 0 0 var(--uc-header-divider) !important;
+  }
+
+  /* 顶部所有按钮统一使用 Chrome 的 kColorSysHeaderContainer 亮奶油黄强调底色。 */
+  .NavigationBar .nav-item:not([data-class="space"]) {
+    --nav-btn-fg: var(--uc-on-header-container) !important;
+    --toolbar-fg: var(--uc-on-header-container) !important;
+    background-color: var(--uc-header-container) !important;
+    box-shadow: none !important;
+  }
+
+  .NavigationBar .nav-item:not([data-class="space"]) .len {
+    text-shadow:
+      0 0 2px var(--uc-header-container),
+      0 0 3px var(--uc-header-container) !important;
+  }
+
+  .NavigationBar .nav-item:not([data-class="space"]):hover {
+    --nav-btn-fg: var(--uc-on-header-hover) !important;
+    --toolbar-fg: var(--uc-on-header-hover) !important;
+    background-color: var(--uc-header-hover) !important;
+  }
+
+  .NavigationBar .nav-item:not([data-class="space"]):hover .len {
+    text-shadow:
+      0 0 2px var(--uc-header-hover),
+      0 0 3px var(--uc-header-hover) !important;
+  }
+
+  .NavigationBar .nav-item:not([data-class="space"]):active {
+    background-color: var(--uc-header-active) !important;
+  }
+
+  .Tab[data-selected] .lvl-wrapper:after,
+  .Tab[data-active] .lvl-wrapper:after {
+    box-shadow: none !important;
+  }
+
+  .Tab:not([data-active="true"]):hover .title {
+    color: var(--uc-on-header-hover) !important;
   }
 
   /* 用 3px 容器色边框环绕标签，保留标签背景和原有点击区域。 */
@@ -76,39 +186,32 @@
     pointer-events: none !important;
   }
 
-  /* Sidebery 可能仍保留亮色属性；暗色时显式修正其文字和浮层配色。 */
-  @media (prefers-color-scheme: dark) {
-    :root,
-    body,
-    #root_container,
-    #root {
-      color: #ccc !important;
-    }
-
-    #root {
-      --frame-fg: #ccc !important;
-      --toolbar-fg: #eee !important;
-      --frame-el-fg: #eee !important;
-      --active-el-bg: rgba(255, 255, 255, 0.141) !important;
-      --active-el-fg: #fff !important;
-      --popup-bg: var(--uc-panel-background) !important;
-      --popup-fg: #fafafa !important;
-      --notification-bg: var(--uc-panel-background) !important;
-      --notification-fg: #fafafa !important;
-      --tabs-normal-fg: #ccc !important;
-      --tabs-activated-bg: rgba(255, 255, 255, 0.141) !important;
-      --tabs-activated-fg: #fff !important;
-      --tabs-selected-bg: rgba(255, 255, 255, 0.141) !important;
-      --tabs-selected-fg: #fff !important;
-    }
-  }
-
-  /* 底部按钮、其留白父层和防穿透伪元素都使用不透明面板色。 */
+  /* 底部留白区保持不透明侧栏底色，新建标签按钮使用 Chrome SysHeaderContainer 强调色。 */
   .TabsPanel .bottom-space,
   .TabsPanel .new-tab-btns,
-  .TabsPanel .new-tab-btns::after,
+  .TabsPanel .new-tab-btns::after {
+    background-color: var(--uc-sidebar-background) !important;
+  }
+
   .TabsPanel .new-tab-btn {
-    background-color: var(--uc-panel-background) !important;
+    background-color: var(--uc-header-container) !important;
+    box-shadow: none !important;
+  }
+
+  .TabsPanel .new-tab-btn > svg {
+    fill: var(--uc-on-header-container) !important;
+  }
+
+  .TabsPanel .new-tab-btn:hover::before {
+    background-color: var(--uc-header-hover) !important;
+  }
+
+  .TabsPanel .new-tab-btn:hover > svg {
+    fill: var(--uc-on-header-hover) !important;
+  }
+
+  .TabsPanel .new-tab-btn:active::before {
+    background-color: var(--uc-header-active) !important;
   }
 
   /* Sidebery 的 HTML 右键菜单与 userChrome.css 的原生菜单共用 theme.css。 */

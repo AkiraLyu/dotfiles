@@ -7,6 +7,109 @@
   --uc-panel-radius: var(--border-radius-medium, 8px);
   --uc-sidebar-collapsed-width: 40px;
   --uc-bookmarks-toolbar-height: 32px;
+
+  /* 覆盖活动轻量主题与默认 Nova 主题变量，与 Chrome Profile 2 配色保持一致。 */
+  --lwt-accent-color: var(--uc-frame-background) !important;
+  --lwt-accent-color-inactive: var(--uc-frame-background-inactive) !important;
+  --lwt-text-color: var(--uc-text-primary) !important;
+  --lwt-header-image: none !important;
+  --lwt-additional-images: none !important;
+  --lwt-tab-line-color: var(--uc-accent) !important;
+  --lwt-background-tab-separator-color: var(--uc-border-color) !important;
+  --lwt-toolbar-field-highlight: var(--uc-selection-bg) !important;
+  --lwt-toolbar-field-highlight-text: var(--uc-selection-fg) !important;
+
+  --toolbox-background-color: var(--uc-frame-background) !important;
+  --toolbox-background-color-inactive: var(--uc-frame-background-inactive) !important;
+  --toolbox-background-image: none !important;
+  --toolbox-background-gradient: none !important;
+  --toolbox-text-color: var(--uc-text-primary) !important;
+  --toolbox-text-color-inactive: var(--uc-text-secondary) !important;
+
+  --toolbar-background-color: var(--uc-header-background) !important;
+  --toolbar-text-color: var(--uc-text-primary) !important;
+  --toolbarbutton-icon-fill: var(--uc-icon-color) !important;
+  --toolbarbutton-icon-fill-attention: var(--uc-accent) !important;
+  --toolbarbutton-icon-fill-attention-text: var(--uc-on-accent) !important;
+  --toolbarbutton-background-color-hover: var(--uc-hover-bg) !important;
+  --toolbarbutton-background-color-active: var(--uc-active-bg) !important;
+
+  --chrome-content-separator-color: var(--uc-border-color) !important;
+  --toolbarseparator-color: var(--uc-border-color) !important;
+  --tabs-navbar-separator-color: transparent !important;
+
+  --tab-background-color-selected: var(--uc-panel-background) !important;
+  --tab-text-color-selected: var(--uc-text-primary) !important;
+  --tab-icon-fill-loading: var(--uc-accent) !important;
+
+  --toolbar-field-background-color: var(--uc-urlbar-background) !important;
+  --toolbar-field-text-color: var(--uc-text-primary) !important;
+  --toolbar-field-border-color: var(--uc-border-color) !important;
+  --toolbar-field-background-color-focus: var(--uc-urlbar-focus-background) !important;
+  --toolbar-field-text-color-focus: var(--uc-text-primary) !important;
+  --toolbar-field-border-color-focus: var(--uc-accent) !important;
+
+  --urlbar-box-background-color: var(--uc-surface-container) !important;
+  --urlbar-box-background-color-hover: var(--uc-urlbar-chip-hover-background) !important;
+  --urlbar-box-background-color-active: var(--uc-urlbar-row-selected-background) !important;
+  --urlbarview-background-color-hover: var(--uc-urlbar-row-hover-background) !important;
+  --urlbarview-background-color-selected: var(--uc-urlbar-row-selected-background) !important;
+  --urlbarview-text-color-selected: var(--uc-text-primary) !important;
+  --urlbarview-text-color-action: var(--uc-accent) !important;
+  --urlbarview-separator-color: var(--uc-divider-color) !important;
+
+  --color-accent-primary: var(--uc-accent) !important;
+  --color-accent-primary-hover: var(--uc-accent-hover) !important;
+  --color-accent-primary-active: var(--uc-accent-active) !important;
+  --color-accent-primary-selected: var(--uc-accent) !important;
+  --color-accent-attention: var(--uc-accent) !important;
+  --focus-outline-color: var(--uc-accent) !important;
+  --link-color: var(--uc-accent) !important;
+  --link-color-hover: var(--uc-accent-hover) !important;
+  --link-color-active: var(--uc-accent-active) !important;
+
+  --panel-background-color: var(--uc-popup-background) !important;
+  --panel-text-color: var(--uc-text-primary) !important;
+  --panel-border-color: var(--uc-border-color) !important;
+  --panel-separator-color: var(--uc-divider-color) !important;
+
+  --sidebar-background-color: var(--uc-sidebar-background) !important;
+  --sidebar-text-color: var(--uc-text-primary) !important;
+  --sidebar-border-color: var(--uc-border-color) !important;
+
+  --tabpanel-background-color: var(--uc-ntp-background) !important;
+  --newtab-background-color: var(--uc-ntp-background) !important;
+}
+
+body {
+  background-color: var(--toolbox-background-color) !important;
+  background-image: none !important;
+}
+
+body:-moz-window-inactive {
+  background-color: var(--toolbox-background-color-inactive) !important;
+}
+
+.urlbar-input::selection,
+.searchbar-textbox::selection {
+  background-color: var(--uc-selection-bg) !important;
+  color: var(--uc-selection-fg) !important;
+}
+
+#urlbar:not([focused], [open]):hover > .urlbar-background {
+  background-color: var(--uc-urlbar-hover-background) !important;
+}
+
+findbar {
+  background-color: var(--uc-panel-background) !important;
+  color: var(--uc-text-primary) !important;
+  border-top-color: var(--chrome-content-separator-color) !important;
+}
+
+#statuspanel-label {
+  background-color: var(--uc-panel-background) !important;
+  border-color: var(--chrome-content-separator-color) !important;
+  color: var(--uc-text-subtle) !important;
 }
 
 /* 保留 */
@@ -17,7 +120,7 @@
 /* } */
 
 /*
- * 让 Firefox 原生 Nova UI 管理顶栏、窗口按钮、字体、间距与主题配色。
+ * 让 Firefox 原生 Nova UI 管理顶栏、窗口按钮、字体与间距，配色统一由 theme.css 覆盖。
  * Firefox 的垂直标签模式负责原生单行标题栏，标签内容仍由 Sidebery 提供，
  * 因此只隐藏重复的原生侧栏启动器。
  */
@@ -52,10 +155,11 @@
 
   #nav-bar {
     background-color: var(--toolbar-background-color) !important;
-    background-image: var(--toolbox-background-image) !important;
-    background-repeat: var(--toolbox-background-repeat) !important;
-    background-position: var(--toolbox-background-position) !important;
-    background-size: var(--toolbox-background-size) !important;
+    background-image: none !important;
+  }
+
+  #nav-bar:-moz-window-inactive {
+    background-color: var(--uc-frame-background-inactive) !important;
   }
 
   #PersonalToolbar:not([collapsed], [moz-collapsed], [hidden]) {
@@ -75,6 +179,7 @@
     overflow: clip !important;
     background-color: var(--uc-panel-background) !important;
     background-image: none !important;
+    color: var(--uc-text-subtle) !important;
   }
 
   /* 全屏时书签栏被原生样式隐藏，侧栏无需向上延伸。 */

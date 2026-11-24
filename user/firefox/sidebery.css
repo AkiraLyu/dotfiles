@@ -3,28 +3,81 @@
   --tabs-count-font: .625rem system-ui;
   --bookmarks-bookmark-font: .875rem system-ui;
   --bookmarks-folder-font: 10pt system-ui;
-  --bg: var(--uc-panel-background) !important;
-  --frame-bg: var(--uc-panel-background) !important;
-  --toolbar-bg: var(--uc-panel-background) !important;
-  --frame-el-bg: var(--uc-panel-background) !important;
+  --bg: var(--uc-sidebar-background, #eae3bd) !important;
+  --frame-bg: var(--uc-sidebar-background, #eae3bd) !important;
+  --frame-fg: var(--uc-text-secondary, #4b472b) !important;
+  --toolbar-bg: var(--uc-sidebar-background, #eae3bd) !important;
+  --toolbar-fg: var(--uc-text-secondary, #4b472b) !important;
+  --frame-el-bg: var(--uc-sidebar-background, #eae3bd) !important;
+  --frame-el-fg: var(--uc-text-secondary, #4b472b) !important;
   --frame-el-shadow: none !important;
+  --nav-btn-active-shadow: none !important;
+  --accent: var(--uc-accent, #696001) !important;
+  --status-active: var(--uc-accent, #696001) !important;
+  --border: var(--uc-header-divider, #d5c967) !important;
+  --active-el-bg: var(--uc-panel-background, #fef9eb) !important;
+  --active-el-fg: var(--uc-text-primary, #1d1c14) !important;
+  --active-el-shadow: none !important;
+  --popup-bg: var(--uc-popup-background, #fffbff) !important;
+  --popup-fg: var(--uc-text-primary, #1d1c14) !important;
+  --notification-bg: var(--uc-popup-background, #fffbff) !important;
+  --notification-fg: var(--uc-text-primary, #1d1c14) !important;
+  --tabs-normal-fg: var(--uc-text-secondary, #4b472b) !important;
+  --tabs-bg-hover: var(--uc-sidebar-hover-bg, #d5c967) !important;
+  --tabs-bg-active: var(--uc-sidebar-active-bg, #c6ba60) !important;
+  --tabs-activated-bg: var(--uc-panel-background, #fef9eb) !important;
+  --tabs-activated-fg: var(--uc-text-primary, #1d1c14) !important;
+  --tabs-activated-shadow: none !important;
+  --tabs-selected-bg: var(--uc-sidebar-tab-selected-bg, #f6f0d9) !important;
+  --tabs-selected-fg: var(--uc-text-primary, #1d1c14) !important;
+  --tabs-progress-bg: var(--uc-accent, #696001) !important;
 }
 
 html,
 body,
 #root_container,
 #root {
-  background: var(--uc-panel-background) !important;
+  background: var(--uc-sidebar-background, #eae3bd) !important;
+  color: var(--uc-text-secondary, #4b472b) !important;
+}
+
+.NavigationBar {
+  box-shadow: 0 1px 0 0 var(--uc-header-divider, #d5c967) !important;
+}
+
+.NavigationBar .nav-item:not([data-class="space"]) {
+  --nav-btn-fg: var(--uc-on-header-container, #1f1c00) !important;
+  --toolbar-fg: var(--uc-on-header-container, #1f1c00) !important;
+  background-color: var(--uc-header-container, #fff39a) !important;
+  box-shadow: none !important;
+}
+
+.NavigationBar .nav-item:not([data-class="space"]):hover {
+  --nav-btn-fg: var(--uc-on-header-hover, #363100) !important;
+  --toolbar-fg: var(--uc-on-header-hover, #363100) !important;
+  background-color: var(--uc-header-hover, #d5c967) !important;
+}
+
+.NavigationBar .nav-item:not([data-class="space"]):active {
+  background-color: var(--uc-header-active, #c6ba60) !important;
 }
 
 /* Keep the bottom new-tab area opaque above the scrolling tab list. */
 .TabsPanel .bottom-space,
 .TabsPanel .new-tab-btns,
-.TabsPanel .new-tab-btns::after,
-.TabsPanel .new-tab-btn {
-  background-color: var(--uc-panel-background) !important;
+.TabsPanel .new-tab-btns::after {
+  background-color: var(--uc-sidebar-background, #eae3bd) !important;
 }
- 
+
+.TabsPanel .new-tab-btn {
+  background-color: var(--uc-header-container, #fff39a) !important;
+  box-shadow: none !important;
+}
+
+.TabsPanel .new-tab-btn > svg {
+  fill: var(--uc-on-header-container, #1f1c00) !important;
+}
+
 /* Adjust styles according to sidebar width */
 @media screen and (max-width: 49px) {
   #root {
@@ -43,50 +96,23 @@ body,
     visibility: collapse;
   }
 }
- 
+
 @media screen and (min-width: 49px) {
   .Tab .audio {
     left: 28px;
   }
 }
- 
+
 /*
  * Add margins and rounding around tabs
- */ 
- 
+ */
+
 #root {
   --tabs-height: 33px;
 }
 
-/* Keep dark colors correct even when Sidebery retains its light scheme attributes. */
-@media (prefers-color-scheme: dark) {
-  html,
-  body,
-  #root_container,
-  #root {
-    color: #ccc !important;
-  }
-
-  #root {
-    --frame-fg: #ccc !important;
-    --toolbar-fg: #eee !important;
-    --frame-el-fg: #eee !important;
-    --active-el-bg: rgba(255, 255, 255, 0.141) !important;
-    --active-el-fg: #fff !important;
-    --popup-bg: var(--uc-panel-background) !important;
-    --popup-fg: #fafafa !important;
-    --notification-bg: var(--uc-panel-background) !important;
-    --notification-fg: #fafafa !important;
-    --tabs-normal-fg: #ccc !important;
-    --tabs-activated-bg: rgba(255, 255, 255, 0.141) !important;
-    --tabs-activated-fg: #fff !important;
-    --tabs-selected-bg: rgba(255, 255, 255, 0.141) !important;
-    --tabs-selected-fg: #fff !important;
-  }
-}
- 
 /* Background layer */
- 
+
 .Tab {
   margin: 0 4px;
   width: unset;
@@ -100,22 +126,12 @@ body,
   border-radius: 4px;
   z-index: -1;
 }
- 
-@media (prefers-color-scheme:light) {
-  #root {
-    --tabs-activated-bg: white !important;
-    --tabs-bg-active: var(--tabs-activated-bg) !important;
-    --tabs-selected-fg: var(--tabs-activated-fg) !important;
-    --tabs-selected-bg: var(--tabs-activated-bg) !important;
-    --bg: var(--uc-panel-background) !important;
-  }
-  .Tab[data-selected] .lvl-wrapper:after,
-  .Tab[data-active] .lvl-wrapper:after {
-    box-shadow: 0 0 1px rgba(128,128,142,0.9), 0 0 4px rgba(128,128,142,0.5);
-  }
+
+.Tab[data-selected] .lvl-wrapper:after,
+.Tab[data-active] .lvl-wrapper:after {
+  box-shadow: none !important;
 }
- 
- 
+
 /* Reset default styles */
 .Tab:hover,
 .Tab:active,
@@ -126,39 +142,38 @@ body,
 .Tab[data-selected]:active {
   background: transparent;
 }
- 
+
 /* Reapply styles */
- 
+
 .Tab:hover .lvl-wrapper:after {
   background-color: var(--tabs-bg-hover);
 }
- 
+
 .Tab:active .lvl-wrapper:after,
 .Tab[data-active]:active .lvl-wrapper:after {
   background-color: var(--tabs-bg-active);
 }
- 
+
 .Tab[data-active] .lvl-wrapper:after {
   background-color: var(--tabs-activated-bg);
 }
- 
- 
+
 .Tab[data-selected] .lvl-wrapper:after {
   background-color: var(--tabs-selected-bg);
 }
- 
+
 /* Resize and reposition favicons */
 .Tab .fav {
   width: 18px;
   height: 18px;
   margin-left: 10px;
 }
- 
+
 .Tab .placeholder > svg {
   width: 18px;
   height: 18px;
 }
- 
+
 .Tab .fav,
 .Tab .placeholder,
 .Tab .t-box {

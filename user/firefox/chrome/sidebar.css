@@ -43,7 +43,7 @@
 
   #sidebar {
     /* Sidebery 文档保持透明，但浏览器外壳必须是不透明的 Nova 面板。 */
-    background-color: var(--uc-panel-background) !important;
+    background-color: var(--uc-sidebar-background) !important;
     background-image: none !important;
     border-radius: var(--uc-panel-radius, 8px) !important;
     outline: 1px solid var(--chrome-content-separator-color) !important;

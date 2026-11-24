@@ -1,25 +1,107 @@
 /*
  * Firefox UI color configuration.
- * Shared panel and context-menu colors for Firefox and Sidebery.
+ * Matched to Chrome Profile 2 (Material You Tonal Spot, seed #fff9e4).
+ * Shared colors for Firefox chrome, new tab page, Sidebery, and context menus.
  */
 :root {
-  --uc-panel-background-light: #f9f9fb;
-  --uc-panel-background-dark: #121114;
+  /* Frame, top bar, and vertical tab strip (Chrome SysHeader). */
+  --uc-frame-background-light: #eae3bd;
+  --uc-frame-background-dark: #232008;
+  --uc-frame-background: light-dark(
+    var(--uc-frame-background-light),
+    var(--uc-frame-background-dark)
+  );
 
+  --uc-frame-background-inactive-light: #e9e2cb;
+  --uc-frame-background-inactive-dark: #2d2b19;
+  --uc-frame-background-inactive: light-dark(
+    var(--uc-frame-background-inactive-light),
+    var(--uc-frame-background-inactive-dark)
+  );
+
+  --uc-header-background: var(--uc-frame-background);
+  --uc-sidebar-background: var(--uc-frame-background);
+
+  /* Vertical tab strip control buttons, hover, and divider (Chrome SysHeader* tokens). */
+  --uc-header-container: light-dark(#fff39a, #403c21);
+  --uc-on-header-container: light-dark(#1f1c00, #f2e580);
+  --uc-header-hover: light-dark(#d5c967, #4f4800);
+  --uc-on-header-hover: light-dark(#363100, #f2e580);
+  --uc-header-active: light-dark(#c6ba60, #6b6429);
+  --uc-header-divider: light-dark(#d5c967, #403c21);
+  --uc-sidebar-tab-selected-bg: light-dark(#f6f0d9, #353117);
+
+  /* Bookmarks bar, active tab, URL bar, and new tab page (Chrome SysBase). */
+  --uc-panel-background-light: #fef9eb;
+  --uc-panel-background-dark: #403c21;
   --uc-panel-background: light-dark(
     var(--uc-panel-background-light),
     var(--uc-panel-background-dark)
   );
 
-  /* Both context menus keep the same light appearance, including in dark mode. */
-  --uc-menu-background: #ffffff;
-  --uc-menu-text: #333333;
-  --uc-menu-border: #d4d4d4;
-  --uc-menu-hover: #dddddd;
-  --uc-menu-active: #d3d3d3;
-  --uc-menu-muted: #707070;
-  --uc-menu-disabled: #a0a0a0;
-  --uc-menu-separator: #cccccc;
+  /* Arrow panels and Sidebery popups (Chrome SysSurface). */
+  --uc-popup-background-light: #fffbff;
+  --uc-popup-background-dark: #1d1c14;
+  --uc-popup-background: light-dark(
+    var(--uc-popup-background-light),
+    var(--uc-popup-background-dark)
+  );
+
+  /* Subtle containers and omnibox chips (Chrome SysBaseContainer / Surface4). */
+  --uc-surface-container-light: #ede9e1;
+  --uc-surface-container-dark: #29260d;
+  --uc-surface-container: light-dark(
+    var(--uc-surface-container-light),
+    var(--uc-surface-container-dark)
+  );
+
+  /* URL bar and dropdown states. */
+  --uc-urlbar-background: var(--uc-panel-background);
+  --uc-urlbar-hover-background: light-dark(#f6f0e3, #494528);
+  --uc-urlbar-focus-background: var(--uc-panel-background);
+  --uc-urlbar-chip-hover-background: light-dark(#e1ddd5, #4b4834);
+  --uc-urlbar-row-hover-background: light-dark(#f1ecde, #4d492d);
+  --uc-urlbar-row-selected-background: light-dark(#eae3bd, #575336);
+
+  /* Foreground text and icons (Chrome OnSurface / OnSurfaceSecondary / OnSurfaceSubtle). */
+  --uc-text-primary: light-dark(#1d1c14, #e7e2d5);
+  --uc-text-secondary: light-dark(#4b472b, #cec7a3);
+  --uc-text-subtle: light-dark(#49473d, #cbc6b9);
+  --uc-icon-color: var(--uc-text-secondary);
+
+  /* Primary accent, focus ring, and links (Chrome SysPrimary). */
+  --uc-accent: light-dark(#696001, #d5c967);
+  --uc-accent-hover: light-dark(#5b5300, #e2d674);
+  --uc-accent-active: light-dark(#4f4800, #f2e580);
+  --uc-on-accent: light-dark(#ffffff, #363100);
+
+  /* Text selection highlight (Chrome SysTonalContainer / Primary40). */
+  --uc-selection-bg: light-dark(#f2e580, #696001);
+  --uc-selection-fg: light-dark(#1f1c00, #fff9e7);
+
+  /* Borders, separators, and scrollbars. */
+  --uc-border-color: light-dark(#cec7a3, #575336);
+  --uc-divider-color: light-dark(#e8e2d0, #49473a);
+  --uc-scrollbar-color: light-dark(rgb(75 71 43 / 28%), rgb(206 199 163 / 28%));
+
+  /* Interactive overlays on toolbars and Sidebery tabs. */
+  --uc-hover-bg: light-dark(rgb(29 28 20 / 8%), rgb(255 251 255 / 12%));
+  --uc-active-bg: light-dark(rgb(29 28 20 / 14%), rgb(255 251 255 / 18%));
+  --uc-sidebar-hover-bg: var(--uc-header-hover);
+  --uc-sidebar-active-bg: var(--uc-header-active);
+
+  /* New tab page background (Chrome kColorNewTabPageBackground). */
+  --uc-ntp-background: var(--uc-panel-background);
+
+  /* Both context menus keep Chrome's light SysSurface appearance, including in dark mode. */
+  --uc-menu-background: #fffbff;
+  --uc-menu-text: #1d1c14;
+  --uc-menu-border: transparent;
+  --uc-menu-hover: #f2eef1;
+  --uc-menu-active: #edeaed;
+  --uc-menu-muted: #49473d;
+  --uc-menu-disabled: #5f6368;
+  --uc-menu-separator: #f2e580;
   --uc-menu-radius: 22px;
   --uc-menu-item-radius: 18px;
   --uc-menu-shadow:
