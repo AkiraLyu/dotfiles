@@ -10,11 +10,12 @@ autostart = [
 xwayland = true
 xwayland_native_resolution = true
 xwayland_xsettings = true
+show_cheatsheet = false
 
 [environment]
 QT_QPA_PLATFORMTHEME = "kde"
 XDG_MENU_PREFIX = "plasma-"
 
-[[security_context_rule]]
-match.app_id = 'com\.tencent\.wechat'
-allow_globals = ["zxdg_output_manager_v1"]
+# [[security_context_rule]]
+# match.app_id = 'com\.tencent\.wechat'
+# allow_globals = ["zxdg_output_manager_v1"]

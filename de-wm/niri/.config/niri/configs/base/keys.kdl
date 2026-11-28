@@ -151,7 +151,4 @@ binds {
         spawn "noctalia" "msg" "dock-toggle";
     }
 
-    Super+S repeat=false hotkey-overlay-title="Toggle Stage Manager" {
-        spawn-sh "\"$HOME/.local/bin/stagemanager\" toggle 2>/dev/null || exec \"$HOME/.local/bin/stagemanager\" run";
-    }
 }

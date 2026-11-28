@@ -34,6 +34,8 @@ match.app_id = [
     '^wpspdf$',
     '^et$',
     '^wpp$',
+    # wps popup
+    '^pdf$',
     '.*\.exe$',
     "steam_proton",
     "Display",
