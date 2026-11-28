@@ -25,7 +25,6 @@ calibre
 cava
 chntpw
 cjson
-clamav
 clang
 cliphist
 cmake
@@ -135,6 +134,7 @@ openocd
 openssh
 os-prober
 pamixer
+pandoc-bin
 paru
 patchelf
 pavucontrol
@@ -205,6 +205,8 @@ wget
 wireshark-qt
 wl-clipboard
 xclip
+xdotool
+xorg-server-xvfb
 xorg-xhost
 yazi
 yt-dlp

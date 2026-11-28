@@ -1,9 +1,7 @@
 adjustable-task-manager
 antigravity
-appgrid
 archive-tools-meta
 baidunetdisk-bin
-bettbox-bin
 binaryninja-free
 chatgpt-desktop
 darkly-bin
@@ -22,8 +20,7 @@ jpdfbookmarks
 kate-translucent-bars
 kazumi-bin
 kde-config
-kde-mimeapps-export
-kdotool
+kde-mimeapps-export-git
 kwin-effect-rounded-corners-git
 linuxqq
 logisim
@@ -34,12 +31,11 @@ masterpdfeditor
 netease-cloud-music-web-player
 niri-akira-git
 noctalia-akira-git
-noto-sans-akira
+noto-sans-akira-git
 okular-session-git
 papirus-folders-git
 plasma6-themes-layan-git
-shiguang-diary
-substream
+shiguang-diary-git
 sunshine-bin
 texlive-meta-full
 ttf-i-ming-fonts

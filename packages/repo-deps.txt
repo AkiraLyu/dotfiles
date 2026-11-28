@@ -121,7 +121,7 @@ dmidecode
 dnssec-anchors
 dosfstools
 dotnet-host
-dotnet-runtime-9.0
+dotnet-runtime-10.0
 double-conversion
 drkonqi
 dtc
@@ -144,6 +144,7 @@ espeak-ng
 exiv2
 expac
 expat
+extra-cmake-modules
 faad2
 fakeroot
 fcitx5-chinese-addons
@@ -553,6 +554,7 @@ libde265
 libdecor
 libdeflate
 libdicom
+libdispatch
 libdisplay-info
 libdmtx
 libdovi
@@ -620,7 +622,6 @@ libjpeg-turbo
 libjxl
 libkdcraw
 libkexiv2
-libkeybinder3
 libksba
 libkscreen
 libksysguard
@@ -645,8 +646,8 @@ libmbim
 libmd
 libmfx
 libmicrodns
+libmicrohttpd
 libmikmod
-libmilter
 libmm-glib
 libmms
 libmng
@@ -708,6 +709,7 @@ libresidfp
 librevenge
 librime
 librime-data
+librist
 librsvg
 librsync
 libsamplerate
@@ -785,6 +787,7 @@ libvterm
 libwacom
 libwbclient
 libwebp
+libwebp-utils
 libwebsockets
 libwireplumber
 libwmf
@@ -878,6 +881,7 @@ m4
 mailcap
 make
 marisa
+mbedtls3
 md4c
 mdadm
 med
@@ -1280,6 +1284,7 @@ qhull
 qpdf
 qqc2-breeze-style
 qqc2-desktop-style
+qrcodegencpp-cmake
 qrencode
 qt5-base
 qt5-declarative
@@ -1362,6 +1367,7 @@ signon-kwallet-extension
 signon-plugin-oauth2
 signon-ui
 simdjson
+simdutf
 slang
 smartmontools
 smbclient
@@ -1387,6 +1393,7 @@ spirv-tools
 sqlite
 sratom
 srt
+stb
 steam-devices
 subversion
 sudo
@@ -1451,6 +1458,7 @@ tree-sitter-vimdoc
 tslib
 ttf-hack
 ttf-liberation
+ttf-opensans
 twolame
 tzdata
 uchardet
@@ -1463,6 +1471,7 @@ unzip
 upower
 usbredir
 usbutils
+uthash
 util-linux
 util-linux-libs
 v4l-utils
@@ -1480,6 +1489,7 @@ volume_key
 vte3
 vte-common
 vtk
+vulkan-headers
 vulkan-icd-loader
 vulkan-mesa-implicit-layers
 vulkan-tools
@@ -1527,6 +1537,7 @@ xorg-mkfontscale
 xorgproto
 xorg-server-common
 xorg-setxkbmap
+xorg-xauth
 xorg-xdpyinfo
 xorg-xkbcomp
 xorg-xmessage

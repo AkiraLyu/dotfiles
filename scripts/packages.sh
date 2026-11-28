@@ -32,15 +32,20 @@ mapfile -t foreign_dependencies < "$list_dir/foreign-deps.txt"
 
 case ${1:-} in
     check)
-        # 只比较本机已安装的包名，不更新数据库，也不安装缺失的软件。
-        missing=$(comm -23 \
-            <(printf '%s\n' "${repo_packages[@]}" "${repo_dependencies[@]}" \
-                "${foreign_packages[@]}" "${foreign_dependencies[@]}" | sort -u) \
-            <(pacman -Qq | sort))
+        # 双向比较清单与本机已安装包名，不更新数据库，也不修改已安装软件。
+        saved=$(printf '%s\n' "${repo_packages[@]}" "${repo_dependencies[@]}" \
+            "${foreign_packages[@]}" "${foreign_dependencies[@]}" | awk 'NF' | sort -u)
+        installed=$(pacman -Qq | sort)
+        missing=$(comm -23 <(awk 'NF' <<< "$saved") <(awk 'NF' <<< "$installed"))
+        extra=$(comm -13 <(awk 'NF' <<< "$saved") <(awk 'NF' <<< "$installed"))
         if [[ -n $missing ]]; then
             printf '清单中尚未安装的包：\n%s\n' "$missing"
-        else
-            echo '包清单检查通过：所有已记录的包均已安装。'
+        fi
+        if [[ -n $extra ]]; then
+            printf '本机已安装但未记录在清单中的包：\n%s\n' "$extra"
+        fi
+        if [[ -z $missing && -z $extra ]]; then
+            echo '包清单检查通过：本机已安装包与清单完全一致。'
         fi
         ;;
     install)

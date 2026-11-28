@@ -1,5 +1,6 @@
 gtkmm
 lib32-libvdpau
+plasma-wayland-protocols-git
 wechat-bin
 xcb-imdkit-git
 xdg-desktop-portal-umbriel-git
