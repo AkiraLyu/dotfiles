@@ -44,13 +44,13 @@ git diff -- packages/
 
 ## 独立安装项
 
-pacman 包清单之外的工具链、语言包管理器程序与沙箱应用需在软件包恢复后单独配置。`repo.txt` 已包含 `rustup`，安装完成后运行以下命令初始化默认工具链：
+pacman 包清单之外的工具链与语言包管理器程序需在软件包恢复后单独配置。`repo.txt` 已包含 `rustup`，安装完成后运行以下命令初始化默认工具链：
 
 ```bash
 rustup default nightly
 ```
 
-Flatpak 微信与通过 Cargo 安装的 Carillon 邮件监听程序按[桌面与应用](desktop.md)中的说明恢复，Firefox 与 Chrome 的账户、书签及扩展数据通过浏览器同步功能或独立备份恢复。
+微信通过 AUR 软件包 `wechat` 与 `wechat-bin` 维护在 `foreign` 包清单中，随 `./install.sh packages` 一同安装，毛玻璃插件配置见[桌面与应用](desktop.md#应用补丁)。通过 Cargo 安装的 Carillon 邮件监听程序按[桌面与应用](desktop.md#carillon)中的说明恢复，Firefox 与 Chrome 的账户、书签及扩展数据通过浏览器同步功能或独立备份恢复。
 
 ## 源码与配方
 

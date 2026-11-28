@@ -6,7 +6,7 @@
 
 ## KDE
 
-在 Plasma 会话中运行 `./install.sh kde` 会依次完成三项操作：将 [de-wm/kde/](../de-wm/kde/) 中的本地配置链接到家目录，通过 Paru 从 [pkgbuilds](https://github.com/AkiraLyu/pkgbuilds) 安装 [kde-plugins](https://github.com/AkiraLyu/kde-plugins) 提供的远端组件，最后执行 `kde-config` 写入桌面设置。`kde-config` 会统一应用 Darkly 窗口装饰与控件样式、KWin 规则、Kate 透明边栏启动器，并为已安装的 Flatpak 微信写入 XWayland 启动参数。日常需要重新写入这套桌面设置时，直接运行以下命令即可：
+在 Plasma 会话中运行 `./install.sh kde` 会依次完成三项操作：将 [de-wm/kde/](../de-wm/kde/) 中的本地配置链接到家目录，通过 Paru 从 [pkgbuilds](https://github.com/AkiraLyu/pkgbuilds) 安装 [kde-plugins](https://github.com/AkiraLyu/kde-plugins) 提供的远端组件，最后执行 `kde-config` 写入桌面设置。`kde-config` 会统一应用 Darkly 窗口装饰与控件样式、KWin 规则、Kate 透明边栏启动器，并启用微信毛玻璃特效。日常需要重新写入这套桌面设置时，直接运行以下命令即可：
 
 ```bash
 kde-config
@@ -49,9 +49,9 @@ theme status   # 查看已保存的模式与当前生效的 KDE 配色名称
 | 应用 | 组件 | 作用与用法 |
 | --- | --- | --- |
 | Kate | `kate-translucent-bars` | 通过 `kate-translucent` 启动器加载透明边栏插件，桌面入口由 `kde-config` 自动配置 |
-| 微信 | `wechat-glass-live` | 为运行在 XWayland 下的微信窗口提供实时背景毛玻璃效果，通过 `wechat-glass-control` 调节 |
+| 微信 | `wechat-glass-live` | 为运行在 XWayland 与 Wayland 下的微信窗口提供实时背景毛玻璃效果，通过 `wechat-glass-control` 调节 |
 
-微信使用 Flatpak 应用 `com.tencent.WeChat`，单独安装后运行一次 `kde-config` 即可写入 XWayland 运行参数，完全退出并重新打开微信后毛玻璃插件即会生效。可通过以下命令查看插件状态或调整背景不透明度：
+微信通过 AUR 软件包 `wechat`（`portable` 沙箱封装，记录于 `packages/foreign.txt`）与 `wechat-bin`（二进制本体，记录于 `packages/foreign-deps.txt`）安装，随 `./install.sh packages` 一同恢复。安装完成后运行一次 `kde-config` 启用毛玻璃插件并写入 KWin 模糊规则，完全退出并重新打开微信后效果即会生效。可通过以下命令查看插件状态或调整背景不透明度：
 
 ```bash
 wechat-glass-control status
@@ -71,9 +71,9 @@ systemctl --user status personal-niri.target niri-noctalia.service
 
 ## Umbriel
 
-[de-wm/umbriel/](../de-wm/umbriel/) 保存 Umbriel 合成器的主配置、Portal 后端配置及 XWayland 资源脚本，通过 `./install.sh de-wm umbriel` 部署到家目录，完整步骤见[安装指南](install.md#umbriel)。主配置文件 [config.toml](../de-wm/umbriel/.config/umbriel/config.toml) 的快捷键、滚动布局、图层模糊和窗口规则与 Niri 会话保持对齐，同时将 `noctalia.toml` 列在 `[include.optional]` 下并在文件内提供完整的 `[colors]` 默认配色，使新设备在尚未生成 `noctalia.toml` 时也能正常加载配置。会话启动时通过 `[general] autostart` 依次拉起 `noctalia`、`kwalletd6`、`/usr/lib/pam_kwallet_init` 和 `$HOME/.config/umbriel/scripts/xconfig.sh`（合并 `.Xresources` 中的字体 DPI 与光标设置），Polkit 认证代理由 `user/systemd/` 中的 `polkit-agent.service` 随图形会话自动启动。
+[de-wm/umbriel/](../de-wm/umbriel/) 保存 Umbriel 合成器的主入口配置、模块化子配置、自定义动画着色器、Portal 后端配置及 XWayland 资源脚本，通过 `./install.sh de-wm umbriel` 部署到家目录，完整步骤见[安装指南](install.md#umbriel)。主入口文件 [config.toml](../de-wm/umbriel/.config/umbriel/config.toml) 通过 `[include]` 引入 `configs/` 子目录下的 9 份配置文件（`general.toml`、`outputs.toml`、`input.toml`、`appearance.toml`、`animation.toml`、`layout.toml`、`keybinds.toml`、`window-rules.toml` 与 `layer-rules.toml`），并将 `noctalia.toml` 列在 `[include.optional]` 下。其中 `configs/animation.toml` 引用 `shaders/` 子目录下的 `window_open.glsl` 与 `window_close.glsl` 提供窗口开关动画效果，`configs/appearance.toml` 提供完整的 `[colors]` 默认配色，使新设备在尚未生成 `noctalia.toml` 时也能正常加载配置，快捷键、滚动布局、图层模糊和窗口规则与 Niri 会话保持对齐。会话启动时由 `configs/general.toml` 中的 `[general] autostart` 依次拉起 `noctalia`、`kwalletd6`、`/usr/lib/pam_kwallet_init` 和 `$HOME/.config/umbriel/scripts/xconfig.sh`（合并 `.Xresources` 中的字体 DPI 与光标设置），Polkit 认证代理由 `user/systemd/` 中的 `polkit-agent.service` 随图形会话自动启动。
 
-迁移到其他设备前，先根据 `umbriel outputs` 的实机输出核对显示器名称、分辨率与缩放比例，部署后可通过以下命令校验配置语法与会话服务状态：
+迁移到其他设备前，先根据 `umbriel outputs` 的实机输出核对 `configs/outputs.toml` 中的显示器名称、分辨率与缩放比例，部署后可通过以下命令校验配置语法与会话服务状态：
 
 ```bash
 umbriel config validate

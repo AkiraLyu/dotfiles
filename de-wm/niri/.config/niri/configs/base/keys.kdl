@@ -30,10 +30,9 @@ binds {
     Mod+E { spawn-sh "exec dolphin \"$HOME\""; }
     Mod+R { spawn-sh "noctalia msg panel-toggle launcher"; }
     Mod+Shift+T hotkey-overlay-title="Toggle light/dark theme" { spawn "darkly-theme" "toggle"; }
-    Mod+Shift+V { spawn "sh" "-c" "cliphist list | rofi -dmenu -normal-window | cliphist decode | wl-copy"; }
+    Mod+Shift+V { spawn "noctalia" "msg" "panel-toggle" "clipboard"; }
     Alt+L { spawn "brightnessctl" "set" "0"; }
     Alt+W { spawn "brightnessctl" "set" "50%"; }
-    Mod+P { spawn "sh" "-c" "notify-send $(hyprpicker)"; }
 
     // window focus
     Mod+Left  { focus-column-left; }

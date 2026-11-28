@@ -1,6 +1,6 @@
 spawn-at-startup "kwalletd6"
 spawn-at-startup "/usr/lib/pam_kwallet_init"
-spawn-at-startup "/home/akira/.config/niri/scripts/xconfig.sh"
+spawn-sh-at-startup "\"$HOME/.config/niri/scripts/xconfig.sh\""
 
 // Long-running session helpers are managed by personal-niri.target.
 

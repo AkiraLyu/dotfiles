@@ -40,7 +40,7 @@ cd "$HOME/dotfiles"
 ./install.sh packages
 ```
 
-该步骤调用 [scripts/packages.sh](../scripts/packages.sh) 先通过 `pacman -Syu --needed` 完整升级系统并安装软件源中的显式包与依赖包，随后使用仓库的 Paru 配置刷新自有 PKGBUILD 仓库并安装 `foreign` 列表中的 AUR 包与自有配方包，最后通过 `pacman -D` 统一还原所有软件包的显式安装与依赖安装标记。Rust Nightly 工具链、Cargo 安装的程序与 Flatpak 应用需在包清单恢复后按[软件包与源码](packages.md)单独安装。
+该步骤调用 [scripts/packages.sh](../scripts/packages.sh) 先通过 `pacman -Syu --needed` 完整升级系统并安装软件源中的显式包与依赖包，随后使用仓库的 Paru 配置刷新自有 PKGBUILD 仓库并安装 `foreign` 列表中的 AUR 包与自有配方包，最后通过 `pacman -D` 统一还原所有软件包的显式安装与依赖安装标记。Rust Nightly 工具链与 Cargo 安装的程序需在包清单恢复后按[软件包与源码](packages.md)单独安装。
 
 ### 用户配置
 
@@ -91,7 +91,7 @@ cd "$HOME/dotfiles"
 ./install.sh kde
 ```
 
-该步骤先将 `de-wm/kde/` 中的 Portal 配置、D-Bus 服务和会话脚本链接到家目录，接着通过 Paru 刷新远端 `pkgbuilds` 仓库并安装 `kde-config` 与 `kde-mimeapps-export-git`，最后运行 `kde-config` 应用 Darkly 主题、KWin 规则、Kate 启动器及 Flatpak 微信的 XWayland 参数。明暗主题切换、文件关联导出与应用补丁的日常维护见[桌面与应用](desktop.md)。若仅需链接仓库内的本地 KDE 文件，可执行：
+该步骤先将 `de-wm/kde/` 中的 Portal 配置、D-Bus 服务和会话脚本链接到家目录，接着通过 Paru 刷新远端 `pkgbuilds` 仓库并安装 `kde-config` 与 `kde-mimeapps-export-git`，最后运行 `kde-config` 应用 Darkly 主题、KWin 规则、Kate 启动器并启用微信毛玻璃特效。明暗主题切换、文件关联导出与应用补丁的日常维护见[桌面与应用](desktop.md)。若仅需链接仓库内的本地 KDE 文件，可执行：
 
 ```bash
 ./install.sh --check de-wm kde
@@ -118,7 +118,7 @@ cd "$HOME/dotfiles"
 ./install.sh de-wm umbriel
 ```
 
-该步骤将 `de-wm/umbriel/` 中的 `config.toml`、Portal 规则和 XWayland 资源加载脚本按[逐文件链接](#链接规则)方式部署到家目录。Umbriel 会话启动时通过 `config.toml` 的 `autostart` 列表自动拉起 Noctalia、`kwalletd6` 与 XWayland 资源脚本，并由下文 `systemd` 步骤中的 `polkit-agent.service` 提供认证代理。配置文件校验与服务检查方法见 [Umbriel](desktop.md#umbriel)。
+该步骤将 `de-wm/umbriel/` 中的 `config.toml`、`configs/` 模块化子配置、`shaders/` 动画着色器、Portal 规则和 XWayland 资源加载脚本按[逐文件链接](#链接规则)方式部署到家目录。Umbriel 会话启动时通过 `configs/general.toml` 的 `autostart` 列表自动拉起 Noctalia、`kwalletd6` 与 XWayland 资源脚本，并由下文 `systemd` 步骤中的 `polkit-agent.service` 提供认证代理。配置文件校验与服务检查方法见 [Umbriel](desktop.md#umbriel)。
 
 ### Firefox
 
@@ -193,8 +193,8 @@ systemctl --user status carillon.service
 | `firefox` | 检查目标配置目录及 `prefs.js` 是否存在，再模拟 Stow 部署 |
 | `packages` | 双向比对本机已安装包与 `packages/` 清单，列出清单中尚未安装的包及本机尚未记录的包 |
 | `kde` | 模拟本地 KDE 配置的 Stow 部署，再显示 Paru 安装与 `kde-config` 命令 |
-| `etc install`、`firmware` | 按清单显示待执行的 `run0` 链接、复制及 `systemd-hwdb` 更新命令 |
+| `etc install`、`firmware` | 按清单显示待执行的 `run0` 链接、复制、`systemd-hwdb` 更新与 `systemctl daemon-reload` 命令 |
 | `private` | 检查 `private/` 私密配置与 `.local/share` 结构，再模拟 Stow 部署 |
-| `etc export` | 检查实机 `/etc` 文件状态，对需要同步的独立文件显示复制命令 |
+| `etc export` | 检查实机 `/etc` 文件状态，对需要同步的独立文件显示普通复制或 `run0` 复制命令 |
 
 `./install.sh etc diff` 本身即为只读操作，直接输出仓库文件与实机 `/etc` 文件的内容及权限差异。

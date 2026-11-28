@@ -17,7 +17,7 @@
 | 文档 | 内容 |
 | --- | --- |
 | [安装指南](docs/install.md) | 软件源准备、完整部署顺序、链接校验规则与检查模式 |
-| [系统配置](docs/system.md) | `/etc` 配置部署与反向同步、硬件参数核对、AVS 固件及 UKI 维护 |
+| [系统配置](docs/system.md) | `/etc` 配置部署与反向同步、硬件参数核对、系统服务、AVS 固件及 UKI 维护 |
 | [桌面与应用](docs/desktop.md) | KDE 插件与主题、Niri 与 Umbriel 会话、Firefox 样式和 Carillon 邮件通知 |
 | [软件包与源码](docs/packages.md) | pacman 包清单同步、安装流程、独立软件恢复与外部源码仓库边界 |
 | [拾光日记](docs/diary.md) | 拾光日记软件包的安装、更新、数据备份与上游文档索引 |

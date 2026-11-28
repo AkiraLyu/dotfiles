@@ -23,7 +23,6 @@
 "Mod+Shift+V" = { action = "spawn noctalia msg panel-toggle clipboard", repeat = false }
 "Alt+L" = { action = "spawn noctalia msg brightness-set 0", repeat = false }
 "Alt+W" = { action = "spawn noctalia msg brightness-set 50%", repeat = false }
-"Mod+P" = { action = "spawn sh -c 'c=$(hyprpicker -a); [ -n \"$c\" ] && noctalia msg notification-show \"Color Picked\" \"$c\"'", repeat = false }
 "Mod+Space" = { action = "spawn noctalia msg panel-toggle session", repeat = false }
 "Mod+Shift+Space" = { action = "spawn noctalia msg panel-toggle launcher", repeat = false }
 "Mod+D" = { action = "spawn noctalia msg dock-toggle", repeat = false }

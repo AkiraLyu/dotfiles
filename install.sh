@@ -35,6 +35,10 @@ system_files=(
     mkinitcpio.d/linux.preset
     initcpio/install/block
     udev/hwdb.d/90-swap-caps-esc.hwdb
+    conf.d/snapper
+    snapper/configs/root
+    snapper/configs/home
+    systemd/system/snapper-timeline.timer.d/10-daily.conf
 )
 
 # 需要写入的普通命令会先显示；检查模式不会执行它们。
@@ -151,9 +155,14 @@ case "$step" in
         if (($#)); then system_files=("$@"); fi
 
         refresh_hwdb=false
+        reload_systemd=false
         for file in "${system_files[@]}"; do
             repo_file="$repo_dir/etc/$file"
             system_file="/etc/$file"
+            target_mode=$(stat -Lc '%a' "$repo_file")
+            if [[ $file == snapper/configs/* ]]; then
+                target_mode=640
+            fi
             if [[ $action == install ]]; then
                 case "$file" in
                     environment|makepkg.conf.d/90-local.conf)
@@ -163,12 +172,13 @@ case "$step" in
                         run run0 ln -sfnrT -- "$repo_file" "$system_file"
                         ;;
                     *)
-                        # 引导、包管理、PAM 限制和 udev 使用独立文件。
+                        # 引导、包管理、PAM 限制、快照和 udev 使用独立文件。
                         # TLP 设置了 ProtectHome=yes，也不能读取 HOME 内的链接。
-                        run run0 install -D -m "$(stat -Lc '%a' "$repo_file")" "$repo_file" "$system_file"
+                        run run0 install -D -m "$target_mode" "$repo_file" "$system_file"
                         ;;
                 esac
                 if [[ $file == udev/hwdb.d/90-swap-caps-esc.hwdb ]]; then refresh_hwdb=true; fi
+                if [[ $file == systemd/system/* ]]; then reload_systemd=true; fi
                 continue
             fi
 
@@ -182,20 +192,28 @@ case "$step" in
                 continue
             fi
             if [[ $action == diff ]]; then
+                if [[ ! -r $system_file ]]; then
+                    printf '需要 root 权限读取，跳过只读比较：%s\n' "$file"
+                    continue
+                fi
                 # diff 返回 1 仅表示内容不同；读取错误仍应使脚本失败。
                 diff -u --label "仓库/etc/$file" --label "/etc/$file" \
                     "$repo_file" "$system_file" || test $? -eq 1
-                repo_mode=$(stat -Lc '%a' "$repo_file")
                 system_mode=$(stat -Lc '%a' "$system_file")
-                if [[ $repo_mode != "$system_mode" ]]; then
-                    printf '%s 权限不同：仓库 %s，实机 %s\n' "$file" "$repo_mode" "$system_mode"
+                if [[ $target_mode != "$system_mode" ]]; then
+                    printf '%s 权限不同：预期 %s，实机 %s\n' "$file" "$target_mode" "$system_mode"
                 fi
             else
-                # 导出只写仓库，以当前用户身份复制，避免产生 root 所有的文件。
-                run install -D -m "$(stat -Lc '%a' "$system_file")" "$system_file" "$repo_file"
+                # 导出只写仓库，保证导回仓库的文件归属当前用户。
+                if [[ ! -r $system_file ]]; then
+                    run run0 install -D -o "$(id -un)" -g "$(id -gn)" -m 644 "$system_file" "$repo_file"
+                else
+                    run install -D -m "$(stat -Lc '%a' "$system_file")" "$system_file" "$repo_file"
+                fi
             fi
         done
         if $refresh_hwdb; then run run0 systemd-hwdb update; fi
+        if $reload_systemd; then run run0 systemctl daemon-reload; fi
         ;;
     firmware)
         (($# == 0)) || { echo '用法：./install.sh [--check] firmware' >&2; exit 1; }
