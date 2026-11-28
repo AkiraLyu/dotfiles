@@ -2,22 +2,22 @@
 
 [返回 README](../README.md)
 
-拾光日记（Shiguang Diary）的应用源码与完整使用文档由独立仓库 [AkiraLyu/shiguang-diary](https://github.com/AkiraLyu/shiguang-diary) 维护，打包配方位于 [AkiraLyu/pkgbuilds/shiguang-diary](https://github.com/AkiraLyu/pkgbuilds/tree/main/shiguang-diary)。本页记录该应用在 Arch Linux 环境下的软件包安装、版本重编与日记库恢复方法。
+拾光日记（Shiguang Diary）的应用源码与完整使用文档由独立仓库 [AkiraLyu/shiguang-diary](https://github.com/AkiraLyu/shiguang-diary) 维护，打包配方位于 [AkiraLyu/pkgbuilds/shiguang-diary-git](https://github.com/AkiraLyu/pkgbuilds/tree/main/shiguang-diary-git)。本页记录该应用在 Arch Linux 环境下的软件包安装、版本重编与日记库恢复方法。
 
 ## 安装与更新
 
-`shiguang-diary` 已列入 `packages/foreign.txt`，完整执行 `./install.sh packages` 时会自动构建并安装该软件包。如需在已准备好基础工具和软件源的机器上单独安装，可在 dotfiles 仓库根目录下执行：
+`shiguang-diary-git` 已列入 `packages/foreign.txt`，完整执行 `./install.sh packages` 时会自动构建并安装该软件包。如需在已准备好基础工具和软件源的机器上单独安装，可在 dotfiles 仓库根目录下执行：
 
 ```bash
 PARU_CONF="$PWD/user/paru/.config/paru/paru.conf" paru --sudo run0 -Sy --pkgbuilds
-PARU_CONF="$PWD/user/paru/.config/paru/paru.conf" paru --sudo run0 -S --needed shiguang-diary
+PARU_CONF="$PWD/user/paru/.config/paru/paru.conf" paru --sudo run0 -S --needed shiguang-diary-git
 shiguang-diary
 ```
 
-远端 PKGBUILD 配方固定了上游仓库的源码提交哈希，构建过程中会自动运行单元测试、校验桌面启动器并使用系统 Electron 打包应用代码、静态资源与 Wayland 背景模糊原生模块。当上游发布新版本并在 `pkgbuilds` 仓库中更新了源码提交与 `.SRCINFO` 后，先执行 `paru -Sy --pkgbuilds` 刷新配方再运行安装命令即可升级；若需要在当前固定版本下重新编译本地二进制包，可执行：
+远端 PKGBUILD 配方直接拉取上游 Git 仓库的最新源码，构建过程中会自动运行单元测试、校验桌面启动器并使用系统 Electron 打包应用代码、静态资源与 Wayland 背景模糊原生模块。当上游有新提交或 `pkgbuilds` 仓库更新了构建配方后，先执行 `paru -Sy --pkgbuilds` 刷新配方，再重新编译并安装软件包即可升级：
 
 ```bash
-PARU_CONF="$PWD/user/paru/.config/paru/paru.conf" paru --sudo run0 --rebuild -S shiguang-diary
+PARU_CONF="$PWD/user/paru/.config/paru/paru.conf" paru --sudo run0 --rebuild -S shiguang-diary-git
 ```
 
 ## 数据备份与恢复

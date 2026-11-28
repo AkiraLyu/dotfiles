@@ -91,7 +91,7 @@ cd "$HOME/dotfiles"
 ./install.sh kde
 ```
 
-该步骤先将 `de-wm/kde/` 中的 Portal 配置、D-Bus 服务和会话脚本链接到家目录，接着通过 Paru 刷新远端 `pkgbuilds` 仓库并安装 `kde-config` 与 `kde-mimeapps-export`，最后运行 `kde-config` 应用 Darkly 主题、KWin 规则、Kate 启动器及 Flatpak 微信的 XWayland 参数。明暗主题切换、文件关联导出与应用补丁的日常维护见[桌面与应用](desktop.md)。若仅需链接仓库内的本地 KDE 文件，可执行：
+该步骤先将 `de-wm/kde/` 中的 Portal 配置、D-Bus 服务和会话脚本链接到家目录，接着通过 Paru 刷新远端 `pkgbuilds` 仓库并安装 `kde-config` 与 `kde-mimeapps-export-git`，最后运行 `kde-config` 应用 Darkly 主题、KWin 规则、Kate 启动器及 Flatpak 微信的 XWayland 参数。明暗主题切换、文件关联导出与应用补丁的日常维护见[桌面与应用](desktop.md)。若仅需链接仓库内的本地 KDE 文件，可执行：
 
 ```bash
 ./install.sh --check de-wm kde
@@ -191,7 +191,7 @@ systemctl --user status carillon.service
 | `de-wm niri` | 校验源包结构并模拟 Niri 配置的 Stow 部署，再显示 `daemon-reload` 命令 |
 | `systemd` | 校验源包结构并模拟用户服务的 Stow 部署，再显示 `daemon-reload` 命令 |
 | `firefox` | 检查目标配置目录及 `prefs.js` 是否存在，再模拟 Stow 部署 |
-| `packages` | 比对本机已安装包与 `packages/` 清单，列出尚未安装的包名 |
+| `packages` | 双向比对本机已安装包与 `packages/` 清单，列出清单中尚未安装的包及本机尚未记录的包 |
 | `kde` | 模拟本地 KDE 配置的 Stow 部署，再显示 Paru 安装与 `kde-config` 命令 |
 | `etc install`、`firmware` | 按清单显示待执行的 `run0` 链接、复制及 `systemd-hwdb` 更新命令 |
 | `private` | 检查 `private/` 私密配置与 `.local/share` 结构，再模拟 Stow 部署 |

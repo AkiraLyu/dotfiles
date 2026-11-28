@@ -5,4 +5,4 @@ set -g fish_key_bindings fish_vi_key_bindings
 set -gx PATH "/home/akira/.local/bin" $PATH
 
 # The next line updates PATH for the Google Cloud SDK.
-if [ -f '/home/akira/google-cloud-sdk/path.fish.inc' ]; . '/home/akira/google-cloud-sdk/path.fish.inc'; end
+if [ -f "$HOME/.local/bin/google-cloud-sdk/path.fish.inc" ]; . "$HOME/.local/bin/google-cloud-sdk/path.fish.inc"; end

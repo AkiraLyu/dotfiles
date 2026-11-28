@@ -15,7 +15,7 @@ kde-config
 当系统升级 KWin 或 Kate 导致 C++ 插件 ABI 变更时，重新编译安装对应的原生插件并重新应用设置，随后重启相关应用或重新登录 Plasma 会话即可恢复效果：
 
 ```bash
-paru --sudo run0 --rebuild -S appgrid adjustable-task-manager kate-translucent-bars wechat-glass-live
+paru --sudo run0 --rebuild -S adjustable-task-manager kate-translucent-bars wechat-glass-live
 kde-config
 ```
 
@@ -25,7 +25,7 @@ kde-config
 
 ```bash
 paru --sudo run0 -Sy --pkgbuilds
-paru --sudo run0 -S kde-mimeapps-export
+paru --sudo run0 -S kde-mimeapps-export-git
 kde-mimeapps-export --dry-run
 kde-mimeapps-export
 ```
